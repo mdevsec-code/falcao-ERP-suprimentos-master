@@ -1,0 +1,405 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─────────────────────────────────────────────────────────────
+// Multi-tenancy foundation
+// ─────────────────────────────────────────────────────────────
+
+model Company {
+  id        String   @id @default(uuid())
+  name      String
+  cnpj      String   @unique
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  users            User[]
+  suppliers        Supplier[]
+  products         Product[]
+  purchaseRequests PurchaseRequest[]
+  auditLogs        AuditLog[]
+
+  @@map("companies")
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  BUYER
+  FINANCE
+  WAREHOUSE
+  REQUESTER
+  AUDITOR
+}
+
+model User {
+  id           String   @id @default(uuid())
+  companyId    String   @map("company_id")
+  name         String
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  role         Role     @default(REQUESTER)
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  company             Company              @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  refreshTokens       RefreshToken[]
+  supplierEvaluations SupplierEvaluation[]
+  uploadedDocuments   SupplierDocument[]
+  auditLogs           AuditLog[]
+
+  requestedPurchaseRequests PurchaseRequest[]           @relation("PurchaseRequestRequester")
+  purchaseRequestApprovals  PurchaseRequestApproval[]
+  purchaseRequestComments   PurchaseRequestComment[]
+  uploadedAttachments       PurchaseRequestAttachment[]
+
+  @@index([companyId])
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  tokenHash String   @map("token_hash")
+  expiresAt DateTime @map("expires_at")
+  revokedAt DateTime? @map("revoked_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+// ─────────────────────────────────────────────────────────────
+// Suppliers (Fornecedores) — Fase 1 business module
+// ─────────────────────────────────────────────────────────────
+
+enum SupplierCategory {
+  MATERIAIS_CONSTRUCAO
+  EQUIPAMENTOS
+  SERVICOS_ENGENHARIA
+  MAO_DE_OBRA
+  TRANSPORTE_LOGISTICA
+  TECNOLOGIA
+  CONSULTORIA
+  MANUTENCAO
+  OUTROS
+}
+
+model Supplier {
+  id                String           @id @default(uuid())
+  companyId         String           @map("company_id")
+  razaoSocial       String           @map("razao_social")
+  nomeFantasia      String           @map("nome_fantasia")
+  cnpj              String
+  inscricaoEstadual String?          @map("inscricao_estadual")
+  categoria         SupplierCategory
+  cidade            String
+  estado            String           @db.VarChar(2)
+  responsavel       String
+  isActive          Boolean          @default(true) @map("is_active")
+  createdAt         DateTime         @default(now()) @map("created_at")
+  updatedAt         DateTime         @updatedAt @map("updated_at")
+
+  company     Company              @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  contacts    SupplierContact[]
+  evaluations SupplierEvaluation[]
+  documents   SupplierDocument[]
+
+  primaryForProducts   Product[]           @relation("PrimarySupplierProducts")
+  alternativeProducts  ProductSupplier[]
+  priceEntries         ProductPriceEntry[]
+
+  @@unique([companyId, cnpj])
+  @@index([companyId])
+  @@index([companyId, categoria])
+  @@index([companyId, estado])
+  @@map("suppliers")
+}
+
+enum ContactType {
+  PHONE
+  EMAIL
+}
+
+model SupplierContact {
+  id         String      @id @default(uuid())
+  supplierId String      @map("supplier_id")
+  type       ContactType
+  label      String
+  value      String
+
+  supplier Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+
+  @@index([supplierId])
+  @@map("supplier_contacts")
+}
+
+model SupplierEvaluation {
+  id         String   @id @default(uuid())
+  supplierId String   @map("supplier_id")
+  authorId   String   @map("author_id")
+  score      Int
+  comment    String?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  supplier Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  author   User     @relation(fields: [authorId], references: [id])
+
+  @@index([supplierId])
+  @@map("supplier_evaluations")
+}
+
+enum SupplierDocumentCategory {
+  CERTIFICADO
+  CONTRATO
+  COTACAO
+  COMPROVANTE
+  OUTRO
+}
+
+model SupplierDocument {
+  id           String                    @id @default(uuid())
+  supplierId   String                    @map("supplier_id")
+  fileName     String                    @map("file_name")
+  filePath     String                    @map("file_path")
+  mimeType     String                    @map("mime_type")
+  size         Int
+  category     SupplierDocumentCategory  @default(OUTRO)
+  uploadedById String                    @map("uploaded_by_id")
+  uploadedAt   DateTime                  @default(now()) @map("uploaded_at")
+
+  supplier   Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  uploadedBy User     @relation(fields: [uploadedById], references: [id])
+
+  @@index([supplierId])
+  @@map("supplier_documents")
+}
+
+// ─────────────────────────────────────────────────────────────
+// Products (Banco de Produtos) — Fase 2 business module
+// ─────────────────────────────────────────────────────────────
+
+enum ProductCategory {
+  MATERIAIS_CONSTRUCAO
+  EQUIPAMENTOS
+  FERRAMENTAS
+  EPI
+  ELETRICA
+  HIDRAULICA
+  ACABAMENTO
+  OUTROS
+}
+
+enum UnitOfMeasure {
+  UN
+  KG
+  M
+  M2
+  M3
+  L
+  CX
+  PC
+  SC
+  TON
+}
+
+model Product {
+  id           String          @id @default(uuid())
+  companyId    String          @map("company_id")
+  codigo       String
+  nome         String
+  categoria    ProductCategory
+  marca        String?
+  unidade      UnitOfMeasure
+  leadTimeDays Int?            @map("lead_time_days")
+  observacoes  String?
+  isActive     Boolean         @default(true) @map("is_active")
+  createdAt    DateTime        @default(now()) @map("created_at")
+  updatedAt    DateTime        @updatedAt @map("updated_at")
+
+  primarySupplierId String?   @map("primary_supplier_id")
+  primarySupplier   Supplier? @relation("PrimarySupplierProducts", fields: [primarySupplierId], references: [id])
+
+  company              Company                @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  alternativeSuppliers ProductSupplier[]
+  priceHistory         ProductPriceEntry[]
+  purchaseRequestItems PurchaseRequestItem[]
+
+  @@unique([companyId, codigo])
+  @@index([companyId])
+  @@index([companyId, categoria])
+  @@map("products")
+}
+
+model ProductSupplier {
+  id         String @id @default(uuid())
+  productId  String @map("product_id")
+  supplierId String @map("supplier_id")
+
+  product  Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  supplier Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, supplierId])
+  @@index([productId])
+  @@map("product_suppliers")
+}
+
+model ProductPriceEntry {
+  id         String   @id @default(uuid())
+  productId  String   @map("product_id")
+  supplierId String?  @map("supplier_id")
+  price      Decimal  @db.Decimal(12, 2)
+  recordedAt DateTime @default(now()) @map("recorded_at")
+
+  product  Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  supplier Supplier? @relation(fields: [supplierId], references: [id])
+
+  @@index([productId])
+  @@map("product_price_entries")
+}
+
+// ─────────────────────────────────────────────────────────────
+// Purchase Requests (Solicitações de Compras & Aprovações) — Fase 3
+// ─────────────────────────────────────────────────────────────
+
+enum PurchaseRequestStatus {
+  AGUARDANDO_APROVACAO
+  EM_COMPRAS
+  EM_COTACAO
+  PEDIDO_REALIZADO
+  AGUARDANDO_RECEBIMENTO
+  FINALIZADO
+  REJEITADO
+}
+
+enum ApprovalAction {
+  APPROVE
+  REJECT
+  REQUEST_CHANGES
+}
+
+model PurchaseRequest {
+  id           String                @id @default(uuid())
+  companyId    String                @map("company_id")
+  requesterId  String                @map("requester_id")
+  title        String
+  justification String?              @map("justification")
+  costCenter   String?               @map("cost_center")
+  status       PurchaseRequestStatus @default(AGUARDANDO_APROVACAO)
+  createdAt    DateTime              @default(now()) @map("created_at")
+  updatedAt    DateTime              @updatedAt @map("updated_at")
+
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  requester User    @relation("PurchaseRequestRequester", fields: [requesterId], references: [id])
+
+  items       PurchaseRequestItem[]
+  approvals   PurchaseRequestApproval[]
+  comments    PurchaseRequestComment[]
+  attachments PurchaseRequestAttachment[]
+
+  @@index([companyId])
+  @@index([companyId, status])
+  @@index([companyId, requesterId])
+  @@map("purchase_requests")
+}
+
+model PurchaseRequestItem {
+  id                String   @id @default(uuid())
+  purchaseRequestId String   @map("purchase_request_id")
+  productId         String?  @map("product_id")
+  description       String
+  quantity          Decimal  @db.Decimal(12, 2)
+  unit              String
+  estimatedPrice    Decimal? @map("estimated_price") @db.Decimal(12, 2)
+
+  purchaseRequest PurchaseRequest @relation(fields: [purchaseRequestId], references: [id], onDelete: Cascade)
+  product         Product?        @relation(fields: [productId], references: [id])
+
+  @@index([purchaseRequestId])
+  @@map("purchase_request_items")
+}
+
+model PurchaseRequestApproval {
+  id                String         @id @default(uuid())
+  purchaseRequestId String         @map("purchase_request_id")
+  approverId        String         @map("approver_id")
+  action            ApprovalAction
+  fromStatus        PurchaseRequestStatus @map("from_status")
+  toStatus          PurchaseRequestStatus @map("to_status")
+  comment           String?
+  createdAt         DateTime       @default(now()) @map("created_at")
+
+  purchaseRequest PurchaseRequest @relation(fields: [purchaseRequestId], references: [id], onDelete: Cascade)
+  approver        User            @relation(fields: [approverId], references: [id])
+
+  @@index([purchaseRequestId])
+  @@map("purchase_request_approvals")
+}
+
+model PurchaseRequestComment {
+  id                String   @id @default(uuid())
+  purchaseRequestId String   @map("purchase_request_id")
+  authorId          String   @map("author_id")
+  message           String
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  purchaseRequest PurchaseRequest @relation(fields: [purchaseRequestId], references: [id], onDelete: Cascade)
+  author          User            @relation(fields: [authorId], references: [id])
+
+  @@index([purchaseRequestId])
+  @@map("purchase_request_comments")
+}
+
+model PurchaseRequestAttachment {
+  id                String   @id @default(uuid())
+  purchaseRequestId String   @map("purchase_request_id")
+  fileName          String   @map("file_name")
+  filePath          String   @map("file_path")
+  mimeType          String   @map("mime_type")
+  size              Int
+  uploadedById      String   @map("uploaded_by_id")
+  uploadedAt        DateTime @default(now()) @map("uploaded_at")
+
+  purchaseRequest PurchaseRequest @relation(fields: [purchaseRequestId], references: [id], onDelete: Cascade)
+  uploadedBy      User            @relation(fields: [uploadedById], references: [id])
+
+  @@index([purchaseRequestId])
+  @@map("purchase_request_attachments")
+}
+
+// ─────────────────────────────────────────────────────────────
+// Cross-cutting: audit trail (reused by every future module)
+// ─────────────────────────────────────────────────────────────
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+}
+
+model AuditLog {
+  id         String      @id @default(uuid())
+  companyId  String      @map("company_id")
+  userId     String      @map("user_id")
+  action     AuditAction
+  entityType String      @map("entity_type")
+  entityId   String      @map("entity_id")
+  changes    Json?
+  createdAt  DateTime    @default(now()) @map("created_at")
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@index([companyId])
+  @@index([entityType, entityId])
+  @@map("audit_logs")
+}
