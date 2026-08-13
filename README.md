@@ -16,6 +16,8 @@ Monorepo em TypeScript com API [NestJS](https://nestjs.com/) + [Prisma](https://
 - [Modelo de dados](#modelo-de-dados)
 - [Papéis de usuário](#papéis-de-usuário)
 - [API](#api)
+- [Histórico de construção](#histórico-de-construção)
+- [Estado atual e próximos passos](#estado-atual-e-próximos-passos)
 
 ## Funcionalidades
 
@@ -148,3 +150,39 @@ Principais entidades (definidas em `apps/api/prisma/schema.prisma`):
 - Prefixo global: `/api/v1`
 - Autenticação: `Authorization: Bearer <accessToken>`, obtido em `POST /api/v1/auth/login`
 - Renovação de sessão: `POST /api/v1/auth/refresh`
+
+## Histórico de construção
+
+O projeto foi construído em fases incrementais, cada uma adicionando um módulo de negócio completo (schema + API + tela):
+
+1. **Fundação** — multi-tenancy (`Company`/`User`), autenticação JWT com access + refresh token e RBAC por papel.
+2. **Fase 1 — Fornecedores** — cadastro, contatos, avaliações de desempenho e upload de documentos, com armazenamento local de arquivos (`LocalStorageProvider`) por trás de uma interface (`IStorageProvider`) já preparada para trocar por um provider em nuvem sem alterar controllers/serviços.
+3. **Fase 2 — Banco de produtos** — catálogo por empresa, fornecedor primário/alternativos e histórico de preços.
+4. **Fase 3 — Solicitações de compra** — fluxo de aprovação com múltiplos status, itens, comentários, anexos e trilha de aprovações; interceptor de auditoria (`AuditLogInterceptor`) plugado nos módulos de negócio.
+5. **Publicação** — versionamento do código com Git e envio para o repositório GitHub ([mdevsec-code/falcao-ERP-suprimentos-master](https://github.com/mdevsec-code/falcao-ERP-suprimentos-master)).
+
+## Estado atual e próximos passos
+
+O projeto está funcional para desenvolvimento local (`npm run dev`), mas ainda **não está pronto para produção**. Faltam:
+
+**Infraestrutura e entrega**
+- Sem Dockerfile de produção para API/Web — o `docker-compose.yml` atual sobe apenas o Postgres de desenvolvimento.
+- Sem pipeline de CI/CD (lint/build/test automatizados a cada push).
+- Sem ambiente de deploy configurado (hospedagem, variáveis de produção, HTTPS, etc.).
+- Armazenamento de arquivos apenas local em disco (`UPLOADS_DIR`); não serve para múltiplas instâncias nem é durável em produção — a interface `IStorageProvider` já existe para plugar um provider em nuvem (ex. S3/Azure Blob) quando isso for priorizado.
+
+**Qualidade**
+- Sem testes automatizados — nenhum `*.spec.ts` (unitário) ou e2e na API, nem testes no Web.
+
+**Funcionalidades de negócio pendentes**
+Módulos já previstos na navegação do Web, mas ainda não implementados (marcados como "em breve" na interface):
+- Contratos
+- Financeiro
+- Reembolsos
+- Agenda
+- Documentos (gestão central, além dos documentos de fornecedor)
+
+**Gaps administrativos**
+- Módulos `users` e `companies` existem apenas como serviços internos (usados pelo login) — não há controller/endpoints REST nem tela no Web para administrar usuários ou dados da empresa.
+- Sem fluxo de recuperação de senha ("esqueci minha senha").
+- `AuditLog` é gravado pelos módulos de negócio, mas não há endpoint nem tela para consultar o histórico de auditoria.
