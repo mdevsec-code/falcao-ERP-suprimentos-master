@@ -1,0 +1,14 @@
+node_modules/
+dist/
+build/
+.env
+.env.local
+apps/api/uploads/*
+!apps/api/uploads/.gitkeep
+apps/api/generated/
+*.log
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+coverage/
+.claude/scheduled_tasks.lock
