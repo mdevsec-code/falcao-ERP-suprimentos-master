@@ -51,7 +51,11 @@ describe('i18n locales', () => {
     );
     const missing: string[] = [];
 
-    for (const file of sourceFiles(SRC_DIR)) {
+    // Valores de permissão (`users:manage`, `audit:read`) têm o mesmo formato
+    // `ns:chave` e colidiriam com os namespaces homônimos.
+    const ignored = new Set([path.join(SRC_DIR, 'constants', 'permissions.ts')]);
+
+    for (const file of sourceFiles(SRC_DIR).filter((f) => !ignored.has(f))) {
       const content = readFileSync(file, 'utf-8');
       for (const match of content.matchAll(keyPattern)) {
         const [, ns, key] = match;

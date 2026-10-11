@@ -8,5 +8,8 @@
   "integer": "Informe um número inteiro",
   "minValue": "O valor mínimo é {{count}}",
   "maxDecimals": "Use no máximo {{count}} casas decimais",
-  "selectOption": "Selecione uma opção"
+  "selectOption": "Selecione uma opção",
+  "minPassword": "A senha deve ter no mínimo {{count}} caracteres",
+  "maxPassword": "A senha deve ter no máximo {{count}} caracteres",
+  "passwordMismatch": "As senhas não conferem"
 }

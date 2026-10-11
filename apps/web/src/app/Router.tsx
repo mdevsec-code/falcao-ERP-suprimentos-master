@@ -67,6 +67,16 @@ const ApprovalsPage = lazy(() =>
   })),
 );
 
+const UsersPage = lazy(() =>
+  import('@/features/users/pages/UsersPage').then((m) => ({ default: m.UsersPage })),
+);
+const AuditPage = lazy(() =>
+  import('@/features/audit/pages/AuditPage').then((m) => ({ default: m.AuditPage })),
+);
+const ProfilePage = lazy(() =>
+  import('@/features/profile/pages/ProfilePage').then((m) => ({ default: m.ProfilePage })),
+);
+
 const withSuspense = (element: ReactNode) => (
   <Suspense fallback={<LoadingState />}>{element}</Suspense>
 );
@@ -129,6 +139,15 @@ const protectedRoutes: RouteObject[] = [
     path: ROUTE_PATHS.APROVACOES,
     element: withPermission(PERMISSIONS.APPROVALS_READ, <ApprovalsPage />),
   },
+  {
+    path: ROUTE_PATHS.USUARIOS,
+    element: withPermission(PERMISSIONS.USERS_MANAGE, <UsersPage />),
+  },
+  {
+    path: ROUTE_PATHS.AUDITORIA,
+    element: withPermission(PERMISSIONS.AUDIT_READ, <AuditPage />),
+  },
+  { path: ROUTE_PATHS.PERFIL, element: withSuspense(<ProfilePage />) },
   { path: ROUTE_PATHS.CONTRATOS, element: <ComingSoonPage navKey="contracts" /> },
   { path: ROUTE_PATHS.FINANCEIRO, element: <ComingSoonPage navKey="finance" /> },
   { path: ROUTE_PATHS.REEMBOLSOS, element: <ComingSoonPage navKey="reimbursements" /> },

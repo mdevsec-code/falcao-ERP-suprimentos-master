@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH } from '@falcao-erp/shared-types';
 import i18n from '@/i18n';
 
 /**
@@ -23,6 +24,12 @@ export const emailSchema = z
 
 /** Login: só exige preenchimento — a política de senha é da API. */
 export const loginPasswordSchema = z.string().min(1, i18n.t('validation:required'));
+
+/** Senha nova (criação, redefinição, troca) — mesma política da API. */
+export const newPasswordSchema = z
+  .string()
+  .min(MIN_PASSWORD_LENGTH, i18n.t('validation:minPassword', { count: MIN_PASSWORD_LENGTH }))
+  .max(MAX_PASSWORD_LENGTH, i18n.t('validation:maxPassword', { count: MAX_PASSWORD_LENGTH }));
 
 /** CNPJ com ou sem máscara (`00.000.000/0000-00`) — exige 14 dígitos. */
 export const cnpjSchema = z

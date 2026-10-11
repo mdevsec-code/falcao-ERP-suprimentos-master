@@ -18,6 +18,9 @@ export const ROUTE_PATHS = {
   REEMBOLSOS: '/reembolsos',
   AGENDA: '/agenda',
   DOCUMENTOS: '/documentos',
+  USUARIOS: '/usuarios',
+  AUDITORIA: '/auditoria',
+  PERFIL: '/perfil',
   PLACEHOLDER: '/em-construcao',
   NOT_FOUND: '/404',
 } as const;
@@ -49,4 +52,7 @@ export const ROUTE_NAV_KEYS: Record<string, string> = {
   [ROUTE_PATHS.REEMBOLSOS]: 'reimbursements',
   [ROUTE_PATHS.AGENDA]: 'agenda',
   [ROUTE_PATHS.DOCUMENTOS]: 'documents',
+  [ROUTE_PATHS.USUARIOS]: 'users',
+  [ROUTE_PATHS.AUDITORIA]: 'audit',
+  [ROUTE_PATHS.PERFIL]: 'profile',
 };

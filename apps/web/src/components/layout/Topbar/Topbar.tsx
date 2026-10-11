@@ -1,7 +1,16 @@
 import { useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Bell, ChevronsLeft, ChevronsRight, LogOut, Menu, Search, X } from 'lucide-react';
+import {
+  Bell,
+  ChevronsLeft,
+  ChevronsRight,
+  LogOut,
+  Menu,
+  Search,
+  UserRound,
+  X,
+} from 'lucide-react';
 
 import { Avatar, AvatarFallback } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
@@ -220,6 +229,10 @@ export function Topbar(): ReactNode {
               )}
             </div>
             <DropdownMenuSeparator />
+            <DropdownMenuItem onSelect={() => navigate(ROUTE_PATHS.PERFIL)}>
+              <UserRound className="h-4 w-4" />
+              {t('topbar.profile')}
+            </DropdownMenuItem>
             <DropdownMenuItem onSelect={() => void handleSignOut()}>
               <LogOut className="h-4 w-4" />
               {t('topbar.signOut')}

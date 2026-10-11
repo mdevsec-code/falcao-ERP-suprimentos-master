@@ -16,6 +16,9 @@ export const NAMESPACES = [
   'suppliers',
   'products',
   'purchaseRequests',
+  'users',
+  'audit',
+  'profile',
 ] as const;
 
 export type Namespace = (typeof NAMESPACES)[number];
@@ -24,6 +27,13 @@ export const localeLabels: Record<Locale, string> = {
   'pt-BR': 'Português (Brasil)',
   'en-US': 'English (United States)',
   'zh-CN': '中文（简体）',
+};
+
+/** Nome curto (no próprio idioma) — para seletores com pouco espaço. */
+export const localeShortLabels: Record<Locale, string> = {
+  'pt-BR': 'Português',
+  'en-US': 'English',
+  'zh-CN': '简体中文',
 };
 
 /** Bandeira/emoji curto usado no seletor de idioma. */

@@ -1,0 +1,49 @@
+{
+  "page": {
+    "eyebrow": "Administration",
+    "title": "Audit",
+    "description": "Trail of creations, updates and deletions — who did it, when and on which record."
+  },
+  "kpi": {
+    "total": "Recorded events",
+    "today": "Today",
+    "creates": "Creations",
+    "changes": "Updates and deletions"
+  },
+  "filters": {
+    "title": "Filters",
+    "search": {
+      "label": "Search",
+      "placeholder": "Person or record id…"
+    },
+    "action": "Action",
+    "entity": "Entity",
+    "from": "From",
+    "to": "To",
+    "allActions": "All actions",
+    "allEntities": "All",
+    "chipAction": "Action: {{value}}",
+    "chipEntity": "Entity: {{value}}",
+    "chipFrom": "From: {{value}}",
+    "chipTo": "To: {{value}}",
+    "chipSearch": "Search: {{value}}"
+  },
+  "table": {
+    "when": "When",
+    "who": "Who",
+    "action": "Action",
+    "entity": "Entity",
+    "record": "Record",
+    "expand": "Show record details",
+    "collapse": "Hide details",
+    "snapshot": "Record state after the operation"
+  },
+  "error": {
+    "title": "Could not load the audit trail",
+    "description": "Check your connection and try again."
+  },
+  "empty": {
+    "title": "No events found",
+    "description": "Adjust the filters — or there were no changes in this period."
+  }
+}

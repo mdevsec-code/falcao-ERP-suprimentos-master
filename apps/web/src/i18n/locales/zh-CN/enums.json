@@ -65,5 +65,16 @@
   "contactType": {
     "PHONE": "电话",
     "EMAIL": "邮箱"
+  },
+  "auditAction": {
+    "CREATE": "创建",
+    "UPDATE": "修改",
+    "DELETE": "删除"
+  },
+  "auditEntity": {
+    "Supplier": "供应商",
+    "Product": "产品",
+    "PurchaseRequest": "采购申请",
+    "User": "用户"
   }
 }

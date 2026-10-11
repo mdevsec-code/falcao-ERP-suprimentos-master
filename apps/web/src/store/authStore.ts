@@ -15,6 +15,8 @@ export interface AuthState {
   signIn: (email: string, password: string, rememberMe?: boolean) => Promise<SignInResult>;
   /** Troca os tokens da sessão atual (usado pelo refresh automático do `httpClient`). */
   setTokens: (accessToken: string, refreshToken: string) => void;
+  /** Atualiza os dados do usuário na sessão (ex.: depois de editar o próprio perfil). */
+  updateUser: (patch: Partial<AuthSession['user']>) => void;
   signOut: () => Promise<void>;
 }
 
@@ -98,6 +100,12 @@ export const useAuthStore = create<AuthState>()(
         const current = get().session;
         if (!current) return;
         set({ session: { ...current, accessToken, refreshToken } });
+      },
+
+      updateUser: (patch) => {
+        const current = get().session;
+        if (!current) return;
+        set({ session: { ...current, user: { ...current.user, ...patch } } });
       },
 
       signOut: async () => {

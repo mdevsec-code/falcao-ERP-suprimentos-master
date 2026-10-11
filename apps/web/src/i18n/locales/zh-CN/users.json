@@ -1,0 +1,99 @@
+{
+  "page": {
+    "eyebrow": "管理",
+    "title": "用户",
+    "description": "谁可以访问 Falcão 供应管理、使用哪种角色，以及谁处于启用状态。"
+  },
+  "actions": {
+    "new": "新建用户",
+    "resetPassword": "重置密码",
+    "deactivate": "停用",
+    "reactivate": "重新启用"
+  },
+  "kpi": {
+    "total": "用户",
+    "active": "启用",
+    "inactive": "停用",
+    "admins": "管理员"
+  },
+  "filters": {
+    "title": "筛选",
+    "search": {
+      "label": "搜索",
+      "placeholder": "姓名或邮箱…"
+    },
+    "role": "角色",
+    "status": "状态",
+    "allRoles": "全部角色",
+    "allStatuses": "全部",
+    "chipRole": "角色：{{value}}",
+    "chipStatus": "状态：{{value}}",
+    "chipSearch": "搜索：{{value}}"
+  },
+  "table": {
+    "user": "用户",
+    "role": "角色",
+    "status": "状态",
+    "createdAt": "创建于",
+    "actions": "操作",
+    "you": "你",
+    "editAria": "编辑 {{name}}",
+    "resetPasswordAria": "重置 {{name}} 的密码",
+    "deactivateAria": "停用 {{name}}",
+    "reactivateAria": "重新启用 {{name}}",
+    "cannotDeactivateSelf": "不能停用自己"
+  },
+  "dialog": {
+    "createTitle": "新建用户",
+    "editTitle": "编辑用户",
+    "createDescription": "用户将使用此处设置的邮箱和初始密码登录。",
+    "editDescription": "登录名：{{email}}",
+    "submitCreate": "创建用户",
+    "submitEdit": "保存更改"
+  },
+  "form": {
+    "name": "姓名",
+    "namePlaceholder": "例如：Mariana Souza",
+    "email": "邮箱",
+    "emailPlaceholder": "name@falcaoengenharia.com.br",
+    "emailHint": "这是登录名——之后无法修改。",
+    "initialPassword": "初始密码",
+    "passwordHint": "至少 {{count}} 个字符。建议组合大写字母、数字和符号。",
+    "role": "访问角色",
+    "roleHint": "决定用户可以查看和执行的内容。",
+    "selfRoleHint": "不能修改自己的角色。",
+    "active": "启用用户",
+    "activeHint": "停用的用户无法登录。",
+    "selfActiveHint": "不能停用自己。"
+  },
+  "resetDialog": {
+    "title": "重置密码",
+    "description": "为 <strong>{{name}}</strong> 设置新密码。",
+    "newPassword": "新密码",
+    "confirmPassword": "确认新密码",
+    "sessionsNotice": "该用户的所有登录会话将被结束——需要使用新密码重新登录。",
+    "submit": "重置密码"
+  },
+  "confirm": {
+    "deactivateTitle": "停用用户",
+    "reactivateTitle": "重新启用用户",
+    "deactivateDescription": "<strong>{{name}}</strong> 将立即失去访问权限，所有会话将被结束。",
+    "reactivateDescription": "<strong>{{name}}</strong> 将可以使用当前密码重新登录。"
+  },
+  "error": {
+    "title": "无法加载用户",
+    "description": "请检查网络连接后重试。"
+  },
+  "empty": {
+    "title": "未找到用户",
+    "description": "调整筛选条件或新建用户。"
+  },
+  "toast": {
+    "createSuccess": "用户已创建。",
+    "createError": "无法创建用户。",
+    "updateSuccess": "用户已更新。",
+    "updateError": "无法更新用户。",
+    "passwordReset": "密码已重置，该用户的会话已结束。",
+    "passwordResetError": "无法重置密码。"
+  }
+}

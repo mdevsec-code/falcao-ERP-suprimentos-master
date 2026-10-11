@@ -1,0 +1,45 @@
+{
+  "page": {
+    "eyebrow": "Meu perfil",
+    "memberSince": "Desde {{date}}"
+  },
+  "personal": {
+    "title": "Dados pessoais",
+    "description": "Como você aparece para a equipe.",
+    "name": "Nome completo",
+    "email": "E-mail",
+    "emailHint": "O e-mail é o seu login — só um administrador pode alterá-lo.",
+    "save": "Salvar nome"
+  },
+  "preferences": {
+    "title": "Preferências",
+    "description": "Valem para este navegador.",
+    "darkTheme": "Tema escuro",
+    "darkThemeHint": "Menos brilho em ambientes com pouca luz.",
+    "language": "Idioma"
+  },
+  "security": {
+    "eyebrow": "Segurança",
+    "title": "Trocar senha",
+    "description": "Use uma senha que você não utilize em outros sistemas.",
+    "currentPassword": "Senha atual",
+    "newPassword": "Nova senha",
+    "confirmPassword": "Confirmar nova senha",
+    "requirement": "Mínimo de {{count}} caracteres.",
+    "strength": {
+      "0": "",
+      "1": "Fraca",
+      "2": "Razoável",
+      "3": "Boa",
+      "4": "Forte"
+    },
+    "notice": "Esta sessão continua ativa depois da troca.",
+    "submit": "Atualizar senha"
+  },
+  "toast": {
+    "nameUpdated": "Nome atualizado.",
+    "nameError": "Não foi possível atualizar o nome.",
+    "passwordChanged": "Senha alterada com sucesso.",
+    "passwordError": "Não foi possível alterar a senha."
+  }
+}

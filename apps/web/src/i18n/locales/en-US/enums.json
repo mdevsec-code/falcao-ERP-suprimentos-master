@@ -65,5 +65,16 @@
   "contactType": {
     "PHONE": "Phone",
     "EMAIL": "Email"
+  },
+  "auditAction": {
+    "CREATE": "Created",
+    "UPDATE": "Updated",
+    "DELETE": "Deleted"
+  },
+  "auditEntity": {
+    "Supplier": "Supplier",
+    "Product": "Product",
+    "PurchaseRequest": "Purchase request",
+    "User": "User"
   }
 }

@@ -8,5 +8,8 @@
   "integer": "请输入整数",
   "minValue": "最小值为 {{count}}",
   "maxDecimals": "最多保留 {{count}} 位小数",
-  "selectOption": "请选择一项"
+  "selectOption": "请选择一项",
+  "minPassword": "密码至少 {{count}} 个字符",
+  "maxPassword": "密码最多 {{count}} 个字符",
+  "passwordMismatch": "两次输入的密码不一致"
 }

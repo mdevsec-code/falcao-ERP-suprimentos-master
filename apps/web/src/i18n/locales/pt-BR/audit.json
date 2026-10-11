@@ -1,0 +1,49 @@
+{
+  "page": {
+    "eyebrow": "Administração",
+    "title": "Auditoria",
+    "description": "Trilha de criações, alterações e exclusões — quem fez, quando e em qual registro."
+  },
+  "kpi": {
+    "total": "Eventos registrados",
+    "today": "Hoje",
+    "creates": "Criações",
+    "changes": "Alterações e exclusões"
+  },
+  "filters": {
+    "title": "Filtros",
+    "search": {
+      "label": "Buscar",
+      "placeholder": "Pessoa ou id do registro…"
+    },
+    "action": "Ação",
+    "entity": "Entidade",
+    "from": "De",
+    "to": "Até",
+    "allActions": "Todas as ações",
+    "allEntities": "Todas",
+    "chipAction": "Ação: {{value}}",
+    "chipEntity": "Entidade: {{value}}",
+    "chipFrom": "De: {{value}}",
+    "chipTo": "Até: {{value}}",
+    "chipSearch": "Busca: {{value}}"
+  },
+  "table": {
+    "when": "Quando",
+    "who": "Quem",
+    "action": "Ação",
+    "entity": "Entidade",
+    "record": "Registro",
+    "expand": "Ver detalhes do registro",
+    "collapse": "Ocultar detalhes",
+    "snapshot": "Estado do registro após a operação"
+  },
+  "error": {
+    "title": "Não foi possível carregar a auditoria",
+    "description": "Verifique sua conexão e tente novamente."
+  },
+  "empty": {
+    "title": "Nenhum evento encontrado",
+    "description": "Ajuste os filtros — ou ainda não houve alterações no período."
+  }
+}

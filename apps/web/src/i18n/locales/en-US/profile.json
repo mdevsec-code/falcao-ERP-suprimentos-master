@@ -1,0 +1,45 @@
+{
+  "page": {
+    "eyebrow": "My profile",
+    "memberSince": "Since {{date}}"
+  },
+  "personal": {
+    "title": "Personal data",
+    "description": "How you appear to the team.",
+    "name": "Full name",
+    "email": "Email",
+    "emailHint": "Your email is your login — only an administrator can change it.",
+    "save": "Save name"
+  },
+  "preferences": {
+    "title": "Preferences",
+    "description": "Apply to this browser.",
+    "darkTheme": "Dark theme",
+    "darkThemeHint": "Less glare in low-light environments.",
+    "language": "Language"
+  },
+  "security": {
+    "eyebrow": "Security",
+    "title": "Change password",
+    "description": "Use a password you do not use on other systems.",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm new password",
+    "requirement": "At least {{count}} characters.",
+    "strength": {
+      "0": "",
+      "1": "Weak",
+      "2": "Fair",
+      "3": "Good",
+      "4": "Strong"
+    },
+    "notice": "This session stays active after the change.",
+    "submit": "Update password"
+  },
+  "toast": {
+    "nameUpdated": "Name updated.",
+    "nameError": "Could not update the name.",
+    "passwordChanged": "Password changed successfully.",
+    "passwordError": "Could not change the password."
+  }
+}

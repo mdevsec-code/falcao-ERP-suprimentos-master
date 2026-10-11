@@ -14,6 +14,8 @@ export const PERMISSIONS = {
   PURCHASE_REQUEST_READ: 'purchase-request:read',
   PURCHASE_REQUEST_WRITE: 'purchase-request:write',
   APPROVALS_READ: 'approvals:read',
+  USERS_MANAGE: 'users:manage',
+  AUDIT_READ: 'audit:read',
 } as const;
 
 export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
@@ -52,8 +54,9 @@ export const ROLE_PERMISSIONS: Record<Role, readonly Permission[]> = {
 
   [ROLES.REQUESTER]: [...READ_ONLY, PERMISSIONS.PURCHASE_REQUEST_WRITE],
 
-  // Auditor: leitura de tudo, sem criar nem movimentar solicitações.
-  [ROLES.AUDITOR]: [...READ_ONLY],
+  // Auditor: leitura de tudo (inclusive a trilha de auditoria), sem criar nem
+  // movimentar solicitações.
+  [ROLES.AUDITOR]: [...READ_ONLY, PERMISSIONS.AUDIT_READ],
 };
 
 export function hasPermission(role: Role, permission: Permission): boolean {

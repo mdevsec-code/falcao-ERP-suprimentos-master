@@ -13,6 +13,8 @@ import {
   ReceiptText,
   CalendarDays,
   FileStack,
+  UserCog,
+  ScrollText,
   X,
   type LucideIcon,
 } from 'lucide-react';
@@ -99,6 +101,25 @@ const SECTIONS: NavSection[] = [
     items: [
       { label: 'nav.agenda', to: ROUTE_PATHS.AGENDA, icon: CalendarDays, enabled: false },
       { label: 'nav.documents', to: ROUTE_PATHS.DOCUMENTOS, icon: FileStack, enabled: false },
+    ],
+  },
+  {
+    title: 'sidebar.admin',
+    items: [
+      {
+        label: 'nav.users',
+        to: ROUTE_PATHS.USUARIOS,
+        icon: UserCog,
+        enabled: true,
+        requires: PERMISSIONS.USERS_MANAGE,
+      },
+      {
+        label: 'nav.audit',
+        to: ROUTE_PATHS.AUDITORIA,
+        icon: ScrollText,
+        enabled: true,
+        requires: PERMISSIONS.AUDIT_READ,
+      },
     ],
   },
 ];

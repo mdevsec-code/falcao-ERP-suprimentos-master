@@ -1,0 +1,45 @@
+{
+  "page": {
+    "eyebrow": "个人资料",
+    "memberSince": "自 {{date}} 起"
+  },
+  "personal": {
+    "title": "个人信息",
+    "description": "团队成员看到的你。",
+    "name": "姓名",
+    "email": "邮箱",
+    "emailHint": "邮箱是你的登录名——只有管理员可以修改。",
+    "save": "保存姓名"
+  },
+  "preferences": {
+    "title": "偏好设置",
+    "description": "仅对当前浏览器生效。",
+    "darkTheme": "深色主题",
+    "darkThemeHint": "在弱光环境下更护眼。",
+    "language": "语言"
+  },
+  "security": {
+    "eyebrow": "安全",
+    "title": "修改密码",
+    "description": "请使用未在其他系统中使用过的密码。",
+    "currentPassword": "当前密码",
+    "newPassword": "新密码",
+    "confirmPassword": "确认新密码",
+    "requirement": "至少 {{count}} 个字符。",
+    "strength": {
+      "0": "",
+      "1": "弱",
+      "2": "一般",
+      "3": "良好",
+      "4": "强"
+    },
+    "notice": "修改后当前会话仍保持登录。",
+    "submit": "更新密码"
+  },
+  "toast": {
+    "nameUpdated": "姓名已更新。",
+    "nameError": "无法更新姓名。",
+    "passwordChanged": "密码修改成功。",
+    "passwordError": "无法修改密码。"
+  }
+}

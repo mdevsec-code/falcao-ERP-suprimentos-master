@@ -8,5 +8,8 @@
   "integer": "Enter a whole number",
   "minValue": "The minimum value is {{count}}",
   "maxDecimals": "Use at most {{count}} decimal places",
-  "selectOption": "Select an option"
+  "selectOption": "Select an option",
+  "minPassword": "Password must be at least {{count}} characters",
+  "maxPassword": "Password must be at most {{count}} characters",
+  "passwordMismatch": "Passwords do not match"
 }

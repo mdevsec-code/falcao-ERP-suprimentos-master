@@ -1,5 +1,6 @@
 import type {
   ApprovalAction,
+  AuditAction,
   ContactType,
   ProductCategory,
   PurchaseRequestStatus,
@@ -31,3 +32,5 @@ export const DOCUMENT_CATEGORY_LABELS =
   createTranslatedLabels<SupplierDocumentCategory>('documentCategory');
 
 export const CONTACT_TYPE_LABELS = createTranslatedLabels<ContactType>('contactType');
+
+export const AUDIT_ACTION_LABELS = createTranslatedLabels<AuditAction>('auditAction');

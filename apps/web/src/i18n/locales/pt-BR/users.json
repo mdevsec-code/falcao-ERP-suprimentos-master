@@ -1,0 +1,99 @@
+{
+  "page": {
+    "eyebrow": "Administração",
+    "title": "Usuários",
+    "description": "Quem acessa o Falcão Suprimentos, com qual perfil — e quem está ativo."
+  },
+  "actions": {
+    "new": "Novo usuário",
+    "resetPassword": "Redefinir senha",
+    "deactivate": "Desativar",
+    "reactivate": "Reativar"
+  },
+  "kpi": {
+    "total": "Usuários",
+    "active": "Ativos",
+    "inactive": "Inativos",
+    "admins": "Administradores"
+  },
+  "filters": {
+    "title": "Filtros",
+    "search": {
+      "label": "Buscar",
+      "placeholder": "Nome ou e-mail…"
+    },
+    "role": "Perfil",
+    "status": "Situação",
+    "allRoles": "Todos os perfis",
+    "allStatuses": "Todas",
+    "chipRole": "Perfil: {{value}}",
+    "chipStatus": "Situação: {{value}}",
+    "chipSearch": "Busca: {{value}}"
+  },
+  "table": {
+    "user": "Usuário",
+    "role": "Perfil",
+    "status": "Situação",
+    "createdAt": "Desde",
+    "actions": "Ações",
+    "you": "você",
+    "editAria": "Editar {{name}}",
+    "resetPasswordAria": "Redefinir senha de {{name}}",
+    "deactivateAria": "Desativar {{name}}",
+    "reactivateAria": "Reativar {{name}}",
+    "cannotDeactivateSelf": "Você não pode desativar a si mesmo"
+  },
+  "dialog": {
+    "createTitle": "Novo usuário",
+    "editTitle": "Editar usuário",
+    "createDescription": "O usuário entra com o e-mail e a senha inicial definidos aqui.",
+    "editDescription": "Login: {{email}}",
+    "submitCreate": "Criar usuário",
+    "submitEdit": "Salvar alterações"
+  },
+  "form": {
+    "name": "Nome completo",
+    "namePlaceholder": "Ex.: Mariana Souza",
+    "email": "E-mail",
+    "emailPlaceholder": "nome@falcaoengenharia.com.br",
+    "emailHint": "É o login — não pode ser alterado depois.",
+    "initialPassword": "Senha inicial",
+    "passwordHint": "Mínimo de {{count}} caracteres. Combine maiúsculas, números e símbolos.",
+    "role": "Perfil de acesso",
+    "roleHint": "Define o que o usuário pode ver e fazer.",
+    "selfRoleHint": "Você não pode alterar o seu próprio perfil.",
+    "active": "Usuário ativo",
+    "activeHint": "Usuários inativos não conseguem entrar.",
+    "selfActiveHint": "Você não pode desativar a si mesmo."
+  },
+  "resetDialog": {
+    "title": "Redefinir senha",
+    "description": "Defina uma nova senha para <strong>{{name}}</strong>.",
+    "newPassword": "Nova senha",
+    "confirmPassword": "Confirmar nova senha",
+    "sessionsNotice": "As sessões abertas desse usuário serão encerradas — ele precisará entrar de novo com a nova senha.",
+    "submit": "Redefinir senha"
+  },
+  "confirm": {
+    "deactivateTitle": "Desativar usuário",
+    "reactivateTitle": "Reativar usuário",
+    "deactivateDescription": "<strong>{{name}}</strong> perderá o acesso imediatamente e as sessões abertas serão encerradas.",
+    "reactivateDescription": "<strong>{{name}}</strong> voltará a conseguir entrar com a senha atual."
+  },
+  "error": {
+    "title": "Não foi possível carregar os usuários",
+    "description": "Verifique sua conexão e tente novamente."
+  },
+  "empty": {
+    "title": "Nenhum usuário encontrado",
+    "description": "Ajuste os filtros ou cadastre um novo usuário."
+  },
+  "toast": {
+    "createSuccess": "Usuário criado.",
+    "createError": "Não foi possível criar o usuário.",
+    "updateSuccess": "Usuário atualizado.",
+    "updateError": "Não foi possível atualizar o usuário.",
+    "passwordReset": "Senha redefinida. As sessões do usuário foram encerradas.",
+    "passwordResetError": "Não foi possível redefinir a senha."
+  }
+}

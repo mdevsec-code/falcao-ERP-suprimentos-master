@@ -1,0 +1,99 @@
+{
+  "page": {
+    "eyebrow": "Administration",
+    "title": "Users",
+    "description": "Who can access Falcão Supplies, with which profile — and who is active."
+  },
+  "actions": {
+    "new": "New user",
+    "resetPassword": "Reset password",
+    "deactivate": "Deactivate",
+    "reactivate": "Reactivate"
+  },
+  "kpi": {
+    "total": "Users",
+    "active": "Active",
+    "inactive": "Inactive",
+    "admins": "Administrators"
+  },
+  "filters": {
+    "title": "Filters",
+    "search": {
+      "label": "Search",
+      "placeholder": "Name or email…"
+    },
+    "role": "Profile",
+    "status": "Status",
+    "allRoles": "All profiles",
+    "allStatuses": "All",
+    "chipRole": "Profile: {{value}}",
+    "chipStatus": "Status: {{value}}",
+    "chipSearch": "Search: {{value}}"
+  },
+  "table": {
+    "user": "User",
+    "role": "Profile",
+    "status": "Status",
+    "createdAt": "Since",
+    "actions": "Actions",
+    "you": "you",
+    "editAria": "Edit {{name}}",
+    "resetPasswordAria": "Reset password for {{name}}",
+    "deactivateAria": "Deactivate {{name}}",
+    "reactivateAria": "Reactivate {{name}}",
+    "cannotDeactivateSelf": "You cannot deactivate yourself"
+  },
+  "dialog": {
+    "createTitle": "New user",
+    "editTitle": "Edit user",
+    "createDescription": "The user signs in with the email and initial password set here.",
+    "editDescription": "Login: {{email}}",
+    "submitCreate": "Create user",
+    "submitEdit": "Save changes"
+  },
+  "form": {
+    "name": "Full name",
+    "namePlaceholder": "E.g.: Mariana Souza",
+    "email": "Email",
+    "emailPlaceholder": "name@falcaoengenharia.com.br",
+    "emailHint": "This is the login — it cannot be changed later.",
+    "initialPassword": "Initial password",
+    "passwordHint": "At least {{count}} characters. Mix uppercase, numbers and symbols.",
+    "role": "Access profile",
+    "roleHint": "Defines what the user can see and do.",
+    "selfRoleHint": "You cannot change your own profile.",
+    "active": "Active user",
+    "activeHint": "Inactive users cannot sign in.",
+    "selfActiveHint": "You cannot deactivate yourself."
+  },
+  "resetDialog": {
+    "title": "Reset password",
+    "description": "Set a new password for <strong>{{name}}</strong>.",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm new password",
+    "sessionsNotice": "This user's open sessions will be ended — they will need to sign in again with the new password.",
+    "submit": "Reset password"
+  },
+  "confirm": {
+    "deactivateTitle": "Deactivate user",
+    "reactivateTitle": "Reactivate user",
+    "deactivateDescription": "<strong>{{name}}</strong> will lose access immediately and open sessions will be ended.",
+    "reactivateDescription": "<strong>{{name}}</strong> will be able to sign in again with the current password."
+  },
+  "error": {
+    "title": "Could not load users",
+    "description": "Check your connection and try again."
+  },
+  "empty": {
+    "title": "No users found",
+    "description": "Adjust the filters or register a new user."
+  },
+  "toast": {
+    "createSuccess": "User created.",
+    "createError": "Could not create the user.",
+    "updateSuccess": "User updated.",
+    "updateError": "Could not update the user.",
+    "passwordReset": "Password reset. The user's sessions were ended.",
+    "passwordResetError": "Could not reset the password."
+  }
+}
