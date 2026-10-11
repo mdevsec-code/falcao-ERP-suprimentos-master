@@ -26,7 +26,8 @@ Monorepo em TypeScript com API [NestJS](https://nestjs.com/) + [Prisma](https://
 - **Fornecedores** — cadastro completo (razão social, CNPJ, categoria, localização), contatos, avaliações de desempenho e upload de documentos (certificados, contratos, cotações).
 - **Banco de produtos** — catálogo por empresa, fornecedor primário e alternativos, histórico de preços por fornecedor e unidade de medida.
 - **Solicitações de compra** — fluxo de aprovação com múltiplos status (`aguardando aprovação → em compras → em cotação → pedido realizado → aguardando recebimento → finalizado`, ou rejeição), itens, comentários, anexos e trilha de aprovações.
-- **Auditoria** — log de criação/atualização/remoção por entidade, associado ao usuário e à empresa.
+- **Auditoria** — log de criação/atualização/remoção por entidade, associado ao usuário e à empresa, com tela de consulta (filtros por ação, entidade, período e pessoa).
+- **Usuários e perfil** — administração de usuários (criar, editar perfil de acesso, ativar/desativar, redefinir senha) e página "Meu perfil" com troca do próprio nome e senha.
 
 ## Stack técnica
 
@@ -165,6 +166,10 @@ Principais entidades (definidas em `apps/api/prisma/schema.prisma`):
 - Prefixo global: `/api/v1`
 - Autenticação: `Authorization: Bearer <accessToken>`, obtido em `POST /api/v1/auth/login`
 - Renovação de sessão: `POST /api/v1/auth/refresh`
+- A cada requisição o token é conferido contra o banco: usuário desativado perde o acesso na hora e mudança de perfil vale imediatamente.
+- Usuários: `GET/POST /users`, `GET /users/stats`, `PATCH /users/:id`, `PATCH /users/:id/password` (ADMIN); `GET/PATCH /users/me`, `PATCH /users/me/password` (qualquer usuário)
+- Auditoria: `GET /audit-logs`, `GET /audit-logs/stats` (ADMIN e AUDITOR)
+- Saúde: `GET /health` (público — status da API e do banco)
 
 ## Padrão visual e de código
 
@@ -186,6 +191,7 @@ O projeto foi construído em fases incrementais, cada uma adicionando um módulo
 4. **Fase 3 — Solicitações de compra** — fluxo de aprovação com múltiplos status, itens, comentários, anexos e trilha de aprovações; interceptor de auditoria (`AuditLogInterceptor`) plugado nos módulos de negócio.
 5. **Publicação** — versionamento do código com Git e envio para o repositório GitHub ([mdevsec-code/falcao-ERP-suprimentos-master](https://github.com/mdevsec-code/falcao-ERP-suprimentos-master)).
 6. **Padronização com o Falcão Saúde Ocupacional** — frontend refeito sobre o design system, a estrutura de pastas e as convenções da plataforma de Saúde Ocupacional: tokens e componentes de UI, layout, animações, i18n (pt-BR/en-US/zh-CN), sessão em Zustand com "manter conectado", RBAC por permissões, KPIs e gráficos nas telas, Vitest, Prettier e CI. Correções feitas no caminho: a fila de Aprovações pedia `pageSize=200` (a API aceita no máximo 100) e falhava; o seletor de produto nos itens da solicitação não refletia a escolha; o `.env` da raiz não era lido pela API, pelo Prisma nem pelo Vite.
+7. **Administração** — usuários (API + tela), trilha de auditoria (API + tela), "Meu perfil", endpoint de saúde e redesenho das telas de entrada (login, 404, acesso negado, módulos "em breve") na linguagem "planta técnica" — malha milimetrada, carimbo de prancha e o fluxo de compra desenhado como diagrama vivo — mantendo tokens, cores e componentes. Correção: o `nest build` gerava `dist/` sem `main.js` quando o cache incremental do TypeScript existia.
 
 ## Estado atual e próximos passos
 
@@ -211,6 +217,5 @@ Módulos já previstos na navegação do Web, mas ainda não implementados (marc
 - Documentos (gestão central, além dos documentos de fornecedor)
 
 **Gaps administrativos**
-- Módulos `users` e `companies` existem apenas como serviços internos (usados pelo login) — não há controller/endpoints REST nem tela no Web para administrar usuários ou dados da empresa.
-- Sem fluxo de recuperação de senha ("esqueci minha senha").
-- `AuditLog` é gravado pelos módulos de negócio, mas não há endpoint nem tela para consultar o histórico de auditoria.
+- `companies` ainda é só um serviço interno — não há tela para os dados da empresa.
+- Sem fluxo de recuperação de senha por e-mail ("esqueci minha senha"); hoje um administrador redefine a senha.
