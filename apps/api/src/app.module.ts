@@ -19,7 +19,12 @@ import { UsersModule } from "./modules/users/users.module";
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true, validate: validateEnv }),
+    // `.env` do app primeiro; depois o da raiz do monorepo (onde o README manda criar).
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: [".env", "../../.env"],
+      validate: validateEnv,
+    }),
     ServeStaticModule.forRoot({
       rootPath: join(process.cwd(), process.env.UPLOADS_DIR ?? "uploads"),
       serveRoot: "/uploads",
