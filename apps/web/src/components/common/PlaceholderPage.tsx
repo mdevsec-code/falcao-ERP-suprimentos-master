@@ -1,9 +1,11 @@
 import { type ReactNode, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Sparkles } from 'lucide-react';
+import { ArrowLeft, PencilRuler } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { PageHeader } from '@/components/layout/PageHeader';
+import { BlueprintBackdrop } from '@/components/brand/BlueprintBackdrop';
+import { CornerBrackets } from '@/components/brand/CornerBrackets';
 import { ROUTE_PATHS } from '@/constants/routes';
 import falcaoMark from '@/assets/logo/falcao-mark.png';
 
@@ -12,10 +14,14 @@ interface PlaceholderPageProps {
   description?: string;
   /** Itens específicos do que está a caminho para este módulo (opcional). */
   features?: string[];
-  /** Conteúdo adicional exibido abaixo do cartão de "em construção". */
+  /** Conteúdo adicional exibido abaixo da prancha de "em projeto". */
   children?: ReactNode;
 }
 
+/**
+ * Módulo ainda não construído, apresentado como uma prancha "em projeto":
+ * malha técnica, carimbo inclinado e o escopo previsto como itens numerados.
+ */
 export function PlaceholderPage({
   title,
   description,
@@ -47,39 +53,63 @@ export function PlaceholderPage({
       />
 
       <div className="space-y-6 px-6 py-10 sm:px-8">
-        <div className="relative mx-auto flex max-w-2xl flex-col items-center gap-5 overflow-hidden rounded-xl border border-border bg-surface p-10 text-center shadow-sm">
+        <div className="relative mx-auto max-w-3xl overflow-hidden rounded-xl border border-border bg-surface shadow-sm">
+          <BlueprintBackdrop registrationMarks={false} />
+          <CornerBrackets />
+
           <img
             src={falcaoMark}
             alt=""
             aria-hidden="true"
-            className="pointer-events-none absolute -bottom-10 -right-10 h-48 w-auto object-contain opacity-[0.04]"
+            className="pointer-events-none absolute -bottom-12 -right-10 h-56 w-auto object-contain opacity-[0.05]"
           />
 
+          {/* Carimbo */}
           <div
             aria-hidden="true"
-            className="relative flex h-14 w-14 items-center justify-center rounded-full bg-brand-gold-50 text-brand-gold-700"
+            className="absolute right-6 top-6 hidden rotate-[-8deg] animate-scale-in rounded-md border-2 border-brand-gold-500/70 px-3 py-1 font-mono text-xs font-semibold uppercase tracking-[0.25em] text-brand-gold-700 sm:block"
+            style={{ animationDelay: '300ms', animationFillMode: 'backwards' }}
           >
-            <Sparkles className="h-6 w-6" />
+            {t('placeholder.stamp')}
           </div>
 
-          <div className="relative">
-            <h2 className="font-display text-2xl font-semibold text-ink">{title}</h2>
-            <p className="mx-auto mt-2 max-w-md text-sm text-ink-soft">{resolvedDescription}</p>
-          </div>
+          <div className="relative space-y-6 p-8 sm:p-10">
+            <div className="flex items-center gap-3">
+              <span
+                aria-hidden="true"
+                className="flex h-11 w-11 items-center justify-center rounded-md bg-brand-gold-50 text-brand-gold-700"
+              >
+                <PencilRuler className="h-5 w-5" />
+              </span>
+              <div>
+                <p className="font-mono text-2xs uppercase tracking-[0.22em] text-muted">
+                  {t('placeholder.scopeLabel')}
+                </p>
+                <h2 className="font-display text-2xl font-semibold text-ink">{title}</h2>
+              </div>
+            </div>
 
-          {features && features.length > 0 && (
-            <ul className="relative grid grid-cols-1 gap-2 text-left text-sm text-ink-soft sm:grid-cols-2">
-              {features.map((item) => (
-                <li key={item} className="flex items-center gap-2">
-                  <Sparkles
-                    className="h-3.5 w-3.5 shrink-0 text-brand-gold-700"
-                    aria-hidden="true"
-                  />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          )}
+            {features && features.length > 0 && (
+              <ol className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {features.map((item, idx) => (
+                  <li
+                    key={item}
+                    className="flex animate-slide-up items-start gap-3 rounded-md border border-dashed border-border bg-bg/60 px-4 py-3 backdrop-blur-sm"
+                    style={{ animationDelay: `${80 + idx * 60}ms`, animationFillMode: 'backwards' }}
+                  >
+                    <span className="mt-0.5 font-mono text-xs font-semibold text-brand-gold-700">
+                      {String(idx + 1).padStart(2, '0')}
+                    </span>
+                    <span className="text-sm text-ink">{item}</span>
+                  </li>
+                ))}
+              </ol>
+            )}
+
+            <p className="border-t border-dashed border-border pt-4 font-mono text-2xs uppercase tracking-[0.16em] text-muted">
+              {t('placeholder.footnote')}
+            </p>
+          </div>
         </div>
 
         {children}

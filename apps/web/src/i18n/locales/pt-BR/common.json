@@ -59,7 +59,10 @@
     "finance": "Financeiro",
     "reimbursements": "Reembolsos",
     "agenda": "Agenda",
-    "documents": "Documentos"
+    "documents": "Documentos",
+    "users": "Usuários",
+    "audit": "Auditoria",
+    "profile": "Meu perfil"
   },
   "theme": {
     "switchToLight": "Ativar tema claro",
@@ -71,7 +74,8 @@
     "contractsFinance": "Contratos & Financeiro",
     "organization": "Organização",
     "comingSoon": "Em breve",
-    "mainNavAriaLabel": "Navegação principal"
+    "mainNavAriaLabel": "Navegação principal",
+    "admin": "Administração"
   },
   "footer": {
     "version": "Falcão · v{{version}}"
@@ -87,7 +91,8 @@
     "notifications": "Notificações",
     "noNotifications": "Nenhuma notificação por aqui ainda.",
     "signOut": "Sair",
-    "account": "Minha conta"
+    "account": "Minha conta",
+    "profile": "Meu perfil"
   },
   "breadcrumb": {
     "ariaLabel": "Trilha de navegação",
@@ -137,15 +142,20 @@
         "Controle de validade",
         "Busca por conteúdo"
       ]
-    }
+    },
+    "stamp": "Em projeto",
+    "scopeLabel": "Escopo previsto",
+    "footnote": "Prancha preliminar · sujeita a revisão"
   },
   "notFound": {
     "title": "Página não encontrada",
-    "description": "A rota solicitada não pôde ser carregada. Verifique o endereço ou volte para a página inicial."
+    "description": "A rota solicitada não pôde ser carregada. Verifique o endereço ou volte para a página inicial.",
+    "label": "Folha não encontrada"
   },
   "forbidden": {
     "title": "Acesso restrito",
-    "description": "Seu perfil de acesso não tem permissão para ver esta página. Fale com um administrador se precisar de acesso."
+    "description": "Seu perfil de acesso não tem permissão para ver esta página. Fale com um administrador se precisar de acesso.",
+    "label": "Acesso restrito"
   },
   "errorBoundary": {
     "routeErrorDescription": "A rota solicitada não pôde ser carregada.",

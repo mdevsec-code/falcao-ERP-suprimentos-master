@@ -59,7 +59,10 @@
     "finance": "Finance",
     "reimbursements": "Reimbursements",
     "agenda": "Schedule",
-    "documents": "Documents"
+    "documents": "Documents",
+    "users": "Users",
+    "audit": "Audit",
+    "profile": "My profile"
   },
   "theme": {
     "switchToLight": "Switch to light theme",
@@ -71,7 +74,8 @@
     "contractsFinance": "Contracts & Finance",
     "organization": "Organization",
     "comingSoon": "Coming soon",
-    "mainNavAriaLabel": "Main navigation"
+    "mainNavAriaLabel": "Main navigation",
+    "admin": "Administration"
   },
   "footer": {
     "version": "Falcão · v{{version}}"
@@ -87,7 +91,8 @@
     "notifications": "Notifications",
     "noNotifications": "No notifications yet.",
     "signOut": "Sign out",
-    "account": "My account"
+    "account": "My account",
+    "profile": "My profile"
   },
   "breadcrumb": {
     "ariaLabel": "Breadcrumb",
@@ -137,15 +142,20 @@
         "Expiration control",
         "Full-text search"
       ]
-    }
+    },
+    "stamp": "In design",
+    "scopeLabel": "Planned scope",
+    "footnote": "Preliminary sheet · subject to revision"
   },
   "notFound": {
     "title": "Page not found",
-    "description": "The requested route could not be loaded. Check the address or go back to the home page."
+    "description": "The requested route could not be loaded. Check the address or go back to the home page.",
+    "label": "Sheet not found"
   },
   "forbidden": {
     "title": "Restricted access",
-    "description": "Your access profile is not allowed to see this page. Ask an administrator if you need access."
+    "description": "Your access profile is not allowed to see this page. Ask an administrator if you need access.",
+    "label": "Restricted access"
   },
   "errorBoundary": {
     "routeErrorDescription": "The requested route could not be loaded.",

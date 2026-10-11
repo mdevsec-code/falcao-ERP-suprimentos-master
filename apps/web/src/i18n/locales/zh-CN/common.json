@@ -59,7 +59,10 @@
     "finance": "财务",
     "reimbursements": "报销",
     "agenda": "日程",
-    "documents": "文档"
+    "documents": "文档",
+    "users": "用户",
+    "audit": "审计",
+    "profile": "个人资料"
   },
   "theme": {
     "switchToLight": "切换到浅色主题",
@@ -71,7 +74,8 @@
     "contractsFinance": "合同与财务",
     "organization": "组织",
     "comingSoon": "即将推出",
-    "mainNavAriaLabel": "主导航"
+    "mainNavAriaLabel": "主导航",
+    "admin": "管理"
   },
   "footer": {
     "version": "Falcão · v{{version}}"
@@ -87,7 +91,8 @@
     "notifications": "通知",
     "noNotifications": "暂无通知。",
     "signOut": "退出",
-    "account": "我的账户"
+    "account": "我的账户",
+    "profile": "个人资料"
   },
   "breadcrumb": {
     "ariaLabel": "导航路径",
@@ -112,15 +117,20 @@
       "reimbursements": ["附凭证的报销申请", "经理审批", "与财务集成", "按员工查看历史"],
       "agenda": ["交货与收货日程", "供应商拜访", "到期提醒", "按工地查看"],
       "documents": ["集中文档库", "分类与标签", "有效期管理", "全文搜索"]
-    }
+    },
+    "stamp": "设计中",
+    "scopeLabel": "规划范围",
+    "footnote": "初步图纸 · 可能修订"
   },
   "notFound": {
     "title": "页面未找到",
-    "description": "无法加载所请求的路由。请检查地址或返回首页。"
+    "description": "无法加载所请求的路由。请检查地址或返回首页。",
+    "label": "图纸未找到"
   },
   "forbidden": {
     "title": "访问受限",
-    "description": "您的访问权限无法查看此页面。如需访问，请联系管理员。"
+    "description": "您的访问权限无法查看此页面。如需访问，请联系管理员。",
+    "label": "访问受限"
   },
   "errorBoundary": {
     "routeErrorDescription": "无法加载所请求的路由。",

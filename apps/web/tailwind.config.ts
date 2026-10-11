@@ -170,6 +170,30 @@ const config: Config = {
           '0%, 100%': { transform: 'translate(0, 0) scale(1)' },
           '50%': { transform: 'translate(3%, 2%) scale(1.06)' },
         },
+        // ── Linguagem "planta técnica" (login e telas de entrada) ──
+        // Traço que se desenha: requer stroke-dasharray = comprimento do path.
+        'draw-line': {
+          from: { strokeDashoffset: 'var(--dash, 1000)' },
+          to: { strokeDashoffset: '0' },
+        },
+        // Pulso dourado que percorre o fluxo de ponta a ponta, em loop.
+        // Com stroke-dasharray "L P" (L = tamanho do pulso, P = comprimento do
+        // path): offset L = pulso inteiro antes do início; -P = depois do fim.
+        'pulse-travel': {
+          '0%': { strokeDashoffset: 'var(--travel-from, 80)', opacity: '0' },
+          '6%': { opacity: '1' },
+          '90%': { opacity: '1' },
+          '100%': { strokeDashoffset: 'var(--travel-to, -1000)', opacity: '0' },
+        },
+        // Etapa do fluxo acendendo quando o pulso passa por ela.
+        'node-lit': {
+          '0%, 100%': { fill: 'rgb(var(--color-surface))' },
+          '12%, 30%': { fill: 'rgb(var(--color-brand-gold-300))' },
+        },
+        'blink-caret': {
+          '0%, 49%': { opacity: '1' },
+          '50%, 100%': { opacity: '0' },
+        },
       },
       animation: {
         'fade-in': 'fade-in var(--duration-base) var(--ease-out)',
@@ -188,6 +212,10 @@ const config: Config = {
         'glow-pulse': 'glow-pulse 6s var(--ease-in-out) infinite',
         drift: 'drift 14s var(--ease-in-out) infinite',
         'drift-reverse': 'drift-reverse 18s var(--ease-in-out) infinite',
+        'draw-line': 'draw-line 1.4s var(--ease-out) both',
+        'pulse-travel': 'pulse-travel 5s var(--ease-in-out) infinite',
+        'node-lit': 'node-lit 5s var(--ease-in-out) infinite',
+        'blink-caret': 'blink-caret 1.1s steps(1) infinite',
       },
     },
   },

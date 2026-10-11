@@ -1,21 +1,24 @@
-import { useEffect, useState, type KeyboardEvent, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type KeyboardEvent, type ReactNode } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
-import { Mail, Lock, Eye, EyeOff, LogIn, ShieldCheck, AlertTriangle } from 'lucide-react';
+import { AlertTriangle, ArrowRight, Eye, EyeOff, Lock, Mail, ShieldCheck } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher';
+import { BlueprintBackdrop } from '@/components/brand/BlueprintBackdrop';
+import { CornerBrackets } from '@/components/brand/CornerBrackets';
+import { PipelineDiagram } from '@/components/brand/PipelineDiagram';
+import { TitleBlock } from '@/components/brand/TitleBlock';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Checkbox } from '@/components/ui/Checkbox';
 import { Label } from '@/components/ui/Label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui';
 import { FalcaoLogo } from '@/assets/logo/FalcaoLogo';
-import falcaoMark from '@/assets/logo/falcao-mark.png';
 import { brand } from '@/config/brand';
+import { formatDate } from '@/utils/format';
 import { useAuth } from '../hooks/useAuth';
 import { loginSchema, type LoginInput } from '../types';
 import { ROUTE_PATHS } from '@/constants/routes';
@@ -24,12 +27,17 @@ interface LocationState {
   from?: string;
 }
 
+/** Entrada escalonada: cada bloco sobe um pouco depois do anterior. */
+function stagger(ms: number) {
+  return { animationDelay: `${ms}ms`, animationFillMode: 'backwards' as const };
+}
+
 export function LoginPage(): ReactNode {
   const navigate = useNavigate();
   const location = useLocation();
   const { signIn, isAuthenticated } = useAuth();
   const { t } = useTranslation(['auth', 'common', 'validation']);
-  const sidePanelRoles = t('auth:login.sidePanel.roles', { returnObjects: true }) as string[];
+  const steps = t('auth:login.pipeline.steps', { returnObjects: true }) as string[];
 
   // Para onde ir depois de autenticar: a página que o usuário tentava
   // acessar antes de ser redirecionado ao login (`RequireAuth`), ou o
@@ -42,6 +50,7 @@ export function LoginPage(): ReactNode {
   const [credentialsError, setCredentialsError] = useState<string | null>(null);
   const [showPwd, setShowPwd] = useState(false);
   const [capsLockOn, setCapsLockOn] = useState(false);
+  const issuedAt = useMemo(() => formatDate(new Date()) ?? '', []);
 
   function handlePasswordKeyEvent(event: KeyboardEvent<HTMLInputElement>) {
     setCapsLockOn(event.getModifierState('CapsLock'));
@@ -81,259 +90,248 @@ export function LoginPage(): ReactNode {
   );
 
   return (
-    <div className="grid min-h-screen grid-cols-1 lg:grid-cols-2">
-      {/* ────────── Esquerda: painel decorativo (apenas ≥lg) ────────── */}
-      <aside
-        aria-hidden="true"
-        className="relative hidden overflow-hidden bg-gradient-to-br from-neutral-900 via-neutral-900 to-brand-gold-900 p-10 lg:flex lg:flex-col lg:justify-between xl:p-12"
-      >
-        {/* Textura de grade sutil — dá profundidade sem competir com o conteúdo */}
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.05]"
-          style={{
-            backgroundImage:
-              'linear-gradient(rgb(var(--color-neutral-0)) 1px, transparent 1px), linear-gradient(90deg, rgb(var(--color-neutral-0)) 1px, transparent 1px)',
-            backgroundSize: '44px 44px',
-          }}
-        />
+    <div className="relative min-h-screen overflow-hidden bg-bg">
+      <BlueprintBackdrop spotlight />
 
-        {/* Camadas de glow ambiente — cada uma deriva num ritmo diferente para sensação "viva" sem distrair */}
-        <div
-          className="pointer-events-none absolute -left-20 -top-20 h-[28rem] w-[28rem] animate-drift rounded-full opacity-70 blur-3xl"
-          style={{
-            background:
-              'radial-gradient(circle, rgb(var(--color-brand-gold-500) / 0.28), transparent 70%)',
-          }}
-        />
-        <div
-          className="pointer-events-none absolute -bottom-24 right-0 h-[24rem] w-[24rem] animate-drift-reverse rounded-full opacity-60 blur-3xl"
-          style={{
-            background:
-              'radial-gradient(circle, rgb(var(--color-brand-gold-300) / 0.16), transparent 70%)',
-          }}
-        />
-        <div
-          className="pointer-events-none absolute inset-0 animate-glow-pulse"
-          style={{
-            background:
-              'radial-gradient(60% 50% at 30% 30%, rgb(var(--color-brand-gold-500) / 0.18), transparent 70%)',
-          }}
-        />
-
-        {/* Vinheta — escurece as bordas para o conteúdo central respirar */}
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              'radial-gradient(120% 100% at 50% 50%, transparent 55%, rgb(var(--color-neutral-900) / 0.35) 100%)',
-          }}
-        />
-
-        <img
-          src={falcaoMark}
-          alt=""
-          className="pointer-events-none absolute -bottom-16 -right-16 h-[26rem] w-auto animate-drift object-contain opacity-[0.07] grayscale invert"
-        />
-
-        <FalcaoLogo
-          variant="wordmark"
-          className="relative h-16 w-auto max-w-[280px] animate-fade-in drop-shadow-[0_0_24px_rgba(253,191,42,0.15)]"
-          bgClassName="rounded-lg bg-white p-3 shadow-md ring-1 ring-black/5"
-        />
-
-        <div className="relative animate-slide-up space-y-4">
-          <div className="space-y-2">
-            <p className="font-display text-2xl font-semibold text-white">
-              {t('auth:login.sidePanel.title')}
+      {/* ───────── Barra superior ───────── */}
+      <header className="relative z-10 flex items-center justify-between px-5 py-4 sm:px-10 sm:py-6">
+        <div className="flex animate-fade-in items-center gap-3">
+          <FalcaoLogo
+            className="h-9 w-auto"
+            bgClassName="rounded-md bg-white p-1 shadow-sm ring-1 ring-border"
+          />
+          <div className="leading-tight">
+            <p className="font-display text-lg font-semibold text-ink">{brand.shortName}</p>
+            <p className="font-mono text-2xs uppercase tracking-[0.2em] text-brand-gold-700">
+              {t('common:branding.supplies')}
             </p>
-            <p className="max-w-sm text-sm text-white/70">{t('auth:login.sidePanel.tagline')}</p>
-          </div>
-
-          <div className="flex flex-wrap gap-1.5">
-            {sidePanelRoles.map((role, idx) => (
-              <span
-                key={role}
-                className="animate-slide-up rounded-full border border-white/15 bg-white/5 px-2.5 py-1 text-2xs font-medium text-white/80 backdrop-blur-sm transition-colors hover:border-white/25 hover:bg-white/10"
-                style={{ animationDelay: `${120 + idx * 60}ms`, animationFillMode: 'backwards' }}
-              >
-                {role}
-              </span>
-            ))}
-          </div>
-
-          <div className="flex items-center gap-2 border-t border-white/10 pt-4 text-xs text-white/50">
-            <ShieldCheck className="h-3.5 w-3.5 shrink-0" />
-            <span>{t('auth:login.sidePanel.compliance')}</span>
           </div>
         </div>
-      </aside>
-
-      {/* ────────── Direita: formulário ────────── */}
-      <main className="relative flex flex-col items-center justify-center overflow-hidden bg-bg px-4 py-10 sm:px-8">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 animate-glow-pulse"
-          style={{
-            background:
-              'radial-gradient(50% 40% at 50% 0%, rgb(var(--color-brand-gold-500) / 0.08), transparent 70%)',
-          }}
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -bottom-32 -left-24 h-96 w-96 animate-drift-reverse rounded-full opacity-60 blur-3xl"
-          style={{
-            background:
-              'radial-gradient(circle, rgb(var(--color-brand-gold-300) / 0.06), transparent 70%)',
-          }}
-        />
-
-        <div className="absolute right-4 top-4 flex items-center gap-1 sm:right-6 sm:top-6">
+        <div className="flex items-center gap-1">
           <LanguageSwitcher />
           <ThemeToggle />
         </div>
+      </header>
 
-        <div className="relative w-full max-w-md animate-scale-in">
+      {/* ───────── Conteúdo ───────── */}
+      <main className="relative z-10 mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-10 px-5 pb-20 pt-4 sm:px-10 lg:min-h-[calc(100vh-8rem)] lg:grid-cols-[1.15fr_0.85fr] lg:gap-16 lg:pt-0">
+        {/* Esquerda: manifesto + fluxo */}
+        <section className="space-y-8" aria-labelledby="login-headline">
+          <div className="space-y-5">
+            <p
+              className="flex animate-slide-up items-center gap-3 font-mono text-2xs uppercase tracking-[0.22em] text-brand-gold-700"
+              style={stagger(40)}
+            >
+              <span className="h-px w-8 bg-brand-gold-500" aria-hidden="true" />
+              {t('auth:login.hero.eyebrow')}
+            </p>
+            <h1
+              id="login-headline"
+              className="animate-slide-up font-display text-4xl font-semibold leading-[1.05] tracking-tight text-ink sm:text-5xl xl:text-6xl"
+              style={stagger(100)}
+            >
+              {t('auth:login.hero.titleStart')}{' '}
+              <span className="relative whitespace-nowrap italic text-brand-gold-700">
+                {t('auth:login.hero.titleAccent')}
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 300 12"
+                  preserveAspectRatio="none"
+                  className="absolute -bottom-1 left-0 h-2.5 w-full"
+                >
+                  <path
+                    d="M2 8 C 80 2, 180 2, 298 7"
+                    fill="none"
+                    stroke="rgb(var(--color-brand-gold-300))"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeDasharray="300"
+                    className="animate-draw-line"
+                    style={{ ['--dash' as string]: 300, animationDelay: '600ms' }}
+                  />
+                </svg>
+              </span>
+            </h1>
+            <p className="max-w-lg animate-slide-up text-base text-ink-soft" style={stagger(160)}>
+              {t('auth:login.hero.description')}
+            </p>
+          </div>
+
+          <figure
+            className="relative hidden animate-slide-up rounded-lg border border-dashed border-border bg-surface/50 px-5 pb-4 pt-7 backdrop-blur-sm sm:block"
+            style={stagger(240)}
+          >
+            <figcaption className="absolute -top-2.5 left-4 bg-bg px-2 font-mono text-2xs uppercase tracking-[0.2em] text-muted">
+              {t('auth:login.pipeline.caption')}
+            </figcaption>
+            <PipelineDiagram steps={steps} />
+          </figure>
+
+          <TitleBlock
+            className="hidden max-w-sm animate-slide-up lg:grid"
+            rows={[
+              { label: t('auth:login.titleBlock.project'), value: brand.name },
+              {
+                label: t('auth:login.titleBlock.sheet'),
+                value: t('auth:login.titleBlock.sheetValue'),
+              },
+              { label: t('auth:login.titleBlock.revision'), value: `v${brand.version}` },
+              { label: t('auth:login.titleBlock.issued'), value: issuedAt },
+            ]}
+          />
+        </section>
+
+        {/* Direita: formulário */}
+        <section
+          className="relative mx-auto w-full max-w-md animate-scale-in lg:mx-0"
+          style={stagger(120)}
+          aria-labelledby="login-title"
+        >
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -inset-4 rounded-2xl opacity-60 blur-2xl"
+            className="pointer-events-none absolute -inset-6 rounded-[2rem] opacity-70 blur-2xl"
             style={{
               background:
-                'radial-gradient(60% 60% at 50% 40%, rgb(var(--color-brand-gold-500) / 0.12), transparent 70%)',
+                'radial-gradient(60% 55% at 50% 40%, rgb(var(--color-brand-gold-300) / 0.18), transparent 70%)',
             }}
           />
-          <Card className="relative overflow-hidden border-border shadow-lg">
-            <div
-              aria-hidden="true"
-              className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand-gold-300 via-brand-gold-500 to-brand-gold-300"
-            />
-            <CardHeader className="items-center text-center">
-              <FalcaoLogo
-                className="h-12 w-auto"
-                bgClassName="rounded-md bg-white p-1.5 shadow-sm ring-1 ring-border"
-              />
-              <CardTitle className="mt-3">{t('auth:login.title')}</CardTitle>
-              <CardDescription>{t('auth:login.subtitle')}</CardDescription>
-            </CardHeader>
+          <div className="relative rounded-xl border border-border bg-surface/90 p-7 shadow-lg backdrop-blur-md sm:p-9">
+            <CornerBrackets />
 
-            <CardContent>
-              <form onSubmit={onSubmit} noValidate className="space-y-4">
-                <div
-                  className="animate-slide-up"
-                  style={{ animationDelay: '60ms', animationFillMode: 'backwards' }}
-                >
-                  <Input
-                    {...register('email')}
-                    type="email"
-                    label={t('auth:login.fields.email')}
-                    placeholder={t('auth:login.fields.emailPlaceholder')}
-                    autoComplete="email"
-                    leftIcon={<Mail className="h-4 w-4" />}
-                    error={errors.email?.message}
-                    disabled={isSubmitting}
-                    required
-                  />
-                </div>
+            <div className="mb-7 space-y-2">
+              <p className="font-mono text-2xs uppercase tracking-[0.22em] text-muted">
+                {t('auth:login.formEyebrow')}
+              </p>
+              <h2 id="login-title" className="font-display text-3xl font-semibold text-ink">
+                {t('auth:login.title')}
+              </h2>
+              <p className="text-sm text-ink-soft">{t('auth:login.subtitle')}</p>
+            </div>
 
-                <div
-                  className="animate-slide-up"
-                  style={{ animationDelay: '110ms', animationFillMode: 'backwards' }}
-                >
-                  <Input
-                    {...register('password')}
-                    type={showPwd ? 'text' : 'password'}
-                    label={t('auth:login.fields.password')}
-                    placeholder={t('auth:login.fields.passwordPlaceholder')}
-                    autoComplete="current-password"
-                    leftIcon={<Lock className="h-4 w-4" />}
-                    onKeyDown={handlePasswordKeyEvent}
-                    onKeyUp={handlePasswordKeyEvent}
-                    rightIcon={
-                      <button
-                        type="button"
-                        onClick={() => setShowPwd((s) => !s)}
-                        aria-label={
-                          showPwd
-                            ? t('auth:login.actions.hidePassword')
-                            : t('auth:login.actions.showPassword')
-                        }
-                        aria-pressed={showPwd}
-                        className="text-ink-soft transition-colors hover:text-ink focus:outline-none focus-visible:text-ink"
-                      >
-                        {showPwd ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                      </button>
-                    }
-                    error={errors.password?.message}
-                    disabled={isSubmitting}
-                    required
-                  />
-                  {capsLockOn && (
-                    <p className="mt-1.5 flex animate-slide-up items-center gap-1.5 text-xs text-warning">
-                      <AlertTriangle className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-                      {t('auth:login.fields.capsLockWarning')}
-                    </p>
-                  )}
-                </div>
+            <form onSubmit={onSubmit} noValidate className="space-y-5">
+              <div className="animate-slide-up" style={stagger(220)}>
+                <Input
+                  {...register('email')}
+                  type="email"
+                  label={t('auth:login.fields.email')}
+                  placeholder={t('auth:login.fields.emailPlaceholder')}
+                  autoComplete="email"
+                  leftIcon={<Mail className="h-4 w-4" />}
+                  error={errors.email?.message}
+                  disabled={isSubmitting}
+                  required
+                />
+              </div>
 
-                <div
-                  className="flex animate-slide-up items-center justify-between"
-                  style={{ animationDelay: '160ms', animationFillMode: 'backwards' }}
-                >
-                  <Label className="flex items-center gap-2 font-normal text-ink-soft">
-                    <Controller
-                      control={control}
-                      name="rememberMe"
-                      render={({ field }) => (
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={(checked) => field.onChange(checked === true)}
-                        />
-                      )}
-                    />
-                    {t('auth:login.fields.rememberMe')}
-                  </Label>
-
-                  <Button
-                    type="button"
-                    variant="link"
-                    size="sm"
-                    className="h-auto px-0 text-xs"
-                    onClick={() => toast.info(t('auth:login.actions.forgotPasswordUnavailable'))}
-                  >
-                    {t('auth:login.actions.forgotPassword')}
-                  </Button>
-                </div>
-
-                {credentialsError && (
-                  <p
-                    role="alert"
-                    className="animate-slide-up rounded-md border border-danger/30 bg-danger/5 px-3 py-2 text-xs text-danger"
-                  >
-                    {credentialsError}
+              <div className="animate-slide-up" style={stagger(270)}>
+                <Input
+                  {...register('password')}
+                  type={showPwd ? 'text' : 'password'}
+                  label={t('auth:login.fields.password')}
+                  placeholder={t('auth:login.fields.passwordPlaceholder')}
+                  autoComplete="current-password"
+                  leftIcon={<Lock className="h-4 w-4" />}
+                  onKeyDown={handlePasswordKeyEvent}
+                  onKeyUp={handlePasswordKeyEvent}
+                  rightIcon={
+                    <button
+                      type="button"
+                      onClick={() => setShowPwd((s) => !s)}
+                      aria-label={
+                        showPwd
+                          ? t('auth:login.actions.hidePassword')
+                          : t('auth:login.actions.showPassword')
+                      }
+                      aria-pressed={showPwd}
+                      className="text-ink-soft transition-colors hover:text-ink focus:outline-none focus-visible:text-ink"
+                    >
+                      {showPwd ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  }
+                  error={errors.password?.message}
+                  disabled={isSubmitting}
+                  required
+                />
+                {capsLockOn && (
+                  <p className="mt-1.5 flex animate-slide-up items-center gap-1.5 text-xs text-warning">
+                    <AlertTriangle className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                    {t('auth:login.fields.capsLockWarning')}
                   </p>
                 )}
+              </div>
 
-                <div
-                  className="animate-slide-up"
-                  style={{ animationDelay: '210ms', animationFillMode: 'backwards' }}
+              <div
+                className="flex animate-slide-up items-center justify-between"
+                style={stagger(320)}
+              >
+                <Label className="flex items-center gap-2 font-normal text-ink-soft">
+                  <Controller
+                    control={control}
+                    name="rememberMe"
+                    render={({ field }) => (
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={(checked) => field.onChange(checked === true)}
+                      />
+                    )}
+                  />
+                  {t('auth:login.fields.rememberMe')}
+                </Label>
+
+                <Button
+                  type="button"
+                  variant="link"
+                  size="sm"
+                  className="h-auto px-0 text-xs"
+                  onClick={() => toast.info(t('auth:login.actions.forgotPasswordUnavailable'))}
                 >
-                  <Button
-                    type="submit"
-                    variant="primary"
-                    size="lg"
-                    fullWidth
-                    isLoading={isSubmitting}
-                    leftIcon={!isSubmitting ? <LogIn className="h-4 w-4" /> : undefined}
-                  >
-                    {t('auth:login.actions.submit')}
-                  </Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-        </div>
+                  {t('auth:login.actions.forgotPassword')}
+                </Button>
+              </div>
 
-        <p className="relative mt-6 text-2xs text-muted">{brand.copyright}</p>
+              {credentialsError && (
+                <p
+                  role="alert"
+                  className="animate-slide-up rounded-md border border-danger/30 bg-danger/5 px-3 py-2 text-xs text-danger"
+                >
+                  {credentialsError}
+                </p>
+              )}
+
+              <div className="animate-slide-up pt-1" style={stagger(370)}>
+                <Button
+                  type="submit"
+                  variant="primary"
+                  size="lg"
+                  fullWidth
+                  isLoading={isSubmitting}
+                  rightIcon={
+                    !isSubmitting ? (
+                      <ArrowRight className="h-4 w-4 transition-transform duration-base group-hover:translate-x-0.5" />
+                    ) : undefined
+                  }
+                  className="group"
+                >
+                  {t('auth:login.actions.submit')}
+                </Button>
+              </div>
+            </form>
+
+            <div className="mt-7 flex items-center gap-2 border-t border-dashed border-border pt-4 text-xs text-ink-soft">
+              <ShieldCheck
+                className="h-3.5 w-3.5 shrink-0 text-brand-gold-700"
+                aria-hidden="true"
+              />
+              <span>{t('auth:login.compliance')}</span>
+            </div>
+          </div>
+        </section>
       </main>
+
+      <footer className="relative z-10 flex flex-col items-center justify-between gap-1 px-5 pb-6 font-mono text-2xs uppercase tracking-[0.14em] text-muted sm:flex-row sm:px-10 lg:absolute lg:inset-x-0 lg:bottom-0">
+        <span>{brand.copyright}</span>
+        <span className="hidden sm:inline">{t('auth:login.footerTag')}</span>
+      </footer>
     </div>
   );
 }
