@@ -1,4 +1,10 @@
 {
   "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // O `nest build` apaga o dist/ antes de compilar (deleteOutDir); com build
+    // incremental o cache .tsbuildinfo (fora do dist/) faria o tsc pular
+    // arquivos "inalterados" e o dist/ sairia sem main.js.
+    "incremental": false
+  },
   "exclude": ["node_modules", "dist", "generated", "**/*spec.ts", "prisma/seed.ts", "prisma.config.ts"]
 }
