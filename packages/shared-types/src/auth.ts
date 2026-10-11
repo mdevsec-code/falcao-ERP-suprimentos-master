@@ -1,4 +1,4 @@
-import type { Role } from "./enums";
+import type { AuditAction, Role } from "./enums";
 
 export interface AuthUserDto {
   id: string;
@@ -17,11 +17,13 @@ export interface LoginResponseDto {
 
 export interface AuditLogEntryDto {
   id: string;
-  action: string;
+  action: AuditAction;
   entityType: string;
   entityId: string;
-  changes: Record<string, { before: unknown; after: unknown }> | null;
+  /** Snapshot do registro após a operação (o AuditLogInterceptor grava `{ after }`); nulo em DELETE. */
+  changes: { after?: unknown } | null;
   userId: string;
   userName: string;
+  userEmail: string;
   createdAt: string;
 }

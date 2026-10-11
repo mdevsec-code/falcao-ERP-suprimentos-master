@@ -55,8 +55,17 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
           delete: ({ args, query }) => query(withWhere(args, companyId)),
           create: ({ args, query }) => query(withData(args, companyId)),
         },
+        user: {
+          findMany: ({ args, query }) => query(withWhere(args, companyId)),
+          findFirst: ({ args, query }) => query(withWhere(args, companyId)),
+          count: ({ args, query }) => query(withWhere(args, companyId)),
+          groupBy: ({ args, query }) => query(withWhere(args, companyId)),
+          update: ({ args, query }) => query(withWhere(args, companyId)),
+          create: ({ args, query }) => query(withData(args, companyId)),
+        },
         auditLog: {
           findMany: ({ args, query }) => query(withWhere(args, companyId)),
+          groupBy: ({ args, query }) => query(withWhere(args, companyId)),
           count: ({ args, query }) => query(withWhere(args, companyId)),
           create: ({ args, query }) => query(withData(args, companyId)),
         },

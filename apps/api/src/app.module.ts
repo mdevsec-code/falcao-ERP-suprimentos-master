@@ -9,8 +9,10 @@ import { JwtAuthGuard } from "./common/guards/jwt-auth.guard";
 import { RolesGuard } from "./common/guards/roles.guard";
 import { AuditLogInterceptor } from "./common/interceptors/audit-log.interceptor";
 import { PrismaModule } from "./database/prisma.module";
+import { AuditModule } from "./modules/audit/audit.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { CompaniesModule } from "./modules/companies/companies.module";
+import { HealthModule } from "./modules/health/health.module";
 import { ProductsModule } from "./modules/products/products.module";
 import { PurchaseRequestsModule } from "./modules/purchase-requests/purchase-requests.module";
 import { StorageModule } from "./modules/storage/storage.module";
@@ -37,6 +39,8 @@ import { UsersModule } from "./modules/users/users.module";
     SuppliersModule,
     ProductsModule,
     PurchaseRequestsModule,
+    AuditModule,
+    HealthModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: JwtAuthGuard },

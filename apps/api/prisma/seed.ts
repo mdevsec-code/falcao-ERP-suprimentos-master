@@ -1,4 +1,6 @@
-import "dotenv/config";
+import { config } from "dotenv";
+// `.env` do app primeiro; depois o da raiz do monorepo.
+config({ path: [".env", "../../.env"] });
 import { PrismaPg } from "@prisma/adapter-pg";
 import * as bcrypt from "bcryptjs";
 import { PrismaClient } from "../generated/prisma";

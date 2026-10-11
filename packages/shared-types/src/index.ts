@@ -57,3 +57,6 @@ export {
 } from "./purchase-request-workflow";
 
 export type { AuthUserDto, LoginResponseDto, AuditLogEntryDto } from "./auth";
+
+export { MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH } from "./user";
+export type { UserSummaryDto, UserStatsDto, AuditLogStatsDto, HealthDto } from "./user";
