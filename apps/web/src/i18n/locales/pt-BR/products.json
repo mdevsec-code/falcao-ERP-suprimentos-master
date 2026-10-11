@@ -1,0 +1,138 @@
+{
+  "page": {
+    "eyebrow": "Suprimentos",
+    "title": "Banco de Produtos",
+    "description": "Catálogo de produtos e materiais, com fornecedores e histórico de preços."
+  },
+  "actions": {
+    "new": "Novo produto",
+    "backToList": "Ver produtos",
+    "deactivate": "Desativar",
+    "reactivate": "Reativar",
+    "addPrice": "Registrar preço"
+  },
+  "kpi": {
+    "title": "Indicadores de produtos",
+    "total": "Cadastrados",
+    "active": "Ativos",
+    "inactive": "Inativos",
+    "categories": "Categorias"
+  },
+  "filters": {
+    "title": "Filtros",
+    "search": {
+      "label": "Buscar",
+      "placeholder": "Código, nome ou marca…"
+    },
+    "category": { "label": "Categoria" },
+    "allCategories": "Todas as categorias",
+    "chipCategory": "Categoria: {{value}}",
+    "chipSearch": "Busca: {{value}}"
+  },
+  "table": {
+    "product": "Produto",
+    "category": "Categoria",
+    "unit": "Unidade",
+    "primarySupplier": "Fornecedor principal",
+    "lastPrice": "Último preço",
+    "status": "Status"
+  },
+  "empty": {
+    "title": "Nenhum produto cadastrado",
+    "description": "Cadastre produtos para agilizar as solicitações de compra.",
+    "filteredTitle": "Nenhum produto encontrado",
+    "filteredDescription": "Ajuste ou limpe os filtros para ver mais resultados."
+  },
+  "error": {
+    "title": "Não foi possível carregar os produtos",
+    "description": "Verifique sua conexão e tente novamente."
+  },
+  "detail": {
+    "tabs": {
+      "overview": "Visão geral",
+      "suppliers": "Fornecedores ({{count}})",
+      "prices": "Histórico de preços ({{count}})"
+    },
+    "lastPrice": "Último preço",
+    "createdAt": "Cadastrado em",
+    "leadTimeValue_one": "{{count}} dia",
+    "leadTimeValue_other": "{{count}} dias",
+    "primaryBadge": "Principal",
+    "alternativeBadge": "Alternativo",
+    "noPrimarySupplier": "Nenhum fornecedor principal definido",
+    "noAlternativeSuppliers": "Nenhum fornecedor alternativo",
+    "notFoundTitle": "Produto não encontrado",
+    "notFoundDescription": "Ele pode ter sido removido ou o endereço está incorreto."
+  },
+  "prices": {
+    "chartTitle": "Evolução do preço",
+    "chartDescription": "Todos os preços registrados para este produto.",
+    "noSupplier": "Sem fornecedor",
+    "emptyTitle": "Nenhum preço registrado",
+    "emptyDescription": "Registre preços para acompanhar a variação ao longo do tempo.",
+    "table": {
+      "date": "Data",
+      "supplier": "Fornecedor",
+      "price": "Preço",
+      "variation": "Variação"
+    },
+    "dialog": {
+      "title": "Registrar preço",
+      "description": "Adicione um novo ponto ao histórico de preços deste produto.",
+      "price": "Preço (R$)",
+      "supplier": "Fornecedor",
+      "submit": "Registrar"
+    }
+  },
+  "form": {
+    "createTitle": "Novo produto",
+    "createDescription": "Cadastre um novo item no banco de produtos.",
+    "editTitle": "Editar produto",
+    "submitCreate": "Cadastrar produto",
+    "submitEdit": "Salvar alterações",
+    "noPrimarySupplier": "Nenhum",
+    "noSuppliers": "Nenhum fornecedor ativo cadastrado ainda.",
+    "sections": {
+      "general": "Dados gerais",
+      "generalDescription": "Identificação, unidade de compra e prazo de entrega.",
+      "suppliers": "Fornecedores",
+      "suppliersDescription": "Quem fornece este produto — o principal e as alternativas."
+    },
+    "fields": {
+      "codigo": "Código",
+      "nome": "Nome",
+      "categoria": "Categoria",
+      "marca": "Marca",
+      "unidade": "Unidade",
+      "leadTimeDays": "Lead time (dias)",
+      "initialPrice": "Preço inicial (R$)",
+      "observacoes": "Observações",
+      "primarySupplier": "Fornecedor principal",
+      "alternativeSuppliers": "Fornecedores alternativos"
+    },
+    "hints": {
+      "leadTimeDays": "Prazo médio de entrega",
+      "initialPrice": "Inicia o histórico de preços"
+    },
+    "placeholders": {
+      "category": "Selecione a categoria",
+      "unit": "Selecione a unidade"
+    }
+  },
+  "confirm": {
+    "deactivateTitle": "Desativar produto",
+    "deactivateDescription": "<strong>{{name}}</strong> será marcado como inativo e deixará de aparecer em novas solicitações.",
+    "reactivateTitle": "Reativar produto",
+    "reactivateDescription": "<strong>{{name}}</strong> voltará a ficar disponível para novas solicitações."
+  },
+  "toast": {
+    "createSuccess": "Produto cadastrado com sucesso.",
+    "createError": "Não foi possível cadastrar o produto.",
+    "updateSuccess": "Produto atualizado com sucesso.",
+    "updateError": "Não foi possível atualizar o produto.",
+    "deactivated": "Produto desativado.",
+    "reactivated": "Produto reativado.",
+    "priceAdded": "Preço registrado.",
+    "priceError": "Não foi possível registrar o preço."
+  }
+}

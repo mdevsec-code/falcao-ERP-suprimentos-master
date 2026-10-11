@@ -16,6 +16,7 @@ Monorepo em TypeScript com API [NestJS](https://nestjs.com/) + [Prisma](https://
 - [Modelo de dados](#modelo-de-dados)
 - [Papéis de usuário](#papéis-de-usuário)
 - [API](#api)
+- [Padrão visual e de código](#padrão-visual-e-de-código)
 - [Histórico de construção](#histórico-de-construção)
 - [Estado atual e próximos passos](#estado-atual-e-próximos-passos)
 
@@ -36,9 +37,12 @@ Monorepo em TypeScript com API [NestJS](https://nestjs.com/) + [Prisma](https://
 - Validação com `class-validator` / `class-transformer` e `zod`
 
 **Web** (`apps/web`)
-- React 18 + Vite 5 + TypeScript
+- React 18 + Vite 5 + TypeScript (strict, `noUncheckedIndexedAccess`)
 - TanStack Query para data-fetching, React Hook Form + Zod para formulários
-- Tailwind CSS + Radix UI + `lucide-react`, gráficos com Recharts
+- Zustand para sessão e preferências de UI (tema, menu recolhido)
+- i18next com três idiomas: português (padrão), inglês e chinês simplificado
+- Tailwind CSS sobre design tokens em CSS + Radix UI + `lucide-react`, animações com Framer Motion, gráficos com Recharts
+- Vitest + Testing Library, ESLint (com `jsx-a11y`) e Prettier
 
 **Compartilhado** (`packages/shared-types`) — tipos TypeScript (DTOs, enums, paginação) usados por API e Web.
 
@@ -52,11 +56,18 @@ falcao-ERP-suprimentos-master/
 │   │   └── src/
 │   │       ├── common/      # decorators, guards, filters, interceptors
 │   │       └── modules/     # auth, companies, products, purchase-requests, suppliers, users, storage
-│   └── web/                 # SPA React
+│   └── web/                 # SPA React (mesmo padrão do Falcão Saúde Ocupacional)
 │       └── src/
-│           ├── features/    # auth, products, purchase-requests, suppliers, dashboard
-│           ├── components/  # componentes de UI compartilhados
-│           └── layouts/     # shell da aplicação, sidebar, navegação
+│           ├── app/         # App, Providers, Router (lazy + guardas de permissão), error boundaries
+│           ├── components/  # ui/ (design system), layout/, feedback/, data-display/, charts/, common/, error/
+│           ├── features/    # auth, dashboard, suppliers, products, purchase-requests
+│           │                #   cada uma com components/ hooks/ pages/ services/ types.ts (+ lib/)
+│           ├── constants/   # rotas, papéis, permissões (RBAC), enums traduzidos, i18n
+│           ├── i18n/        # bootstrap do i18next + locales/{pt-BR,en-US,zh-CN}/*.json
+│           ├── services/    # cliente HTTP (axios) com refresh token e ApiError
+│           ├── store/       # Zustand: authStore, uiStore
+│           ├── styles/      # tokens.css (cores, tipografia, sombras, motion), reset, tailwind
+│           ├── hooks/ utils/ validators/ config/
 ├── packages/
 │   └── shared-types/        # tipos TypeScript compartilhados entre API e Web
 ├── docker-compose.yml       # Postgres para desenvolvimento
@@ -125,6 +136,10 @@ Executados a partir da raiz do monorepo:
 | `npm run dev:api` / `npm run dev:web` | Sobe apenas a API ou apenas o Web |
 | `npm run build` | Build de produção de `shared-types`, API e Web |
 | `npm run lint` | Lint da API e do Web |
+| `npm run typecheck` | Checagem de tipos de `shared-types`, API e Web |
+| `npm run test` | Testes unitários do Web (Vitest) |
+| `npm run format` / `npm run format:check` | Formata / verifica a formatação com Prettier |
+| `npm run validate` | Typecheck + lint + formatação + testes + build (o mesmo que o CI roda) |
 | `npm run db:up` / `npm run db:down` | Sobe/derruba o Postgres via Docker Compose |
 | `npm run db:migrate` | Aplica migrations do Prisma |
 | `npm run db:seed` | Popula o banco com dados de exemplo |
@@ -151,6 +166,16 @@ Principais entidades (definidas em `apps/api/prisma/schema.prisma`):
 - Autenticação: `Authorization: Bearer <accessToken>`, obtido em `POST /api/v1/auth/login`
 - Renovação de sessão: `POST /api/v1/auth/refresh`
 
+## Padrão visual e de código
+
+O frontend segue o mesmo design system e as mesmas convenções da plataforma [Falcão Saúde Ocupacional](https://github.com/mdevsec-code/falcao-saude-ocupacional), para que os produtos Falcão tenham uma identidade única:
+
+- **Identidade visual** — dourado e grafite extraídos da logo oficial, tipografia Fraunces (títulos), Inter (texto) e IBM Plex Mono (rótulos), tokens de cor/sombra/raio/movimento em `src/styles/tokens.css`, tema claro e escuro.
+- **Componentes** — mesmo kit de UI (`Button`, `Input`, `Select`, `Dialog`, `Tabs`, `Badge`, `Card`…), `PageHeader` com *eyebrow*, `StatTile` para KPIs, `EmptyState`/`ErrorState`/`LoadingState`, `Sidebar` com pílula ativa animada e `Topbar` com breadcrumb, busca global, idioma e tema.
+- **Animações** — transição entre páginas, entradas em `slide-up`/`scale-in` escalonadas, glows com *drift* na tela de login, contagem animada nos KPIs; tudo respeita `prefers-reduced-motion`.
+- **Código** — componentes em PascalCase (`components/ui/Button/Button.tsx`), uma pasta por feature com `services/` (chamadas HTTP), `hooks/` (TanStack Query), `types.ts` (schemas Zod + conversões formulário ⇄ API), `components/` e `pages/`; textos sempre via i18n; permissões centralizadas em `constants/permissions.ts`, espelhando os `@Roles` da API.
+- **Gráficos** — série única no dourado da marca, validada para contraste nos dois temas (ver `src/styles/tokens.css`).
+
 ## Histórico de construção
 
 O projeto foi construído em fases incrementais, cada uma adicionando um módulo de negócio completo (schema + API + tela):
@@ -160,6 +185,7 @@ O projeto foi construído em fases incrementais, cada uma adicionando um módulo
 3. **Fase 2 — Banco de produtos** — catálogo por empresa, fornecedor primário/alternativos e histórico de preços.
 4. **Fase 3 — Solicitações de compra** — fluxo de aprovação com múltiplos status, itens, comentários, anexos e trilha de aprovações; interceptor de auditoria (`AuditLogInterceptor`) plugado nos módulos de negócio.
 5. **Publicação** — versionamento do código com Git e envio para o repositório GitHub ([mdevsec-code/falcao-ERP-suprimentos-master](https://github.com/mdevsec-code/falcao-ERP-suprimentos-master)).
+6. **Padronização com o Falcão Saúde Ocupacional** — frontend refeito sobre o design system, a estrutura de pastas e as convenções da plataforma de Saúde Ocupacional: tokens e componentes de UI, layout, animações, i18n (pt-BR/en-US/zh-CN), sessão em Zustand com "manter conectado", RBAC por permissões, KPIs e gráficos nas telas, Vitest, Prettier e CI. Correções feitas no caminho: a fila de Aprovações pedia `pageSize=200` (a API aceita no máximo 100) e falhava; o seletor de produto nos itens da solicitação não refletia a escolha; o `.env` da raiz não era lido pela API, pelo Prisma nem pelo Vite.
 
 ## Estado atual e próximos passos
 
@@ -167,12 +193,14 @@ O projeto está funcional para desenvolvimento local (`npm run dev`), mas ainda 
 
 **Infraestrutura e entrega**
 - Sem Dockerfile de produção para API/Web — o `docker-compose.yml` atual sobe apenas o Postgres de desenvolvimento.
-- Sem pipeline de CI/CD (lint/build/test automatizados a cada push).
+- CI existe, mas não há CD (deploy automatizado).
 - Sem ambiente de deploy configurado (hospedagem, variáveis de produção, HTTPS, etc.).
 - Armazenamento de arquivos apenas local em disco (`UPLOADS_DIR`); não serve para múltiplas instâncias nem é durável em produção — a interface `IStorageProvider` já existe para plugar um provider em nuvem (ex. S3/Azure Blob) quando isso for priorizado.
 
 **Qualidade**
-- Sem testes automatizados — nenhum `*.spec.ts` (unitário) ou e2e na API, nem testes no Web.
+- O Web tem testes unitários (formatação, KPIs, paridade de traduções); a API ainda não tem `*.spec.ts` nem testes e2e.
+- O CI (`.github/workflows/ci.yml`) roda lint, typecheck, testes e build — falta um job com Postgres para testes de integração.
+- `multer@1.4.5-lts.1` (API) tem vulnerabilidades conhecidas, corrigidas na 2.x — atualizar.
 
 **Funcionalidades de negócio pendentes**
 Módulos já previstos na navegação do Web, mas ainda não implementados (marcados como "em breve" na interface):

@@ -1,0 +1,173 @@
+{
+  "page": {
+    "eyebrow": "Supplies",
+    "title": "Purchase Requests",
+    "description": "Follow every purchase request, from request to receipt."
+  },
+  "actions": {
+    "new": "New request",
+    "backToList": "View requests",
+    "uploadAttachment": "Upload file"
+  },
+  "costCenterShort": "Cost center: {{value}}",
+  "kpi": {
+    "title": "Request indicators",
+    "total": "Total",
+    "awaitingApproval": "Awaiting approval",
+    "inProgress": "In progress",
+    "finished": "Completed"
+  },
+  "filters": {
+    "title": "Filters",
+    "search": {
+      "label": "Search",
+      "placeholder": "Request title…"
+    },
+    "status": { "label": "Status" },
+    "allStatuses": "All statuses",
+    "chipStatus": "Status: {{value}}",
+    "chipSearch": "Search: {{value}}"
+  },
+  "table": {
+    "title": "Request",
+    "requester": "Requester",
+    "createdAt": "Created",
+    "items": "Items",
+    "estimatedTotal": "Estimated total",
+    "status": "Status"
+  },
+  "empty": {
+    "title": "No requests yet",
+    "description": "Create the first purchase request — it will go to your manager for approval.",
+    "filteredTitle": "No requests found",
+    "filteredDescription": "Adjust or clear the filters to see more results."
+  },
+  "error": {
+    "title": "Could not load requests",
+    "description": "Check your connection and try again."
+  },
+  "approvals": {
+    "eyebrow": "Work queue",
+    "title": "Approvals",
+    "description": "Purchase requests waiting for your action, oldest first.",
+    "stagesLabel": "Stages in your queue:",
+    "kpi": {
+      "pending": "Awaiting your action",
+      "oldest": "Oldest in queue"
+    },
+    "days_one": "{{count}} day",
+    "days_other": "{{count}} days",
+    "emptyTitle": "All caught up",
+    "emptyDescription": "No requests are waiting for your action right now."
+  },
+  "stepper": {
+    "ariaLabel": "Request stages",
+    "rejected": "This request was rejected/cancelled and no longer moves through the flow."
+  },
+  "transitions": {
+    "approve": "Approve",
+    "requestChanges": "Request changes",
+    "reject": "Reject",
+    "cancel": "Cancel request",
+    "startQuote": "Start quoting",
+    "placeOrder": "Record order",
+    "confirmShipment": "Confirm order sent",
+    "confirmReceipt": "Confirm receipt"
+  },
+  "transitionDialog": {
+    "comment": "Comment",
+    "requiredComment": "Explain why — the comment is recorded on the timeline.",
+    "optionalComment": "Confirm the action. You may leave a comment for the record."
+  },
+  "detail": {
+    "eyebrow": "Purchase request",
+    "requestedBy": "Requested by {{name}}",
+    "requester": "Requester",
+    "createdAt": "Created on",
+    "catalogItem": "Catalog: {{name}}",
+    "noItems": "No items in this request",
+    "tabs": {
+      "overview": "Overview",
+      "timeline": "Timeline",
+      "comments": "Comments ({{count}})",
+      "attachments": "Files ({{count}})"
+    },
+    "notFoundTitle": "Request not found",
+    "notFoundDescription": "It may have been removed or the address is wrong."
+  },
+  "timeline": {
+    "created": "created the request",
+    "updated": "updated the request",
+    "commented": "commented",
+    "requestedChanges": "requested changes",
+    "rejected": "rejected/cancelled the request",
+    "moved": "moved it to \"{{status}}\"",
+    "emptyTitle": "No events recorded yet"
+  },
+  "comments": {
+    "newLabel": "New comment",
+    "placeholder": "Write a comment for the team…",
+    "hint": "Ctrl + Enter to send",
+    "submit": "Comment",
+    "emptyTitle": "No comments yet",
+    "emptyDescription": "Use comments to align details with whoever is handling the purchase."
+  },
+  "attachments": {
+    "emptyTitle": "No files attached",
+    "emptyDescription": "Attach quotes, estimates and invoices for this request.",
+    "dialog": {
+      "title": "Upload file",
+      "description": "Attach quotes, estimates or other documents for this request.",
+      "file": "File",
+      "submit": "Upload"
+    }
+  },
+  "form": {
+    "createTitle": "New purchase request",
+    "createDescription": "Describe what you need. The request will go to your manager for approval.",
+    "submit": "Submit request",
+    "addItem": "Add item",
+    "itemNumber": "Item {{index}}",
+    "removeItemAria": "Remove item {{index}}",
+    "looseItem": "None (one-off item)",
+    "estimatedTotal": "Estimated total",
+    "sections": {
+      "general": "General information",
+      "generalDescription": "What is being bought and why.",
+      "items": "Items",
+      "itemsDescription": "Pick from the catalog to fill in unit and price automatically, or describe a one-off item."
+    },
+    "fields": {
+      "title": "Title",
+      "costCenter": "Cost center",
+      "justification": "Justification",
+      "product": "Catalog product",
+      "description": "Description",
+      "quantity": "Quantity",
+      "unit": "Unit",
+      "estimatedPrice": "Est. unit price (R$)",
+      "subtotal": "Subtotal"
+    },
+    "placeholders": {
+      "title": "E.g.: Materials for the Sector B job site",
+      "justification": "What it is for, deadline, job site/project…"
+    }
+  },
+  "confirm": {
+    "removeAttachmentTitle": "Remove file",
+    "removeAttachmentDescription": "The file <strong>{{name}}</strong> will be permanently removed. This cannot be undone."
+  },
+  "validation": {
+    "itemsRequired": "Add at least one item."
+  },
+  "toast": {
+    "createSuccess": "Request created successfully.",
+    "createError": "Could not create the request.",
+    "statusChanged": "Status updated.",
+    "statusError": "Could not change the status.",
+    "commentError": "Could not send the comment.",
+    "attachmentUploaded": "File uploaded successfully.",
+    "attachmentError": "Could not upload the file.",
+    "attachmentRemoved": "File removed."
+  }
+}

@@ -1,0 +1,172 @@
+{
+  "page": {
+    "eyebrow": "供应",
+    "title": "采购申请",
+    "description": "跟踪所有采购申请，从申请到收货。"
+  },
+  "actions": {
+    "new": "新建申请",
+    "backToList": "查看申请",
+    "uploadAttachment": "上传文件"
+  },
+  "costCenterShort": "成本中心：{{value}}",
+  "kpi": {
+    "title": "申请指标",
+    "total": "总数",
+    "awaitingApproval": "待审批",
+    "inProgress": "进行中",
+    "finished": "已完成"
+  },
+  "filters": {
+    "title": "筛选",
+    "search": {
+      "label": "搜索",
+      "placeholder": "申请标题…"
+    },
+    "status": { "label": "状态" },
+    "allStatuses": "全部状态",
+    "chipStatus": "状态：{{value}}",
+    "chipSearch": "搜索：{{value}}"
+  },
+  "table": {
+    "title": "申请",
+    "requester": "申请人",
+    "createdAt": "创建时间",
+    "items": "项目数",
+    "estimatedTotal": "预估总额",
+    "status": "状态"
+  },
+  "empty": {
+    "title": "暂无申请",
+    "description": "创建第一个采购申请——它将提交给您的经理审批。",
+    "filteredTitle": "未找到申请",
+    "filteredDescription": "调整或清除筛选条件以查看更多结果。"
+  },
+  "error": {
+    "title": "无法加载申请",
+    "description": "请检查网络连接后重试。"
+  },
+  "approvals": {
+    "eyebrow": "工作队列",
+    "title": "审批",
+    "description": "等待您处理的采购申请，最早的排在前面。",
+    "stagesLabel": "您队列中的环节：",
+    "kpi": {
+      "pending": "待您处理",
+      "oldest": "队列中最早"
+    },
+    "days_other": "{{count}} 天",
+    "emptyTitle": "全部处理完毕",
+    "emptyDescription": "目前没有等待您处理的申请。"
+  },
+  "stepper": {
+    "ariaLabel": "申请环节",
+    "rejected": "该申请已被驳回/取消，不再进入后续流程。"
+  },
+  "transitions": {
+    "approve": "批准",
+    "requestChanges": "要求修改",
+    "reject": "驳回",
+    "cancel": "取消申请",
+    "startQuote": "开始询价",
+    "placeOrder": "登记订单",
+    "confirmShipment": "确认订单已发出",
+    "confirmReceipt": "确认收货"
+  },
+  "transitionDialog": {
+    "comment": "备注",
+    "requiredComment": "请说明原因——备注将记录在时间线中。",
+    "optionalComment": "确认此操作。您可以留下备注以供记录。"
+  },
+  "detail": {
+    "eyebrow": "采购申请",
+    "requestedBy": "申请人：{{name}}",
+    "requester": "申请人",
+    "createdAt": "创建时间",
+    "catalogItem": "目录：{{name}}",
+    "noItems": "此申请中没有项目",
+    "tabs": {
+      "overview": "概览",
+      "timeline": "时间线",
+      "comments": "评论（{{count}}）",
+      "attachments": "文件（{{count}}）"
+    },
+    "notFoundTitle": "未找到申请",
+    "notFoundDescription": "它可能已被删除，或地址有误。"
+  },
+  "timeline": {
+    "created": "创建了申请",
+    "updated": "更新了申请",
+    "commented": "发表了评论",
+    "requestedChanges": "要求修改",
+    "rejected": "驳回/取消了申请",
+    "moved": "推进到“{{status}}”",
+    "emptyTitle": "暂无记录"
+  },
+  "comments": {
+    "newLabel": "新评论",
+    "placeholder": "给团队写一条评论…",
+    "hint": "Ctrl + Enter 发送",
+    "submit": "评论",
+    "emptyTitle": "暂无评论",
+    "emptyDescription": "通过评论与负责采购的同事沟通细节。"
+  },
+  "attachments": {
+    "emptyTitle": "暂无附件",
+    "emptyDescription": "附加此申请的报价、预算和发票。",
+    "dialog": {
+      "title": "上传文件",
+      "description": "为此申请附加报价、预算或其他文档。",
+      "file": "文件",
+      "submit": "上传"
+    }
+  },
+  "form": {
+    "createTitle": "新建采购申请",
+    "createDescription": "描述您的需求。申请将提交给您的经理审批。",
+    "submit": "提交申请",
+    "addItem": "添加项目",
+    "itemNumber": "项目 {{index}}",
+    "removeItemAria": "移除项目 {{index}}",
+    "looseItem": "无（临时项目）",
+    "estimatedTotal": "预估总额",
+    "sections": {
+      "general": "基本信息",
+      "generalDescription": "采购什么以及原因。",
+      "items": "项目",
+      "itemsDescription": "从目录中选择可自动填入单位和价格，或描述一个临时项目。"
+    },
+    "fields": {
+      "title": "标题",
+      "costCenter": "成本中心",
+      "justification": "理由",
+      "product": "目录产品",
+      "description": "描述",
+      "quantity": "数量",
+      "unit": "单位",
+      "estimatedPrice": "预估单价（R$）",
+      "subtotal": "小计"
+    },
+    "placeholders": {
+      "title": "例如：B 区工地材料",
+      "justification": "用途、所需时间、工地/项目…"
+    }
+  },
+  "confirm": {
+    "removeAttachmentTitle": "移除文件",
+    "removeAttachmentDescription": "文件 <strong>{{name}}</strong> 将被永久删除，此操作无法撤销。"
+  },
+  "validation": {
+    "itemsRequired": "请至少添加一个项目。"
+  },
+  "toast": {
+    "createSuccess": "申请创建成功。",
+    "createError": "无法创建申请。",
+    "statusChanged": "状态已更新。",
+    "statusError": "无法更改状态。",
+    "commentError": "无法发送评论。",
+    "attachmentUploaded": "文件上传成功。",
+    "attachmentError": "无法上传文件。",
+    "attachmentRemoved": "文件已移除。"
+  }
+}

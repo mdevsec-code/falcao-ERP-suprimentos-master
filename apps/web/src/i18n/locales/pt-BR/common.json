@@ -1,0 +1,157 @@
+{
+  "app": {
+    "name": "Falcão Suprimentos",
+    "shortName": "Falcão"
+  },
+  "actions": {
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "edit": "Editar",
+    "remove": "Remover",
+    "back": "Voltar",
+    "close": "Fechar",
+    "search": "Buscar",
+    "retry": "Tentar novamente",
+    "backToHome": "Voltar ao início"
+  },
+  "states": {
+    "loading": "Carregando…",
+    "error": "Algo deu errado"
+  },
+  "status": {
+    "active": "Ativo",
+    "inactive": "Inativo"
+  },
+  "errors": {
+    "generic": "Não foi possível concluir a operação. Tente novamente."
+  },
+  "form": {
+    "optional": "Opcional"
+  },
+  "filters": {
+    "clearAll": "Limpar filtros",
+    "removeChipAria": "Remover filtro {{label}}"
+  },
+  "pagination": {
+    "showingRange": "Mostrando {{start}}–{{end}} de {{total}}",
+    "pageOf": "Página {{current}} de {{total}}",
+    "prevPage": "Página anterior",
+    "nextPage": "Próxima página"
+  },
+  "file": {
+    "choose": "Clique para escolher um arquivo",
+    "maxSize": "Tamanho máximo: {{max}}",
+    "tooLarge": "O arquivo excede o limite de {{max}}.",
+    "remove": "Remover arquivo",
+    "uploadedBy": "enviado por {{name}} em {{date}}",
+    "downloadAria": "Baixar {{name}}",
+    "removeAria": "Remover {{name}}"
+  },
+  "nav": {
+    "home": "Início",
+    "dashboard": "Dashboard",
+    "suppliers": "Fornecedores",
+    "products": "Banco de Produtos",
+    "purchaseRequests": "Solicitações de Compra",
+    "approvals": "Aprovações",
+    "contracts": "Contratos",
+    "finance": "Financeiro",
+    "reimbursements": "Reembolsos",
+    "agenda": "Agenda",
+    "documents": "Documentos"
+  },
+  "theme": {
+    "switchToLight": "Ativar tema claro",
+    "switchToDark": "Ativar tema escuro"
+  },
+  "sidebar": {
+    "overview": "Visão geral",
+    "supplies": "Suprimentos",
+    "contractsFinance": "Contratos & Financeiro",
+    "organization": "Organização",
+    "comingSoon": "Em breve",
+    "mainNavAriaLabel": "Navegação principal"
+  },
+  "footer": {
+    "version": "Falcão · v{{version}}"
+  },
+  "branding": {
+    "supplies": "Suprimentos"
+  },
+  "topbar": {
+    "closeSearch": "Fechar busca",
+    "openMenu": "Abrir menu",
+    "expandMenu": "Expandir menu",
+    "collapseMenu": "Recolher menu",
+    "notifications": "Notificações",
+    "noNotifications": "Nenhuma notificação por aqui ainda.",
+    "signOut": "Sair",
+    "account": "Minha conta"
+  },
+  "breadcrumb": {
+    "ariaLabel": "Trilha de navegação",
+    "new": "Novo",
+    "edit": "Editar",
+    "details": "Detalhes"
+  },
+  "search": {
+    "placeholder": "Buscar fornecedor ou produto…",
+    "ariaLabel": "Busca global",
+    "searching": "Buscando…",
+    "noResults": "Nenhum resultado para \"{{query}}\"."
+  },
+  "languageSwitcher": {
+    "selectLanguage": "Selecionar idioma"
+  },
+  "placeholder": {
+    "defaultDescription": "Estamos preparando este módulo com todo o cuidado. Em breve, novidades por aqui.",
+    "features": {
+      "contracts": [
+        "Cadastro de contratos por fornecedor",
+        "Alertas de vencimento e renovação",
+        "Aditivos e histórico",
+        "Anexos e assinaturas"
+      ],
+      "finance": [
+        "Contas a pagar vinculadas a pedidos",
+        "Conciliação com notas fiscais",
+        "Fluxo de caixa por centro de custo",
+        "Relatórios gerenciais"
+      ],
+      "reimbursements": [
+        "Solicitação de reembolso com comprovantes",
+        "Aprovação pelo gestor",
+        "Integração com o financeiro",
+        "Histórico por colaborador"
+      ],
+      "agenda": [
+        "Agenda de entregas e recebimentos",
+        "Visitas de fornecedores",
+        "Lembretes de vencimentos",
+        "Visão por obra"
+      ],
+      "documents": [
+        "Repositório central de documentos",
+        "Categorias e etiquetas",
+        "Controle de validade",
+        "Busca por conteúdo"
+      ]
+    }
+  },
+  "notFound": {
+    "title": "Página não encontrada",
+    "description": "A rota solicitada não pôde ser carregada. Verifique o endereço ou volte para a página inicial."
+  },
+  "forbidden": {
+    "title": "Acesso restrito",
+    "description": "Seu perfil de acesso não tem permissão para ver esta página. Fale com um administrador se precisar de acesso."
+  },
+  "errorBoundary": {
+    "routeErrorDescription": "A rota solicitada não pôde ser carregada.",
+    "genericDescription": "Não foi possível carregar essa página. Tente novamente ou volte para a tela inicial.",
+    "crashTitle": "Erro de runtime na aplicação",
+    "crashDescription": "Algo explodiu durante a renderização. Stacktrace abaixo para diagnóstico.",
+    "reload": "Recarregar página"
+  }
+}

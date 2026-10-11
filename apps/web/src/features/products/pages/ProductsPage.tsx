@@ -1,0 +1,173 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Boxes, CheckCircle2, CircleOff, Layers, Plus } from 'lucide-react';
+
+import { PageHeader } from '@/components/layout/PageHeader';
+import { StatTile } from '@/components/data-display/StatTile';
+import { CountUp } from '@/components/data-display/CountUp';
+import { Pagination } from '@/components/data-display/Pagination';
+import { EmptyState } from '@/components/feedback/EmptyState';
+import { ErrorState } from '@/components/feedback/ErrorState';
+import { Skeleton } from '@/components/ui/Skeleton';
+import { Button } from '@/components/ui/Button';
+import { Separator } from '@/components/ui/Separator';
+import { Can } from '@/features/auth/components/Can';
+import { useDebounce } from '@/hooks/useDebounce';
+import { PERMISSIONS } from '@/constants/permissions';
+import { ROUTE_PATHS } from '@/constants/routes';
+
+import { useProductStats, useProducts } from '../hooks/useProducts';
+import { FiltersBar } from '../components/FiltersBar';
+import { ProductsTable } from '../components/ProductsTable';
+import type { ProductFilters } from '../types';
+
+const PAGE_SIZE = 10;
+
+export function ProductsPage() {
+  const { t } = useTranslation('products');
+  const navigate = useNavigate();
+  const [filters, setFilters] = useState<ProductFilters>({});
+  const [page, setPage] = useState(1);
+  const debouncedSearch = useDebounce(filters.busca, 300);
+
+  const stats = useProductStats();
+  const list = useProducts({
+    page,
+    pageSize: PAGE_SIZE,
+    search: debouncedSearch || undefined,
+    categoria: filters.categoria,
+  });
+
+  function handleFilterChange(patch: Partial<ProductFilters>) {
+    setFilters((prev) => ({ ...prev, ...patch }));
+    setPage(1);
+  }
+
+  function handleClearAll() {
+    setFilters({});
+    setPage(1);
+  }
+
+  const hasFilters = Boolean(filters.busca || filters.categoria);
+  const rows = list.data?.data ?? [];
+
+  const newProductButton = (
+    <Can permission={PERMISSIONS.PRODUCT_WRITE}>
+      <Button
+        variant="primary"
+        leftIcon={<Plus className="h-4 w-4" />}
+        onClick={() => navigate(ROUTE_PATHS.PRODUTO_NOVO)}
+      >
+        {t('products:actions.new')}
+      </Button>
+    </Can>
+  );
+
+  return (
+    <>
+      <PageHeader
+        eyebrow={t('products:page.eyebrow')}
+        title={t('products:page.title')}
+        description={t('products:page.description')}
+        actions={newProductButton}
+      />
+
+      <div className="space-y-8 px-6 py-8 sm:px-8">
+        <section
+          aria-labelledby="products-kpi-title"
+          className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4"
+        >
+          <h2 id="products-kpi-title" className="sr-only">
+            {t('products:kpi.title')}
+          </h2>
+          {stats.isLoading &&
+            Array.from({ length: 4 }).map((_, idx) => (
+              <Skeleton key={idx} className="h-[112px] w-full" />
+            ))}
+          {stats.data && (
+            <>
+              <StatTile
+                label={t('products:kpi.total')}
+                value={<CountUp value={stats.data.total} />}
+                icon={<Boxes className="h-4 w-4" />}
+              />
+              <StatTile
+                label={t('products:kpi.active')}
+                value={<CountUp value={stats.data.active} />}
+                icon={<CheckCircle2 className="h-4 w-4" />}
+              />
+              <StatTile
+                label={t('products:kpi.inactive')}
+                value={<CountUp value={stats.data.total - stats.data.active} />}
+                icon={<CircleOff className="h-4 w-4" />}
+              />
+              <StatTile
+                label={t('products:kpi.categories')}
+                value={<CountUp value={stats.data.byCategory.length} />}
+                icon={<Layers className="h-4 w-4" />}
+              />
+            </>
+          )}
+        </section>
+
+        <Separator />
+
+        <FiltersBar filters={filters} onChange={handleFilterChange} onClearAll={handleClearAll} />
+
+        {list.isLoading && (
+          <div className="space-y-2">
+            {Array.from({ length: 6 }).map((_, idx) => (
+              <Skeleton key={idx} className="h-14 w-full" />
+            ))}
+          </div>
+        )}
+
+        {list.isError && (
+          <ErrorState
+            title={t('products:error.title')}
+            description={t('products:error.description')}
+            action={
+              <Button variant="outline" onClick={() => void list.refetch()}>
+                {t('common:actions.retry')}
+              </Button>
+            }
+          />
+        )}
+
+        {list.data && rows.length === 0 && (
+          <EmptyState
+            icon={<Boxes className="h-6 w-6" />}
+            title={hasFilters ? t('products:empty.filteredTitle') : t('products:empty.title')}
+            description={
+              hasFilters ? t('products:empty.filteredDescription') : t('products:empty.description')
+            }
+            action={
+              hasFilters ? (
+                <Button variant="outline" onClick={handleClearAll}>
+                  {t('common:filters.clearAll')}
+                </Button>
+              ) : (
+                newProductButton
+              )
+            }
+          />
+        )}
+
+        {list.data && rows.length > 0 && (
+          <div className="space-y-4">
+            <ProductsTable rows={rows} isFetching={list.isFetching && !list.isLoading} />
+            <Pagination
+              page={list.data.meta.page}
+              pageSize={list.data.meta.pageSize}
+              total={list.data.meta.total}
+              onPageChange={setPage}
+            />
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
+export default ProductsPage;

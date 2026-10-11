@@ -1,0 +1,69 @@
+{
+  "roles": {
+    "ADMIN": "管理员",
+    "MANAGER": "经理",
+    "BUYER": "采购员",
+    "FINANCE": "财务",
+    "WAREHOUSE": "仓库",
+    "REQUESTER": "申请人",
+    "AUDITOR": "审计员"
+  },
+  "supplierCategory": {
+    "MATERIAIS_CONSTRUCAO": "建筑材料",
+    "EQUIPAMENTOS": "设备",
+    "SERVICOS_ENGENHARIA": "工程服务",
+    "MAO_DE_OBRA": "劳务",
+    "TRANSPORTE_LOGISTICA": "运输与物流",
+    "TECNOLOGIA": "技术",
+    "CONSULTORIA": "咨询",
+    "MANUTENCAO": "维护",
+    "OUTROS": "其他"
+  },
+  "productCategory": {
+    "MATERIAIS_CONSTRUCAO": "建筑材料",
+    "EQUIPAMENTOS": "设备",
+    "FERRAMENTAS": "工具",
+    "EPI": "个人防护用品",
+    "ELETRICA": "电气",
+    "HIDRAULICA": "给排水",
+    "ACABAMENTO": "装修",
+    "OUTROS": "其他"
+  },
+  "unit": {
+    "UN": "个",
+    "KG": "千克",
+    "M": "米",
+    "M2": "平方米",
+    "M3": "立方米",
+    "L": "升",
+    "CX": "箱",
+    "PC": "件",
+    "SC": "袋",
+    "TON": "吨"
+  },
+  "purchaseRequestStatus": {
+    "AGUARDANDO_APROVACAO": "待审批",
+    "EM_COMPRAS": "采购中",
+    "EM_COTACAO": "询价中",
+    "PEDIDO_REALIZADO": "已下单",
+    "AGUARDANDO_RECEBIMENTO": "待收货",
+    "FINALIZADO": "已完成",
+    "REJEITADO": "已驳回"
+  },
+  "approvalAction": {
+    "APPROVE": "已批准",
+    "REJECT": "已驳回",
+    "REQUEST_CHANGES": "要求修改"
+  },
+  "documentCategory": {
+    "CERTIFICADO": "证书",
+    "CONTRATO": "合同",
+    "COTACAO": "报价",
+    "COMPROVANTE": "凭证",
+    "OUTRO": "其他"
+  },
+  "contactType": {
+    "PHONE": "电话",
+    "EMAIL": "邮箱"
+  }
+}

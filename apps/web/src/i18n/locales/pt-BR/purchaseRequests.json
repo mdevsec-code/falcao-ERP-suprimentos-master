@@ -1,0 +1,173 @@
+{
+  "page": {
+    "eyebrow": "Suprimentos",
+    "title": "Solicitações de Compra",
+    "description": "Acompanhe todas as solicitações de compra, do pedido ao recebimento."
+  },
+  "actions": {
+    "new": "Nova solicitação",
+    "backToList": "Ver solicitações",
+    "uploadAttachment": "Enviar arquivo"
+  },
+  "costCenterShort": "C. custo: {{value}}",
+  "kpi": {
+    "title": "Indicadores de solicitações",
+    "total": "Total",
+    "awaitingApproval": "Aguardando aprovação",
+    "inProgress": "Em andamento",
+    "finished": "Finalizadas"
+  },
+  "filters": {
+    "title": "Filtros",
+    "search": {
+      "label": "Buscar",
+      "placeholder": "Título da solicitação…"
+    },
+    "status": { "label": "Status" },
+    "allStatuses": "Todos os status",
+    "chipStatus": "Status: {{value}}",
+    "chipSearch": "Busca: {{value}}"
+  },
+  "table": {
+    "title": "Solicitação",
+    "requester": "Solicitante",
+    "createdAt": "Criada",
+    "items": "Itens",
+    "estimatedTotal": "Total estimado",
+    "status": "Status"
+  },
+  "empty": {
+    "title": "Nenhuma solicitação ainda",
+    "description": "Crie a primeira solicitação de compra — ela seguirá para aprovação do gestor.",
+    "filteredTitle": "Nenhuma solicitação encontrada",
+    "filteredDescription": "Ajuste ou limpe os filtros para ver mais resultados."
+  },
+  "error": {
+    "title": "Não foi possível carregar as solicitações",
+    "description": "Verifique sua conexão e tente novamente."
+  },
+  "approvals": {
+    "eyebrow": "Fila de trabalho",
+    "title": "Aprovações",
+    "description": "Solicitações de compra aguardando uma ação sua, da mais antiga para a mais nova.",
+    "stagesLabel": "Etapas da sua fila:",
+    "kpi": {
+      "pending": "Aguardando sua ação",
+      "oldest": "Mais antiga na fila"
+    },
+    "days_one": "{{count}} dia",
+    "days_other": "{{count}} dias",
+    "emptyTitle": "Tudo em dia",
+    "emptyDescription": "Não há solicitações aguardando sua ação no momento."
+  },
+  "stepper": {
+    "ariaLabel": "Etapas da solicitação",
+    "rejected": "Esta solicitação foi rejeitada/cancelada e não segue mais no fluxo."
+  },
+  "transitions": {
+    "approve": "Aprovar",
+    "requestChanges": "Solicitar ajustes",
+    "reject": "Reprovar",
+    "cancel": "Cancelar solicitação",
+    "startQuote": "Iniciar cotação",
+    "placeOrder": "Registrar pedido",
+    "confirmShipment": "Confirmar envio do pedido",
+    "confirmReceipt": "Confirmar recebimento"
+  },
+  "transitionDialog": {
+    "comment": "Comentário",
+    "requiredComment": "Explique o motivo — o comentário fica registrado na timeline.",
+    "optionalComment": "Confirme a ação. Você pode deixar um comentário para o histórico."
+  },
+  "detail": {
+    "eyebrow": "Solicitação de compra",
+    "requestedBy": "Solicitada por {{name}}",
+    "requester": "Solicitante",
+    "createdAt": "Criada em",
+    "catalogItem": "Catálogo: {{name}}",
+    "noItems": "Nenhum item nesta solicitação",
+    "tabs": {
+      "overview": "Visão geral",
+      "timeline": "Timeline",
+      "comments": "Comentários ({{count}})",
+      "attachments": "Arquivos ({{count}})"
+    },
+    "notFoundTitle": "Solicitação não encontrada",
+    "notFoundDescription": "Ela pode ter sido removida ou o endereço está incorreto."
+  },
+  "timeline": {
+    "created": "criou a solicitação",
+    "updated": "atualizou a solicitação",
+    "commented": "comentou",
+    "requestedChanges": "solicitou ajustes",
+    "rejected": "reprovou/cancelou a solicitação",
+    "moved": "avançou para \"{{status}}\"",
+    "emptyTitle": "Nenhum evento registrado ainda"
+  },
+  "comments": {
+    "newLabel": "Novo comentário",
+    "placeholder": "Escreva um comentário para a equipe…",
+    "hint": "Ctrl + Enter para enviar",
+    "submit": "Comentar",
+    "emptyTitle": "Nenhum comentário ainda",
+    "emptyDescription": "Use os comentários para alinhar detalhes com quem está tocando a compra."
+  },
+  "attachments": {
+    "emptyTitle": "Nenhum arquivo anexado",
+    "emptyDescription": "Anexe cotações, orçamentos e notas fiscais desta solicitação.",
+    "dialog": {
+      "title": "Enviar arquivo",
+      "description": "Anexe cotações, orçamentos ou outros documentos desta solicitação.",
+      "file": "Arquivo",
+      "submit": "Enviar"
+    }
+  },
+  "form": {
+    "createTitle": "Nova solicitação de compra",
+    "createDescription": "Descreva o que você precisa. A solicitação seguirá para aprovação do seu gestor.",
+    "submit": "Enviar solicitação",
+    "addItem": "Adicionar item",
+    "itemNumber": "Item {{index}}",
+    "removeItemAria": "Remover item {{index}}",
+    "looseItem": "Nenhum (item avulso)",
+    "estimatedTotal": "Total estimado",
+    "sections": {
+      "general": "Dados gerais",
+      "generalDescription": "O que está sendo comprado e por quê.",
+      "items": "Itens",
+      "itemsDescription": "Escolha do catálogo para preencher unidade e preço automaticamente, ou descreva um item avulso."
+    },
+    "fields": {
+      "title": "Título",
+      "costCenter": "Centro de custo",
+      "justification": "Justificativa",
+      "product": "Produto do catálogo",
+      "description": "Descrição",
+      "quantity": "Quantidade",
+      "unit": "Unidade",
+      "estimatedPrice": "Preço unit. estimado (R$)",
+      "subtotal": "Subtotal"
+    },
+    "placeholders": {
+      "title": "Ex.: Materiais para a obra do Setor B",
+      "justification": "Para que serve, prazo necessário, obra/projeto…"
+    }
+  },
+  "confirm": {
+    "removeAttachmentTitle": "Remover arquivo",
+    "removeAttachmentDescription": "O arquivo <strong>{{name}}</strong> será removido permanentemente. Esta ação não pode ser desfeita."
+  },
+  "validation": {
+    "itemsRequired": "Informe ao menos um item."
+  },
+  "toast": {
+    "createSuccess": "Solicitação criada com sucesso.",
+    "createError": "Não foi possível criar a solicitação.",
+    "statusChanged": "Status atualizado.",
+    "statusError": "Não foi possível alterar o status.",
+    "commentError": "Não foi possível enviar o comentário.",
+    "attachmentUploaded": "Arquivo enviado com sucesso.",
+    "attachmentError": "Não foi possível enviar o arquivo.",
+    "attachmentRemoved": "Arquivo removido."
+  }
+}

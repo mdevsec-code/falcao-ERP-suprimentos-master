@@ -1,0 +1,161 @@
+{
+  "page": {
+    "eyebrow": "Supplies",
+    "title": "Suppliers",
+    "description": "Complete supplier records, with contacts, performance ratings and documents."
+  },
+  "actions": {
+    "new": "New supplier",
+    "backToList": "View suppliers",
+    "deactivate": "Deactivate",
+    "reactivate": "Reactivate",
+    "evaluate": "Rate supplier",
+    "uploadDocument": "Upload document"
+  },
+  "kpi": {
+    "title": "Supplier indicators",
+    "total": "Registered",
+    "active": "Active",
+    "inactive": "Inactive",
+    "categories": "Categories covered"
+  },
+  "filters": {
+    "title": "Filters",
+    "search": {
+      "label": "Search",
+      "placeholder": "Legal name, trade name or CNPJ…"
+    },
+    "category": { "label": "Category" },
+    "state": { "label": "State" },
+    "allCategories": "All categories",
+    "allStates": "All",
+    "chipCategory": "Category: {{value}}",
+    "chipState": "State: {{value}}",
+    "chipSearch": "Search: {{value}}"
+  },
+  "table": {
+    "supplier": "Supplier",
+    "cnpj": "CNPJ",
+    "category": "Category",
+    "location": "Location",
+    "score": "Rating",
+    "status": "Status"
+  },
+  "empty": {
+    "title": "No suppliers registered",
+    "description": "Register the first supplier to start building your base.",
+    "filteredTitle": "No suppliers found",
+    "filteredDescription": "Adjust or clear the filters to see more results."
+  },
+  "error": {
+    "title": "Could not load suppliers",
+    "description": "Check your connection and try again."
+  },
+  "detail": {
+    "tabs": {
+      "overview": "Overview",
+      "contacts": "Contacts ({{count}})",
+      "evaluations": "Ratings ({{count}})",
+      "documents": "Documents ({{count}})",
+      "contracts": "Contracts"
+    },
+    "location": "Location",
+    "createdAt": "Registered on",
+    "noContacts": "No contacts registered",
+    "contractsSoonTitle": "Contracts module in development",
+    "contractsSoonDescription": "Soon you will see every contract linked to this supplier here.",
+    "notFoundTitle": "Supplier not found",
+    "notFoundDescription": "It may have been removed or the address is wrong."
+  },
+  "evaluations": {
+    "none": "No ratings",
+    "by": "by {{name}}",
+    "scoreAria": "Score {{score}} out of 5",
+    "emptyTitle": "No ratings yet",
+    "emptyDescription": "Record how this supplier did on deadlines, quality and service.",
+    "scoreLabels": {
+      "1": "Poor",
+      "2": "Fair",
+      "3": "Good",
+      "4": "Very good",
+      "5": "Excellent"
+    },
+    "dialog": {
+      "title": "New rating",
+      "description": "Record a performance rating for this supplier.",
+      "score": "Score",
+      "comment": "Comment",
+      "commentPlaceholder": "Delivery history, quality, deadlines…",
+      "submit": "Save rating"
+    }
+  },
+  "documents": {
+    "emptyTitle": "No documents attached",
+    "emptyDescription": "Upload this supplier's certificates, contracts, quotes and receipts.",
+    "dialog": {
+      "title": "Upload document",
+      "description": "Attach certificates, contracts or other files for this supplier.",
+      "file": "File",
+      "category": "Category",
+      "submit": "Upload"
+    }
+  },
+  "form": {
+    "createTitle": "New supplier",
+    "createDescription": "Register a new supplier for Falcão Engenharia.",
+    "editTitle": "Edit supplier",
+    "submitCreate": "Register supplier",
+    "submitEdit": "Save changes",
+    "addContact": "Add contact",
+    "removeContactAria": "Remove contact {{index}}",
+    "sections": {
+      "general": "General information",
+      "generalDescription": "Tax identification and relationship owner.",
+      "address": "Address",
+      "contacts": "Contacts",
+      "contactsDescription": "Phones and emails for orders and quotes."
+    },
+    "fields": {
+      "razaoSocial": "Legal name",
+      "nomeFantasia": "Trade name",
+      "cnpj": "CNPJ",
+      "inscricaoEstadual": "State registration",
+      "categoria": "Category",
+      "responsavel": "Contact person",
+      "cidade": "City",
+      "estado": "State",
+      "contactType": "Type",
+      "contactLabel": "Label",
+      "contactValue": "Contact"
+    },
+    "placeholders": {
+      "category": "Select a category",
+      "state": "State",
+      "contactLabel": "Sales, Billing…",
+      "contactValue": "(31) 99999-9999 or name@company.com"
+    }
+  },
+  "confirm": {
+    "deactivateTitle": "Deactivate supplier",
+    "deactivateDescription": "<strong>{{name}}</strong> will be marked inactive and will no longer appear in new records and quotes.",
+    "reactivateTitle": "Reactivate supplier",
+    "reactivateDescription": "<strong>{{name}}</strong> will be available again for new records and quotes.",
+    "removeDocumentTitle": "Remove document",
+    "removeDocumentDescription": "The file <strong>{{name}}</strong> will be permanently removed. This cannot be undone."
+  },
+  "validation": {
+    "contactsRequired": "Add at least one contact."
+  },
+  "toast": {
+    "createSuccess": "Supplier registered successfully.",
+    "createError": "Could not register the supplier.",
+    "updateSuccess": "Supplier updated successfully.",
+    "updateError": "Could not update the supplier.",
+    "deactivated": "Supplier deactivated.",
+    "reactivated": "Supplier reactivated.",
+    "evaluationSuccess": "Rating saved.",
+    "documentUploaded": "Document uploaded successfully.",
+    "documentUploadError": "Could not upload the document.",
+    "documentRemoved": "Document removed."
+  }
+}

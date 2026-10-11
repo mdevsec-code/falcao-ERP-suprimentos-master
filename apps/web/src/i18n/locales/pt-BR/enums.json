@@ -1,0 +1,69 @@
+{
+  "roles": {
+    "ADMIN": "Administrador",
+    "MANAGER": "Gestor",
+    "BUYER": "Comprador",
+    "FINANCE": "Financeiro",
+    "WAREHOUSE": "Almoxarifado",
+    "REQUESTER": "Solicitante",
+    "AUDITOR": "Auditor"
+  },
+  "supplierCategory": {
+    "MATERIAIS_CONSTRUCAO": "Materiais de Construção",
+    "EQUIPAMENTOS": "Equipamentos",
+    "SERVICOS_ENGENHARIA": "Serviços de Engenharia",
+    "MAO_DE_OBRA": "Mão de Obra",
+    "TRANSPORTE_LOGISTICA": "Transporte e Logística",
+    "TECNOLOGIA": "Tecnologia",
+    "CONSULTORIA": "Consultoria",
+    "MANUTENCAO": "Manutenção",
+    "OUTROS": "Outros"
+  },
+  "productCategory": {
+    "MATERIAIS_CONSTRUCAO": "Materiais de Construção",
+    "EQUIPAMENTOS": "Equipamentos",
+    "FERRAMENTAS": "Ferramentas",
+    "EPI": "EPI",
+    "ELETRICA": "Elétrica",
+    "HIDRAULICA": "Hidráulica",
+    "ACABAMENTO": "Acabamento",
+    "OUTROS": "Outros"
+  },
+  "unit": {
+    "UN": "Unidade",
+    "KG": "Quilograma",
+    "M": "Metro",
+    "M2": "Metro²",
+    "M3": "Metro³",
+    "L": "Litro",
+    "CX": "Caixa",
+    "PC": "Peça",
+    "SC": "Saco",
+    "TON": "Tonelada"
+  },
+  "purchaseRequestStatus": {
+    "AGUARDANDO_APROVACAO": "Aguardando Aprovação",
+    "EM_COMPRAS": "Em Compras",
+    "EM_COTACAO": "Em Cotação",
+    "PEDIDO_REALIZADO": "Pedido Realizado",
+    "AGUARDANDO_RECEBIMENTO": "Aguardando Recebimento",
+    "FINALIZADO": "Finalizado",
+    "REJEITADO": "Rejeitado"
+  },
+  "approvalAction": {
+    "APPROVE": "Aprovado",
+    "REJECT": "Reprovado",
+    "REQUEST_CHANGES": "Ajustes solicitados"
+  },
+  "documentCategory": {
+    "CERTIFICADO": "Certificado",
+    "CONTRATO": "Contrato",
+    "COTACAO": "Cotação",
+    "COMPROVANTE": "Comprovante",
+    "OUTRO": "Outro"
+  },
+  "contactType": {
+    "PHONE": "Telefone",
+    "EMAIL": "E-mail"
+  }
+}

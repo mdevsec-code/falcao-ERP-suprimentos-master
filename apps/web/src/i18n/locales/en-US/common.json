@@ -1,0 +1,157 @@
+{
+  "app": {
+    "name": "Falcão Supplies",
+    "shortName": "Falcão"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "edit": "Edit",
+    "remove": "Remove",
+    "back": "Back",
+    "close": "Close",
+    "search": "Search",
+    "retry": "Try again",
+    "backToHome": "Back to home"
+  },
+  "states": {
+    "loading": "Loading…",
+    "error": "Something went wrong"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "errors": {
+    "generic": "The operation could not be completed. Please try again."
+  },
+  "form": {
+    "optional": "Optional"
+  },
+  "filters": {
+    "clearAll": "Clear filters",
+    "removeChipAria": "Remove filter {{label}}"
+  },
+  "pagination": {
+    "showingRange": "Showing {{start}}–{{end}} of {{total}}",
+    "pageOf": "Page {{current}} of {{total}}",
+    "prevPage": "Previous page",
+    "nextPage": "Next page"
+  },
+  "file": {
+    "choose": "Click to choose a file",
+    "maxSize": "Max size: {{max}}",
+    "tooLarge": "The file exceeds the {{max}} limit.",
+    "remove": "Remove file",
+    "uploadedBy": "uploaded by {{name}} on {{date}}",
+    "downloadAria": "Download {{name}}",
+    "removeAria": "Remove {{name}}"
+  },
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "suppliers": "Suppliers",
+    "products": "Product Catalog",
+    "purchaseRequests": "Purchase Requests",
+    "approvals": "Approvals",
+    "contracts": "Contracts",
+    "finance": "Finance",
+    "reimbursements": "Reimbursements",
+    "agenda": "Schedule",
+    "documents": "Documents"
+  },
+  "theme": {
+    "switchToLight": "Switch to light theme",
+    "switchToDark": "Switch to dark theme"
+  },
+  "sidebar": {
+    "overview": "Overview",
+    "supplies": "Supplies",
+    "contractsFinance": "Contracts & Finance",
+    "organization": "Organization",
+    "comingSoon": "Coming soon",
+    "mainNavAriaLabel": "Main navigation"
+  },
+  "footer": {
+    "version": "Falcão · v{{version}}"
+  },
+  "branding": {
+    "supplies": "Supplies"
+  },
+  "topbar": {
+    "closeSearch": "Close search",
+    "openMenu": "Open menu",
+    "expandMenu": "Expand menu",
+    "collapseMenu": "Collapse menu",
+    "notifications": "Notifications",
+    "noNotifications": "No notifications yet.",
+    "signOut": "Sign out",
+    "account": "My account"
+  },
+  "breadcrumb": {
+    "ariaLabel": "Breadcrumb",
+    "new": "New",
+    "edit": "Edit",
+    "details": "Details"
+  },
+  "search": {
+    "placeholder": "Search supplier or product…",
+    "ariaLabel": "Global search",
+    "searching": "Searching…",
+    "noResults": "No results for \"{{query}}\"."
+  },
+  "languageSwitcher": {
+    "selectLanguage": "Select language"
+  },
+  "placeholder": {
+    "defaultDescription": "We are carefully building this module. News coming soon.",
+    "features": {
+      "contracts": [
+        "Contracts per supplier",
+        "Expiration and renewal alerts",
+        "Amendments and history",
+        "Attachments and signatures"
+      ],
+      "finance": [
+        "Payables linked to orders",
+        "Invoice reconciliation",
+        "Cash flow by cost center",
+        "Management reports"
+      ],
+      "reimbursements": [
+        "Reimbursement requests with receipts",
+        "Manager approval",
+        "Finance integration",
+        "History per employee"
+      ],
+      "agenda": [
+        "Delivery and receiving schedule",
+        "Supplier visits",
+        "Expiration reminders",
+        "View by job site"
+      ],
+      "documents": [
+        "Central document repository",
+        "Categories and tags",
+        "Expiration control",
+        "Full-text search"
+      ]
+    }
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The requested route could not be loaded. Check the address or go back to the home page."
+  },
+  "forbidden": {
+    "title": "Restricted access",
+    "description": "Your access profile is not allowed to see this page. Ask an administrator if you need access."
+  },
+  "errorBoundary": {
+    "routeErrorDescription": "The requested route could not be loaded.",
+    "genericDescription": "This page could not be loaded. Try again or go back to the home screen.",
+    "crashTitle": "Application runtime error",
+    "crashDescription": "Something blew up while rendering. Stack trace below for diagnosis.",
+    "reload": "Reload page"
+  }
+}

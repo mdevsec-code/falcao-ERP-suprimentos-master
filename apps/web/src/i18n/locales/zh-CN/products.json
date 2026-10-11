@@ -1,0 +1,137 @@
+{
+  "page": {
+    "eyebrow": "供应",
+    "title": "产品目录",
+    "description": "产品与材料目录，包含供应商和价格历史。"
+  },
+  "actions": {
+    "new": "新建产品",
+    "backToList": "查看产品",
+    "deactivate": "停用",
+    "reactivate": "重新启用",
+    "addPrice": "记录价格"
+  },
+  "kpi": {
+    "title": "产品指标",
+    "total": "已登记",
+    "active": "启用",
+    "inactive": "停用",
+    "categories": "类别"
+  },
+  "filters": {
+    "title": "筛选",
+    "search": {
+      "label": "搜索",
+      "placeholder": "编码、名称或品牌…"
+    },
+    "category": { "label": "类别" },
+    "allCategories": "全部类别",
+    "chipCategory": "类别：{{value}}",
+    "chipSearch": "搜索：{{value}}"
+  },
+  "table": {
+    "product": "产品",
+    "category": "类别",
+    "unit": "单位",
+    "primarySupplier": "主供应商",
+    "lastPrice": "最近价格",
+    "status": "状态"
+  },
+  "empty": {
+    "title": "暂无产品",
+    "description": "登记产品以加快采购申请。",
+    "filteredTitle": "未找到产品",
+    "filteredDescription": "调整或清除筛选条件以查看更多结果。"
+  },
+  "error": {
+    "title": "无法加载产品",
+    "description": "请检查网络连接后重试。"
+  },
+  "detail": {
+    "tabs": {
+      "overview": "概览",
+      "suppliers": "供应商（{{count}}）",
+      "prices": "价格历史（{{count}}）"
+    },
+    "lastPrice": "最近价格",
+    "createdAt": "登记日期",
+    "leadTimeValue_other": "{{count}} 天",
+    "primaryBadge": "主要",
+    "alternativeBadge": "备选",
+    "noPrimarySupplier": "未设置主供应商",
+    "noAlternativeSuppliers": "暂无备选供应商",
+    "notFoundTitle": "未找到产品",
+    "notFoundDescription": "它可能已被删除，或地址有误。"
+  },
+  "prices": {
+    "chartTitle": "价格走势",
+    "chartDescription": "该产品记录的所有价格。",
+    "noSupplier": "无供应商",
+    "emptyTitle": "暂无价格记录",
+    "emptyDescription": "记录价格以跟踪其随时间的变化。",
+    "table": {
+      "date": "日期",
+      "supplier": "供应商",
+      "price": "价格",
+      "variation": "变动"
+    },
+    "dialog": {
+      "title": "记录价格",
+      "description": "为该产品的价格历史添加一个新数据点。",
+      "price": "价格（R$）",
+      "supplier": "供应商",
+      "submit": "记录"
+    }
+  },
+  "form": {
+    "createTitle": "新建产品",
+    "createDescription": "向产品目录添加新项目。",
+    "editTitle": "编辑产品",
+    "submitCreate": "登记产品",
+    "submitEdit": "保存更改",
+    "noPrimarySupplier": "无",
+    "noSuppliers": "尚无启用的供应商。",
+    "sections": {
+      "general": "基本信息",
+      "generalDescription": "标识、采购单位和交货周期。",
+      "suppliers": "供应商",
+      "suppliersDescription": "谁供应此产品——主供应商及备选供应商。"
+    },
+    "fields": {
+      "codigo": "编码",
+      "nome": "名称",
+      "categoria": "类别",
+      "marca": "品牌",
+      "unidade": "单位",
+      "leadTimeDays": "交货周期（天）",
+      "initialPrice": "初始价格（R$）",
+      "observacoes": "备注",
+      "primarySupplier": "主供应商",
+      "alternativeSuppliers": "备选供应商"
+    },
+    "hints": {
+      "leadTimeDays": "平均交货时间",
+      "initialPrice": "作为价格历史的起点"
+    },
+    "placeholders": {
+      "category": "选择类别",
+      "unit": "选择单位"
+    }
+  },
+  "confirm": {
+    "deactivateTitle": "停用产品",
+    "deactivateDescription": "<strong>{{name}}</strong> 将被标记为停用，不再出现在新的申请中。",
+    "reactivateTitle": "重新启用产品",
+    "reactivateDescription": "<strong>{{name}}</strong> 将重新可用于新的申请。"
+  },
+  "toast": {
+    "createSuccess": "产品登记成功。",
+    "createError": "无法登记产品。",
+    "updateSuccess": "产品更新成功。",
+    "updateError": "无法更新产品。",
+    "deactivated": "产品已停用。",
+    "reactivated": "产品已重新启用。",
+    "priceAdded": "价格已记录。",
+    "priceError": "无法记录价格。"
+  }
+}

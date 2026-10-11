@@ -1,0 +1,12 @@
+{
+  "required": "必填项",
+  "email": "邮箱格式无效",
+  "minLength": "至少 {{count}} 个字符",
+  "maxLength": "最多 {{count}} 个字符",
+  "cnpj": "CNPJ 必须为 14 位数字",
+  "number": "请输入有效数字",
+  "integer": "请输入整数",
+  "minValue": "最小值为 {{count}}",
+  "maxDecimals": "最多保留 {{count}} 位小数",
+  "selectOption": "请选择一项"
+}

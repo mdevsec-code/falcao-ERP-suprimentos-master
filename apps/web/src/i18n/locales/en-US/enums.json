@@ -1,0 +1,69 @@
+{
+  "roles": {
+    "ADMIN": "Administrator",
+    "MANAGER": "Manager",
+    "BUYER": "Buyer",
+    "FINANCE": "Finance",
+    "WAREHOUSE": "Warehouse",
+    "REQUESTER": "Requester",
+    "AUDITOR": "Auditor"
+  },
+  "supplierCategory": {
+    "MATERIAIS_CONSTRUCAO": "Construction Materials",
+    "EQUIPAMENTOS": "Equipment",
+    "SERVICOS_ENGENHARIA": "Engineering Services",
+    "MAO_DE_OBRA": "Labor",
+    "TRANSPORTE_LOGISTICA": "Transport & Logistics",
+    "TECNOLOGIA": "Technology",
+    "CONSULTORIA": "Consulting",
+    "MANUTENCAO": "Maintenance",
+    "OUTROS": "Other"
+  },
+  "productCategory": {
+    "MATERIAIS_CONSTRUCAO": "Construction Materials",
+    "EQUIPAMENTOS": "Equipment",
+    "FERRAMENTAS": "Tools",
+    "EPI": "PPE",
+    "ELETRICA": "Electrical",
+    "HIDRAULICA": "Plumbing",
+    "ACABAMENTO": "Finishing",
+    "OUTROS": "Other"
+  },
+  "unit": {
+    "UN": "Unit",
+    "KG": "Kilogram",
+    "M": "Meter",
+    "M2": "Square meter",
+    "M3": "Cubic meter",
+    "L": "Liter",
+    "CX": "Box",
+    "PC": "Piece",
+    "SC": "Bag",
+    "TON": "Ton"
+  },
+  "purchaseRequestStatus": {
+    "AGUARDANDO_APROVACAO": "Awaiting Approval",
+    "EM_COMPRAS": "In Purchasing",
+    "EM_COTACAO": "Quoting",
+    "PEDIDO_REALIZADO": "Order Placed",
+    "AGUARDANDO_RECEBIMENTO": "Awaiting Receipt",
+    "FINALIZADO": "Completed",
+    "REJEITADO": "Rejected"
+  },
+  "approvalAction": {
+    "APPROVE": "Approved",
+    "REJECT": "Rejected",
+    "REQUEST_CHANGES": "Changes requested"
+  },
+  "documentCategory": {
+    "CERTIFICADO": "Certificate",
+    "CONTRATO": "Contract",
+    "COTACAO": "Quote",
+    "COMPROVANTE": "Receipt",
+    "OUTRO": "Other"
+  },
+  "contactType": {
+    "PHONE": "Phone",
+    "EMAIL": "Email"
+  }
+}

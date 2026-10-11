@@ -1,0 +1,49 @@
+{
+  "welcome": {
+    "eyebrow": "Visão geral",
+    "title": "Bem-vindo, {{name}}",
+    "description": "Acompanhe fornecedores, produtos e o andamento das solicitações de compra da Falcão Engenharia.",
+    "openApprovals": "Abrir aprovações"
+  },
+  "kpiSection": {
+    "title": "Indicadores principais"
+  },
+  "kpis": {
+    "activeSuppliers": "Fornecedores ativos",
+    "activeProducts": "Produtos ativos",
+    "requestsInProgress": "Solicitações em andamento",
+    "pendingMyApproval": "Aguardando minha ação",
+    "actionNeeded": "Requer ação"
+  },
+  "quickLinks": {
+    "title": "Atalhos",
+    "newRequest": { "label": "Nova solicitação", "description": "Peça materiais ou serviços" },
+    "approvals": { "label": "Aprovações", "description": "Solicitações na sua etapa" },
+    "requests": { "label": "Solicitações", "description": "Acompanhe todo o fluxo" },
+    "suppliers": { "label": "Fornecedores", "description": "Cadastro, avaliações e documentos" },
+    "products": { "label": "Banco de Produtos", "description": "Catálogo e histórico de preços" }
+  },
+  "charts": {
+    "pipeline": {
+      "title": "Solicitações por etapa",
+      "description": "Onde as solicitações estão no fluxo agora.",
+      "tooltip_one": "{{value}} solicitação",
+      "tooltip_other": "{{value}} solicitações",
+      "emptyTitle": "Nenhuma solicitação ainda",
+      "emptyDescription": "Quando houver solicitações de compra, o fluxo aparece aqui."
+    },
+    "suppliersByCategory": {
+      "title": "Fornecedores por categoria",
+      "description_one": "{{count}} fornecedor cadastrado",
+      "description_other": "{{count}} fornecedores cadastrados",
+      "tooltip_one": "{{value}} fornecedor",
+      "tooltip_other": "{{value}} fornecedores",
+      "emptyTitle": "Nenhum fornecedor cadastrado",
+      "emptyDescription": "Cadastre fornecedores para ver a distribuição por categoria."
+    }
+  },
+  "upcoming": {
+    "title": "Próximos módulos",
+    "description": "O Falcão Suprimentos continua crescendo. Estes módulos estão a caminho."
+  }
+}

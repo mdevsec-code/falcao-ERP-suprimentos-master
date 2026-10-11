@@ -1,0 +1,49 @@
+{
+  "welcome": {
+    "eyebrow": "Overview",
+    "title": "Welcome, {{name}}",
+    "description": "Track Falcão Engenharia's suppliers, products and purchase requests.",
+    "openApprovals": "Open approvals"
+  },
+  "kpiSection": {
+    "title": "Key indicators"
+  },
+  "kpis": {
+    "activeSuppliers": "Active suppliers",
+    "activeProducts": "Active products",
+    "requestsInProgress": "Requests in progress",
+    "pendingMyApproval": "Awaiting my action",
+    "actionNeeded": "Action needed"
+  },
+  "quickLinks": {
+    "title": "Shortcuts",
+    "newRequest": { "label": "New request", "description": "Request materials or services" },
+    "approvals": { "label": "Approvals", "description": "Requests at your stage" },
+    "requests": { "label": "Requests", "description": "Follow the whole flow" },
+    "suppliers": { "label": "Suppliers", "description": "Records, ratings and documents" },
+    "products": { "label": "Product Catalog", "description": "Catalog and price history" }
+  },
+  "charts": {
+    "pipeline": {
+      "title": "Requests by stage",
+      "description": "Where requests currently are in the flow.",
+      "tooltip_one": "{{value}} request",
+      "tooltip_other": "{{value}} requests",
+      "emptyTitle": "No requests yet",
+      "emptyDescription": "Once there are purchase requests, the flow shows up here."
+    },
+    "suppliersByCategory": {
+      "title": "Suppliers by category",
+      "description_one": "{{count}} registered supplier",
+      "description_other": "{{count}} registered suppliers",
+      "tooltip_one": "{{value}} supplier",
+      "tooltip_other": "{{value}} suppliers",
+      "emptyTitle": "No suppliers registered",
+      "emptyDescription": "Register suppliers to see the breakdown by category."
+    }
+  },
+  "upcoming": {
+    "title": "Upcoming modules",
+    "description": "Falcão Supplies keeps growing. These modules are on the way."
+  }
+}

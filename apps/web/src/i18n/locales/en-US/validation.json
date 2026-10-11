@@ -1,0 +1,12 @@
+{
+  "required": "Required field",
+  "email": "Invalid email",
+  "minLength": "At least {{count}} characters",
+  "maxLength": "At most {{count}} characters",
+  "cnpj": "CNPJ must have 14 digits",
+  "number": "Enter a valid number",
+  "integer": "Enter a whole number",
+  "minValue": "The minimum value is {{count}}",
+  "maxDecimals": "Use at most {{count}} decimal places",
+  "selectOption": "Select an option"
+}

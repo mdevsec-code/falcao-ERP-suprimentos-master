@@ -1,0 +1,132 @@
+{
+  "app": {
+    "name": "Falcão 供应管理",
+    "shortName": "Falcão"
+  },
+  "actions": {
+    "save": "保存",
+    "cancel": "取消",
+    "confirm": "确认",
+    "edit": "编辑",
+    "remove": "移除",
+    "back": "返回",
+    "close": "关闭",
+    "search": "搜索",
+    "retry": "重试",
+    "backToHome": "返回首页"
+  },
+  "states": {
+    "loading": "加载中…",
+    "error": "出现错误"
+  },
+  "status": {
+    "active": "启用",
+    "inactive": "停用"
+  },
+  "errors": {
+    "generic": "操作未能完成，请重试。"
+  },
+  "form": {
+    "optional": "可选"
+  },
+  "filters": {
+    "clearAll": "清除筛选",
+    "removeChipAria": "移除筛选 {{label}}"
+  },
+  "pagination": {
+    "showingRange": "显示第 {{start}}–{{end}} 条，共 {{total}} 条",
+    "pageOf": "第 {{current}} / {{total}} 页",
+    "prevPage": "上一页",
+    "nextPage": "下一页"
+  },
+  "file": {
+    "choose": "点击选择文件",
+    "maxSize": "最大：{{max}}",
+    "tooLarge": "文件超出 {{max}} 的限制。",
+    "remove": "移除文件",
+    "uploadedBy": "由 {{name}} 于 {{date}} 上传",
+    "downloadAria": "下载 {{name}}",
+    "removeAria": "移除 {{name}}"
+  },
+  "nav": {
+    "home": "首页",
+    "dashboard": "仪表盘",
+    "suppliers": "供应商",
+    "products": "产品目录",
+    "purchaseRequests": "采购申请",
+    "approvals": "审批",
+    "contracts": "合同",
+    "finance": "财务",
+    "reimbursements": "报销",
+    "agenda": "日程",
+    "documents": "文档"
+  },
+  "theme": {
+    "switchToLight": "切换到浅色主题",
+    "switchToDark": "切换到深色主题"
+  },
+  "sidebar": {
+    "overview": "概览",
+    "supplies": "供应",
+    "contractsFinance": "合同与财务",
+    "organization": "组织",
+    "comingSoon": "即将推出",
+    "mainNavAriaLabel": "主导航"
+  },
+  "footer": {
+    "version": "Falcão · v{{version}}"
+  },
+  "branding": {
+    "supplies": "供应管理"
+  },
+  "topbar": {
+    "closeSearch": "关闭搜索",
+    "openMenu": "打开菜单",
+    "expandMenu": "展开菜单",
+    "collapseMenu": "收起菜单",
+    "notifications": "通知",
+    "noNotifications": "暂无通知。",
+    "signOut": "退出",
+    "account": "我的账户"
+  },
+  "breadcrumb": {
+    "ariaLabel": "导航路径",
+    "new": "新建",
+    "edit": "编辑",
+    "details": "详情"
+  },
+  "search": {
+    "placeholder": "搜索供应商或产品…",
+    "ariaLabel": "全局搜索",
+    "searching": "搜索中…",
+    "noResults": "没有与“{{query}}”匹配的结果。"
+  },
+  "languageSwitcher": {
+    "selectLanguage": "选择语言"
+  },
+  "placeholder": {
+    "defaultDescription": "我们正在精心打造此模块，敬请期待。",
+    "features": {
+      "contracts": ["按供应商管理合同", "到期与续约提醒", "补充协议与历史", "附件与签署"],
+      "finance": ["与订单关联的应付账款", "发票对账", "按成本中心的现金流", "管理报表"],
+      "reimbursements": ["附凭证的报销申请", "经理审批", "与财务集成", "按员工查看历史"],
+      "agenda": ["交货与收货日程", "供应商拜访", "到期提醒", "按工地查看"],
+      "documents": ["集中文档库", "分类与标签", "有效期管理", "全文搜索"]
+    }
+  },
+  "notFound": {
+    "title": "页面未找到",
+    "description": "无法加载所请求的路由。请检查地址或返回首页。"
+  },
+  "forbidden": {
+    "title": "访问受限",
+    "description": "您的访问权限无法查看此页面。如需访问，请联系管理员。"
+  },
+  "errorBoundary": {
+    "routeErrorDescription": "无法加载所请求的路由。",
+    "genericDescription": "无法加载此页面。请重试或返回首页。",
+    "crashTitle": "应用运行时错误",
+    "crashDescription": "渲染过程中发生错误。以下是用于诊断的堆栈信息。",
+    "reload": "重新加载页面"
+  }
+}

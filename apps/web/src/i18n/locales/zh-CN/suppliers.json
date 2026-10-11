@@ -1,0 +1,161 @@
+{
+  "page": {
+    "eyebrow": "供应",
+    "title": "供应商",
+    "description": "完整的供应商档案，包括联系人、绩效评价和文档。"
+  },
+  "actions": {
+    "new": "新建供应商",
+    "backToList": "查看供应商",
+    "deactivate": "停用",
+    "reactivate": "重新启用",
+    "evaluate": "评价供应商",
+    "uploadDocument": "上传文档"
+  },
+  "kpi": {
+    "title": "供应商指标",
+    "total": "已登记",
+    "active": "启用",
+    "inactive": "停用",
+    "categories": "覆盖类别"
+  },
+  "filters": {
+    "title": "筛选",
+    "search": {
+      "label": "搜索",
+      "placeholder": "公司名称、商号或 CNPJ…"
+    },
+    "category": { "label": "类别" },
+    "state": { "label": "州" },
+    "allCategories": "全部类别",
+    "allStates": "全部",
+    "chipCategory": "类别：{{value}}",
+    "chipState": "州：{{value}}",
+    "chipSearch": "搜索：{{value}}"
+  },
+  "table": {
+    "supplier": "供应商",
+    "cnpj": "CNPJ",
+    "category": "类别",
+    "location": "所在地",
+    "score": "评分",
+    "status": "状态"
+  },
+  "empty": {
+    "title": "暂无供应商",
+    "description": "登记第一家供应商，开始建立您的供应商库。",
+    "filteredTitle": "未找到供应商",
+    "filteredDescription": "调整或清除筛选条件以查看更多结果。"
+  },
+  "error": {
+    "title": "无法加载供应商",
+    "description": "请检查网络连接后重试。"
+  },
+  "detail": {
+    "tabs": {
+      "overview": "概览",
+      "contacts": "联系人（{{count}}）",
+      "evaluations": "评价（{{count}}）",
+      "documents": "文档（{{count}}）",
+      "contracts": "合同"
+    },
+    "location": "所在地",
+    "createdAt": "登记日期",
+    "noContacts": "暂无联系人",
+    "contractsSoonTitle": "合同模块开发中",
+    "contractsSoonDescription": "不久后您将在此看到与该供应商相关的所有合同。",
+    "notFoundTitle": "未找到供应商",
+    "notFoundDescription": "它可能已被删除，或地址有误。"
+  },
+  "evaluations": {
+    "none": "暂无评价",
+    "by": "评价人：{{name}}",
+    "scoreAria": "{{score}} 分（满分 5 分）",
+    "emptyTitle": "暂无评价",
+    "emptyDescription": "记录该供应商在交期、质量和服务方面的表现。",
+    "scoreLabels": {
+      "1": "差",
+      "2": "一般",
+      "3": "良好",
+      "4": "很好",
+      "5": "优秀"
+    },
+    "dialog": {
+      "title": "新建评价",
+      "description": "为该供应商记录一次绩效评价。",
+      "score": "评分",
+      "comment": "备注",
+      "commentPlaceholder": "交货记录、质量、交期…",
+      "submit": "保存评价"
+    }
+  },
+  "documents": {
+    "emptyTitle": "暂无文档",
+    "emptyDescription": "上传该供应商的证书、合同、报价和凭证。",
+    "dialog": {
+      "title": "上传文档",
+      "description": "为该供应商附加证书、合同或其他文件。",
+      "file": "文件",
+      "category": "类别",
+      "submit": "上传"
+    }
+  },
+  "form": {
+    "createTitle": "新建供应商",
+    "createDescription": "为 Falcão Engenharia 登记新的供应商。",
+    "editTitle": "编辑供应商",
+    "submitCreate": "登记供应商",
+    "submitEdit": "保存更改",
+    "addContact": "添加联系人",
+    "removeContactAria": "移除联系人 {{index}}",
+    "sections": {
+      "general": "基本信息",
+      "generalDescription": "税务登记信息与对接负责人。",
+      "address": "地址",
+      "contacts": "联系人",
+      "contactsDescription": "用于下单和询价的电话与邮箱。"
+    },
+    "fields": {
+      "razaoSocial": "公司名称",
+      "nomeFantasia": "商号",
+      "cnpj": "CNPJ",
+      "inscricaoEstadual": "州税号",
+      "categoria": "类别",
+      "responsavel": "负责人",
+      "cidade": "城市",
+      "estado": "州",
+      "contactType": "类型",
+      "contactLabel": "标签",
+      "contactValue": "联系方式"
+    },
+    "placeholders": {
+      "category": "选择类别",
+      "state": "州",
+      "contactLabel": "销售、财务…",
+      "contactValue": "(31) 99999-9999 或 name@company.com"
+    }
+  },
+  "confirm": {
+    "deactivateTitle": "停用供应商",
+    "deactivateDescription": "<strong>{{name}}</strong> 将被标记为停用，不再出现在新的登记和询价中。",
+    "reactivateTitle": "重新启用供应商",
+    "reactivateDescription": "<strong>{{name}}</strong> 将重新可用于新的登记和询价。",
+    "removeDocumentTitle": "移除文档",
+    "removeDocumentDescription": "文件 <strong>{{name}}</strong> 将被永久删除，此操作无法撤销。"
+  },
+  "validation": {
+    "contactsRequired": "请至少添加一个联系人。"
+  },
+  "toast": {
+    "createSuccess": "供应商登记成功。",
+    "createError": "无法登记供应商。",
+    "updateSuccess": "供应商更新成功。",
+    "updateError": "无法更新供应商。",
+    "deactivated": "供应商已停用。",
+    "reactivated": "供应商已重新启用。",
+    "evaluationSuccess": "评价已保存。",
+    "documentUploaded": "文档上传成功。",
+    "documentUploadError": "无法上传文档。",
+    "documentRemoved": "文档已移除。"
+  }
+}

@@ -1,0 +1,146 @@
+/* ============================================
+   🦅 Falcão · Design Tokens
+   Mesmos tokens da plataforma Falcão Saúde Ocupacional —
+   os produtos Falcão compartilham uma única identidade visual.
+   Extraídos por amostragem de pixel da logo oficial:
+   dourado #FEBD03, preto #0A0A0A, cinza #5C5C5D, branco.
+   Ver src/assets/logo/FalcaoLogo.tsx.
+   ============================================ */
+
+:root {
+  /* ---------- Brand — Dourado (hue ~44°, da logo) ---------- */
+  --color-brand-gold-50: 255 248 230;
+  --color-brand-gold-100: 255 235 179;
+  --color-brand-gold-300: 253 191 42; /* = #FDBF2A, tom quase idêntico ao dourado da logo */
+  --color-brand-gold-500: 172 126 6; /* primary brand — ações/botões (contraste com branco) */
+  --color-brand-gold-700: 138 99 4;
+  --color-brand-gold-900: 62 42 2;
+
+  /* ---------- Accent — Preto/grafite (da logo) ---------- */
+  --color-accent-50: 233 233 230;
+  --color-accent-100: 214 214 208;
+  --color-accent-500: 43 43 38;
+  --color-accent-700: 26 26 22;
+  --color-accent-900: 12 12 10; /* ≈ #0C0C0A, preto da logo */
+
+  /* ---------- Neutrals ---------- */
+  --color-neutral-0: 255 255 255;
+  --color-neutral-50: 250 250 249;
+  --color-neutral-100: 244 244 242;
+  --color-neutral-200: 231 231 227;
+  --color-neutral-300: 210 210 204;
+  --color-neutral-500: 138 138 130;
+  --color-neutral-700: 74 74 69;
+  --color-neutral-900: 20 20 15;
+
+  /* ---------- Semantic ---------- */
+  --color-success: 47 125 90;
+  --color-warning: 172 126 6;
+  --color-danger: 178 58 50;
+  --color-info: 44 93 138;
+
+  /* ---------- Charts ----------
+   * Série única de magnitude (um só matiz, o dourado da marca).
+   * Validado com scripts/validate_palette.js (skill dataviz):
+   * claro #AC7E06 vs #FCFCFB e escuro #B9861F vs #181813 — faixa de
+   * luminosidade e contraste ≥ 3:1 OK nos dois modos. */
+  --color-chart-1: 172 126 6;
+
+  /* ---------- Surfaces (light) ---------- */
+  --color-bg: 250 250 249; /* var(--color-neutral-50) */
+  --color-surface: 255 255 255; /* var(--color-neutral-0) */
+  --color-surface-elevated: 255 255 255;
+  --color-border: 231 231 227;
+  --color-hover: 244 244 242;
+
+  /* ---------- Text (light) ---------- */
+  --color-text-primary: 20 20 15;
+  --color-text-secondary: 74 74 69;
+  --color-text-muted: 138 138 130;
+
+  /* ---------- Type ---------- */
+  --font-display: 'Fraunces', 'Times New Roman', serif;
+  --font-sans: 'Inter', 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', 'Cascadia Mono', monospace;
+
+  /* ---------- Spacing (4px base) ---------- */
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  /* ---------- Radius ---------- */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+  --radius-full: 9999px;
+
+  /* ---------- Shadow ---------- */
+  --shadow-sm: 0 1px 2px rgba(20, 20, 15, 0.04), 0 1px 3px rgba(20, 20, 15, 0.04);
+  --shadow-md: 0 1px 2px rgba(20, 20, 15, 0.04), 0 8px 24px rgba(20, 20, 15, 0.06);
+  --shadow-lg: 0 8px 32px rgba(20, 20, 15, 0.08), 0 2px 8px rgba(20, 20, 15, 0.04);
+  --shadow-focus: 0 0 0 3px rgba(172, 126, 6, 0.22);
+
+  /* ---------- Motion ---------- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+
+  /* ---------- Z-index scale ---------- */
+  --z-dropdown: 50;
+  --z-sticky: 60;
+  --z-modal-backdrop: 70;
+  --z-modal: 80;
+  --z-popover: 90;
+  --z-toast: 100;
+  --z-tooltip: 110;
+}
+
+/* ============================================
+   Dark theme
+   ============================================ */
+.dark {
+  --color-bg: 14 14 11;
+  --color-surface: 24 24 19;
+  --color-surface-elevated: 34 34 27;
+  --color-border: 42 42 35;
+  --color-hover: 32 32 25;
+
+  --color-text-primary: 244 244 240;
+  --color-text-secondary: 168 168 158;
+  --color-text-muted: 110 110 102;
+
+  /*
+   * A escala "50/100" do dourado serve de fundo suave para chips/badges/
+   * pill ativa da Sidebar; a "700/900" é o texto/ícone que fica por cima.
+   * Sem estas variáveis, os dois lados ficam com o MESMO valor do modo
+   * claro — um bloco creme quase branco com texto marrom quase preto por
+   * cima, ambos ilegíveis/deslocados sobre um fundo escuro. Invertemos a
+   * escala tonal (50/100 escurecem, 700/900 clareiam) mantendo o matiz.
+   */
+  --color-brand-gold-50: 56 45 18;
+  --color-brand-gold-100: 84 66 24;
+  --color-brand-gold-700: 224 172 62;
+  --color-brand-gold-900: 247 197 84;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-focus: 0 0 0 3px rgba(253, 191, 42, 0.32);
+
+  /* Dourado da série reescalonado para a superfície escura (ver :root). */
+  --color-chart-1: 185 134 31;
+}

@@ -1,0 +1,161 @@
+{
+  "page": {
+    "eyebrow": "Suprimentos",
+    "title": "Fornecedores",
+    "description": "Cadastro completo de fornecedores, com contatos, avaliações de desempenho e documentos."
+  },
+  "actions": {
+    "new": "Novo fornecedor",
+    "backToList": "Ver fornecedores",
+    "deactivate": "Desativar",
+    "reactivate": "Reativar",
+    "evaluate": "Avaliar fornecedor",
+    "uploadDocument": "Enviar documento"
+  },
+  "kpi": {
+    "title": "Indicadores de fornecedores",
+    "total": "Cadastrados",
+    "active": "Ativos",
+    "inactive": "Inativos",
+    "categories": "Categorias atendidas"
+  },
+  "filters": {
+    "title": "Filtros",
+    "search": {
+      "label": "Buscar",
+      "placeholder": "Razão social, nome fantasia ou CNPJ…"
+    },
+    "category": { "label": "Categoria" },
+    "state": { "label": "Estado" },
+    "allCategories": "Todas as categorias",
+    "allStates": "Todos",
+    "chipCategory": "Categoria: {{value}}",
+    "chipState": "UF: {{value}}",
+    "chipSearch": "Busca: {{value}}"
+  },
+  "table": {
+    "supplier": "Fornecedor",
+    "cnpj": "CNPJ",
+    "category": "Categoria",
+    "location": "Localização",
+    "score": "Avaliação",
+    "status": "Status"
+  },
+  "empty": {
+    "title": "Nenhum fornecedor cadastrado",
+    "description": "Cadastre o primeiro fornecedor para começar a montar sua base.",
+    "filteredTitle": "Nenhum fornecedor encontrado",
+    "filteredDescription": "Ajuste ou limpe os filtros para ver mais resultados."
+  },
+  "error": {
+    "title": "Não foi possível carregar os fornecedores",
+    "description": "Verifique sua conexão e tente novamente."
+  },
+  "detail": {
+    "tabs": {
+      "overview": "Visão geral",
+      "contacts": "Contatos ({{count}})",
+      "evaluations": "Avaliações ({{count}})",
+      "documents": "Documentos ({{count}})",
+      "contracts": "Contratos"
+    },
+    "location": "Localização",
+    "createdAt": "Cadastrado em",
+    "noContacts": "Nenhum contato cadastrado",
+    "contractsSoonTitle": "Módulo de Contratos em desenvolvimento",
+    "contractsSoonDescription": "Em breve você verá aqui todos os contratos vinculados a este fornecedor.",
+    "notFoundTitle": "Fornecedor não encontrado",
+    "notFoundDescription": "Ele pode ter sido removido ou o endereço está incorreto."
+  },
+  "evaluations": {
+    "none": "Sem avaliações",
+    "by": "por {{name}}",
+    "scoreAria": "Nota {{score}} de 5",
+    "emptyTitle": "Nenhuma avaliação registrada",
+    "emptyDescription": "Registre como foram prazos, qualidade e atendimento deste fornecedor.",
+    "scoreLabels": {
+      "1": "Ruim",
+      "2": "Regular",
+      "3": "Bom",
+      "4": "Muito bom",
+      "5": "Excelente"
+    },
+    "dialog": {
+      "title": "Nova avaliação",
+      "description": "Registre uma avaliação de desempenho para este fornecedor.",
+      "score": "Nota",
+      "comment": "Comentário",
+      "commentPlaceholder": "Histórico de entregas, qualidade, prazos…",
+      "submit": "Registrar avaliação"
+    }
+  },
+  "documents": {
+    "emptyTitle": "Nenhum documento anexado",
+    "emptyDescription": "Envie certificados, contratos, cotações e comprovantes deste fornecedor.",
+    "dialog": {
+      "title": "Enviar documento",
+      "description": "Anexe certificados, contratos ou outros arquivos deste fornecedor.",
+      "file": "Arquivo",
+      "category": "Categoria",
+      "submit": "Enviar"
+    }
+  },
+  "form": {
+    "createTitle": "Novo fornecedor",
+    "createDescription": "Cadastre um novo fornecedor para a Falcão Engenharia.",
+    "editTitle": "Editar fornecedor",
+    "submitCreate": "Cadastrar fornecedor",
+    "submitEdit": "Salvar alterações",
+    "addContact": "Adicionar contato",
+    "removeContactAria": "Remover contato {{index}}",
+    "sections": {
+      "general": "Dados gerais",
+      "generalDescription": "Identificação fiscal e responsável pelo relacionamento.",
+      "address": "Endereço",
+      "contacts": "Contatos",
+      "contactsDescription": "Telefones e e-mails para pedidos e cotações."
+    },
+    "fields": {
+      "razaoSocial": "Razão social",
+      "nomeFantasia": "Nome fantasia",
+      "cnpj": "CNPJ",
+      "inscricaoEstadual": "Inscrição estadual",
+      "categoria": "Categoria",
+      "responsavel": "Responsável",
+      "cidade": "Cidade",
+      "estado": "Estado",
+      "contactType": "Tipo",
+      "contactLabel": "Rótulo",
+      "contactValue": "Contato"
+    },
+    "placeholders": {
+      "category": "Selecione a categoria",
+      "state": "UF",
+      "contactLabel": "Comercial, Vendas…",
+      "contactValue": "(31) 99999-9999 ou nome@empresa.com"
+    }
+  },
+  "confirm": {
+    "deactivateTitle": "Desativar fornecedor",
+    "deactivateDescription": "<strong>{{name}}</strong> será marcado como inativo e deixará de aparecer em novos cadastros e cotações.",
+    "reactivateTitle": "Reativar fornecedor",
+    "reactivateDescription": "<strong>{{name}}</strong> voltará a ficar disponível para novos cadastros e cotações.",
+    "removeDocumentTitle": "Remover documento",
+    "removeDocumentDescription": "O arquivo <strong>{{name}}</strong> será removido permanentemente. Esta ação não pode ser desfeita."
+  },
+  "validation": {
+    "contactsRequired": "Informe ao menos um contato."
+  },
+  "toast": {
+    "createSuccess": "Fornecedor cadastrado com sucesso.",
+    "createError": "Não foi possível cadastrar o fornecedor.",
+    "updateSuccess": "Fornecedor atualizado com sucesso.",
+    "updateError": "Não foi possível atualizar o fornecedor.",
+    "deactivated": "Fornecedor desativado.",
+    "reactivated": "Fornecedor reativado.",
+    "evaluationSuccess": "Avaliação registrada.",
+    "documentUploaded": "Documento enviado com sucesso.",
+    "documentUploadError": "Não foi possível enviar o documento.",
+    "documentRemoved": "Documento removido."
+  }
+}

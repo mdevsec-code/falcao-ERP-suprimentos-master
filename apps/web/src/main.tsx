@@ -1,10 +1,19 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import { App } from "./app/App";
-import "./styles/globals.css";
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { App } from '@/app/App';
+import { RuntimeErrorBoundary } from '@/app/RuntimeErrorBoundary';
+import '@/i18n';
+import '@/styles/tailwind.css';
 
-createRoot(document.getElementById("root") as HTMLElement).render(
+const container = document.getElementById('root');
+if (!container) {
+  throw new Error('Elemento #root não encontrado em index.html');
+}
+
+createRoot(container).render(
   <StrictMode>
-    <App />
+    <RuntimeErrorBoundary>
+      <App />
+    </RuntimeErrorBoundary>
   </StrictMode>,
 );

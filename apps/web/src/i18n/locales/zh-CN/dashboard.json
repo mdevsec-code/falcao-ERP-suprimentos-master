@@ -1,0 +1,46 @@
+{
+  "welcome": {
+    "eyebrow": "概览",
+    "title": "欢迎，{{name}}",
+    "description": "跟踪 Falcão Engenharia 的供应商、产品与采购申请进度。",
+    "openApprovals": "打开审批"
+  },
+  "kpiSection": {
+    "title": "关键指标"
+  },
+  "kpis": {
+    "activeSuppliers": "启用的供应商",
+    "activeProducts": "启用的产品",
+    "requestsInProgress": "进行中的申请",
+    "pendingMyApproval": "待我处理",
+    "actionNeeded": "需要处理"
+  },
+  "quickLinks": {
+    "title": "快捷方式",
+    "newRequest": { "label": "新建申请", "description": "申请材料或服务" },
+    "approvals": { "label": "审批", "description": "处于您环节的申请" },
+    "requests": { "label": "申请", "description": "跟踪完整流程" },
+    "suppliers": { "label": "供应商", "description": "档案、评价与文档" },
+    "products": { "label": "产品目录", "description": "目录与价格历史" }
+  },
+  "charts": {
+    "pipeline": {
+      "title": "各环节申请数",
+      "description": "申请当前在流程中的位置。",
+      "tooltip_other": "{{value}} 个申请",
+      "emptyTitle": "暂无申请",
+      "emptyDescription": "有采购申请后，流程将显示在这里。"
+    },
+    "suppliersByCategory": {
+      "title": "按类别统计供应商",
+      "description_other": "已登记 {{count}} 家供应商",
+      "tooltip_other": "{{value}} 家供应商",
+      "emptyTitle": "暂无供应商",
+      "emptyDescription": "登记供应商后即可查看按类别的分布。"
+    }
+  },
+  "upcoming": {
+    "title": "即将推出的模块",
+    "description": "Falcão 供应管理持续成长中，以下模块正在路上。"
+  }
+}

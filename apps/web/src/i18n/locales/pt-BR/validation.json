@@ -1,0 +1,12 @@
+{
+  "required": "Campo obrigatório",
+  "email": "E-mail inválido",
+  "minLength": "Mínimo de {{count}} caracteres",
+  "maxLength": "Máximo de {{count}} caracteres",
+  "cnpj": "CNPJ deve ter 14 dígitos",
+  "number": "Informe um número válido",
+  "integer": "Informe um número inteiro",
+  "minValue": "O valor mínimo é {{count}}",
+  "maxDecimals": "Use no máximo {{count}} casas decimais",
+  "selectOption": "Selecione uma opção"
+}

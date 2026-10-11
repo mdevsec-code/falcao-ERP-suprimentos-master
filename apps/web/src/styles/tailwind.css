@@ -1,0 +1,57 @@
+@import './tokens.css';
+@import './reset.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   Componentes utilitários (camada base do Tailwind)
+   ============================================ */
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    color: rgb(var(--color-text-primary));
+    background-color: rgb(var(--color-bg));
+  }
+
+  body {
+    @apply min-h-screen;
+  }
+
+  ::selection {
+    background-color: rgb(var(--color-brand-gold-100));
+    color: rgb(var(--color-brand-gold-900));
+  }
+
+  .dark ::selection {
+    background-color: rgb(var(--color-brand-gold-700));
+    color: rgb(var(--color-brand-gold-50));
+  }
+}
+
+@layer components {
+  /* Scrollbars discretas */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--color-neutral-300)) transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: rgb(var(--color-neutral-300));
+    border-radius: 4px;
+  }
+  .dark .scrollbar-thin {
+    scrollbar-color: rgb(var(--color-neutral-700)) transparent;
+  }
+  .dark .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: rgb(var(--color-neutral-700));
+  }
+}

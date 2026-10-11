@@ -1,0 +1,138 @@
+{
+  "page": {
+    "eyebrow": "Supplies",
+    "title": "Product Catalog",
+    "description": "Catalog of products and materials, with suppliers and price history."
+  },
+  "actions": {
+    "new": "New product",
+    "backToList": "View products",
+    "deactivate": "Deactivate",
+    "reactivate": "Reactivate",
+    "addPrice": "Record price"
+  },
+  "kpi": {
+    "title": "Product indicators",
+    "total": "Registered",
+    "active": "Active",
+    "inactive": "Inactive",
+    "categories": "Categories"
+  },
+  "filters": {
+    "title": "Filters",
+    "search": {
+      "label": "Search",
+      "placeholder": "Code, name or brand…"
+    },
+    "category": { "label": "Category" },
+    "allCategories": "All categories",
+    "chipCategory": "Category: {{value}}",
+    "chipSearch": "Search: {{value}}"
+  },
+  "table": {
+    "product": "Product",
+    "category": "Category",
+    "unit": "Unit",
+    "primarySupplier": "Primary supplier",
+    "lastPrice": "Last price",
+    "status": "Status"
+  },
+  "empty": {
+    "title": "No products registered",
+    "description": "Register products to speed up purchase requests.",
+    "filteredTitle": "No products found",
+    "filteredDescription": "Adjust or clear the filters to see more results."
+  },
+  "error": {
+    "title": "Could not load products",
+    "description": "Check your connection and try again."
+  },
+  "detail": {
+    "tabs": {
+      "overview": "Overview",
+      "suppliers": "Suppliers ({{count}})",
+      "prices": "Price history ({{count}})"
+    },
+    "lastPrice": "Last price",
+    "createdAt": "Registered on",
+    "leadTimeValue_one": "{{count}} day",
+    "leadTimeValue_other": "{{count}} days",
+    "primaryBadge": "Primary",
+    "alternativeBadge": "Alternative",
+    "noPrimarySupplier": "No primary supplier set",
+    "noAlternativeSuppliers": "No alternative suppliers",
+    "notFoundTitle": "Product not found",
+    "notFoundDescription": "It may have been removed or the address is wrong."
+  },
+  "prices": {
+    "chartTitle": "Price over time",
+    "chartDescription": "Every price recorded for this product.",
+    "noSupplier": "No supplier",
+    "emptyTitle": "No prices recorded",
+    "emptyDescription": "Record prices to track how they change over time.",
+    "table": {
+      "date": "Date",
+      "supplier": "Supplier",
+      "price": "Price",
+      "variation": "Change"
+    },
+    "dialog": {
+      "title": "Record price",
+      "description": "Add a new point to this product's price history.",
+      "price": "Price (R$)",
+      "supplier": "Supplier",
+      "submit": "Record"
+    }
+  },
+  "form": {
+    "createTitle": "New product",
+    "createDescription": "Add a new item to the product catalog.",
+    "editTitle": "Edit product",
+    "submitCreate": "Register product",
+    "submitEdit": "Save changes",
+    "noPrimarySupplier": "None",
+    "noSuppliers": "No active suppliers registered yet.",
+    "sections": {
+      "general": "General information",
+      "generalDescription": "Identification, purchase unit and lead time.",
+      "suppliers": "Suppliers",
+      "suppliersDescription": "Who supplies this product — the primary one and the alternatives."
+    },
+    "fields": {
+      "codigo": "Code",
+      "nome": "Name",
+      "categoria": "Category",
+      "marca": "Brand",
+      "unidade": "Unit",
+      "leadTimeDays": "Lead time (days)",
+      "initialPrice": "Initial price (R$)",
+      "observacoes": "Notes",
+      "primarySupplier": "Primary supplier",
+      "alternativeSuppliers": "Alternative suppliers"
+    },
+    "hints": {
+      "leadTimeDays": "Average delivery time",
+      "initialPrice": "Starts the price history"
+    },
+    "placeholders": {
+      "category": "Select a category",
+      "unit": "Select a unit"
+    }
+  },
+  "confirm": {
+    "deactivateTitle": "Deactivate product",
+    "deactivateDescription": "<strong>{{name}}</strong> will be marked inactive and will no longer appear in new requests.",
+    "reactivateTitle": "Reactivate product",
+    "reactivateDescription": "<strong>{{name}}</strong> will be available again for new requests."
+  },
+  "toast": {
+    "createSuccess": "Product registered successfully.",
+    "createError": "Could not register the product.",
+    "updateSuccess": "Product updated successfully.",
+    "updateError": "Could not update the product.",
+    "deactivated": "Product deactivated.",
+    "reactivated": "Product reactivated.",
+    "priceAdded": "Price recorded.",
+    "priceError": "Could not record the price."
+  }
+}
