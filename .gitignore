@@ -12,3 +12,4 @@ apps/api/generated/
 !.vscode/extensions.json
 coverage/
 .claude/scheduled_tasks.lock
+*.tsbuildinfo

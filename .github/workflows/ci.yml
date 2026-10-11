@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# O Prisma 7 lê a URL do banco na configuração (prisma.config.ts) até para
+# gerar o client — nenhum job aqui conecta de fato a um banco.
+env:
+  DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
+
+jobs:
+  web:
+    name: Web (apps/web)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+      - name: Instalar dependências
+        run: npm ci
+      - name: Build shared-types
+        run: npm run build -w packages/shared-types
+      - name: Prettier
+        run: npm run format:check
+      - name: ESLint
+        run: npm run lint -w apps/web
+      - name: Typecheck
+        run: npm run typecheck -w apps/web
+      - name: Testes
+        run: npm run test -w apps/web
+      - name: Build
+        run: npm run build -w apps/web
+
+  api:
+    name: API (apps/api)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+      - name: Instalar dependências
+        run: npm ci
+      - name: Build shared-types
+        run: npm run build -w packages/shared-types
+      - name: Gerar Prisma Client
+        run: npm run prisma:generate -w apps/api
+      - name: ESLint
+        run: npm run lint -w apps/api
+      - name: Typecheck
+        run: npm run typecheck -w apps/api
+      - name: Build
+        run: npm run build -w apps/api
