@@ -6,6 +6,8 @@ export interface StatTileProps {
   label: string;
   value: ReactNode;
   delta?: { value: string; direction: 'up' | 'down' | 'flat' };
+  /** Linha de apoio abaixo do valor (ex.: "7 contas"), para valores longos como moeda. */
+  hint?: ReactNode;
   icon?: ReactNode;
   className?: string;
 }
@@ -16,7 +18,7 @@ const deltaClasses = {
   flat: 'text-ink-soft bg-hover',
 } as const;
 
-export function StatTile({ label, value, delta, icon, className }: StatTileProps) {
+export function StatTile({ label, value, delta, hint, icon, className }: StatTileProps) {
   return (
     <div
       className={cn(
@@ -38,7 +40,9 @@ export function StatTile({ label, value, delta, icon, className }: StatTileProps
       </div>
 
       <div className="flex items-end justify-between gap-3">
-        <span className="font-display text-3xl font-semibold tracking-tight text-ink">{value}</span>
+        <span className="min-w-0 truncate font-display text-3xl font-semibold tracking-tight text-ink">
+          {value}
+        </span>
 
         {delta && (
           <span
@@ -54,6 +58,7 @@ export function StatTile({ label, value, delta, icon, className }: StatTileProps
           </span>
         )}
       </div>
+      {hint && <div className="-mt-1 text-xs text-ink-soft">{hint}</div>}
     </div>
   );
 }

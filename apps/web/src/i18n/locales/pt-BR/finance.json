@@ -1,0 +1,152 @@
+{
+  "page": {
+    "eyebrow": "Contratos & Financeiro",
+    "title": "Financeiro",
+    "description": "Contas a pagar de pedidos, contratos e reembolsos, com conciliação de notas fiscais e fluxo de caixa por centro de custo."
+  },
+  "actions": {
+    "new": "Lançar conta",
+    "export": "Exportar CSV",
+    "pay": "Registrar pagamento",
+    "invoice": "Informar nota fiscal",
+    "invoiceEdit": "Alterar nota fiscal",
+    "cancel": "Cancelar conta",
+    "cancelReimbursementBlocked": "Contas de reembolso aprovado não podem ser canceladas"
+  },
+  "kpi": {
+    "title": "Indicadores financeiros",
+    "open": "A pagar",
+    "overdue": "Vencido",
+    "next7": "Próximos 7 dias",
+    "paidMonth": "Pago no mês",
+    "count_one": "{{count}} conta",
+    "count_other": "{{count}} contas"
+  },
+  "reconcile": {
+    "banner_one": "<strong>{{count}} conta</strong> ainda sem nota fiscal — pendente de conciliação.",
+    "banner_other": "<strong>{{count}} contas</strong> ainda sem nota fiscal — pendentes de conciliação.",
+    "action": "Conciliar agora"
+  },
+  "cashFlow": {
+    "title": "Fluxo de caixa",
+    "description": "Previsto pelo vencimento × efetivamente pago, mês a mês.",
+    "forecast": "Previsto",
+    "paid": "Pago",
+    "now": "hoje"
+  },
+  "byCostCenter": {
+    "title": "Por centro de custo",
+    "description": "Total comprometido (em aberto + pago) nos centros com mais gastos.",
+    "empty": "Nenhum lançamento ainda."
+  },
+  "noCostCenter": "Sem centro de custo",
+  "filters": {
+    "title": "Filtros",
+    "search": {
+      "label": "Buscar",
+      "placeholder": "Descrição, nota fiscal ou fornecedor"
+    },
+    "status": "Status",
+    "allStatuses": "Todos os status",
+    "source": "Origem",
+    "allSources": "Todas as origens",
+    "costCenter": "Centro de custo",
+    "allCostCenters": "Todos os centros",
+    "from": "Vencimento de",
+    "to": "Vencimento até",
+    "overdueOnly": "Só vencidas",
+    "noInvoiceOnly": "Sem nota fiscal",
+    "chipFrom": "A partir de {{date}}",
+    "chipTo": "Até {{date}}",
+    "chipSearch": "Busca: {{value}}"
+  },
+  "table": {
+    "due": "Vencimento",
+    "description": "Descrição",
+    "supplier": "Fornecedor",
+    "invoice": "Nota fiscal",
+    "amount": "Valor",
+    "status": "Status",
+    "actions": "Ações",
+    "paidOn": "Pago em {{date}}",
+    "paidAmount": "Pago: {{value}}",
+    "overdue": "Vencida",
+    "noInvoice": "Sem NF",
+    "openReimbursement": "Ver reembolso"
+  },
+  "empty": {
+    "title": "Nenhuma conta lançada",
+    "description": "Contas surgem de contratos, pedidos de compra e reembolsos aprovados — ou lance uma manualmente.",
+    "filteredTitle": "Nenhuma conta encontrada",
+    "filteredDescription": "Ajuste os filtros para ver outras contas."
+  },
+  "error": {
+    "title": "Não foi possível carregar as contas",
+    "description": "Verifique sua conexão e tente novamente."
+  },
+  "dialog": {
+    "createTitle": "Lançar conta a pagar",
+    "editTitle": "Editar conta a pagar",
+    "description": "Vincule a um contrato ou pedido para herdar fornecedor e centro de custo.",
+    "reimbursementDescription": "Conta gerada por reembolso aprovado: o valor e os vínculos vêm do reembolso.",
+    "linksLegend": "Vínculos",
+    "submitCreate": "Lançar conta"
+  },
+  "fields": {
+    "descricao": "Descrição",
+    "valor": "Valor (R$)",
+    "vencimento": "Vencimento",
+    "contract": "Contrato",
+    "purchaseRequest": "Pedido de compra",
+    "supplier": "Fornecedor",
+    "costCenter": "Obra / centro de custo",
+    "notaFiscal": "Nota fiscal",
+    "notaFiscalEmissao": "Emissão da nota",
+    "observacoes": "Observações",
+    "pagoEm": "Data do pagamento",
+    "valorPago": "Valor pago (R$)",
+    "formaPagamento": "Forma de pagamento"
+  },
+  "placeholders": {
+    "none": "Nenhum",
+    "formaPagamento": "Selecione"
+  },
+  "hints": {
+    "notaFiscal": "Pode ser informada depois, na conciliação.",
+    "valorPago": "Ajuste se houve juros ou desconto."
+  },
+  "payDialog": {
+    "title": "Registrar pagamento",
+    "description": "{{name}} — {{value}}, vencimento em {{date}}.",
+    "reimbursementNote": "Ao registrar o pagamento, o reembolso de origem passa para \"Pago\".",
+    "submit": "Confirmar pagamento"
+  },
+  "invoiceDialog": {
+    "title": "Nota fiscal",
+    "description": "Vincule a nota fiscal à conta \"{{name}}\" para concluir a conciliação."
+  },
+  "confirm": {
+    "cancelTitle": "Cancelar conta a pagar?",
+    "cancelDescription": "A conta <strong>{{name}}</strong> ({{value}}) sai do fluxo de caixa. Esta ação não pode ser desfeita."
+  },
+  "export": {
+    "due": "Vencimento",
+    "description": "Descrição",
+    "source": "Origem",
+    "supplier": "Fornecedor",
+    "costCenter": "Centro de custo",
+    "invoice": "Nota fiscal",
+    "amount": "Valor",
+    "status": "Status",
+    "paidOn": "Pago em",
+    "paidAmount": "Valor pago",
+    "method": "Forma de pagamento"
+  },
+  "toast": {
+    "created": "Conta lançada.",
+    "updated": "Conta atualizada.",
+    "paid": "Pagamento registrado.",
+    "invoiced": "Nota fiscal registrada.",
+    "cancelled": "Conta cancelada."
+  }
+}

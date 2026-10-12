@@ -1,0 +1,150 @@
+{
+  "page": {
+    "eyebrow": "合同与财务",
+    "title": "财务",
+    "description": "来自订单、合同和报销的应付款，支持发票对账和按成本中心查看现金流。"
+  },
+  "actions": {
+    "new": "新增应付款",
+    "export": "导出 CSV",
+    "pay": "登记付款",
+    "invoice": "填写发票",
+    "invoiceEdit": "修改发票",
+    "cancel": "取消应付款",
+    "cancelReimbursementBlocked": "已批准报销生成的应付款不能取消"
+  },
+  "kpi": {
+    "title": "财务指标",
+    "open": "待付款",
+    "overdue": "已逾期",
+    "next7": "未来 7 天",
+    "paidMonth": "本月已付",
+    "count_other": "{{count}} 笔"
+  },
+  "reconcile": {
+    "banner_other": "<strong>{{count}} 笔</strong>应付款尚无发票，待对账。",
+    "action": "立即对账"
+  },
+  "cashFlow": {
+    "title": "现金流",
+    "description": "按到期日的预计支出 × 实际支付，逐月对比。",
+    "forecast": "预计",
+    "paid": "已付",
+    "now": "本月"
+  },
+  "byCostCenter": {
+    "title": "按成本中心",
+    "description": "支出最多的成本中心的承诺总额（未付 + 已付）。",
+    "empty": "暂无记录。"
+  },
+  "noCostCenter": "无成本中心",
+  "filters": {
+    "title": "筛选",
+    "search": {
+      "label": "搜索",
+      "placeholder": "说明、发票或供应商"
+    },
+    "status": "状态",
+    "allStatuses": "全部状态",
+    "source": "来源",
+    "allSources": "全部来源",
+    "costCenter": "成本中心",
+    "allCostCenters": "全部成本中心",
+    "from": "到期日从",
+    "to": "到期日至",
+    "overdueOnly": "仅逾期",
+    "noInvoiceOnly": "无发票",
+    "chipFrom": "自 {{date}}",
+    "chipTo": "至 {{date}}",
+    "chipSearch": "搜索：{{value}}"
+  },
+  "table": {
+    "due": "到期日",
+    "description": "说明",
+    "supplier": "供应商",
+    "invoice": "发票",
+    "amount": "金额",
+    "status": "状态",
+    "actions": "操作",
+    "paidOn": "{{date}} 已付",
+    "paidAmount": "实付：{{value}}",
+    "overdue": "逾期",
+    "noInvoice": "无发票",
+    "openReimbursement": "查看报销"
+  },
+  "empty": {
+    "title": "暂无应付款",
+    "description": "应付款来自合同、采购订单和已批准的报销，也可以手动新增。",
+    "filteredTitle": "未找到应付款",
+    "filteredDescription": "调整筛选条件以查看其他记录。"
+  },
+  "error": {
+    "title": "无法加载应付款",
+    "description": "请检查网络连接后重试。"
+  },
+  "dialog": {
+    "createTitle": "新增应付款",
+    "editTitle": "编辑应付款",
+    "description": "关联合同或订单即可继承供应商和成本中心。",
+    "reimbursementDescription": "由已批准的报销生成：金额和关联来自报销单。",
+    "linksLegend": "关联",
+    "submitCreate": "新增"
+  },
+  "fields": {
+    "descricao": "说明",
+    "valor": "金额（R$）",
+    "vencimento": "到期日",
+    "contract": "合同",
+    "purchaseRequest": "采购订单",
+    "supplier": "供应商",
+    "costCenter": "工地 / 成本中心",
+    "notaFiscal": "发票号",
+    "notaFiscalEmissao": "开票日期",
+    "observacoes": "备注",
+    "pagoEm": "付款日期",
+    "valorPago": "实付金额（R$）",
+    "formaPagamento": "付款方式"
+  },
+  "placeholders": {
+    "none": "无",
+    "formaPagamento": "请选择"
+  },
+  "hints": {
+    "notaFiscal": "可在对账时再填写。",
+    "valorPago": "如有利息或折扣请调整。"
+  },
+  "payDialog": {
+    "title": "登记付款",
+    "description": "{{name}} — {{value}}，到期日 {{date}}。",
+    "reimbursementNote": "登记付款后，对应的报销单将变为\"已支付\"。",
+    "submit": "确认付款"
+  },
+  "invoiceDialog": {
+    "title": "发票",
+    "description": "将发票关联到\"{{name}}\"以完成对账。"
+  },
+  "confirm": {
+    "cancelTitle": "取消应付款？",
+    "cancelDescription": "<strong>{{name}}</strong>（{{value}}）将从现金流中移除，此操作无法撤销。"
+  },
+  "export": {
+    "due": "到期日",
+    "description": "说明",
+    "source": "来源",
+    "supplier": "供应商",
+    "costCenter": "成本中心",
+    "invoice": "发票",
+    "amount": "金额",
+    "status": "状态",
+    "paidOn": "付款日期",
+    "paidAmount": "实付金额",
+    "method": "付款方式"
+  },
+  "toast": {
+    "created": "应付款已新增。",
+    "updated": "应付款已更新。",
+    "paid": "付款已登记。",
+    "invoiced": "发票已登记。",
+    "cancelled": "应付款已取消。"
+  }
+}

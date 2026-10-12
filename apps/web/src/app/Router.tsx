@@ -3,7 +3,6 @@ import { createBrowserRouter, type RouteObject } from 'react-router-dom';
 import { AppShell } from '@/components/layout/AppShell';
 import { ROUTE_PATHS } from '@/constants/routes';
 import { LoadingState } from '@/components/feedback/LoadingState';
-import { ComingSoonPage } from '@/components/common/ComingSoonPage';
 import { NotFoundPage } from '@/components/error/NotFoundPage';
 import { RequireAuth } from '@/features/auth/components/RequireAuth';
 import { RequirePermission } from '@/features/auth/components/RequirePermission';
@@ -65,6 +64,45 @@ const ApprovalsPage = lazy(() =>
   import('@/features/purchase-requests/pages/ApprovalsPage').then((m) => ({
     default: m.ApprovalsPage,
   })),
+);
+
+const ContractsPage = lazy(() =>
+  import('@/features/contracts/pages/ContractsPage').then((m) => ({ default: m.ContractsPage })),
+);
+const ContractDetailPage = lazy(() =>
+  import('@/features/contracts/pages/ContractDetailPage').then((m) => ({
+    default: m.ContractDetailPage,
+  })),
+);
+const ContractFormPage = lazy(() =>
+  import('@/features/contracts/pages/ContractFormPage').then((m) => ({
+    default: m.ContractFormPage,
+  })),
+);
+
+const FinancePage = lazy(() =>
+  import('@/features/finance/pages/FinancePage').then((m) => ({ default: m.FinancePage })),
+);
+const ReimbursementsPage = lazy(() =>
+  import('@/features/reimbursements/pages/ReimbursementsPage').then((m) => ({
+    default: m.ReimbursementsPage,
+  })),
+);
+const ReimbursementCreatePage = lazy(() =>
+  import('@/features/reimbursements/pages/ReimbursementCreatePage').then((m) => ({
+    default: m.ReimbursementCreatePage,
+  })),
+);
+const ReimbursementDetailPage = lazy(() =>
+  import('@/features/reimbursements/pages/ReimbursementDetailPage').then((m) => ({
+    default: m.ReimbursementDetailPage,
+  })),
+);
+const DocumentsPage = lazy(() =>
+  import('@/features/documents/pages/DocumentsPage').then((m) => ({ default: m.DocumentsPage })),
+);
+const AgendaPage = lazy(() =>
+  import('@/features/agenda/pages/AgendaPage').then((m) => ({ default: m.AgendaPage })),
 );
 
 const UsersPage = lazy(() =>
@@ -148,11 +186,34 @@ const protectedRoutes: RouteObject[] = [
     element: withPermission(PERMISSIONS.AUDIT_READ, <AuditPage />),
   },
   { path: ROUTE_PATHS.PERFIL, element: withSuspense(<ProfilePage />) },
-  { path: ROUTE_PATHS.CONTRATOS, element: <ComingSoonPage navKey="contracts" /> },
-  { path: ROUTE_PATHS.FINANCEIRO, element: <ComingSoonPage navKey="finance" /> },
-  { path: ROUTE_PATHS.REEMBOLSOS, element: <ComingSoonPage navKey="reimbursements" /> },
-  { path: ROUTE_PATHS.AGENDA, element: <ComingSoonPage navKey="agenda" /> },
-  { path: ROUTE_PATHS.DOCUMENTOS, element: <ComingSoonPage navKey="documents" /> },
+  {
+    path: ROUTE_PATHS.CONTRATOS,
+    element: withPermission(PERMISSIONS.CONTRACT_READ, <ContractsPage />),
+  },
+  {
+    path: ROUTE_PATHS.CONTRATO_NOVO,
+    element: withPermission(PERMISSIONS.CONTRACT_WRITE, <ContractFormPage />),
+  },
+  {
+    path: `${ROUTE_PATHS.CONTRATOS}/:id`,
+    element: withPermission(PERMISSIONS.CONTRACT_READ, <ContractDetailPage />),
+  },
+  {
+    path: `${ROUTE_PATHS.CONTRATOS}/:id/editar`,
+    element: withPermission(PERMISSIONS.CONTRACT_WRITE, <ContractFormPage />),
+  },
+  {
+    path: ROUTE_PATHS.FINANCEIRO,
+    element: withPermission(PERMISSIONS.FINANCE_READ, <FinancePage />),
+  },
+  { path: ROUTE_PATHS.REEMBOLSOS, element: withSuspense(<ReimbursementsPage />) },
+  {
+    path: ROUTE_PATHS.REEMBOLSO_NOVO,
+    element: withPermission(PERMISSIONS.REIMBURSEMENT_REQUEST, <ReimbursementCreatePage />),
+  },
+  { path: `${ROUTE_PATHS.REEMBOLSOS}/:id`, element: withSuspense(<ReimbursementDetailPage />) },
+  { path: ROUTE_PATHS.AGENDA, element: withSuspense(<AgendaPage />) },
+  { path: ROUTE_PATHS.DOCUMENTOS, element: withSuspense(<DocumentsPage />) },
   // URLs desconhecidas dentro da área logada mostram a 404 com o shell
   // (Sidebar/Topbar), em vez de mandar silenciosamente para o Dashboard.
   { path: '*', element: <NotFoundPage /> },

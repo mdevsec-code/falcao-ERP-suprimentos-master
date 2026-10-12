@@ -1,0 +1,88 @@
+{
+  "page": {
+    "eyebrow": "Organization",
+    "title": "Calendar",
+    "description": "Deliveries, receiving, visits and meetings — together with payable, contract and document deadlines."
+  },
+  "actions": {
+    "new": "New event"
+  },
+  "view": {
+    "month": "Month",
+    "list": "Upcoming"
+  },
+  "nav": {
+    "previous": "Previous month",
+    "next": "Next month",
+    "today": "Today"
+  },
+  "filters": {
+    "obra": "Site / cost center",
+    "allObras": "All sites",
+    "obraHint": "Document expiry dates are left out of the per-site view."
+  },
+  "legend": {
+    "ariaLabel": "Visible types"
+  },
+  "grid": {
+    "dayAria_one": "{{date}}, {{count}} item",
+    "dayAria_other": "{{date}}, {{count}} items",
+    "more_one": "+{{count}} item",
+    "more_other": "+{{count}} items"
+  },
+  "day": {
+    "today": "Today",
+    "selected": "Selected day",
+    "empty": "Nothing scheduled for this day.",
+    "addEvent": "New event on this day"
+  },
+  "list": {
+    "range_one": "Next {{count}} day.",
+    "range_other": "Next {{count}} days.",
+    "emptyTitle": "Calendar is clear",
+    "emptyDescription": "No events or deadlines in the coming days."
+  },
+  "item": {
+    "allDay": "All day",
+    "edit": "Edit \"{{title}}\"",
+    "open": "Open \"{{title}}\""
+  },
+  "error": {
+    "title": "Could not load the calendar",
+    "description": "Check your connection and try again."
+  },
+  "dialog": {
+    "createTitle": "New event",
+    "editTitle": "Edit event",
+    "description": "Payable, contract and document deadlines appear automatically — this is for appointments.",
+    "submitCreate": "Schedule",
+    "delete": "Delete event"
+  },
+  "fields": {
+    "titulo": "Title",
+    "tipo": "Type",
+    "data": "Date",
+    "diaInteiro": "All day",
+    "horaInicio": "Start",
+    "horaFim": "End",
+    "obra": "Site / cost center",
+    "local": "Location",
+    "supplier": "Supplier",
+    "descricao": "Notes"
+  },
+  "placeholders": {
+    "titulo": "E.g. CA-50 rebar delivery",
+    "tipo": "Select",
+    "local": "E.g. Gate 2, warehouse",
+    "noSupplier": "No supplier"
+  },
+  "confirm": {
+    "deleteTitle": "Delete event?",
+    "deleteDescription": "\"{{title}}\" will be removed from everyone's calendar. This can't be undone."
+  },
+  "toast": {
+    "created": "Event scheduled.",
+    "updated": "Event updated.",
+    "deleted": "Event deleted."
+  }
+}

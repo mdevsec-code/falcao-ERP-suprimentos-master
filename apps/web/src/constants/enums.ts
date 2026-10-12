@@ -1,9 +1,19 @@
 import type {
+  AgendaEventType,
+  AgendaItemKind,
   ApprovalAction,
   AuditAction,
   ContactType,
+  ContractStatus,
+  DeadlineState,
+  DocumentCategory,
+  ExpenseCategory,
+  PayableSource,
+  PayableStatus,
+  PaymentMethod,
   ProductCategory,
   PurchaseRequestStatus,
+  ReimbursementStatus,
   SupplierCategory,
   SupplierDocumentCategory,
   UnitOfMeasure,
@@ -34,3 +44,26 @@ export const DOCUMENT_CATEGORY_LABELS =
 export const CONTACT_TYPE_LABELS = createTranslatedLabels<ContactType>('contactType');
 
 export const AUDIT_ACTION_LABELS = createTranslatedLabels<AuditAction>('auditAction');
+
+export const CONTRACT_STATUS_LABELS = createTranslatedLabels<ContractStatus>('contractStatus');
+
+export const DEADLINE_STATE_LABELS = createTranslatedLabels<DeadlineState>('deadlineState');
+
+export const PAYABLE_STATUS_LABELS = createTranslatedLabels<PayableStatus>('payableStatus');
+
+export const PAYABLE_SOURCE_LABELS = createTranslatedLabels<PayableSource>('payableSource');
+
+export const PAYMENT_METHOD_LABELS = createTranslatedLabels<PaymentMethod>('paymentMethod');
+
+export const REIMBURSEMENT_STATUS_LABELS =
+  createTranslatedLabels<ReimbursementStatus>('reimbursementStatus');
+
+export const EXPENSE_CATEGORY_LABELS = createTranslatedLabels<ExpenseCategory>('expenseCategory');
+
+/** Categorias do repositório central (as de documento de fornecedor ficam em `documentCategory`). */
+export const CENTRAL_DOCUMENT_CATEGORY_LABELS =
+  createTranslatedLabels<DocumentCategory>('centralDocumentCategory');
+
+export const AGENDA_EVENT_TYPE_LABELS = createTranslatedLabels<AgendaEventType>('agendaEventType');
+
+export const AGENDA_ITEM_KIND_LABELS = createTranslatedLabels<AgendaItemKind>('agendaItemKind');

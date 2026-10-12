@@ -86,21 +86,33 @@ const SECTIONS: NavSection[] = [
   {
     title: 'sidebar.contractsFinance',
     items: [
-      { label: 'nav.contracts', to: ROUTE_PATHS.CONTRATOS, icon: FileText, enabled: false },
-      { label: 'nav.finance', to: ROUTE_PATHS.FINANCEIRO, icon: Wallet, enabled: false },
+      {
+        label: 'nav.contracts',
+        to: ROUTE_PATHS.CONTRATOS,
+        icon: FileText,
+        enabled: true,
+        requires: PERMISSIONS.CONTRACT_READ,
+      },
+      {
+        label: 'nav.finance',
+        to: ROUTE_PATHS.FINANCEIRO,
+        icon: Wallet,
+        enabled: true,
+        requires: PERMISSIONS.FINANCE_READ,
+      },
       {
         label: 'nav.reimbursements',
         to: ROUTE_PATHS.REEMBOLSOS,
         icon: ReceiptText,
-        enabled: false,
+        enabled: true,
       },
     ],
   },
   {
     title: 'sidebar.organization',
     items: [
-      { label: 'nav.agenda', to: ROUTE_PATHS.AGENDA, icon: CalendarDays, enabled: false },
-      { label: 'nav.documents', to: ROUTE_PATHS.DOCUMENTOS, icon: FileStack, enabled: false },
+      { label: 'nav.agenda', to: ROUTE_PATHS.AGENDA, icon: CalendarDays, enabled: true },
+      { label: 'nav.documents', to: ROUTE_PATHS.DOCUMENTOS, icon: FileStack, enabled: true },
     ],
   },
   {

@@ -1,0 +1,85 @@
+{
+  "page": {
+    "eyebrow": "组织",
+    "title": "日程",
+    "description": "交货、收货、拜访和会议——以及应付款、合同和文档的到期日。"
+  },
+  "actions": {
+    "new": "新建事件"
+  },
+  "view": {
+    "month": "月",
+    "list": "近期"
+  },
+  "nav": {
+    "previous": "上个月",
+    "next": "下个月",
+    "today": "今天"
+  },
+  "filters": {
+    "obra": "工地 / 成本中心",
+    "allObras": "全部工地",
+    "obraHint": "按工地查看时不包含文档到期日。"
+  },
+  "legend": {
+    "ariaLabel": "显示的类型"
+  },
+  "grid": {
+    "dayAria_other": "{{date}}，{{count}} 项",
+    "more_other": "+{{count}} 项"
+  },
+  "day": {
+    "today": "今天",
+    "selected": "所选日期",
+    "empty": "这一天没有安排。",
+    "addEvent": "在这一天新建事件"
+  },
+  "list": {
+    "range_other": "未来 {{count}} 天。",
+    "emptyTitle": "日程空闲",
+    "emptyDescription": "近期没有事件或到期事项。"
+  },
+  "item": {
+    "allDay": "全天",
+    "edit": "编辑\"{{title}}\"",
+    "open": "打开\"{{title}}\""
+  },
+  "error": {
+    "title": "无法加载日程",
+    "description": "请检查网络连接后重试。"
+  },
+  "dialog": {
+    "createTitle": "新建事件",
+    "editTitle": "编辑事件",
+    "description": "应付款、合同和文档的到期日会自动加入日程——这里用于安排约会和会议。",
+    "submitCreate": "安排",
+    "delete": "删除事件"
+  },
+  "fields": {
+    "titulo": "标题",
+    "tipo": "类型",
+    "data": "日期",
+    "diaInteiro": "全天",
+    "horaInicio": "开始",
+    "horaFim": "结束",
+    "obra": "工地 / 成本中心",
+    "local": "地点",
+    "supplier": "供应商",
+    "descricao": "备注"
+  },
+  "placeholders": {
+    "titulo": "例如：CA-50 钢筋交货",
+    "tipo": "请选择",
+    "local": "例如：2 号门、仓库",
+    "noSupplier": "无供应商"
+  },
+  "confirm": {
+    "deleteTitle": "删除事件？",
+    "deleteDescription": "\"{{title}}\"将从所有人的日程中删除，此操作无法撤销。"
+  },
+  "toast": {
+    "created": "事件已安排。",
+    "updated": "事件已更新。",
+    "deleted": "事件已删除。"
+  }
+}

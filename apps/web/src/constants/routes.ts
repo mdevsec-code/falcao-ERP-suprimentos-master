@@ -14,8 +14,10 @@ export const ROUTE_PATHS = {
   SOLICITACAO_NOVA: '/solicitacoes/novo',
   APROVACOES: '/aprovacoes',
   CONTRATOS: '/contratos',
+  CONTRATO_NOVO: '/contratos/novo',
   FINANCEIRO: '/financeiro',
   REEMBOLSOS: '/reembolsos',
+  REEMBOLSO_NOVO: '/reembolsos/novo',
   AGENDA: '/agenda',
   DOCUMENTOS: '/documentos',
   USUARIOS: '/usuarios',
@@ -34,6 +36,9 @@ export const routeTo = {
   product: (id: string) => `${ROUTE_PATHS.PRODUTOS}/${id}`,
   productEdit: (id: string) => `${ROUTE_PATHS.PRODUTOS}/${id}/editar`,
   purchaseRequest: (id: string) => `${ROUTE_PATHS.SOLICITACOES}/${id}`,
+  contract: (id: string) => `${ROUTE_PATHS.CONTRATOS}/${id}`,
+  contractEdit: (id: string) => `${ROUTE_PATHS.CONTRATOS}/${id}/editar`,
+  reimbursement: (id: string) => `${ROUTE_PATHS.REEMBOLSOS}/${id}`,
 } as const;
 
 /**

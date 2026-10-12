@@ -7,13 +7,20 @@ export interface RankingBarChartProps {
   formatValue: (value: number) => string;
   /** Largura reservada aos rótulos das categorias (eixo Y). */
   labelWidth?: number;
+  /** Formato curto para os ticks do eixo de valores (ex.: "70 mil"). */
+  formatTick?: (value: number) => string;
 }
 
 /**
  * Barras horizontais de magnitude por categoria — um único matiz (não é
  * identidade, é "quanto"), barras finas com ponta arredondada de 4px.
  */
-export function RankingBarChart({ data, formatValue, labelWidth = 150 }: RankingBarChartProps) {
+export function RankingBarChart({
+  data,
+  formatValue,
+  labelWidth = 150,
+  formatTick,
+}: RankingBarChartProps) {
   const height = Math.max(160, data.length * 34 + 24);
   return (
     <ResponsiveContainer width="100%" height={height}>
@@ -25,6 +32,7 @@ export function RankingBarChart({ data, formatValue, labelWidth = 150 }: Ranking
           axisLine={false}
           tickLine={false}
           allowDecimals={false}
+          tickFormatter={formatTick}
         />
         <YAxis
           type="category"

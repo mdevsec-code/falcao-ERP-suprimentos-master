@@ -1,0 +1,143 @@
+{
+  "page": {
+    "eyebrow": "Contracts & Finance",
+    "title": "Reimbursements",
+    "descriptionAll": "Employee expenses with receipts, manager approval and payment by finance.",
+    "descriptionMine": "Request reimbursement for your expenses with receipts and track it until payment."
+  },
+  "actions": {
+    "new": "Request reimbursement",
+    "backToList": "Back to reimbursements",
+    "approve": "Approve",
+    "reject": "Reject",
+    "delete": "Delete request",
+    "uploadReceipt": "Upload receipt"
+  },
+  "kpi": {
+    "title": "Reimbursements by status"
+  },
+  "pendingBanner_one": "{{count}} reimbursement awaiting your decision.",
+  "pendingBanner_other": "{{count}} reimbursements awaiting your decision.",
+  "pendingAction": "Review pending",
+  "scope": {
+    "all": "All",
+    "mine": "My requests"
+  },
+  "filters": {
+    "search": {
+      "label": "Search",
+      "placeholderAll": "Title or employee",
+      "placeholderMine": "Request title"
+    },
+    "status": "Status",
+    "allStatuses": "All statuses"
+  },
+  "table": {
+    "title": "Request",
+    "requester": "Employee",
+    "createdAt": "Submitted",
+    "total": "Total",
+    "status": "Status",
+    "expenses_one": "{{count}} expense",
+    "expenses_other": "{{count}} expenses"
+  },
+  "empty": {
+    "title": "No reimbursements here",
+    "description": "Paid out of pocket for work? Request a reimbursement with your receipts.",
+    "filteredTitle": "No reimbursements found",
+    "filteredDescription": "Adjust the filters to see other requests."
+  },
+  "error": {
+    "title": "Could not load reimbursements",
+    "description": "Check your connection and try again."
+  },
+  "form": {
+    "title": "Request reimbursement",
+    "description": "List the expenses and attach receipts; the request goes to your manager for approval.",
+    "sections": {
+      "general": "Request",
+      "generalDescription": "A title that explains what the expenses were for.",
+      "expenses": "Expenses",
+      "expensesDescription": "One line per expense, with the date it happened.",
+      "receipts": "Receipts",
+      "receiptsDescription": "Photos or PDFs of invoices and receipts (up to 10 MB each)."
+    },
+    "fields": {
+      "titulo": "Title",
+      "costCenter": "Site / cost center",
+      "data": "Date",
+      "categoria": "Category",
+      "descricao": "Description",
+      "valor": "Amount (R$)"
+    },
+    "placeholders": {
+      "titulo": "E.g. Technical visit to the Contagem warehouse site",
+      "categoria": "Select",
+      "descricao": "E.g. Round-trip tolls"
+    },
+    "addExpense": "Add expense",
+    "removeExpenseAria": "Remove expense {{index}}",
+    "total": "Request total",
+    "addReceipts": "Choose files",
+    "noReceipts": "No receipts chosen — you can also upload them later, while the request awaits approval.",
+    "submit": "Submit for approval"
+  },
+  "validation": {
+    "itemsRequired": "Add at least one expense."
+  },
+  "stepper": {
+    "ariaLabel": "Reimbursement progress",
+    "rejected": "Request rejected — see the reason below."
+  },
+  "detail": {
+    "eyebrow": "Reimbursement",
+    "requestedBy": "Requested by {{name}} on {{date}}",
+    "notFoundTitle": "Reimbursement not found",
+    "notFoundDescription": "It may have been deleted or belongs to someone else.",
+    "ownHint": "You can't decide on your own request.",
+    "requester": "Employee",
+    "payment": "Payment",
+    "dueOn": "Scheduled for {{date}}",
+    "paidOn": "Paid on {{date}}",
+    "openFinance": "Open in finance",
+    "approvedBy": "Approved by {{name}} on {{date}}",
+    "rejectedBy": "Rejected by {{name}} on {{date}}",
+    "expenses_one": "{{count}} expense",
+    "expenses_other": "{{count}} expenses",
+    "receipts": "Receipts ({{count}})"
+  },
+  "receipts": {
+    "emptyTitle": "No receipts",
+    "emptyDescription": "Upload invoices and receipts to speed up approval.",
+    "emptyDecided": "The request was decided without attached receipts.",
+    "dialogTitle": "Upload receipt",
+    "dialogDescription": "Photo or PDF of the invoice or receipt.",
+    "file": "File"
+  },
+  "decision": {
+    "approveTitle": "Approve reimbursement",
+    "approveDescription": "{{value}} for {{name}}. Approval creates a payable in finance.",
+    "rejectTitle": "Reject reimbursement",
+    "rejectDescription": "Explain why — the employee will see this message.",
+    "dueDate": "Pay by",
+    "dueDateHint": "Due date of the generated payable.",
+    "commentOptional": "Comment (optional)",
+    "reason": "Reason for rejection"
+  },
+  "confirm": {
+    "deleteTitle": "Delete reimbursement request?",
+    "deleteDescription": "The request and its receipts will be deleted. This can't be undone.",
+    "removeReceiptTitle": "Remove receipt?",
+    "removeReceiptDescription": "The file <strong>{{name}}</strong> will be removed from the request."
+  },
+  "toast": {
+    "created": "Reimbursement request submitted.",
+    "createError": "Could not submit the request.",
+    "someUploadsFailed": "Could not upload: {{files}}. Try again on the request.",
+    "approved": "Reimbursement approved and added to finance.",
+    "rejected": "Reimbursement rejected.",
+    "removed": "Request deleted.",
+    "receiptUploaded": "Receipt uploaded.",
+    "receiptRemoved": "Receipt removed."
+  }
+}

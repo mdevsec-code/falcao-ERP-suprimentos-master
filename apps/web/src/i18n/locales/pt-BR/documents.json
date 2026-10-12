@@ -1,0 +1,98 @@
+{
+  "page": {
+    "eyebrow": "Organização",
+    "title": "Documentos",
+    "description": "Repositório central da empresa: certidões, licenças, apólices, contratos e políticas, com etiquetas e controle de validade."
+  },
+  "actions": {
+    "upload": "Enviar documento",
+    "download": "Baixar"
+  },
+  "kpi": {
+    "title": "Indicadores de documentos",
+    "total": "Documentos",
+    "expiring": "Vencendo em 30 dias",
+    "expired": "Vencidos"
+  },
+  "filters": {
+    "title": "Filtros",
+    "search": {
+      "label": "Buscar",
+      "placeholder": "Título, arquivo, etiqueta ou conteúdo",
+      "hint": "O conteúdo é pesquisado em arquivos de texto (TXT, CSV, MD, JSON, XML, HTML)."
+    },
+    "category": "Categoria",
+    "allCategories": "Todas as categorias",
+    "validity": "Validade",
+    "anyValidity": "Qualquer validade"
+  },
+  "validity": {
+    "OK": "Válido",
+    "VENCENDO": "Vencendo",
+    "VENCIDO": "Vencido",
+    "SEM_VALIDADE": "Sem validade"
+  },
+  "table": {
+    "document": "Documento",
+    "category": "Categoria",
+    "validity": "Validade",
+    "links": "Vínculos",
+    "actions": "Ações",
+    "indexed": "Conteúdo pesquisável",
+    "noExpiry": "Sem validade",
+    "uploadedBy": "Enviado por {{name}} em {{date}}"
+  },
+  "tags": {
+    "title": "Etiquetas",
+    "empty": "Nenhuma etiqueta ainda."
+  },
+  "byCategory": "Por categoria",
+  "empty": {
+    "title": "Nenhum documento no repositório",
+    "description": "Envie certidões, licenças e contratos para controlar a validade em um só lugar.",
+    "filteredTitle": "Nenhum documento encontrado",
+    "filteredDescription": "Ajuste a busca ou os filtros."
+  },
+  "error": {
+    "title": "Não foi possível carregar os documentos",
+    "description": "Verifique sua conexão e tente novamente."
+  },
+  "dialog": {
+    "uploadTitle": "Enviar documento",
+    "uploadDescription": "Até 20 MB. Arquivos de texto ficam pesquisáveis pelo conteúdo.",
+    "editTitle": "Editar documento",
+    "editDescription": "Arquivo: {{name}}. Para trocar o arquivo, envie um novo documento.",
+    "file": "Arquivo",
+    "fileRequired": "Escolha o arquivo.",
+    "submitUpload": "Enviar"
+  },
+  "fields": {
+    "titulo": "Título",
+    "categoria": "Categoria",
+    "validoAte": "Válido até",
+    "tags": "Etiquetas",
+    "supplier": "Fornecedor",
+    "contract": "Contrato",
+    "descricao": "Descrição"
+  },
+  "placeholders": {
+    "categoria": "Selecione",
+    "tags": "obra alfa, fiscal",
+    "noSupplier": "Nenhum fornecedor",
+    "noContract": "Nenhum contrato"
+  },
+  "hints": {
+    "validoAte": "Aparece na agenda e no alerta de vencimento.",
+    "tags": "Separe por vírgula. Ficam em minúsculas."
+  },
+  "confirm": {
+    "removeTitle": "Remover documento?",
+    "removeDescription": "O documento <strong>{{name}}</strong> e o arquivo serão removidos. Esta ação não pode ser desfeita."
+  },
+  "toast": {
+    "uploaded": "Documento enviado.",
+    "uploadError": "Não foi possível enviar o documento.",
+    "updated": "Documento atualizado.",
+    "removed": "Documento removido."
+  }
+}

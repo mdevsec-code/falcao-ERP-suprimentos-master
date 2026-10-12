@@ -1,0 +1,173 @@
+{
+  "page": {
+    "eyebrow": "Contratos & Financeiro",
+    "title": "Contratos",
+    "description": "Contratos por fornecedor, com vigência, alertas de vencimento, aditivos e anexos."
+  },
+  "actions": {
+    "new": "Novo contrato",
+    "backToList": "Voltar para contratos"
+  },
+  "kpi": {
+    "title": "Indicadores de contratos",
+    "active": "Vigentes",
+    "activeValue": "Valor vigente",
+    "expiring": "Vencendo",
+    "expired": "Vencidos sem encerrar"
+  },
+  "filters": {
+    "title": "Filtros",
+    "search": {
+      "label": "Buscar",
+      "placeholder": "Número, objeto ou fornecedor"
+    },
+    "status": "Status",
+    "allStatuses": "Todos os status",
+    "deadline": "Prazo",
+    "anyDeadline": "Qualquer prazo",
+    "chipStatus": "Status: {{value}}",
+    "chipDeadline": "Prazo: {{value}}",
+    "chipSearch": "Busca: {{value}}"
+  },
+  "table": {
+    "contract": "Contrato",
+    "supplier": "Fornecedor",
+    "period": "Vigência",
+    "value": "Valor",
+    "status": "Status",
+    "amendments_one": "{{count}} aditivo",
+    "amendments_other": "{{count}} aditivos"
+  },
+  "deadline": {
+    "expiring_one": "Vence em {{count}} dia",
+    "expiring_other": "Vence em {{count}} dias",
+    "today": "Vence hoje",
+    "expired_one": "Venceu há {{count}} dia",
+    "expired_other": "Venceu há {{count}} dias"
+  },
+  "vigencia": {
+    "ariaLabel": "Vigência do contrato",
+    "today": "Hoje",
+    "elapsed": "{{percent}}% decorrido"
+  },
+  "empty": {
+    "title": "Nenhum contrato cadastrado",
+    "description": "Cadastre o primeiro contrato para acompanhar vigência, aditivos e pagamentos.",
+    "filteredTitle": "Nenhum contrato encontrado",
+    "filteredDescription": "Ajuste os filtros para ver outros contratos."
+  },
+  "error": {
+    "title": "Não foi possível carregar os contratos",
+    "description": "Verifique sua conexão e tente novamente."
+  },
+  "form": {
+    "createTitle": "Novo contrato",
+    "createDescription": "Registre o contrato com o fornecedor, a vigência e o valor acordado.",
+    "editTitle": "Editar contrato",
+    "submitCreate": "Cadastrar contrato",
+    "lockedTitle": "Contrato não pode ser editado",
+    "lockedDescription": "Contratos encerrados ou cancelados ficam congelados para preservar o histórico.",
+    "sections": {
+      "identification": "Identificação",
+      "identificationDescription": "Número interno, objeto e fornecedor contratado.",
+      "terms": "Vigência e valor",
+      "termsDescription": "Período, valor global e quando avisar sobre o vencimento."
+    },
+    "fields": {
+      "numero": "Número",
+      "objeto": "Objeto",
+      "supplier": "Fornecedor",
+      "costCenter": "Obra / centro de custo",
+      "valorTotal": "Valor total (R$)",
+      "dataInicio": "Início da vigência",
+      "dataFim": "Fim da vigência",
+      "assinadoEm": "Assinado em",
+      "alertaDias": "Alertar com antecedência (dias)",
+      "descricao": "Descrição e cláusulas relevantes"
+    },
+    "placeholders": {
+      "numero": "CT-2026-001",
+      "objeto": "Ex.: Locação de escavadeira hidráulica",
+      "supplier": "Selecione o fornecedor"
+    },
+    "hints": {
+      "costCenter": "Usado nos relatórios do financeiro e na visão por obra da agenda.",
+      "assinadoEm": "Deixe em branco enquanto aguarda assinatura.",
+      "alertaDias": "O contrato aparece como \"vencendo\" dentro desta janela."
+    }
+  },
+  "detail": {
+    "eyebrow": "Contrato {{numero}}",
+    "supplierLine": "Fornecedor: {{name}}",
+    "notFoundTitle": "Contrato não encontrado",
+    "notFoundDescription": "Ele pode ter sido removido ou você não tem acesso.",
+    "notSigned": "Aguardando assinatura",
+    "alertDays_one": "{{count}} dia antes do fim",
+    "alertDays_other": "{{count}} dias antes do fim",
+    "createdBy": "Cadastrado por",
+    "financeTitle": "Execução financeira",
+    "launched": "Lançado em contas a pagar",
+    "paid": "Pago",
+    "balance": "Saldo do contrato",
+    "tabs": {
+      "overview": "Visão geral",
+      "amendments": "Aditivos ({{count}})",
+      "attachments": "Anexos ({{count}})"
+    }
+  },
+  "statusActions": {
+    "suspend": "Suspender",
+    "resume": "Retomar",
+    "close": "Encerrar",
+    "cancel": "Cancelar contrato"
+  },
+  "amendments": {
+    "add": "Registrar aditivo",
+    "label": "Aditivo nº {{number}}",
+    "newEnd": "Novo término: {{date}}",
+    "emptyTitle": "Nenhum aditivo",
+    "emptyDescription": "Prorrogações e alterações de valor ficam registradas aqui.",
+    "dialog": {
+      "title": "Aditivo nº {{number}}",
+      "description": "O aditivo altera o valor e/ou o prazo do contrato e fica no histórico.",
+      "submit": "Registrar aditivo"
+    },
+    "fields": {
+      "descricao": "Descrição",
+      "valorDelta": "Alteração de valor (R$)",
+      "novaDataFim": "Nova data de término"
+    },
+    "placeholders": {
+      "descricao": "Ex.: Prorrogação por 60 dias com reajuste pelo IGP-M"
+    },
+    "hints": {
+      "valorDelta": "Positivo para acréscimo, negativo para supressão.",
+      "novaDataFim": "Término atual: {{date}}"
+    },
+    "preview": {
+      "value": "Valor",
+      "end": "Término"
+    },
+    "validation": {
+      "changeRequired": "Informe a alteração de valor e/ou a nova data de término."
+    }
+  },
+  "attachments": {
+    "upload": "Anexar documento",
+    "emptyTitle": "Nenhum anexo",
+    "emptyDescription": "Anexe o contrato assinado, aditivos e garantias. Eles também aparecem em Documentos."
+  },
+  "confirm": {
+    "statusTitle": "Mudar para \"{{status}}\"?",
+    "statusDescription": "Contratos encerrados ou cancelados não podem mais ser editados nem receber aditivos.",
+    "removeAttachmentTitle": "Remover anexo?",
+    "removeAttachmentDescription": "O arquivo <strong>{{name}}</strong> será removido do repositório de documentos."
+  },
+  "toast": {
+    "createSuccess": "Contrato cadastrado.",
+    "updateSuccess": "Contrato atualizado.",
+    "saveError": "Não foi possível salvar o contrato.",
+    "statusChanged": "Status do contrato atualizado.",
+    "amendmentAdded": "Aditivo registrado."
+  }
+}

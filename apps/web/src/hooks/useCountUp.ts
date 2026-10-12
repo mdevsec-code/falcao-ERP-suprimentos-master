@@ -28,7 +28,8 @@ export function useCountUp(target: number, duration = 600): number {
       const elapsed = now - start;
       const progress = Math.min(1, elapsed / duration);
       const eased = 1 - (1 - progress) * (1 - progress);
-      setValue(Math.round(from + (to - from) * eased));
+      // Quadros intermediários inteiros; o último é o valor exato (centavos).
+      setValue(progress < 1 ? Math.round(from + (to - from) * eased) : to);
       if (progress < 1) {
         frame = requestAnimationFrame(tick);
       }

@@ -11,5 +11,10 @@
   "selectOption": "Select an option",
   "minPassword": "Password must be at least {{count}} characters",
   "maxPassword": "Password must be at most {{count}} characters",
-  "passwordMismatch": "Passwords do not match"
+  "passwordMismatch": "Passwords do not match",
+  "maxValue": "The maximum value is {{count}}",
+  "date": "Enter a valid date",
+  "dateOrder": "The end date must be on or after the start date",
+  "futureDate": "The date cannot be in the future",
+  "timeOrder": "The end time must be after the start time"
 }

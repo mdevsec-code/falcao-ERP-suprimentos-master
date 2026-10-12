@@ -1,0 +1,173 @@
+{
+  "page": {
+    "eyebrow": "Contracts & Finance",
+    "title": "Contracts",
+    "description": "Supplier contracts with term tracking, expiry alerts, amendments and attachments."
+  },
+  "actions": {
+    "new": "New contract",
+    "backToList": "Back to contracts"
+  },
+  "kpi": {
+    "title": "Contract indicators",
+    "active": "Active",
+    "activeValue": "Active value",
+    "expiring": "Expiring",
+    "expired": "Expired, not closed"
+  },
+  "filters": {
+    "title": "Filters",
+    "search": {
+      "label": "Search",
+      "placeholder": "Number, scope or supplier"
+    },
+    "status": "Status",
+    "allStatuses": "All statuses",
+    "deadline": "Deadline",
+    "anyDeadline": "Any deadline",
+    "chipStatus": "Status: {{value}}",
+    "chipDeadline": "Deadline: {{value}}",
+    "chipSearch": "Search: {{value}}"
+  },
+  "table": {
+    "contract": "Contract",
+    "supplier": "Supplier",
+    "period": "Term",
+    "value": "Value",
+    "status": "Status",
+    "amendments_one": "{{count}} amendment",
+    "amendments_other": "{{count}} amendments"
+  },
+  "deadline": {
+    "expiring_one": "Expires in {{count}} day",
+    "expiring_other": "Expires in {{count}} days",
+    "today": "Expires today",
+    "expired_one": "Expired {{count}} day ago",
+    "expired_other": "Expired {{count}} days ago"
+  },
+  "vigencia": {
+    "ariaLabel": "Contract term",
+    "today": "Today",
+    "elapsed": "{{percent}}% elapsed"
+  },
+  "empty": {
+    "title": "No contracts yet",
+    "description": "Register the first contract to track its term, amendments and payments.",
+    "filteredTitle": "No contracts found",
+    "filteredDescription": "Adjust the filters to see other contracts."
+  },
+  "error": {
+    "title": "Could not load contracts",
+    "description": "Check your connection and try again."
+  },
+  "form": {
+    "createTitle": "New contract",
+    "createDescription": "Record the contract with the supplier, its term and the agreed value.",
+    "editTitle": "Edit contract",
+    "submitCreate": "Create contract",
+    "lockedTitle": "This contract can't be edited",
+    "lockedDescription": "Closed or cancelled contracts are frozen to preserve their history.",
+    "sections": {
+      "identification": "Identification",
+      "identificationDescription": "Internal number, scope and contracted supplier.",
+      "terms": "Term and value",
+      "termsDescription": "Period, total value and when to warn about expiry."
+    },
+    "fields": {
+      "numero": "Number",
+      "objeto": "Scope",
+      "supplier": "Supplier",
+      "costCenter": "Site / cost center",
+      "valorTotal": "Total value (R$)",
+      "dataInicio": "Start date",
+      "dataFim": "End date",
+      "assinadoEm": "Signed on",
+      "alertaDias": "Alert in advance (days)",
+      "descricao": "Description and relevant clauses"
+    },
+    "placeholders": {
+      "numero": "CT-2026-001",
+      "objeto": "E.g. Hydraulic excavator rental",
+      "supplier": "Select the supplier"
+    },
+    "hints": {
+      "costCenter": "Used in finance reports and in the calendar's per-site view.",
+      "assinadoEm": "Leave blank while awaiting signature.",
+      "alertaDias": "The contract shows as \"expiring\" within this window."
+    }
+  },
+  "detail": {
+    "eyebrow": "Contract {{numero}}",
+    "supplierLine": "Supplier: {{name}}",
+    "notFoundTitle": "Contract not found",
+    "notFoundDescription": "It may have been removed or you don't have access.",
+    "notSigned": "Awaiting signature",
+    "alertDays_one": "{{count}} day before the end",
+    "alertDays_other": "{{count}} days before the end",
+    "createdBy": "Created by",
+    "financeTitle": "Financial execution",
+    "launched": "Booked as payables",
+    "paid": "Paid",
+    "balance": "Contract balance",
+    "tabs": {
+      "overview": "Overview",
+      "amendments": "Amendments ({{count}})",
+      "attachments": "Attachments ({{count}})"
+    }
+  },
+  "statusActions": {
+    "suspend": "Suspend",
+    "resume": "Resume",
+    "close": "Close",
+    "cancel": "Cancel contract"
+  },
+  "amendments": {
+    "add": "Add amendment",
+    "label": "Amendment #{{number}}",
+    "newEnd": "New end date: {{date}}",
+    "emptyTitle": "No amendments",
+    "emptyDescription": "Extensions and value changes are recorded here.",
+    "dialog": {
+      "title": "Amendment #{{number}}",
+      "description": "The amendment changes the contract value and/or end date and stays in the history.",
+      "submit": "Add amendment"
+    },
+    "fields": {
+      "descricao": "Description",
+      "valorDelta": "Value change (R$)",
+      "novaDataFim": "New end date"
+    },
+    "placeholders": {
+      "descricao": "E.g. 60-day extension with IGP-M adjustment"
+    },
+    "hints": {
+      "valorDelta": "Positive to increase, negative to reduce.",
+      "novaDataFim": "Current end date: {{date}}"
+    },
+    "preview": {
+      "value": "Value",
+      "end": "End date"
+    },
+    "validation": {
+      "changeRequired": "Enter the value change and/or the new end date."
+    }
+  },
+  "attachments": {
+    "upload": "Attach document",
+    "emptyTitle": "No attachments",
+    "emptyDescription": "Attach the signed contract, amendments and guarantees. They also show up in Documents."
+  },
+  "confirm": {
+    "statusTitle": "Change to \"{{status}}\"?",
+    "statusDescription": "Closed or cancelled contracts can no longer be edited or amended.",
+    "removeAttachmentTitle": "Remove attachment?",
+    "removeAttachmentDescription": "The file <strong>{{name}}</strong> will be removed from the document repository."
+  },
+  "toast": {
+    "createSuccess": "Contract created.",
+    "updateSuccess": "Contract updated.",
+    "saveError": "Could not save the contract.",
+    "statusChanged": "Contract status updated.",
+    "amendmentAdded": "Amendment recorded."
+  }
+}

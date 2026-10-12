@@ -11,5 +11,10 @@
   "selectOption": "请选择一项",
   "minPassword": "密码至少 {{count}} 个字符",
   "maxPassword": "密码最多 {{count}} 个字符",
-  "passwordMismatch": "两次输入的密码不一致"
+  "passwordMismatch": "两次输入的密码不一致",
+  "maxValue": "最大值为 {{count}}",
+  "date": "请输入有效日期",
+  "dateOrder": "结束日期不能早于开始日期",
+  "futureDate": "日期不能晚于今天",
+  "timeOrder": "结束时间必须晚于开始时间"
 }

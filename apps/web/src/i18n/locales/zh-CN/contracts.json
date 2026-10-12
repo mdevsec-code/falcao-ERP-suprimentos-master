@@ -1,0 +1,169 @@
+{
+  "page": {
+    "eyebrow": "合同与财务",
+    "title": "合同",
+    "description": "按供应商管理合同：有效期、到期提醒、补充协议与附件。"
+  },
+  "actions": {
+    "new": "新建合同",
+    "backToList": "返回合同列表"
+  },
+  "kpi": {
+    "title": "合同指标",
+    "active": "生效中",
+    "activeValue": "生效合同金额",
+    "expiring": "即将到期",
+    "expired": "已到期未结束"
+  },
+  "filters": {
+    "title": "筛选",
+    "search": {
+      "label": "搜索",
+      "placeholder": "编号、标的或供应商"
+    },
+    "status": "状态",
+    "allStatuses": "全部状态",
+    "deadline": "期限",
+    "anyDeadline": "任意期限",
+    "chipStatus": "状态：{{value}}",
+    "chipDeadline": "期限：{{value}}",
+    "chipSearch": "搜索：{{value}}"
+  },
+  "table": {
+    "contract": "合同",
+    "supplier": "供应商",
+    "period": "有效期",
+    "value": "金额",
+    "status": "状态",
+    "amendments_other": "{{count}} 份补充协议"
+  },
+  "deadline": {
+    "expiring_other": "{{count}} 天后到期",
+    "today": "今天到期",
+    "expired_other": "已到期 {{count}} 天"
+  },
+  "vigencia": {
+    "ariaLabel": "合同有效期",
+    "today": "今天",
+    "elapsed": "已过 {{percent}}%"
+  },
+  "empty": {
+    "title": "暂无合同",
+    "description": "登记第一份合同，跟踪有效期、补充协议和付款。",
+    "filteredTitle": "未找到合同",
+    "filteredDescription": "调整筛选条件以查看其他合同。"
+  },
+  "error": {
+    "title": "无法加载合同",
+    "description": "请检查网络连接后重试。"
+  },
+  "form": {
+    "createTitle": "新建合同",
+    "createDescription": "登记与供应商签订的合同、有效期和约定金额。",
+    "editTitle": "编辑合同",
+    "submitCreate": "创建合同",
+    "lockedTitle": "该合同无法编辑",
+    "lockedDescription": "已结束或已取消的合同会被冻结，以保留历史记录。",
+    "sections": {
+      "identification": "基本信息",
+      "identificationDescription": "内部编号、合同标的和签约供应商。",
+      "terms": "有效期与金额",
+      "termsDescription": "期限、总金额以及到期提醒时间。"
+    },
+    "fields": {
+      "numero": "编号",
+      "objeto": "合同标的",
+      "supplier": "供应商",
+      "costCenter": "工地 / 成本中心",
+      "valorTotal": "总金额（R$）",
+      "dataInicio": "生效日期",
+      "dataFim": "到期日期",
+      "assinadoEm": "签署日期",
+      "alertaDias": "提前提醒（天）",
+      "descricao": "说明及重要条款"
+    },
+    "placeholders": {
+      "numero": "CT-2026-001",
+      "objeto": "例如：液压挖掘机租赁",
+      "supplier": "选择供应商"
+    },
+    "hints": {
+      "costCenter": "用于财务报表和日程的按工地视图。",
+      "assinadoEm": "等待签署时可留空。",
+      "alertaDias": "在此期间内合同显示为\"即将到期\"。"
+    }
+  },
+  "detail": {
+    "eyebrow": "合同 {{numero}}",
+    "supplierLine": "供应商：{{name}}",
+    "notFoundTitle": "未找到合同",
+    "notFoundDescription": "该合同可能已被删除，或您没有访问权限。",
+    "notSigned": "待签署",
+    "alertDays_other": "到期前 {{count}} 天",
+    "createdBy": "登记人",
+    "financeTitle": "财务执行情况",
+    "launched": "已录入应付款",
+    "paid": "已支付",
+    "balance": "合同余额",
+    "tabs": {
+      "overview": "概览",
+      "amendments": "补充协议（{{count}}）",
+      "attachments": "附件（{{count}}）"
+    }
+  },
+  "statusActions": {
+    "suspend": "暂停",
+    "resume": "恢复",
+    "close": "结束",
+    "cancel": "取消合同"
+  },
+  "amendments": {
+    "add": "登记补充协议",
+    "label": "第 {{number}} 号补充协议",
+    "newEnd": "新到期日：{{date}}",
+    "emptyTitle": "暂无补充协议",
+    "emptyDescription": "延期和金额变更会记录在这里。",
+    "dialog": {
+      "title": "第 {{number}} 号补充协议",
+      "description": "补充协议会修改合同金额和/或到期日，并保留在历史记录中。",
+      "submit": "登记补充协议"
+    },
+    "fields": {
+      "descricao": "说明",
+      "valorDelta": "金额变动（R$）",
+      "novaDataFim": "新到期日期"
+    },
+    "placeholders": {
+      "descricao": "例如：延期 60 天，按 IGP-M 调价"
+    },
+    "hints": {
+      "valorDelta": "正数为增加，负数为减少。",
+      "novaDataFim": "当前到期日：{{date}}"
+    },
+    "preview": {
+      "value": "金额",
+      "end": "到期日"
+    },
+    "validation": {
+      "changeRequired": "请填写金额变动和/或新的到期日期。"
+    }
+  },
+  "attachments": {
+    "upload": "添加文档",
+    "emptyTitle": "暂无附件",
+    "emptyDescription": "附上已签署的合同、补充协议和担保文件，它们也会出现在\"文档\"中。"
+  },
+  "confirm": {
+    "statusTitle": "更改为\"{{status}}\"？",
+    "statusDescription": "已结束或已取消的合同将无法再编辑或添加补充协议。",
+    "removeAttachmentTitle": "删除附件？",
+    "removeAttachmentDescription": "文件 <strong>{{name}}</strong> 将从文档库中删除。"
+  },
+  "toast": {
+    "createSuccess": "合同已创建。",
+    "updateSuccess": "合同已更新。",
+    "saveError": "无法保存合同。",
+    "statusChanged": "合同状态已更新。",
+    "amendmentAdded": "补充协议已登记。"
+  }
+}

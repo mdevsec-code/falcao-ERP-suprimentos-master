@@ -34,6 +34,21 @@ export function formatDate(value: Date | string | null | undefined): string | nu
   return new Intl.DateTimeFormat(getIntlLocale(), { dateStyle: 'short' }).format(d);
 }
 
+/**
+ * Datas sem hora da API (`YYYY-MM-DD`) — monta a data no fuso local. Passar
+ * a string direto para `new Date()` a lê como UTC e, no Brasil, mostraria o
+ * dia anterior.
+ */
+export function parseDateOnly(value: string): Date {
+  const [y, m, d] = value.slice(0, 10).split('-').map(Number) as [number, number, number];
+  return new Date(y, m - 1, d);
+}
+
+export function formatDateOnly(value: string | null | undefined): string | null {
+  if (!value) return null;
+  return formatDate(parseDateOnly(value));
+}
+
 export function formatTime(value: Date | string | null | undefined): string | null {
   if (!value) return null;
   const d = value instanceof Date ? value : new Date(value);

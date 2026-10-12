@@ -80,3 +80,27 @@ export function toOptionalNumber(value: number | '' | undefined): number | undef
 export function emptyToUndefined(value: string | undefined): string | undefined {
   return value === '' ? undefined : value;
 }
+
+const DATE_ONLY = /^\d{4}-\d{2}-\d{2}$/;
+
+/** Data de `<input type="date">` (`YYYY-MM-DD`), obrigatória. */
+export const dateOnlySchema = z
+  .string()
+  .min(1, i18n.t('validation:required'))
+  .regex(DATE_ONLY, i18n.t('validation:date'));
+
+/** Data opcional: vazio ou `YYYY-MM-DD`. */
+export const optionalDateOnly = z
+  .union([z.literal(''), z.string().regex(DATE_ONLY, i18n.t('validation:date'))])
+  .optional();
+
+/** Valor monetário positivo com até 2 casas, vindo de `<input type="number">`. */
+export function moneySchema(min = 0.01) {
+  return z.coerce
+    .number({ invalid_type_error: i18n.t('validation:number') })
+    .min(min, i18n.t('validation:minValue', { count: min }))
+    .refine(
+      (value) => Math.abs(value * 100 - Math.round(value * 100)) < 1e-6,
+      i18n.t('validation:maxDecimals', { count: 2 }),
+    );
+}

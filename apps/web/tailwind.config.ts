@@ -170,6 +170,11 @@ const config: Config = {
           '0%, 100%': { transform: 'translate(0, 0) scale(1)' },
           '50%': { transform: 'translate(3%, 2%) scale(1.06)' },
         },
+        // Barra que cresce da esquerda (réguas e medidores; use com origin-left).
+        'grow-x': {
+          from: { transform: 'scaleX(0)' },
+          to: { transform: 'scaleX(1)' },
+        },
         // ── Linguagem "planta técnica" (login e telas de entrada) ──
         // Traço que se desenha: requer stroke-dasharray = comprimento do path.
         'draw-line': {
@@ -212,6 +217,7 @@ const config: Config = {
         'glow-pulse': 'glow-pulse 6s var(--ease-in-out) infinite',
         drift: 'drift 14s var(--ease-in-out) infinite',
         'drift-reverse': 'drift-reverse 18s var(--ease-in-out) infinite',
+        'grow-x': 'grow-x 0.9s var(--ease-out) both',
         'draw-line': 'draw-line 1.4s var(--ease-out) both',
         'pulse-travel': 'pulse-travel 5s var(--ease-in-out) infinite',
         'node-lit': 'node-lit 5s var(--ease-in-out) infinite',

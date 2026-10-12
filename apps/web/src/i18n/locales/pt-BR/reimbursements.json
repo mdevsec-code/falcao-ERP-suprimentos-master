@@ -1,0 +1,143 @@
+{
+  "page": {
+    "eyebrow": "Contratos & Financeiro",
+    "title": "Reembolsos",
+    "descriptionAll": "Despesas dos colaboradores com comprovantes, aprovação do gestor e pagamento pelo financeiro.",
+    "descriptionMine": "Peça reembolso das suas despesas com os comprovantes e acompanhe até o pagamento."
+  },
+  "actions": {
+    "new": "Pedir reembolso",
+    "backToList": "Voltar para reembolsos",
+    "approve": "Aprovar",
+    "reject": "Rejeitar",
+    "delete": "Excluir pedido",
+    "uploadReceipt": "Enviar comprovante"
+  },
+  "kpi": {
+    "title": "Reembolsos por status"
+  },
+  "pendingBanner_one": "{{count}} reembolso aguardando a sua decisão.",
+  "pendingBanner_other": "{{count}} reembolsos aguardando a sua decisão.",
+  "pendingAction": "Ver pendências",
+  "scope": {
+    "all": "Todos",
+    "mine": "Meus pedidos"
+  },
+  "filters": {
+    "search": {
+      "label": "Buscar",
+      "placeholderAll": "Título ou colaborador",
+      "placeholderMine": "Título do pedido"
+    },
+    "status": "Status",
+    "allStatuses": "Todos os status"
+  },
+  "table": {
+    "title": "Pedido",
+    "requester": "Colaborador",
+    "createdAt": "Enviado",
+    "total": "Total",
+    "status": "Status",
+    "expenses_one": "{{count}} despesa",
+    "expenses_other": "{{count}} despesas"
+  },
+  "empty": {
+    "title": "Nenhum reembolso por aqui",
+    "description": "Gastou do próprio bolso a serviço? Peça o reembolso com os comprovantes.",
+    "filteredTitle": "Nenhum reembolso encontrado",
+    "filteredDescription": "Ajuste os filtros para ver outros pedidos."
+  },
+  "error": {
+    "title": "Não foi possível carregar os reembolsos",
+    "description": "Verifique sua conexão e tente novamente."
+  },
+  "form": {
+    "title": "Pedir reembolso",
+    "description": "Liste as despesas e anexe os comprovantes; o pedido vai para aprovação do gestor.",
+    "sections": {
+      "general": "Pedido",
+      "generalDescription": "Um título que explique o motivo das despesas.",
+      "expenses": "Despesas",
+      "expensesDescription": "Uma linha por despesa, com a data em que aconteceu.",
+      "receipts": "Comprovantes",
+      "receiptsDescription": "Fotos ou PDFs das notas e recibos (até 10 MB cada)."
+    },
+    "fields": {
+      "titulo": "Título",
+      "costCenter": "Obra / centro de custo",
+      "data": "Data",
+      "categoria": "Categoria",
+      "descricao": "Descrição",
+      "valor": "Valor (R$)"
+    },
+    "placeholders": {
+      "titulo": "Ex.: Visita técnica à obra Galpão Contagem",
+      "categoria": "Selecione",
+      "descricao": "Ex.: Pedágio ida e volta"
+    },
+    "addExpense": "Adicionar despesa",
+    "removeExpenseAria": "Remover despesa {{index}}",
+    "total": "Total do pedido",
+    "addReceipts": "Escolher arquivos",
+    "noReceipts": "Nenhum comprovante escolhido — você também pode enviar depois, enquanto o pedido aguarda aprovação.",
+    "submit": "Enviar para aprovação"
+  },
+  "validation": {
+    "itemsRequired": "Informe ao menos uma despesa."
+  },
+  "stepper": {
+    "ariaLabel": "Andamento do reembolso",
+    "rejected": "Pedido rejeitado — veja o motivo abaixo."
+  },
+  "detail": {
+    "eyebrow": "Reembolso",
+    "requestedBy": "Pedido por {{name}} em {{date}}",
+    "notFoundTitle": "Reembolso não encontrado",
+    "notFoundDescription": "Ele pode ter sido excluído ou pertence a outra pessoa.",
+    "ownHint": "Você não pode decidir sobre o seu próprio pedido.",
+    "requester": "Colaborador",
+    "payment": "Pagamento",
+    "dueOn": "Previsto para {{date}}",
+    "paidOn": "Pago em {{date}}",
+    "openFinance": "Abrir no financeiro",
+    "approvedBy": "Aprovado por {{name}} em {{date}}",
+    "rejectedBy": "Rejeitado por {{name}} em {{date}}",
+    "expenses_one": "{{count}} despesa",
+    "expenses_other": "{{count}} despesas",
+    "receipts": "Comprovantes ({{count}})"
+  },
+  "receipts": {
+    "emptyTitle": "Nenhum comprovante",
+    "emptyDescription": "Envie as notas e recibos para agilizar a aprovação.",
+    "emptyDecided": "O pedido foi decidido sem comprovantes anexados.",
+    "dialogTitle": "Enviar comprovante",
+    "dialogDescription": "Foto ou PDF da nota fiscal ou recibo.",
+    "file": "Arquivo"
+  },
+  "decision": {
+    "approveTitle": "Aprovar reembolso",
+    "approveDescription": "{{value}} para {{name}}. A aprovação lança uma conta a pagar no financeiro.",
+    "rejectTitle": "Rejeitar reembolso",
+    "rejectDescription": "Explique o motivo — o colaborador verá esta mensagem.",
+    "dueDate": "Pagar até",
+    "dueDateHint": "Vencimento da conta a pagar gerada.",
+    "commentOptional": "Comentário (opcional)",
+    "reason": "Motivo da rejeição"
+  },
+  "confirm": {
+    "deleteTitle": "Excluir pedido de reembolso?",
+    "deleteDescription": "O pedido e os comprovantes serão excluídos. Esta ação não pode ser desfeita.",
+    "removeReceiptTitle": "Remover comprovante?",
+    "removeReceiptDescription": "O arquivo <strong>{{name}}</strong> será removido do pedido."
+  },
+  "toast": {
+    "created": "Pedido de reembolso enviado.",
+    "createError": "Não foi possível enviar o pedido.",
+    "someUploadsFailed": "Não foi possível enviar: {{files}}. Tente de novo no pedido.",
+    "approved": "Reembolso aprovado e lançado no financeiro.",
+    "rejected": "Reembolso rejeitado.",
+    "removed": "Pedido excluído.",
+    "receiptUploaded": "Comprovante enviado.",
+    "receiptRemoved": "Comprovante removido."
+  }
+}

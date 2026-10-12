@@ -1,0 +1,88 @@
+{
+  "page": {
+    "eyebrow": "Organização",
+    "title": "Agenda",
+    "description": "Entregas, recebimentos, visitas e reuniões — junto com os vencimentos de contas, contratos e documentos."
+  },
+  "actions": {
+    "new": "Novo evento"
+  },
+  "view": {
+    "month": "Mês",
+    "list": "Próximos dias"
+  },
+  "nav": {
+    "previous": "Mês anterior",
+    "next": "Próximo mês",
+    "today": "Hoje"
+  },
+  "filters": {
+    "obra": "Obra / centro de custo",
+    "allObras": "Todas as obras",
+    "obraHint": "Validades de documentos ficam de fora da visão por obra."
+  },
+  "legend": {
+    "ariaLabel": "Tipos exibidos"
+  },
+  "grid": {
+    "dayAria_one": "{{date}}, {{count}} item",
+    "dayAria_other": "{{date}}, {{count}} itens",
+    "more_one": "+{{count}} item",
+    "more_other": "+{{count}} itens"
+  },
+  "day": {
+    "today": "Hoje",
+    "selected": "Dia selecionado",
+    "empty": "Nada agendado para este dia.",
+    "addEvent": "Novo evento neste dia"
+  },
+  "list": {
+    "range_one": "Próximo {{count}} dia.",
+    "range_other": "Próximos {{count}} dias.",
+    "emptyTitle": "Agenda livre",
+    "emptyDescription": "Nenhum evento ou vencimento nos próximos dias."
+  },
+  "item": {
+    "allDay": "Dia inteiro",
+    "edit": "Editar \"{{title}}\"",
+    "open": "Abrir \"{{title}}\""
+  },
+  "error": {
+    "title": "Não foi possível carregar a agenda",
+    "description": "Verifique sua conexão e tente novamente."
+  },
+  "dialog": {
+    "createTitle": "Novo evento",
+    "editTitle": "Editar evento",
+    "description": "Vencimentos de contas, contratos e documentos entram na agenda sozinhos — aqui ficam os compromissos.",
+    "submitCreate": "Agendar",
+    "delete": "Excluir evento"
+  },
+  "fields": {
+    "titulo": "Título",
+    "tipo": "Tipo",
+    "data": "Data",
+    "diaInteiro": "Dia inteiro",
+    "horaInicio": "Início",
+    "horaFim": "Término",
+    "obra": "Obra / centro de custo",
+    "local": "Local",
+    "supplier": "Fornecedor",
+    "descricao": "Observações"
+  },
+  "placeholders": {
+    "titulo": "Ex.: Entrega de aço CA-50",
+    "tipo": "Selecione",
+    "local": "Ex.: Portão 2, almoxarifado",
+    "noSupplier": "Nenhum fornecedor"
+  },
+  "confirm": {
+    "deleteTitle": "Excluir evento?",
+    "deleteDescription": "\"{{title}}\" sai da agenda de todos. Esta ação não pode ser desfeita."
+  },
+  "toast": {
+    "created": "Evento agendado.",
+    "updated": "Evento atualizado.",
+    "deleted": "Evento excluído."
+  }
+}

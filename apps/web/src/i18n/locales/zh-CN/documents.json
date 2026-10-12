@@ -1,0 +1,98 @@
+{
+  "page": {
+    "eyebrow": "组织",
+    "title": "文档",
+    "description": "公司文档中心：证明、许可证、保险单、合同和制度，支持标签和有效期管理。"
+  },
+  "actions": {
+    "upload": "上传文档",
+    "download": "下载"
+  },
+  "kpi": {
+    "title": "文档指标",
+    "total": "文档",
+    "expiring": "30 天内到期",
+    "expired": "已过期"
+  },
+  "filters": {
+    "title": "筛选",
+    "search": {
+      "label": "搜索",
+      "placeholder": "标题、文件名、标签或内容",
+      "hint": "内容搜索适用于文本文件（TXT、CSV、MD、JSON、XML、HTML）。"
+    },
+    "category": "类别",
+    "allCategories": "全部类别",
+    "validity": "有效期",
+    "anyValidity": "任意有效期"
+  },
+  "validity": {
+    "OK": "有效",
+    "VENCENDO": "即将到期",
+    "VENCIDO": "已过期",
+    "SEM_VALIDADE": "长期有效"
+  },
+  "table": {
+    "document": "文档",
+    "category": "类别",
+    "validity": "有效期",
+    "links": "关联",
+    "actions": "操作",
+    "indexed": "内容可搜索",
+    "noExpiry": "长期有效",
+    "uploadedBy": "{{name}} 于 {{date}} 上传"
+  },
+  "tags": {
+    "title": "标签",
+    "empty": "暂无标签。"
+  },
+  "byCategory": "按类别",
+  "empty": {
+    "title": "文档库为空",
+    "description": "上传证明、许可证和合同，在一处管理有效期。",
+    "filteredTitle": "未找到文档",
+    "filteredDescription": "请调整搜索或筛选条件。"
+  },
+  "error": {
+    "title": "无法加载文档",
+    "description": "请检查网络连接后重试。"
+  },
+  "dialog": {
+    "uploadTitle": "上传文档",
+    "uploadDescription": "最大 20 MB。文本文件可按内容搜索。",
+    "editTitle": "编辑文档",
+    "editDescription": "文件：{{name}}。如需更换文件，请上传新文档。",
+    "file": "文件",
+    "fileRequired": "请选择文件。",
+    "submitUpload": "上传"
+  },
+  "fields": {
+    "titulo": "标题",
+    "categoria": "类别",
+    "validoAte": "有效期至",
+    "tags": "标签",
+    "supplier": "供应商",
+    "contract": "合同",
+    "descricao": "说明"
+  },
+  "placeholders": {
+    "categoria": "请选择",
+    "tags": "alfa 工地, 税务",
+    "noSupplier": "无供应商",
+    "noContract": "无合同"
+  },
+  "hints": {
+    "validoAte": "会显示在日程和到期提醒中。",
+    "tags": "用逗号分隔，统一保存为小写。"
+  },
+  "confirm": {
+    "removeTitle": "删除文档？",
+    "removeDescription": "文档 <strong>{{name}}</strong> 及其文件将被删除，此操作无法撤销。"
+  },
+  "toast": {
+    "uploaded": "文档已上传。",
+    "uploadError": "无法上传文档。",
+    "updated": "文档已更新。",
+    "removed": "文档已删除。"
+  }
+}

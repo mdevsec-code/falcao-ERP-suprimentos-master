@@ -1,0 +1,98 @@
+{
+  "page": {
+    "eyebrow": "Organization",
+    "title": "Documents",
+    "description": "The company's central repository: certificates, permits, insurance policies, contracts and policies, with tags and expiry tracking."
+  },
+  "actions": {
+    "upload": "Upload document",
+    "download": "Download"
+  },
+  "kpi": {
+    "title": "Document indicators",
+    "total": "Documents",
+    "expiring": "Expiring within 30 days",
+    "expired": "Expired"
+  },
+  "filters": {
+    "title": "Filters",
+    "search": {
+      "label": "Search",
+      "placeholder": "Title, file, tag or content",
+      "hint": "Content is searched in text files (TXT, CSV, MD, JSON, XML, HTML)."
+    },
+    "category": "Category",
+    "allCategories": "All categories",
+    "validity": "Validity",
+    "anyValidity": "Any validity"
+  },
+  "validity": {
+    "OK": "Valid",
+    "VENCENDO": "Expiring",
+    "VENCIDO": "Expired",
+    "SEM_VALIDADE": "No expiry"
+  },
+  "table": {
+    "document": "Document",
+    "category": "Category",
+    "validity": "Validity",
+    "links": "Links",
+    "actions": "Actions",
+    "indexed": "Searchable content",
+    "noExpiry": "No expiry",
+    "uploadedBy": "Uploaded by {{name}} on {{date}}"
+  },
+  "tags": {
+    "title": "Tags",
+    "empty": "No tags yet."
+  },
+  "byCategory": "By category",
+  "empty": {
+    "title": "The repository is empty",
+    "description": "Upload certificates, permits and contracts to track their validity in one place.",
+    "filteredTitle": "No documents found",
+    "filteredDescription": "Adjust the search or filters."
+  },
+  "error": {
+    "title": "Could not load documents",
+    "description": "Check your connection and try again."
+  },
+  "dialog": {
+    "uploadTitle": "Upload document",
+    "uploadDescription": "Up to 20 MB. Text files become searchable by content.",
+    "editTitle": "Edit document",
+    "editDescription": "File: {{name}}. To replace the file, upload a new document.",
+    "file": "File",
+    "fileRequired": "Choose the file.",
+    "submitUpload": "Upload"
+  },
+  "fields": {
+    "titulo": "Title",
+    "categoria": "Category",
+    "validoAte": "Valid until",
+    "tags": "Tags",
+    "supplier": "Supplier",
+    "contract": "Contract",
+    "descricao": "Description"
+  },
+  "placeholders": {
+    "categoria": "Select",
+    "tags": "site alfa, tax",
+    "noSupplier": "No supplier",
+    "noContract": "No contract"
+  },
+  "hints": {
+    "validoAte": "Shows up in the calendar and in the expiry alert.",
+    "tags": "Separate with commas. Stored in lowercase."
+  },
+  "confirm": {
+    "removeTitle": "Remove document?",
+    "removeDescription": "The document <strong>{{name}}</strong> and its file will be removed. This can't be undone."
+  },
+  "toast": {
+    "uploaded": "Document uploaded.",
+    "uploadError": "Could not upload the document.",
+    "updated": "Document updated.",
+    "removed": "Document removed."
+  }
+}

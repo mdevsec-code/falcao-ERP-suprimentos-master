@@ -75,6 +75,79 @@
     "Supplier": "供应商",
     "Product": "产品",
     "PurchaseRequest": "采购申请",
-    "User": "用户"
+    "User": "用户",
+    "Contract": "合同",
+    "Payable": "应付款",
+    "Reimbursement": "报销",
+    "Document": "文档",
+    "AgendaEvent": "日程事件"
+  },
+  "contractStatus": {
+    "VIGENTE": "生效中",
+    "SUSPENSO": "已暂停",
+    "ENCERRADO": "已结束",
+    "CANCELADO": "已取消"
+  },
+  "deadlineState": {
+    "OK": "正常",
+    "VENCENDO": "即将到期",
+    "VENCIDO": "已到期"
+  },
+  "payableStatus": {
+    "ABERTO": "未付",
+    "PAGO": "已付",
+    "CANCELADO": "已取消"
+  },
+  "payableSource": {
+    "MANUAL": "手动录入",
+    "PEDIDO": "采购订单",
+    "CONTRATO": "合同",
+    "REEMBOLSO": "报销"
+  },
+  "paymentMethod": {
+    "BOLETO": "银行票据",
+    "PIX": "Pix",
+    "TRANSFERENCIA": "银行转账",
+    "CARTAO": "银行卡",
+    "DINHEIRO": "现金"
+  },
+  "reimbursementStatus": {
+    "ENVIADO": "待审批",
+    "APROVADO": "已批准",
+    "REJEITADO": "已驳回",
+    "PAGO": "已支付"
+  },
+  "expenseCategory": {
+    "TRANSPORTE": "交通",
+    "COMBUSTIVEL": "燃油",
+    "ALIMENTACAO": "餐饮",
+    "HOSPEDAGEM": "住宿",
+    "MATERIAL": "物料",
+    "OUTROS": "其他"
+  },
+  "centralDocumentCategory": {
+    "CONTRATO": "合同",
+    "NOTA_FISCAL": "发票",
+    "CERTIDAO": "证明",
+    "LICENCA": "许可证",
+    "APOLICE": "保险单",
+    "PROJETO": "设计 / 报告",
+    "MANUAL": "手册",
+    "POLITICA": "制度 / 规范",
+    "OUTRO": "其他"
+  },
+  "agendaEventType": {
+    "ENTREGA": "交货",
+    "RECEBIMENTO": "收货",
+    "VISITA": "拜访",
+    "REUNIAO": "会议",
+    "LEMBRETE": "提醒",
+    "OUTRO": "其他"
+  },
+  "agendaItemKind": {
+    "EVENT": "事件",
+    "PAYABLE_DUE": "付款到期",
+    "CONTRACT_END": "合同到期",
+    "DOCUMENT_EXPIRY": "文档到期"
   }
 }

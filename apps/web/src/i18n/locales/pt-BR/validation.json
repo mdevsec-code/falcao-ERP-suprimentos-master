@@ -11,5 +11,10 @@
   "selectOption": "Selecione uma opção",
   "minPassword": "A senha deve ter no mínimo {{count}} caracteres",
   "maxPassword": "A senha deve ter no máximo {{count}} caracteres",
-  "passwordMismatch": "As senhas não conferem"
+  "passwordMismatch": "As senhas não conferem",
+  "maxValue": "O valor máximo é {{count}}",
+  "date": "Informe uma data válida",
+  "dateOrder": "A data final deve ser igual ou posterior à inicial",
+  "futureDate": "A data não pode estar no futuro",
+  "timeOrder": "O término deve ser depois do início"
 }

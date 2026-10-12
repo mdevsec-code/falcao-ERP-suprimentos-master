@@ -75,6 +75,79 @@
     "Supplier": "Fornecedor",
     "Product": "Produto",
     "PurchaseRequest": "Solicitação de compra",
-    "User": "Usuário"
+    "User": "Usuário",
+    "Contract": "Contrato",
+    "Payable": "Conta a pagar",
+    "Reimbursement": "Reembolso",
+    "Document": "Documento",
+    "AgendaEvent": "Evento da agenda"
+  },
+  "contractStatus": {
+    "VIGENTE": "Vigente",
+    "SUSPENSO": "Suspenso",
+    "ENCERRADO": "Encerrado",
+    "CANCELADO": "Cancelado"
+  },
+  "deadlineState": {
+    "OK": "No prazo",
+    "VENCENDO": "Vencendo",
+    "VENCIDO": "Vencido"
+  },
+  "payableStatus": {
+    "ABERTO": "Em aberto",
+    "PAGO": "Pago",
+    "CANCELADO": "Cancelado"
+  },
+  "payableSource": {
+    "MANUAL": "Lançamento manual",
+    "PEDIDO": "Pedido de compra",
+    "CONTRATO": "Contrato",
+    "REEMBOLSO": "Reembolso"
+  },
+  "paymentMethod": {
+    "BOLETO": "Boleto",
+    "PIX": "Pix",
+    "TRANSFERENCIA": "Transferência",
+    "CARTAO": "Cartão",
+    "DINHEIRO": "Dinheiro"
+  },
+  "reimbursementStatus": {
+    "ENVIADO": "Aguardando aprovação",
+    "APROVADO": "Aprovado",
+    "REJEITADO": "Rejeitado",
+    "PAGO": "Pago"
+  },
+  "expenseCategory": {
+    "TRANSPORTE": "Transporte",
+    "COMBUSTIVEL": "Combustível",
+    "ALIMENTACAO": "Alimentação",
+    "HOSPEDAGEM": "Hospedagem",
+    "MATERIAL": "Material",
+    "OUTROS": "Outros"
+  },
+  "centralDocumentCategory": {
+    "CONTRATO": "Contrato",
+    "NOTA_FISCAL": "Nota fiscal",
+    "CERTIDAO": "Certidão",
+    "LICENCA": "Licença / alvará",
+    "APOLICE": "Apólice de seguro",
+    "PROJETO": "Projeto / laudo",
+    "MANUAL": "Manual",
+    "POLITICA": "Política / norma",
+    "OUTRO": "Outro"
+  },
+  "agendaEventType": {
+    "ENTREGA": "Entrega",
+    "RECEBIMENTO": "Recebimento",
+    "VISITA": "Visita",
+    "REUNIAO": "Reunião",
+    "LEMBRETE": "Lembrete",
+    "OUTRO": "Outro"
+  },
+  "agendaItemKind": {
+    "EVENT": "Evento",
+    "PAYABLE_DUE": "Vencimento de conta",
+    "CONTRACT_END": "Fim de contrato",
+    "DOCUMENT_EXPIRY": "Validade de documento"
   }
 }

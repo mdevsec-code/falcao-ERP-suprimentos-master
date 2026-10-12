@@ -75,6 +75,79 @@
     "Supplier": "Supplier",
     "Product": "Product",
     "PurchaseRequest": "Purchase request",
-    "User": "User"
+    "User": "User",
+    "Contract": "Contract",
+    "Payable": "Payable",
+    "Reimbursement": "Reimbursement",
+    "Document": "Document",
+    "AgendaEvent": "Calendar event"
+  },
+  "contractStatus": {
+    "VIGENTE": "Active",
+    "SUSPENSO": "Suspended",
+    "ENCERRADO": "Closed",
+    "CANCELADO": "Cancelled"
+  },
+  "deadlineState": {
+    "OK": "On track",
+    "VENCENDO": "Expiring",
+    "VENCIDO": "Expired"
+  },
+  "payableStatus": {
+    "ABERTO": "Open",
+    "PAGO": "Paid",
+    "CANCELADO": "Cancelled"
+  },
+  "payableSource": {
+    "MANUAL": "Manual entry",
+    "PEDIDO": "Purchase order",
+    "CONTRATO": "Contract",
+    "REEMBOLSO": "Reimbursement"
+  },
+  "paymentMethod": {
+    "BOLETO": "Bank slip",
+    "PIX": "Pix",
+    "TRANSFERENCIA": "Bank transfer",
+    "CARTAO": "Card",
+    "DINHEIRO": "Cash"
+  },
+  "reimbursementStatus": {
+    "ENVIADO": "Awaiting approval",
+    "APROVADO": "Approved",
+    "REJEITADO": "Rejected",
+    "PAGO": "Paid"
+  },
+  "expenseCategory": {
+    "TRANSPORTE": "Transportation",
+    "COMBUSTIVEL": "Fuel",
+    "ALIMENTACAO": "Meals",
+    "HOSPEDAGEM": "Lodging",
+    "MATERIAL": "Supplies",
+    "OUTROS": "Other"
+  },
+  "centralDocumentCategory": {
+    "CONTRATO": "Contract",
+    "NOTA_FISCAL": "Invoice",
+    "CERTIDAO": "Certificate",
+    "LICENCA": "License / permit",
+    "APOLICE": "Insurance policy",
+    "PROJETO": "Design / report",
+    "MANUAL": "Manual",
+    "POLITICA": "Policy / standard",
+    "OUTRO": "Other"
+  },
+  "agendaEventType": {
+    "ENTREGA": "Delivery",
+    "RECEBIMENTO": "Receiving",
+    "VISITA": "Visit",
+    "REUNIAO": "Meeting",
+    "LEMBRETE": "Reminder",
+    "OUTRO": "Other"
+  },
+  "agendaItemKind": {
+    "EVENT": "Event",
+    "PAYABLE_DUE": "Payment due",
+    "CONTRACT_END": "Contract end",
+    "DOCUMENT_EXPIRY": "Document expiry"
   }
 }

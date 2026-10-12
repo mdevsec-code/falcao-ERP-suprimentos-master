@@ -1,4 +1,3 @@
-import { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { KeyRound, Pencil, Power } from 'lucide-react';
 import type { Role } from '@falcao-erp/shared-types';
@@ -13,8 +12,7 @@ import {
 } from '@/components/ui/Table';
 import { Avatar, AvatarFallback } from '@/components/ui/Avatar';
 import { Badge, type BadgeVariant } from '@/components/ui/Badge';
-import { Button } from '@/components/ui/Button';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/Tooltip';
+import { RowAction } from '@/components/common/RowAction';
 import { ROLE_LABELS } from '@/constants/roles';
 import { formatDate, getInitials } from '@/utils/format';
 import { cn } from '@/utils/cn';
@@ -138,37 +136,5 @@ export function UsersTable({
         })}
       </TableBody>
     </Table>
-  );
-}
-
-interface RowActionProps {
-  label: string;
-  tooltip: string;
-  onClick: () => void;
-  disabled?: boolean;
-  className?: string;
-  children: ReactNode;
-}
-
-function RowAction({ label, tooltip, onClick, disabled, className, children }: RowActionProps) {
-  return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        {/* span: tooltips não disparam em botões desabilitados */}
-        <span>
-          <Button
-            variant="ghost"
-            size="icon"
-            className={cn('h-8 w-8', className)}
-            aria-label={label}
-            onClick={onClick}
-            disabled={disabled}
-          >
-            {children}
-          </Button>
-        </span>
-      </TooltipTrigger>
-      <TooltipContent>{tooltip}</TooltipContent>
-    </Tooltip>
   );
 }
