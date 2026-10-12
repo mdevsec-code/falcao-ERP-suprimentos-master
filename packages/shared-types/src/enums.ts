@@ -166,3 +166,76 @@ export const BRAZILIAN_STATES = [
   "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO",
 ] as const;
 export type BrazilianState = (typeof BRAZILIAN_STATES)[number];
+
+export const ContractStatus = {
+  VIGENTE: "VIGENTE",
+  SUSPENSO: "SUSPENSO",
+  ENCERRADO: "ENCERRADO",
+  CANCELADO: "CANCELADO",
+} as const;
+export type ContractStatus = (typeof ContractStatus)[keyof typeof ContractStatus];
+
+export const PayableStatus = {
+  ABERTO: "ABERTO",
+  PAGO: "PAGO",
+  CANCELADO: "CANCELADO",
+} as const;
+export type PayableStatus = (typeof PayableStatus)[keyof typeof PayableStatus];
+
+export const PayableSource = {
+  MANUAL: "MANUAL",
+  PEDIDO: "PEDIDO",
+  CONTRATO: "CONTRATO",
+  REEMBOLSO: "REEMBOLSO",
+} as const;
+export type PayableSource = (typeof PayableSource)[keyof typeof PayableSource];
+
+export const PaymentMethod = {
+  BOLETO: "BOLETO",
+  PIX: "PIX",
+  TRANSFERENCIA: "TRANSFERENCIA",
+  CARTAO: "CARTAO",
+  DINHEIRO: "DINHEIRO",
+} as const;
+export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod];
+
+export const ReimbursementStatus = {
+  ENVIADO: "ENVIADO",
+  APROVADO: "APROVADO",
+  REJEITADO: "REJEITADO",
+  PAGO: "PAGO",
+} as const;
+export type ReimbursementStatus = (typeof ReimbursementStatus)[keyof typeof ReimbursementStatus];
+
+export const ExpenseCategory = {
+  TRANSPORTE: "TRANSPORTE",
+  COMBUSTIVEL: "COMBUSTIVEL",
+  ALIMENTACAO: "ALIMENTACAO",
+  HOSPEDAGEM: "HOSPEDAGEM",
+  MATERIAL: "MATERIAL",
+  OUTROS: "OUTROS",
+} as const;
+export type ExpenseCategory = (typeof ExpenseCategory)[keyof typeof ExpenseCategory];
+
+export const DocumentCategory = {
+  CONTRATO: "CONTRATO",
+  NOTA_FISCAL: "NOTA_FISCAL",
+  CERTIDAO: "CERTIDAO",
+  LICENCA: "LICENCA",
+  APOLICE: "APOLICE",
+  PROJETO: "PROJETO",
+  MANUAL: "MANUAL",
+  POLITICA: "POLITICA",
+  OUTRO: "OUTRO",
+} as const;
+export type DocumentCategory = (typeof DocumentCategory)[keyof typeof DocumentCategory];
+
+export const AgendaEventType = {
+  ENTREGA: "ENTREGA",
+  RECEBIMENTO: "RECEBIMENTO",
+  VISITA: "VISITA",
+  REUNIAO: "REUNIAO",
+  LEMBRETE: "LEMBRETE",
+  OUTRO: "OUTRO",
+} as const;
+export type AgendaEventType = (typeof AgendaEventType)[keyof typeof AgendaEventType];

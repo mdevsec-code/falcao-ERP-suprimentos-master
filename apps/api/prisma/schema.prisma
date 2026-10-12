@@ -24,6 +24,11 @@ model Company {
   products         Product[]
   purchaseRequests PurchaseRequest[]
   auditLogs        AuditLog[]
+  contracts        Contract[]
+  payables         Payable[]
+  reimbursements   Reimbursement[]
+  documents        Document[]
+  agendaEvents     AgendaEvent[]
 
   @@map("companies")
 }
@@ -60,17 +65,26 @@ model User {
   purchaseRequestComments   PurchaseRequestComment[]
   uploadedAttachments       PurchaseRequestAttachment[]
 
+  createdContracts         Contract[]                @relation("ContractCreatedBy")
+  contractAmendments       ContractAmendment[]
+  createdPayables          Payable[]                 @relation("PayableCreatedBy")
+  reimbursements           Reimbursement[]           @relation("ReimbursementRequester")
+  decidedReimbursements    Reimbursement[]           @relation("ReimbursementDecidedBy")
+  reimbursementAttachments ReimbursementAttachment[]
+  uploadedCentralDocuments Document[]
+  agendaEvents             AgendaEvent[]
+
   @@index([companyId])
   @@map("users")
 }
 
 model RefreshToken {
-  id        String   @id @default(uuid())
-  userId    String   @map("user_id")
-  tokenHash String   @map("token_hash")
-  expiresAt DateTime @map("expires_at")
+  id        String    @id @default(uuid())
+  userId    String    @map("user_id")
+  tokenHash String    @map("token_hash")
+  expiresAt DateTime  @map("expires_at")
   revokedAt DateTime? @map("revoked_at")
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt DateTime  @default(now()) @map("created_at")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -114,9 +128,14 @@ model Supplier {
   evaluations SupplierEvaluation[]
   documents   SupplierDocument[]
 
-  primaryForProducts   Product[]           @relation("PrimarySupplierProducts")
-  alternativeProducts  ProductSupplier[]
-  priceEntries         ProductPriceEntry[]
+  primaryForProducts  Product[]           @relation("PrimarySupplierProducts")
+  alternativeProducts ProductSupplier[]
+  priceEntries        ProductPriceEntry[]
+
+  contracts        Contract[]
+  payables         Payable[]
+  centralDocuments Document[]
+  agendaEvents     AgendaEvent[]
 
   @@unique([companyId, cnpj])
   @@index([companyId])
@@ -167,15 +186,15 @@ enum SupplierDocumentCategory {
 }
 
 model SupplierDocument {
-  id           String                    @id @default(uuid())
-  supplierId   String                    @map("supplier_id")
-  fileName     String                    @map("file_name")
-  filePath     String                    @map("file_path")
-  mimeType     String                    @map("mime_type")
+  id           String                   @id @default(uuid())
+  supplierId   String                   @map("supplier_id")
+  fileName     String                   @map("file_name")
+  filePath     String                   @map("file_path")
+  mimeType     String                   @map("mime_type")
   size         Int
-  category     SupplierDocumentCategory  @default(OUTRO)
-  uploadedById String                    @map("uploaded_by_id")
-  uploadedAt   DateTime                  @default(now()) @map("uploaded_at")
+  category     SupplierDocumentCategory @default(OUTRO)
+  uploadedById String                   @map("uploaded_by_id")
+  uploadedAt   DateTime                 @default(now()) @map("uploaded_at")
 
   supplier   Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
   uploadedBy User     @relation(fields: [uploadedById], references: [id])
@@ -229,7 +248,7 @@ model Product {
   primarySupplierId String?   @map("primary_supplier_id")
   primarySupplier   Supplier? @relation("PrimarySupplierProducts", fields: [primarySupplierId], references: [id])
 
-  company              Company                @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  company              Company               @relation(fields: [companyId], references: [id], onDelete: Cascade)
   alternativeSuppliers ProductSupplier[]
   priceHistory         ProductPriceEntry[]
   purchaseRequestItems PurchaseRequestItem[]
@@ -288,15 +307,15 @@ enum ApprovalAction {
 }
 
 model PurchaseRequest {
-  id           String                @id @default(uuid())
-  companyId    String                @map("company_id")
-  requesterId  String                @map("requester_id")
-  title        String
-  justification String?              @map("justification")
-  costCenter   String?               @map("cost_center")
-  status       PurchaseRequestStatus @default(AGUARDANDO_APROVACAO)
-  createdAt    DateTime              @default(now()) @map("created_at")
-  updatedAt    DateTime              @updatedAt @map("updated_at")
+  id            String                @id @default(uuid())
+  companyId     String                @map("company_id")
+  requesterId   String                @map("requester_id")
+  title         String
+  justification String?               @map("justification")
+  costCenter    String?               @map("cost_center")
+  status        PurchaseRequestStatus @default(AGUARDANDO_APROVACAO)
+  createdAt     DateTime              @default(now()) @map("created_at")
+  updatedAt     DateTime              @updatedAt @map("updated_at")
 
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
   requester User    @relation("PurchaseRequestRequester", fields: [requesterId], references: [id])
@@ -305,6 +324,9 @@ model PurchaseRequest {
   approvals   PurchaseRequestApproval[]
   comments    PurchaseRequestComment[]
   attachments PurchaseRequestAttachment[]
+
+  payables     Payable[]
+  agendaEvents AgendaEvent[]
 
   @@index([companyId])
   @@index([companyId, status])
@@ -329,14 +351,14 @@ model PurchaseRequestItem {
 }
 
 model PurchaseRequestApproval {
-  id                String         @id @default(uuid())
-  purchaseRequestId String         @map("purchase_request_id")
-  approverId        String         @map("approver_id")
+  id                String                @id @default(uuid())
+  purchaseRequestId String                @map("purchase_request_id")
+  approverId        String                @map("approver_id")
   action            ApprovalAction
   fromStatus        PurchaseRequestStatus @map("from_status")
   toStatus          PurchaseRequestStatus @map("to_status")
   comment           String?
-  createdAt         DateTime       @default(now()) @map("created_at")
+  createdAt         DateTime              @default(now()) @map("created_at")
 
   purchaseRequest PurchaseRequest @relation(fields: [purchaseRequestId], references: [id], onDelete: Cascade)
   approver        User            @relation(fields: [approverId], references: [id])
@@ -374,6 +396,296 @@ model PurchaseRequestAttachment {
 
   @@index([purchaseRequestId])
   @@map("purchase_request_attachments")
+}
+
+// ─────────────────────────────────────────────────────────────
+// Contracts (Contratos) — Fase 4
+// ─────────────────────────────────────────────────────────────
+
+enum ContractStatus {
+  VIGENTE
+  SUSPENSO
+  ENCERRADO
+  CANCELADO
+}
+
+model Contract {
+  id          String         @id @default(uuid())
+  companyId   String         @map("company_id")
+  supplierId  String         @map("supplier_id")
+  numero      String
+  objeto      String
+  descricao   String?
+  costCenter  String?        @map("cost_center")
+  valorTotal  Decimal        @map("valor_total") @db.Decimal(14, 2)
+  dataInicio  DateTime       @map("data_inicio") @db.Date
+  dataFim     DateTime       @map("data_fim") @db.Date
+  assinadoEm  DateTime?      @map("assinado_em") @db.Date
+  alertaDias  Int            @default(30) @map("alerta_dias")
+  status      ContractStatus @default(VIGENTE)
+  createdById String         @map("created_by_id")
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+
+  company    Company             @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  supplier   Supplier            @relation(fields: [supplierId], references: [id])
+  createdBy  User                @relation("ContractCreatedBy", fields: [createdById], references: [id])
+  amendments ContractAmendment[]
+  documents  Document[]
+  payables   Payable[]
+
+  @@unique([companyId, numero])
+  @@index([companyId])
+  @@index([companyId, status])
+  @@index([companyId, dataFim])
+  @@map("contracts")
+}
+
+/// Aditivo: altera valor e/ou prazo do contrato e fica registrado no histórico.
+model ContractAmendment {
+  id          String    @id @default(uuid())
+  contractId  String    @map("contract_id")
+  numero      Int
+  descricao   String
+  valorDelta  Decimal?  @map("valor_delta") @db.Decimal(14, 2)
+  novaDataFim DateTime? @map("nova_data_fim") @db.Date
+  authorId    String    @map("author_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  contract Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  author   User     @relation(fields: [authorId], references: [id])
+
+  @@unique([contractId, numero])
+  @@index([contractId])
+  @@map("contract_amendments")
+}
+
+// ─────────────────────────────────────────────────────────────
+// Finance (Contas a pagar) — Fase 5
+// ─────────────────────────────────────────────────────────────
+
+enum PayableStatus {
+  ABERTO
+  PAGO
+  CANCELADO
+}
+
+enum PayableSource {
+  MANUAL
+  PEDIDO
+  CONTRATO
+  REEMBOLSO
+}
+
+enum PaymentMethod {
+  BOLETO
+  PIX
+  TRANSFERENCIA
+  CARTAO
+  DINHEIRO
+}
+
+model Payable {
+  id                String         @id @default(uuid())
+  companyId         String         @map("company_id")
+  descricao         String
+  origem            PayableSource  @default(MANUAL)
+  supplierId        String?        @map("supplier_id")
+  contractId        String?        @map("contract_id")
+  purchaseRequestId String?        @map("purchase_request_id")
+  reimbursementId   String?        @unique @map("reimbursement_id")
+  costCenter        String?        @map("cost_center")
+  valor             Decimal        @db.Decimal(14, 2)
+  vencimento        DateTime       @db.Date
+  status            PayableStatus  @default(ABERTO)
+  notaFiscal        String?        @map("nota_fiscal")
+  notaFiscalEmissao DateTime?      @map("nota_fiscal_emissao") @db.Date
+  pagoEm            DateTime?      @map("pago_em") @db.Date
+  valorPago         Decimal?       @map("valor_pago") @db.Decimal(14, 2)
+  formaPagamento    PaymentMethod? @map("forma_pagamento")
+  observacoes       String?
+  createdById       String         @map("created_by_id")
+  createdAt         DateTime       @default(now()) @map("created_at")
+  updatedAt         DateTime       @updatedAt @map("updated_at")
+
+  company         Company          @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  supplier        Supplier?        @relation(fields: [supplierId], references: [id])
+  contract        Contract?        @relation(fields: [contractId], references: [id])
+  purchaseRequest PurchaseRequest? @relation(fields: [purchaseRequestId], references: [id])
+  reimbursement   Reimbursement?   @relation(fields: [reimbursementId], references: [id])
+  createdBy       User             @relation("PayableCreatedBy", fields: [createdById], references: [id])
+
+  @@index([companyId])
+  @@index([companyId, status])
+  @@index([companyId, vencimento])
+  @@map("payables")
+}
+
+// ─────────────────────────────────────────────────────────────
+// Reimbursements (Reembolsos) — Fase 6
+// ─────────────────────────────────────────────────────────────
+
+enum ReimbursementStatus {
+  ENVIADO
+  APROVADO
+  REJEITADO
+  PAGO
+}
+
+enum ExpenseCategory {
+  TRANSPORTE
+  COMBUSTIVEL
+  ALIMENTACAO
+  HOSPEDAGEM
+  MATERIAL
+  OUTROS
+}
+
+model Reimbursement {
+  id              String              @id @default(uuid())
+  companyId       String              @map("company_id")
+  requesterId     String              @map("requester_id")
+  titulo          String
+  costCenter      String?             @map("cost_center")
+  status          ReimbursementStatus @default(ENVIADO)
+  decidedById     String?             @map("decided_by_id")
+  decidedAt       DateTime?           @map("decided_at")
+  decisionComment String?             @map("decision_comment")
+  createdAt       DateTime            @default(now()) @map("created_at")
+  updatedAt       DateTime            @updatedAt @map("updated_at")
+
+  company     Company                   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  requester   User                      @relation("ReimbursementRequester", fields: [requesterId], references: [id])
+  decidedBy   User?                     @relation("ReimbursementDecidedBy", fields: [decidedById], references: [id])
+  items       ReimbursementItem[]
+  attachments ReimbursementAttachment[]
+  payable     Payable?
+
+  @@index([companyId])
+  @@index([companyId, status])
+  @@index([companyId, requesterId])
+  @@map("reimbursements")
+}
+
+model ReimbursementItem {
+  id              String          @id @default(uuid())
+  reimbursementId String          @map("reimbursement_id")
+  data            DateTime        @db.Date
+  categoria       ExpenseCategory
+  descricao       String
+  valor           Decimal         @db.Decimal(12, 2)
+
+  reimbursement Reimbursement @relation(fields: [reimbursementId], references: [id], onDelete: Cascade)
+
+  @@index([reimbursementId])
+  @@map("reimbursement_items")
+}
+
+model ReimbursementAttachment {
+  id              String   @id @default(uuid())
+  reimbursementId String   @map("reimbursement_id")
+  fileName        String   @map("file_name")
+  filePath        String   @map("file_path")
+  mimeType        String   @map("mime_type")
+  size            Int
+  uploadedById    String   @map("uploaded_by_id")
+  uploadedAt      DateTime @default(now()) @map("uploaded_at")
+
+  reimbursement Reimbursement @relation(fields: [reimbursementId], references: [id], onDelete: Cascade)
+  uploadedBy    User          @relation(fields: [uploadedById], references: [id])
+
+  @@index([reimbursementId])
+  @@map("reimbursement_attachments")
+}
+
+// ─────────────────────────────────────────────────────────────
+// Documents (repositório central) — Fase 7
+// ─────────────────────────────────────────────────────────────
+
+enum DocumentCategory {
+  CONTRATO
+  NOTA_FISCAL
+  CERTIDAO
+  LICENCA
+  APOLICE
+  PROJETO
+  MANUAL
+  POLITICA
+  OUTRO
+}
+
+model Document {
+  id           String           @id @default(uuid())
+  companyId    String           @map("company_id")
+  titulo       String
+  descricao    String?
+  categoria    DocumentCategory @default(OUTRO)
+  /// Sempre em minúsculas — o filtro por etiqueta é exato.
+  tags         String[]
+  validoAte    DateTime?        @map("valido_ate") @db.Date
+  /// Texto extraído de arquivos de texto (txt, csv, md, json, xml, html) para a busca por conteúdo.
+  conteudo     String?
+  fileName     String           @map("file_name")
+  filePath     String           @map("file_path")
+  mimeType     String           @map("mime_type")
+  size         Int
+  supplierId   String?          @map("supplier_id")
+  contractId   String?          @map("contract_id")
+  uploadedById String           @map("uploaded_by_id")
+  createdAt    DateTime         @default(now()) @map("created_at")
+  updatedAt    DateTime         @updatedAt @map("updated_at")
+
+  company    Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  supplier   Supplier? @relation(fields: [supplierId], references: [id])
+  contract   Contract? @relation(fields: [contractId], references: [id])
+  uploadedBy User      @relation(fields: [uploadedById], references: [id])
+
+  @@index([companyId])
+  @@index([companyId, categoria])
+  @@index([companyId, validoAte])
+  @@index([contractId])
+  @@map("documents")
+}
+
+// ─────────────────────────────────────────────────────────────
+// Agenda — Fase 8
+// ─────────────────────────────────────────────────────────────
+
+enum AgendaEventType {
+  ENTREGA
+  RECEBIMENTO
+  VISITA
+  REUNIAO
+  LEMBRETE
+  OUTRO
+}
+
+model AgendaEvent {
+  id                String          @id @default(uuid())
+  companyId         String          @map("company_id")
+  titulo            String
+  descricao         String?
+  tipo              AgendaEventType
+  inicio            DateTime
+  fim               DateTime?
+  diaInteiro        Boolean         @default(false) @map("dia_inteiro")
+  /// Obra / centro de custo — a "visão por obra" filtra por aqui.
+  obra              String?
+  local             String?
+  supplierId        String?         @map("supplier_id")
+  purchaseRequestId String?         @map("purchase_request_id")
+  createdById       String          @map("created_by_id")
+  createdAt         DateTime        @default(now()) @map("created_at")
+  updatedAt         DateTime        @updatedAt @map("updated_at")
+
+  company         Company          @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  supplier        Supplier?        @relation(fields: [supplierId], references: [id])
+  purchaseRequest PurchaseRequest? @relation(fields: [purchaseRequestId], references: [id])
+  createdBy       User             @relation(fields: [createdById], references: [id])
+
+  @@index([companyId])
+  @@index([companyId, inicio])
+  @@map("agenda_events")
 }
 
 // ─────────────────────────────────────────────────────────────
