@@ -19,7 +19,7 @@
     "search": {
       "label": "Buscar",
       "placeholder": "Título, arquivo, etiqueta ou conteúdo",
-      "hint": "O conteúdo é pesquisado em arquivos de texto (TXT, CSV, MD, JSON, XML, HTML)."
+      "hint": "O conteúdo é pesquisado em arquivos de texto (TXT, CSV, MD, JSON, XML)."
     },
     "category": "Categoria",
     "allCategories": "Todas as categorias",

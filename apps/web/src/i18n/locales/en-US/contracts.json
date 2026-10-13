@@ -113,7 +113,9 @@
       "overview": "Overview",
       "amendments": "Amendments ({{count}})",
       "attachments": "Attachments ({{count}})"
-    }
+    },
+    "value": "Total value",
+    "alert": "Expiry alert"
   },
   "statusActions": {
     "suspend": "Suspend",

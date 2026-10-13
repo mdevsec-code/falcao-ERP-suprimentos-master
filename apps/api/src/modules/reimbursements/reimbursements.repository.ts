@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { Prisma, type ReimbursementStatus } from "../../../generated/prisma";
 import { PrismaService } from "../../database/prisma.service";
 import { fromDateOnly } from "../../common/utils/date-only";
@@ -104,8 +104,9 @@ export class ReimbursementsRepository {
     payable: { descricao: string; valor: number; vencimento: Date; costCenter: string | null } | null,
   ) {
     await this.prisma.$transaction(async (tx) => {
-      await tx.reimbursement.update({
-        where: { id },
+      // Condicional: duas decisões simultâneas não geram duas contas a pagar.
+      const { count } = await tx.reimbursement.updateMany({
+        where: { id, companyId, status: "ENVIADO" },
         data: {
           status: decision.status,
           decidedById: deciderId,
@@ -113,6 +114,7 @@ export class ReimbursementsRepository {
           decisionComment: decision.comment,
         },
       });
+      if (count === 0) throw new ConflictException("Este reembolso já foi decidido.");
       if (payable) {
         await tx.payable.create({
           data: {

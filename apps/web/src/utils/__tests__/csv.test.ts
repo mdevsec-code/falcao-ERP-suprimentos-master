@@ -16,6 +16,12 @@ describe('toCsv', () => {
     expect(csv).toBe(`${BOM}"Aço; CA-50";"Diz ""olá""";"linha\nnova";simples`);
   });
 
+  it('neutraliza fórmulas sem mexer em números negativos', () => {
+    expect(toCsv([['=HYPERLINK("x")', '@SUM(A1)', '-1234,50', '+55 31 9999']])).toBe(
+      `${BOM}"'=HYPERLINK(""x"")";'@SUM(A1);-1234,50;'+55 31 9999`,
+    );
+  });
+
   it('trata nulos como vazio', () => {
     expect(toCsv([[null, undefined, 0]])).toBe(`${BOM};;0`);
   });

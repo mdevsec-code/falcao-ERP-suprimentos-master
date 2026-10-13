@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from "@nestjs/core";
 import { ServeStaticModule } from "@nestjs/serve-static";
+import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 import { join } from "node:path";
 import { validateEnv } from "./config/env.validation";
 import { HttpExceptionFilter } from "./common/filters/http-exception.filter";
@@ -22,6 +23,7 @@ import { PurchaseRequestsModule } from "./modules/purchase-requests/purchase-req
 import { ReimbursementsModule } from "./modules/reimbursements/reimbursements.module";
 import { StorageModule } from "./modules/storage/storage.module";
 import { SuppliersModule } from "./modules/suppliers/suppliers.module";
+import { INLINE_UPLOAD_EXTENSIONS, uploadExtension } from "./modules/storage/upload-policy";
 import { UsersModule } from "./modules/users/users.module";
 
 @Module({
@@ -35,7 +37,22 @@ import { UsersModule } from "./modules/users/users.module";
     ServeStaticModule.forRoot({
       rootPath: join(process.cwd(), process.env.UPLOADS_DIR ?? "uploads"),
       serveRoot: "/uploads",
+      serveStaticOptions: {
+        index: false,
+        dotfiles: "deny",
+        // Arquivos enviados por usuários: nunca deixe o navegador "adivinhar" o
+        // tipo nem executar conteúdo; o que não é PDF/imagem/texto vira download.
+        setHeaders: (res, filePath) => {
+          res.setHeader("X-Content-Type-Options", "nosniff");
+          if (!INLINE_UPLOAD_EXTENSIONS.has(uploadExtension(filePath))) {
+            res.setHeader("Content-Disposition", "attachment");
+            res.setHeader("Content-Security-Policy", "sandbox");
+          }
+        },
+      },
     }),
+    // Limite geral generoso; rotas sensíveis (login) usam @Throttle mais restrito.
+    ThrottlerModule.forRoot([{ name: "default", ttl: 60_000, limit: 600 }]),
     PrismaModule,
     AuthModule,
     UsersModule,
@@ -53,6 +70,7 @@ import { UsersModule } from "./modules/users/users.module";
     HealthModule,
   ],
   providers: [
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
     { provide: APP_GUARD, useClass: JwtAuthGuard },
     { provide: APP_GUARD, useClass: RolesGuard },
     { provide: APP_FILTER, useClass: HttpExceptionFilter },

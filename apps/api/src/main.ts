@@ -1,6 +1,7 @@
 import { ValidationPipe } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
+import helmet from "helmet";
 import "reflect-metadata";
 import { AppModule } from "./app.module";
 
@@ -9,6 +10,9 @@ async function bootstrap() {
   const config = app.get(ConfigService);
 
   app.setGlobalPrefix("api/v1");
+  // Cabeçalhos de segurança; `cross-origin` permite ao Web (outra origem)
+  // abrir os anexos servidos em /uploads.
+  app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

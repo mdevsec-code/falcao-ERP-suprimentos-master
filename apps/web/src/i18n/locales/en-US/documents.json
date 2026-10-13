@@ -19,7 +19,7 @@
     "search": {
       "label": "Search",
       "placeholder": "Title, file, tag or content",
-      "hint": "Content is searched in text files (TXT, CSV, MD, JSON, XML, HTML)."
+      "hint": "Content is searched in text files (TXT, CSV, MD, JSON, XML)."
     },
     "category": "Category",
     "allCategories": "All categories",

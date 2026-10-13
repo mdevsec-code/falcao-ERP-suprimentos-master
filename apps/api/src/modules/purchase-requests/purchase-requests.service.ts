@@ -11,6 +11,7 @@ import type {
   PurchaseRequestTimelineEntryDto,
   Role,
 } from "@falcao-erp/shared-types";
+import { decodeUploadName } from "../../common/utils/file-name";
 import { STORAGE_PROVIDER, type IStorageProvider } from "../storage/storage-provider.interface";
 import { AddCommentDto } from "./dto/add-comment.dto";
 import { ChangeStatusDto } from "./dto/change-status.dto";
@@ -158,13 +159,16 @@ export class PurchaseRequestsService {
     uploadedById: string,
     file: { originalname: string; mimetype: string; buffer: Buffer },
   ) {
+    // Confere a solicitação ANTES de gravar: a pasta usa o id da URL.
+    await this.repository.findByIdOrThrow(companyId, purchaseRequestId);
+    const fileName = decodeUploadName(file.originalname);
     const stored = await this.storage.save(file.buffer, {
       folder: `purchase-requests/${purchaseRequestId}`,
-      fileName: file.originalname,
+      fileName,
     });
 
     const attachment = await this.repository.addAttachment(companyId, purchaseRequestId, {
-      fileName: file.originalname,
+      fileName,
       filePath: stored.path,
       mimeType: file.mimetype,
       size: stored.size,

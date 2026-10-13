@@ -113,7 +113,9 @@
       "overview": "Visão geral",
       "amendments": "Aditivos ({{count}})",
       "attachments": "Anexos ({{count}})"
-    }
+    },
+    "value": "Valor total",
+    "alert": "Alerta de vencimento"
   },
   "statusActions": {
     "suspend": "Suspender",

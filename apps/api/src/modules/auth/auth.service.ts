@@ -8,6 +8,13 @@ import { UsersService } from "../users/users.service";
 
 const REFRESH_TOKEN_ROUNDS = 10;
 
+/**
+ * Hash de uma senha qualquer: quando o e-mail não existe, comparamos contra
+ * ele mesmo assim, para que a resposta demore o mesmo que uma senha errada —
+ * sem isso o tempo de resposta revela quais e-mails estão cadastrados.
+ */
+const DUMMY_PASSWORD_HASH = bcrypt.hashSync("falcao-dummy-password", 10);
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -19,12 +26,8 @@ export class AuthService {
 
   async login(email: string, password: string): Promise<LoginResponseDto> {
     const user = await this.usersService.findByEmail(email);
-    if (!user || !user.isActive) {
-      throw new UnauthorizedException("Credenciais inválidas.");
-    }
-
-    const passwordMatches = await bcrypt.compare(password, user.passwordHash);
-    if (!passwordMatches) {
+    const passwordMatches = await bcrypt.compare(password, user?.passwordHash ?? DUMMY_PASSWORD_HASH);
+    if (!user || !user.isActive || !passwordMatches) {
       throw new UnauthorizedException("Credenciais inválidas.");
     }
 

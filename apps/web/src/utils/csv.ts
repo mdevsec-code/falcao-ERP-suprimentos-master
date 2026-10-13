@@ -5,9 +5,18 @@
  */
 export const BOM = String.fromCharCode(0xfeff);
 
+/** Começo de célula que o Excel interpretaria como fórmula. */
+const FORMULA_START = /^[=+\-@\t\r]/;
+const PLAIN_NUMBER = /^-?\d+([.,]\d+)?$/;
+
 export function toCsv(rows: readonly (readonly (string | number | null | undefined)[])[]): string {
   const escape = (value: string | number | null | undefined) => {
-    const text = value === null || value === undefined ? '' : String(value);
+    let text = value === null || value === undefined ? '' : String(value);
+    // Injeção de fórmula: texto vindo do usuário que começa com =, +, -, @ (ou
+    // tab/CR) seria executado pelo Excel. Números (inclusive negativos) ficam intactos.
+    if (typeof value === 'string' && FORMULA_START.test(text) && !PLAIN_NUMBER.test(text)) {
+      text = `'${text}`;
+    }
     return /[";\n\r]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
   };
   return `${BOM}${rows.map((row) => row.map(escape).join(';')).join('\r\n')}`;

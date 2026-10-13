@@ -13,7 +13,7 @@ import { UpdateDocumentDto } from "./dto/update-document.dto";
 import { DocumentsRepository, type DocumentPayload, type DocumentWriteData } from "./documents.repository";
 
 /** Extensões cujo texto é indexado para a busca por conteúdo. */
-const TEXT_EXTENSIONS = new Set([".txt", ".csv", ".md", ".json", ".xml", ".html", ".htm", ".log"]);
+const TEXT_EXTENSIONS = new Set([".txt", ".csv", ".md", ".json", ".xml", ".log"]);
 const MAX_INDEXED_CHARS = 500_000;
 
 function extractText(fileName: string, mimeType: string, buffer: Buffer): string | null {

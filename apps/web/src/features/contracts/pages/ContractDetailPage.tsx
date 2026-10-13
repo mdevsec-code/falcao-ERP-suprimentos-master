@@ -204,7 +204,7 @@ export function ContractDetailPage() {
               />
               <InfoTile
                 icon={CircleDollarSign}
-                label={t('contracts:form.fields.valorTotal')}
+                label={t('contracts:detail.value')}
                 value={formatCurrencyBRL(contract.valorTotal)}
               />
               <InfoTile
@@ -214,7 +214,7 @@ export function ContractDetailPage() {
               />
               <InfoTile
                 icon={AlarmClock}
-                label={t('contracts:form.fields.alertaDias')}
+                label={t('contracts:detail.alert')}
                 value={t('contracts:detail.alertDays', { count: contract.alertaDias })}
               />
               <InfoTile

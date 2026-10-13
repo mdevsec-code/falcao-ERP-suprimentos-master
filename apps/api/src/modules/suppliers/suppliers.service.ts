@@ -1,5 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
 import type { PaginatedResult, SupplierDetailDto, SupplierSummaryDto } from "@falcao-erp/shared-types";
+import { decodeUploadName } from "../../common/utils/file-name";
 import { STORAGE_PROVIDER, type IStorageProvider } from "../storage/storage-provider.interface";
 import { CreateSupplierDto } from "./dto/create-supplier.dto";
 import { QuerySuppliersDto } from "./dto/query-suppliers.dto";
@@ -95,11 +96,11 @@ export class SuppliersService {
     await this.repository.findByIdOrThrow(companyId, supplierId);
     const stored = await this.storage.save(file.buffer, {
       folder: `suppliers/${supplierId}`,
-      fileName: file.originalname,
+      fileName: decodeUploadName(file.originalname),
     });
 
     const document = await this.repository.addDocument(companyId, supplierId, {
-      fileName: file.originalname,
+      fileName: decodeUploadName(file.originalname),
       filePath: stored.path,
       mimeType: file.mimetype,
       size: stored.size,

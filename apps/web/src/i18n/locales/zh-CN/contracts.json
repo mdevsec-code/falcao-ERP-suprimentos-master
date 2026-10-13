@@ -109,7 +109,9 @@
       "overview": "概览",
       "amendments": "补充协议（{{count}}）",
       "attachments": "附件（{{count}}）"
-    }
+    },
+    "value": "总金额",
+    "alert": "到期提醒"
   },
   "statusActions": {
     "suspend": "暂停",

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { Prisma, type PayableSource, type PayableStatus, type PaymentMethod } from "../../../generated/prisma";
 import { PrismaService } from "../../database/prisma.service";
 import { fromDateOnly } from "../../common/utils/date-only";
@@ -110,12 +110,12 @@ export class PayablesRepository {
   }
 
   async cancel(companyId: string, id: string) {
-    const payable = await this.prisma.forCompany(companyId).payable.update({
-      where: { id },
+    const { count } = await this.prisma.forCompany(companyId).payable.updateMany({
+      where: { id, status: "ABERTO" },
       data: { status: "CANCELADO" },
-      include,
     });
-    return payable as unknown as PayablePayload;
+    if (count === 0) throw new ConflictException("Esta conta já foi baixada ou cancelada.");
+    return this.findByIdOrThrow(companyId, id);
   }
 
   /** Baixa a conta e, se ela veio de um reembolso, marca o reembolso como pago. */
@@ -125,7 +125,12 @@ export class PayablesRepository {
     reimbursementId: string | null,
   ) {
     await this.prisma.$transaction(async (tx) => {
-      await tx.payable.update({ where: { id }, data: { ...data, status: "PAGO" } });
+      // Condicional: dois cliques/abas não baixam a mesma conta duas vezes.
+      const { count } = await tx.payable.updateMany({
+        where: { id, status: "ABERTO" },
+        data: { ...data, status: "PAGO" },
+      });
+      if (count === 0) throw new ConflictException("Esta conta já foi baixada ou cancelada.");
       if (reimbursementId) {
         await tx.reimbursement.update({ where: { id: reimbursementId }, data: { status: "PAGO" } });
       }

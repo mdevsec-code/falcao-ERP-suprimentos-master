@@ -19,7 +19,7 @@
     "search": {
       "label": "搜索",
       "placeholder": "标题、文件名、标签或内容",
-      "hint": "内容搜索适用于文本文件（TXT、CSV、MD、JSON、XML、HTML）。"
+      "hint": "内容搜索适用于文本文件（TXT、CSV、MD、JSON、XML）。"
     },
     "category": "类别",
     "allCategories": "全部类别",

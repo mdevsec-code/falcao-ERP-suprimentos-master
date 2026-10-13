@@ -623,7 +623,7 @@ model Document {
   /// Sempre em minúsculas — o filtro por etiqueta é exato.
   tags         String[]
   validoAte    DateTime?        @map("valido_ate") @db.Date
-  /// Texto extraído de arquivos de texto (txt, csv, md, json, xml, html) para a busca por conteúdo.
+  /// Texto extraído de arquivos de texto (txt, csv, md, json, xml, log) para a busca por conteúdo.
   conteudo     String?
   fileName     String           @map("file_name")
   filePath     String           @map("file_path")
