@@ -1,262 +1,337 @@
-# Falcão ERP — Suprimentos
+<p align="center">
+  <img src="apps/web/src/assets/logo/falcao-wordmark.png" alt="Falcão Construções e Engenharia" width="300">
+</p>
 
-Sistema de gestão de suprimentos para engenharia: fornecedores, banco de produtos com histórico de preços, solicitações de compra com aprovações, contratos com aditivos, contas a pagar com fluxo de caixa, reembolsos, repositório central de documentos e agenda unificada.
+<h1 align="center">🦅 Falcão · Suprimentos</h1>
 
-Monorepo em TypeScript com API [NestJS](https://nestjs.com/) + [Prisma](https://www.prisma.io/) e frontend [React](https://react.dev/) + [Vite](https://vitejs.dev/).
+<p align="center">
+  <em>Do pedido ao recebimento, sem perder o fio.</em>
+</p>
 
-## Sumário
+> ERP de suprimentos da Falcão Construções e Engenharia: fornecedores, banco de produtos, solicitações de compra com aprovação, contratos com aditivos, contas a pagar com fluxo de caixa, reembolsos, repositório de documentos e agenda unificada — em pt-BR, en-US e zh-CN.
 
-- [Funcionalidades](#funcionalidades)
-- [Stack técnica](#stack-técnica)
-- [Estrutura do monorepo](#estrutura-do-monorepo)
-- [Pré-requisitos](#pré-requisitos)
-- [Como rodar localmente](#como-rodar-localmente)
-- [Variáveis de ambiente](#variáveis-de-ambiente)
-- [Scripts disponíveis](#scripts-disponíveis)
-- [Modelo de dados](#modelo-de-dados)
-- [Papéis de usuário](#papéis-de-usuário)
-- [API](#api)
-- [Segurança](#segurança)
-- [Padrão visual e de código](#padrão-visual-e-de-código)
-- [Histórico de construção](#histórico-de-construção)
-- [Estado atual e próximos passos](#estado-atual-e-próximos-passos)
+<p align="center">
+  <a href="https://github.com/mdevsec-code/falcao-ERP-suprimentos-master/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/mdevsec-code/falcao-ERP-suprimentos-master/actions/workflows/ci.yml/badge.svg"></a>
+  <a href=".nvmrc"><img alt="Node 22" src="https://img.shields.io/badge/node-%E2%89%A522.12-339933?style=flat-square"></a>
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.6_strict-3178C6?style=flat-square">
+  <img alt="Vite" src="https://img.shields.io/badge/Vite-5-646CFF?style=flat-square">
+  <img alt="i18n" src="https://img.shields.io/badge/i18n-pt--BR_·_en--US_·_zh--CN-B9861F?style=flat-square">
+</p>
 
-## Funcionalidades
+<p align="center">
+  <img src="https://img.shields.io/badge/React_18-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React">
+  <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript">
+  <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite">
+  <img src="https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS">
+  <img src="https://img.shields.io/badge/Radix_UI-161618?style=for-the-badge&logo=radixui&logoColor=white" alt="Radix UI">
+  <img src="https://img.shields.io/badge/TanStack_Query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white" alt="TanStack Query">
+  <br>
+  <img src="https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white" alt="NestJS">
+  <img src="https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white" alt="Prisma">
+  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
+  <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" alt="JWT">
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
+  <img src="https://img.shields.io/badge/Vitest-6E9F18?style=for-the-badge&logo=vitest&logoColor=white" alt="Vitest">
+</p>
 
-- **Autenticação e multi-tenancy** — login com JWT (access + refresh token), usuários vinculados a uma empresa (`Company`), controle de acesso por papel (RBAC).
-- **Fornecedores** — cadastro completo (razão social, CNPJ, categoria, localização), contatos, avaliações de desempenho e upload de documentos (certificados, contratos, cotações).
+---
+
+## 📑 Sumário
+
+- [📸 Telas](#-telas)
+- [✨ Recursos](#-recursos)
+- [🛠️ Stack](#️-stack)
+- [🏗️ Arquitetura](#️-arquitetura)
+- [🚀 Começando](#-começando)
+- [🔐 Perfis e permissões](#-perfis-e-permissões)
+- [🔌 API](#-api)
+- [🛡️ Segurança](#️-segurança)
+- [🎨 Padrão visual e de código](#-padrão-visual-e-de-código)
+- [📜 Histórico de construção](#-histórico-de-construção)
+- [📍 Estado atual e próximos passos](#-estado-atual-e-próximos-passos)
+
+---
+
+## 📸 Telas
+
+<p align="center">
+  <img src="docs/screenshots/login.png" alt="Tela de login na linguagem planta técnica" width="100%">
+</p>
+
+| Dashboard | Financeiro |
+| :---: | :---: |
+| <img src="docs/screenshots/dashboard.png" alt="Dashboard com KPIs, atalhos, pendências e agenda"> | <img src="docs/screenshots/financeiro.png" alt="Financeiro com KPIs, fluxo de caixa e centros de custo"> |
+| **Contrato** | **Reembolso** |
+| <img src="docs/screenshots/contrato.png" alt="Detalhe do contrato com régua de vigência"> | <img src="docs/screenshots/reembolso.png" alt="Reembolso aguardando aprovação"> |
+| **Agenda** | **Documentos** |
+| <img src="docs/screenshots/agenda.png" alt="Agenda mensal com eventos e prazos"> | <img src="docs/screenshots/documentos.png" alt="Repositório de documentos com etiquetas e validade"> |
+
+<details>
+<summary>Tema escuro</summary>
+<br>
+<img src="docs/screenshots/financeiro-escuro.png" alt="Financeiro no tema escuro">
+</details>
+
+---
+
+## ✨ Recursos
+
+**Suprimentos**
+- **Fornecedores** — cadastro completo (razão social, CNPJ, categoria, localização), contatos, avaliações de desempenho e upload de documentos.
 - **Banco de produtos** — catálogo por empresa, fornecedor primário e alternativos, histórico de preços por fornecedor e unidade de medida.
-- **Solicitações de compra** — fluxo de aprovação com múltiplos status (`aguardando aprovação → em compras → em cotação → pedido realizado → aguardando recebimento → finalizado`, ou rejeição), itens, comentários, anexos e trilha de aprovações.
-- **Contratos** — contratos por fornecedor com vigência, janela de alerta de vencimento, régua visual do prazo, aditivos (alteram valor e/ou término e ficam no histórico), status (vigente, suspenso, encerrado, cancelado), anexos e execução financeira (lançado × pago × saldo).
-- **Financeiro** — contas a pagar vinculadas a contrato, pedido de compra ou reembolso (herdando fornecedor e centro de custo), baixa com forma de pagamento, conciliação de nota fiscal, KPIs (a pagar, vencido, próximos 7 dias, pago no mês), fluxo de caixa previsto × pago por mês, ranking por centro de custo e exportação CSV.
-- **Reembolsos** — pedido com várias despesas e comprovantes; o gestor aprova (gerando a conta a pagar) ou rejeita com motivo; quando o financeiro paga, o reembolso vira "pago". Cada colaborador vê o próprio histórico; gestão, financeiro e auditoria veem todos.
-- **Documentos** — repositório central com categorias, etiquetas, validade (vencendo/vencido), vínculo com fornecedor/contrato e busca por conteúdo em arquivos de texto.
-- **Agenda** — calendário mensal e lista dos próximos dias com eventos (entregas, recebimentos, visitas, reuniões, lembretes) mais os prazos dos outros módulos (vencimento de contas, fim de contratos, validade de documentos), filtrados pelo que cada papel pode ver, com visão por obra / centro de custo.
-- **Auditoria** — log de criação/atualização/remoção por entidade, associado ao usuário e à empresa, com tela de consulta (filtros por ação, entidade, período e pessoa).
-- **Usuários e perfil** — administração de usuários (criar, editar perfil de acesso, ativar/desativar, redefinir senha) e página "Meu perfil" com troca do próprio nome e senha.
+- **Solicitações de compra** — fluxo `aguardando aprovação → em compras → em cotação → pedido realizado → aguardando recebimento → finalizado` (ou rejeição), com itens, comentários, anexos, trilha de aprovações e fila "Aprovações" por papel.
 
-## Stack técnica
+**Contratos & Financeiro**
+- **Contratos** — vigência com janela de alerta e régua visual do prazo, aditivos que alteram valor e/ou término, status (vigente, suspenso, encerrado, cancelado), anexos e execução financeira (lançado × pago × saldo).
+- **Financeiro** — contas a pagar vinculadas a contrato, pedido ou reembolso (herdando fornecedor e centro de custo), baixa com forma de pagamento, conciliação de nota fiscal, fluxo de caixa previsto × pago, ranking por centro de custo e exportação CSV.
+- **Reembolsos** — despesas com comprovantes; o gestor aprova (gerando a conta a pagar) ou rejeita com motivo; quando o financeiro paga, o reembolso vira "pago".
 
-**API** (`apps/api`)
-- NestJS 10 + TypeScript
-- Prisma 7 (adapter `@prisma/adapter-pg`) sobre PostgreSQL
-- Autenticação JWT (`@nestjs/jwt`, `passport-jwt`), hashing com `bcryptjs`
-- Validação com `class-validator` / `class-transformer` e `zod`
+**Organização**
+- **Documentos** — repositório central com categorias, etiquetas, controle de validade, vínculo com fornecedor/contrato e busca por conteúdo em arquivos de texto.
+- **Agenda** — calendário mensal e lista dos próximos dias com entregas, recebimentos, visitas, reuniões e lembretes, mais os prazos dos outros módulos (contas, contratos, documentos), com visão por obra.
 
-**Web** (`apps/web`)
-- React 18 + Vite 5 + TypeScript (strict, `noUncheckedIndexedAccess`)
-- TanStack Query para data-fetching, React Hook Form + Zod para formulários
-- Zustand para sessão e preferências de UI (tema, menu recolhido)
-- i18next com três idiomas: português (padrão), inglês e chinês simplificado
-- Tailwind CSS sobre design tokens em CSS + Radix UI + `lucide-react`, animações com Framer Motion, gráficos com Recharts
-- Vitest + Testing Library, ESLint (com `jsx-a11y`) e Prettier
+**Plataforma**
+- **Dashboard** — KPIs de suprimentos, atalhos, pendências (contratos vencendo, contas vencidas, reembolsos a decidir) e os próximos 7 dias da agenda — tudo filtrado pelo papel de quem vê.
+- **Autenticação e multi-tenancy** — JWT (access + refresh), dados isolados por empresa (`Company`), RBAC por papel no back e por permissão no front.
+- **Usuários, perfil e auditoria** — administração de usuários, "Meu perfil" e trilha de auditoria com filtros.
+- **Internacionalização** — pt-BR, en-US e zh-CN, com teste que garante a paridade das traduções.
 
-**Compartilhado** (`packages/shared-types`) — tipos TypeScript (DTOs, enums, paginação) usados por API e Web.
+---
 
-## Estrutura do monorepo
+## 🛠️ Stack
+
+| Camada | Ferramentas |
+| --- | --- |
+| **Web** (`apps/web`) | React 18 · Vite 5 · TypeScript strict (`noUncheckedIndexedAccess`) · React Router 6 |
+| Estilo e UI | Tailwind CSS 3 sobre tokens em CSS · Radix UI · Lucide · Framer Motion · Recharts |
+| Estado e dados | TanStack Query 5 · Zustand 4 (sessão e preferências) · Axios com refresh token |
+| Formulários | React Hook Form 7 + Zod |
+| i18n | i18next + react-i18next (pt-BR, en-US, zh-CN) |
+| **API** (`apps/api`) | NestJS 10 · Passport JWT · class-validator · helmet · throttler |
+| Banco | PostgreSQL · Prisma 7 (`@prisma/adapter-pg`) |
+| **Compartilhado** | `packages/shared-types` — DTOs, enums e regras de datas usados por API e Web |
+| Qualidade | Vitest + Testing Library · ESLint (`jsx-a11y`) · Prettier · GitHub Actions |
+| Infra local | npm workspaces · Docker Compose (PostgreSQL) |
+
+---
+
+## 🏗️ Arquitetura
+
+Monorepo com npm workspaces. No Web, cada módulo em `features/` segue o mesmo padrão interno: `types.ts` (schemas Zod + conversões formulário ⇄ API), `services/*.api.ts`, `hooks/` (TanStack Query), `components/` e `pages/`. Na API, cada módulo tem controller, service, repository e DTOs.
 
 ```
 falcao-ERP-suprimentos-master/
 ├── apps/
-│   ├── api/                 # API NestJS
-│   │   ├── prisma/          # schema, migrations e seed
+│   ├── api/                       # API NestJS
+│   │   ├── prisma/                # schema, migrations e seed
 │   │   └── src/
-│   │       ├── common/      # decorators, guards, filters, interceptors
-│   │       └── modules/     # auth, users, companies, suppliers, products, purchase-requests,
-│   │                        # contracts, finance, reimbursements, documents, agenda, audit, health, storage
-│   └── web/                 # SPA React (mesmo padrão do Falcão Saúde Ocupacional)
+│   │       ├── common/            # decorators, guards, filters, interceptors, papéis por módulo
+│   │       └── modules/           # auth, users, companies, suppliers, products, purchase-requests,
+│   │                              # contracts, finance, reimbursements, documents, agenda,
+│   │                              # audit, health, storage
+│   └── web/                       # SPA React
 │       └── src/
-│           ├── app/         # App, Providers, Router (lazy + guardas de permissão), error boundaries
-│           ├── components/  # ui/ (design system), layout/, feedback/, data-display/, charts/, common/, error/
-│           ├── features/    # auth, dashboard, suppliers, products, purchase-requests, contracts,
-│           │                #   finance, reimbursements, documents, agenda, users, audit, profile
-│           │                #   cada uma com components/ hooks/ pages/ services/ types.ts (+ lib/)
-│           ├── constants/   # rotas, papéis, permissões (RBAC), enums traduzidos, i18n
-│           ├── i18n/        # bootstrap do i18next + locales/{pt-BR,en-US,zh-CN}/*.json
-│           ├── services/    # cliente HTTP (axios) com refresh token e ApiError
-│           ├── store/       # Zustand: authStore, uiStore
-│           ├── styles/      # tokens.css (cores, tipografia, sombras, motion), reset, tailwind
-│           ├── hooks/ utils/ validators/ config/
+│           ├── app/               # Providers, Router (lazy + guardas de permissão), error boundaries
+│           ├── components/        # ui/ (design system), layout/, brand/, charts/, common/, feedback/…
+│           ├── features/          # auth, dashboard, suppliers, products, purchase-requests, contracts,
+│           │                      # finance, reimbursements, documents, agenda, users, audit, profile
+│           ├── constants/         # rotas, papéis, permissões (RBAC), enums traduzidos, i18n
+│           ├── i18n/              # i18next + locales/{pt-BR,en-US,zh-CN}/*.json
+│           ├── services/ store/ styles/ hooks/ utils/ validators/ config/
 ├── packages/
-│   └── shared-types/        # tipos TypeScript compartilhados entre API e Web
-├── docker-compose.yml       # Postgres para desenvolvimento
-└── package.json             # workspaces + scripts raiz
+│   └── shared-types/              # tipos compartilhados entre API e Web
+├── docs/screenshots/              # imagens deste README
+├── docker-compose.yml             # PostgreSQL para desenvolvimento
+└── package.json                   # workspaces, scripts e overrides de segurança
 ```
 
-## Pré-requisitos
+**Modelo de dados** (`apps/api/prisma/schema.prisma`): `Company` (tenant) · `User` · `Supplier` · `Product` · `PurchaseRequest` · `Contract`/`ContractAmendment` · `Payable` · `Reimbursement` · `Document` · `AgendaEvent` · `AuditLog`.
 
-- Node.js >= 20
-- Docker (para o PostgreSQL local) ou uma instância PostgreSQL própria
+---
 
-## Como rodar localmente
+## 🚀 Começando
+
+### Pré-requisitos
+
+- **Node.js 22.12+** (veja [`.nvmrc`](.nvmrc)) e npm 10+
+- **Docker** (para o PostgreSQL local) ou uma instância PostgreSQL própria
+
+### Instalação
 
 ```bash
-# 1. Instalar dependências
+# 1. Clone e instale
+git clone https://github.com/mdevsec-code/falcao-ERP-suprimentos-master.git
+cd falcao-ERP-suprimentos-master
 npm install
 
-# 2. Configurar variáveis de ambiente
+# 2. Variáveis de ambiente
 cp .env.example .env
 
-# 3. Subir o banco de dados (Postgres via Docker)
+# 3. Banco de dados (PostgreSQL via Docker)
 npm run db:up
 
-# 4. Rodar as migrations
+# 4. Migrations e dados de demonstração
 npm run db:migrate
-
-# 5. (Opcional) Popular o banco com dados de exemplo
 npm run db:seed
 
-# 6. Subir API e Web em modo desenvolvimento
+# 5. API + Web em modo desenvolvimento
 npm run dev
 ```
 
-- API disponível em `http://localhost:3333/api/v1`
-- Web disponível em `http://localhost:5173`
+- Web: `http://localhost:5173`
+- API: `http://localhost:3333/api/v1` (saúde em `/api/v1/health`)
 
-Se você rodou o seed, os logins de exemplo são (todos com a senha `Falcao@123`):
+### Acesso local (dados do seed)
 
-| Email | Papel | Para testar |
-|---|---|---|
+Todos com a senha **`Falcao@123`**:
+
+| E-mail | Perfil | Bom para testar |
+| --- | --- | --- |
 | `admin@falcaoengenharia.com.br` | Administrador | tudo |
 | `gestor@falcaoengenharia.com.br` | Gestor | aprovar reembolsos, contratos, consulta ao financeiro |
-| `carlos@falcaoengenharia.com.br` | Solicitante | pedir reembolso; agenda e documentos sem acesso a contratos/financeiro |
+| `carlos@falcaoengenharia.com.br` | Solicitante | pedir reembolso; agenda e documentos sem contratos/financeiro |
 
-O seed também cria contratos (um vencendo, um vencido), contas pagas e em aberto dos últimos meses, reembolsos, documentos e eventos de agenda com datas relativas a hoje.
+O seed cria fornecedores, contratos (um vencendo, um vencido), contas pagas e em aberto dos últimos meses, reembolsos, documentos e eventos de agenda com datas relativas a hoje.
 
-## Variáveis de ambiente
+> Credenciais válidas **apenas no ambiente local** de desenvolvimento.
 
-Definidas em `.env` (veja `.env.example`):
+### Variáveis de ambiente
 
 | Variável | Descrição |
-|---|---|
+| --- | --- |
 | `DATABASE_URL` | String de conexão do PostgreSQL |
 | `PORT` | Porta da API (padrão `3333`) |
 | `JWT_SECRET` / `JWT_ACCESS_EXPIRES_IN` | Segredo e expiração do access token |
 | `JWT_REFRESH_SECRET` / `JWT_REFRESH_EXPIRES_IN` | Segredo e expiração do refresh token |
-| `UPLOADS_DIR` | Diretório local para armazenamento de arquivos enviados |
-| `CORS_ORIGIN` | Origem permitida no CORS da API (URL do Web) |
+| `UPLOADS_DIR` | Diretório dos arquivos enviados |
+| `CORS_ORIGIN` | Origem permitida no CORS (URL do Web) |
 | `VITE_API_URL` | URL base da API consumida pelo Web |
 
-> Nunca versione o arquivo `.env` — ele já está no `.gitignore`. Gere segredos fortes para `JWT_SECRET` e `JWT_REFRESH_SECRET` antes de qualquer deploy.
+> Nunca versione o `.env`. Gere segredos fortes para `JWT_SECRET` e `JWT_REFRESH_SECRET` antes de qualquer deploy.
 
-## Scripts disponíveis
+### Scripts
 
-Executados a partir da raiz do monorepo:
+```bash
+npm run dev            # API + Web em modo watch
+npm run dev:api        # só a API
+npm run dev:web        # só o Web
+npm run build          # build de shared-types, API e Web
+npm run lint           # ESLint da API e do Web
+npm run typecheck      # tipos de shared-types, API e Web
+npm run test           # testes do Web (Vitest)
+npm run format         # Prettier --write  (format:check para verificar)
+npm run validate       # typecheck + lint + format:check + test + build (o mesmo do CI)
 
-| Script | Descrição |
-|---|---|
-| `npm run dev` | Sobe API e Web simultaneamente (modo watch) |
-| `npm run dev:api` / `npm run dev:web` | Sobe apenas a API ou apenas o Web |
-| `npm run build` | Build de produção de `shared-types`, API e Web |
-| `npm run lint` | Lint da API e do Web |
-| `npm run typecheck` | Checagem de tipos de `shared-types`, API e Web |
-| `npm run test` | Testes unitários do Web (Vitest) |
-| `npm run format` / `npm run format:check` | Formata / verifica a formatação com Prettier |
-| `npm run validate` | Typecheck + lint + formatação + testes + build (o mesmo que o CI roda) |
-| `npm run db:up` / `npm run db:down` | Sobe/derruba o Postgres via Docker Compose |
-| `npm run db:migrate` | Aplica migrations do Prisma |
-| `npm run db:seed` | Popula o banco com dados de exemplo |
-| `npm run db:studio` | Abre o Prisma Studio |
+npm run db:up          # sobe o PostgreSQL (Docker Compose)  ·  db:down derruba
+npm run db:migrate     # aplica as migrations do Prisma
+npm run db:seed        # popula o banco com dados de demonstração
+npm run db:studio      # abre o Prisma Studio
+```
 
-## Modelo de dados
+---
 
-Principais entidades (definidas em `apps/api/prisma/schema.prisma`):
+## 🔐 Perfis e permissões
 
-- **Company** — tenant raiz; todo dado é isolado por empresa.
-- **User** — usuário vinculado a uma empresa, com papel (`Role`) e refresh tokens.
-- **Supplier** — fornecedor, com contatos, avaliações e documentos.
-- **Product** — produto do catálogo, com fornecedor primário/alternativos e histórico de preços.
-- **PurchaseRequest** — solicitação de compra, com itens, aprovações, comentários e anexos.
-- **Contract** / **ContractAmendment** — contrato por fornecedor e seus aditivos.
-- **Payable** — conta a pagar, com origem (manual, pedido, contrato, reembolso), nota fiscal e baixa.
-- **Reimbursement** — pedido de reembolso, com despesas (`ReimbursementItem`) e comprovantes.
-- **Document** — documento do repositório central (etiquetas, validade, conteúdo indexado).
-- **AgendaEvent** — evento da agenda (a agenda também agrega prazos de contas, contratos e documentos).
-- **AuditLog** — trilha de auditoria genérica reutilizada por todos os módulos.
-
-## Papéis de usuário
-
-`ADMIN`, `MANAGER`, `BUYER`, `FINANCE`, `WAREHOUSE`, `REQUESTER`, `AUDITOR` — aplicados via guards de RBAC nos endpoints da API (papéis por módulo em `apps/api/src/common/constants/module-roles.ts`, espelhados no Web em `constants/permissions.ts`).
+Papéis: `ADMIN`, `MANAGER`, `BUYER`, `FINANCE`, `WAREHOUSE`, `REQUESTER`, `AUDITOR`. A API é a autoridade (`@Roles`, com os papéis por módulo em `apps/api/src/common/constants/module-roles.ts`); o Web espelha em `constants/permissions.ts` para esconder o que voltaria 403 e bloquear a rota.
 
 | Módulo | Consulta | Altera |
-|---|---|---|
+| --- | --- | --- |
 | Contratos | ADMIN, MANAGER, BUYER, FINANCE, AUDITOR | ADMIN, MANAGER, BUYER |
 | Financeiro | ADMIN, MANAGER, FINANCE, AUDITOR | ADMIN, FINANCE |
 | Reembolsos | todos (solicitantes veem só os próprios) | pedem: todos menos AUDITOR · decidem: ADMIN, MANAGER (nunca o próprio) |
 | Documentos | todos | ADMIN, MANAGER, BUYER, FINANCE, WAREHOUSE |
 | Agenda | todos (prazos só dos módulos que o papel consulta) | todos menos AUDITOR |
+| Usuários | ADMIN | ADMIN |
+| Auditoria | ADMIN, AUDITOR | — |
 
-## API
+---
 
-- Prefixo global: `/api/v1`
-- Autenticação: `Authorization: Bearer <accessToken>`, obtido em `POST /api/v1/auth/login`
-- Renovação de sessão: `POST /api/v1/auth/refresh`
-- A cada requisição o token é conferido contra o banco: usuário desativado perde o acesso na hora e mudança de perfil vale imediatamente.
-- Usuários: `GET/POST /users`, `GET /users/stats`, `PATCH /users/:id`, `PATCH /users/:id/password` (ADMIN); `GET/PATCH /users/me`, `PATCH /users/me/password` (qualquer usuário)
-- Auditoria: `GET /audit-logs`, `GET /audit-logs/stats` (ADMIN e AUDITOR)
-- Contratos: `GET/POST /contracts`, `GET /contracts/stats`, `GET/PATCH /contracts/:id`, `PATCH /contracts/:id/status`, `POST /contracts/:id/amendments`
-- Financeiro: `GET/POST /payables`, `GET /payables/stats`, `GET /payables/cash-flow`, `GET /payables/by-cost-center`, `GET /payables/cost-centers`, `GET/PATCH /payables/:id`, `PATCH /payables/:id/pay`, `PATCH /payables/:id/invoice`, `PATCH /payables/:id/cancel`
-- Reembolsos: `GET/POST /reimbursements`, `GET /reimbursements/stats`, `GET/DELETE /reimbursements/:id`, `PATCH /reimbursements/:id/decision`, `POST /reimbursements/:id/attachments`, `DELETE /reimbursements/:id/attachments/:attachmentId`
-- Documentos: `GET/POST /documents` (upload multipart), `GET /documents/stats`, `GET /documents/tags`, `GET/PATCH/DELETE /documents/:id`
-- Agenda: `GET /agenda?from&to&obra`, `GET /agenda/obras`, `POST /agenda/events`, `PATCH/DELETE /agenda/events/:id`
-- Saúde: `GET /health` (público — status da API e do banco)
+## 🔌 API
 
-## Segurança
+Prefixo `/api/v1` · autenticação `Authorization: Bearer <accessToken>` (de `POST /auth/login`, renovado em `POST /auth/refresh`). O token é conferido contra o banco a cada requisição: usuário desativado perde o acesso na hora.
 
-- **Isolamento por empresa** no nível de consulta (`PrismaService.forCompany`) para todos os modelos de negócio; SQL bruto sempre parametrizado e com `company_id`.
-- **Uploads**: o `LocalStorageProvider` recusa caminhos fora de `UPLOADS_DIR` e aceita só uma lista de extensões (PDF, imagens, Office, texto, CAD, ZIP) — HTML, SVG e JS são bloqueados. Os arquivos em `/uploads` saem com `X-Content-Type-Options: nosniff`; o que não é PDF, imagem ou texto é servido como download com `Content-Security-Policy: sandbox`.
+| Recurso | Endpoints |
+| --- | --- |
+| Usuários | `GET/POST /users`, `GET /users/stats`, `PATCH /users/:id`, `PATCH /users/:id/password`, `GET/PATCH /users/me`, `PATCH /users/me/password` |
+| Contratos | `GET/POST /contracts`, `GET /contracts/stats`, `GET/PATCH /contracts/:id`, `PATCH /contracts/:id/status`, `POST /contracts/:id/amendments` |
+| Financeiro | `GET/POST /payables`, `GET /payables/stats`, `GET /payables/cash-flow`, `GET /payables/by-cost-center`, `GET /payables/cost-centers`, `GET/PATCH /payables/:id`, `PATCH /payables/:id/pay`, `PATCH /payables/:id/invoice`, `PATCH /payables/:id/cancel` |
+| Reembolsos | `GET/POST /reimbursements`, `GET /reimbursements/stats`, `GET/DELETE /reimbursements/:id`, `PATCH /reimbursements/:id/decision`, `POST /reimbursements/:id/attachments`, `DELETE /reimbursements/:id/attachments/:attachmentId` |
+| Documentos | `GET/POST /documents` (multipart), `GET /documents/stats`, `GET /documents/tags`, `GET/PATCH/DELETE /documents/:id` |
+| Agenda | `GET /agenda?from&to&obra`, `GET /agenda/obras`, `POST /agenda/events`, `PATCH/DELETE /agenda/events/:id` |
+| Auditoria | `GET /audit-logs`, `GET /audit-logs/stats` |
+| Saúde | `GET /health` (público — status da API e do banco) |
+
+Fornecedores, produtos e solicitações de compra seguem o mesmo padrão em `/suppliers`, `/products` e `/purchase-requests`.
+
+---
+
+## 🛡️ Segurança
+
+- **Isolamento por empresa** na camada de consulta (`PrismaService.forCompany`); SQL bruto sempre parametrizado e com `company_id`.
+- **Uploads** — o storage recusa caminhos fora de `UPLOADS_DIR` e aceita só uma lista de extensões (PDF, imagens, Office, texto, CAD, ZIP); HTML, SVG e JS são bloqueados. `/uploads` responde com `nosniff`, e o que não é PDF/imagem/texto vai como download com `Content-Security-Policy: sandbox`.
 - **Cabeçalhos** via `helmet`; CORS restrito a `CORS_ORIGIN`.
-- **Força bruta**: login e refresh limitados a 10 tentativas por minuto por IP (`@nestjs/throttler`); o login leva o mesmo tempo para e-mail inexistente e senha errada (não revela quem tem conta).
-- **Concorrência**: baixa de conta, cancelamento e decisão de reembolso são atualizações condicionais — dois cliques simultâneos não pagam duas vezes nem geram duas contas.
-- **Validação**: `ValidationPipe` com `whitelist` + `forbidNonWhitelisted` (campos extras como `companyId` são rejeitados); erros conhecidos do Prisma viram 409/404/400 em vez de 500.
-- **CSV**: a exportação neutraliza células que o Excel executaria como fórmula.
-- **Dependências**: `overrides` no `package.json` raiz fixam versões corrigidas de `multer`, `body-parser`, `lodash` e `qs`.
+- **Força bruta** — login e refresh limitados a 10 tentativas/minuto por IP; o login leva o mesmo tempo para e-mail inexistente e senha errada.
+- **Concorrência** — baixa de conta, cancelamento e decisão de reembolso são atualizações condicionais: dois cliques não pagam duas vezes nem geram duas contas.
+- **Validação** — `whitelist` + `forbidNonWhitelisted` (campos como `companyId` no corpo são rejeitados); erros conhecidos do Prisma viram 409/404/400.
+- **CSV** — a exportação neutraliza células que o Excel executaria como fórmula.
+- **Dependências** — `overrides` fixam versões corrigidas de `multer`, `body-parser`, `lodash` e `qs`.
 
-## Padrão visual e de código
+---
 
-O frontend segue o mesmo design system e as mesmas convenções da plataforma [Falcão Saúde Ocupacional](https://github.com/mdevsec-code/falcao-saude-ocupacional), para que os produtos Falcão tenham uma identidade única:
+## 🎨 Padrão visual e de código
 
-- **Identidade visual** — dourado e grafite extraídos da logo oficial, tipografia Fraunces (títulos), Inter (texto) e IBM Plex Mono (rótulos), tokens de cor/sombra/raio/movimento em `src/styles/tokens.css`, tema claro e escuro.
-- **Componentes** — mesmo kit de UI (`Button`, `Input`, `Select`, `Dialog`, `Tabs`, `Badge`, `Card`…), `PageHeader` com *eyebrow*, `StatTile` para KPIs, `EmptyState`/`ErrorState`/`LoadingState`, `Sidebar` com pílula ativa animada e `Topbar` com breadcrumb, busca global, idioma e tema.
-- **Animações** — transição entre páginas, entradas em `slide-up`/`scale-in` escalonadas, glows com *drift* na tela de login, contagem animada nos KPIs; tudo respeita `prefers-reduced-motion`.
-- **Código** — componentes em PascalCase (`components/ui/Button/Button.tsx`), uma pasta por feature com `services/` (chamadas HTTP), `hooks/` (TanStack Query), `types.ts` (schemas Zod + conversões formulário ⇄ API), `components/` e `pages/`; textos sempre via i18n; permissões centralizadas em `constants/permissions.ts`, espelhando os `@Roles` da API.
-- **Gráficos** — série única no dourado da marca, validada para contraste nos dois temas (ver `src/styles/tokens.css`).
+Mesmo design system e convenções do [Falcão Saúde Ocupacional](https://github.com/mdevsec-code/falcao-saude-ocupacional), para que os produtos Falcão tenham uma identidade única:
 
-## Histórico de construção
+- **Identidade** — dourado e grafite da logo, Fraunces (títulos), Inter (texto) e IBM Plex Mono (rótulos), tokens em `src/styles/tokens.css`, tema claro e escuro.
+- **Linguagem "planta técnica"** — malha milimetrada, carimbo de prancha, cantoneiras e o fluxo de compra desenhado como diagrama vivo nas telas de entrada; régua de vigência nos contratos e calendário com marcação de hoje.
+- **Componentes** — kit de UI compartilhado (`Button`, `Input`, `Select`, `Dialog`, `Tabs`, `Badge`, `Card`…), `PageHeader` com *eyebrow*, `StatTile`, estados vazio/erro/carregando, Sidebar com pílula ativa animada.
+- **Animações** — transição de página, entradas escalonadas e contagem nos KPIs, respeitando `prefers-reduced-motion`.
+- **Gráficos** — um único matiz da marca, validado para contraste nos dois temas.
 
-O projeto foi construído em fases incrementais, cada uma adicionando um módulo de negócio completo (schema + API + tela):
+---
 
-1. **Fundação** — multi-tenancy (`Company`/`User`), autenticação JWT com access + refresh token e RBAC por papel.
-2. **Fase 1 — Fornecedores** — cadastro, contatos, avaliações de desempenho e upload de documentos, com armazenamento local de arquivos (`LocalStorageProvider`) por trás de uma interface (`IStorageProvider`) já preparada para trocar por um provider em nuvem sem alterar controllers/serviços.
-3. **Fase 2 — Banco de produtos** — catálogo por empresa, fornecedor primário/alternativos e histórico de preços.
-4. **Fase 3 — Solicitações de compra** — fluxo de aprovação com múltiplos status, itens, comentários, anexos e trilha de aprovações; interceptor de auditoria (`AuditLogInterceptor`) plugado nos módulos de negócio.
-5. **Publicação** — versionamento do código com Git e envio para o repositório GitHub ([mdevsec-code/falcao-ERP-suprimentos-master](https://github.com/mdevsec-code/falcao-ERP-suprimentos-master)).
-6. **Padronização com o Falcão Saúde Ocupacional** — frontend refeito sobre o design system, a estrutura de pastas e as convenções da plataforma de Saúde Ocupacional: tokens e componentes de UI, layout, animações, i18n (pt-BR/en-US/zh-CN), sessão em Zustand com "manter conectado", RBAC por permissões, KPIs e gráficos nas telas, Vitest, Prettier e CI. Correções feitas no caminho: a fila de Aprovações pedia `pageSize=200` (a API aceita no máximo 100) e falhava; o seletor de produto nos itens da solicitação não refletia a escolha; o `.env` da raiz não era lido pela API, pelo Prisma nem pelo Vite.
-7. **Administração** — usuários (API + tela), trilha de auditoria (API + tela), "Meu perfil", endpoint de saúde e redesenho das telas de entrada (login, 404, acesso negado, módulos "em breve") na linguagem "planta técnica" — malha milimetrada, carimbo de prancha e o fluxo de compra desenhado como diagrama vivo — mantendo tokens, cores e componentes. Correção: o `nest build` gerava `dist/` sem `main.js` quando o cache incremental do TypeScript existia.
-8. **Contratos, Financeiro, Reembolsos, Documentos e Agenda** — os cinco módulos que faltavam, com schema, API, telas, i18n e dados de demonstração, integrados entre si: o aditivo altera o contrato, a aprovação de um reembolso gera a conta a pagar, o pagamento fecha o reembolso e os prazos aparecem na agenda. Componentes comuns novos: `SelectField`, `RowAction`, `UploadFileDialog`, `CostCenterInput`.
-9. **Revisão geral e de segurança** — correção de *path traversal* no upload de anexos de solicitação (o arquivo era gravado antes de validar o id da URL, permitindo escrever fora de `uploads/`), bloqueio de uploads executáveis, cabeçalhos de segurança, limite de tentativas no login, login em tempo constante, condições de corrida em pagamentos e aprovações, erros do Prisma e do serve-static que viravam 500, injeção de fórmula no CSV, nomes de arquivo com acento corrompidos pelo multer e atualização de dependências vulneráveis (incluindo uma crítica).
+## 📜 Histórico de construção
 
-## Estado atual e próximos passos
+1. **Fundação** — multi-tenancy (`Company`/`User`), JWT com access + refresh e RBAC por papel.
+2. **Fornecedores** — cadastro, contatos, avaliações e documentos, com storage local atrás da interface `IStorageProvider`.
+3. **Banco de produtos** — catálogo, fornecedores primário/alternativos e histórico de preços.
+4. **Solicitações de compra** — fluxo de aprovação, itens, comentários, anexos e auditoria (`AuditLogInterceptor`).
+5. **Publicação** — versionamento no GitHub.
+6. **Padronização com o Saúde Ocupacional** — frontend refeito sobre o design system e as convenções da plataforma irmã: UI, layout, animações, i18n, sessão em Zustand, RBAC por permissões, KPIs, Vitest, Prettier e CI.
+7. **Administração** — usuários, auditoria, "Meu perfil", `/health` e redesenho das telas de entrada na linguagem "planta técnica".
+8. **Contratos, Financeiro, Reembolsos, Documentos e Agenda** — os módulos que faltavam, integrados entre si: aditivo altera o contrato, aprovação de reembolso gera conta a pagar, pagamento fecha o reembolso e os prazos aparecem na agenda.
+9. **Revisão geral e de segurança** — correção de *path traversal* no upload de anexos, bloqueio de uploads executáveis, `helmet`, limite de tentativas no login, condições de corrida em pagamentos/aprovações, injeção de fórmula no CSV e atualização de dependências vulneráveis.
+10. **Dashboard operacional** — pendências e agenda dos próximos dias no lugar do antigo card "próximos módulos"; remoção das telas "em breve"; CI em Node 22 LTS.
 
-O projeto está funcional para desenvolvimento local (`npm run dev`), mas ainda **não está pronto para produção**. Faltam:
+---
 
-**Infraestrutura e entrega**
-- Sem Dockerfile de produção para API/Web — o `docker-compose.yml` atual sobe apenas o Postgres de desenvolvimento.
-- CI existe, mas não há CD (deploy automatizado).
-- Sem ambiente de deploy configurado (hospedagem, variáveis de produção, HTTPS, etc.).
-- Armazenamento de arquivos apenas local em disco (`UPLOADS_DIR`); não serve para múltiplas instâncias nem é durável em produção — a interface `IStorageProvider` já existe para plugar um provider em nuvem (ex. S3/Azure Blob) quando isso for priorizado.
+## 📍 Estado atual e próximos passos
+
+Funcional para desenvolvimento local; ainda **não pronto para produção**.
+
+**Infraestrutura**
+- Sem Dockerfile de produção para API/Web — o `docker-compose.yml` sobe apenas o PostgreSQL de desenvolvimento.
+- Sem CD nem ambiente de deploy (hospedagem, variáveis de produção, HTTPS).
+- Armazenamento de arquivos apenas em disco local; a interface `IStorageProvider` permite plugar S3/Azure Blob.
 
 **Qualidade**
-- O Web tem testes unitários (formatação, KPIs, CSV, calendário, paridade de traduções); a API ainda não tem `*.spec.ts` versionados — os fluxos foram verificados com testes de fumaça contra um banco real durante o desenvolvimento.
-- O CI (`.github/workflows/ci.yml`) roda lint, typecheck, testes e build — falta um job com Postgres para testes de integração.
-- `npm audit` ainda aponta vulnerabilidades que só se resolvem com troca de versão maior: NestJS 10 → 11 (`@nestjs/core`, `path-to-regexp` do `serve-static`, `file-type`), React Router 6 → 7 e ferramentas de linha de comando do Prisma (`mysql2`, `deepmerge-ts`, não usadas em produção com Postgres).
+- Testes unitários no Web (formatação, KPIs, CSV, calendário, paridade de traduções); a API ainda não tem `*.spec.ts` versionados.
+- Falta um job de CI com PostgreSQL para testes de integração.
+- `npm audit` ainda aponta itens que exigem troca de versão maior: NestJS 10 → 11 e React Router 6 → 7.
 
-**Segurança — pontos ainda abertos**
-- Arquivos em `/uploads` são acessíveis por quem tiver a URL (nomes aleatórios, sem autenticação) — para dados sensíveis, servir por rota autenticada ou URLs assinadas.
-- Tokens ficam no `localStorage` do navegador; cookies `httpOnly` reduziriam o impacto de um eventual XSS.
-- Exigir segredos JWT longos (32+ caracteres) na validação de ambiente de produção.
+**Segurança**
+- Arquivos em `/uploads` são acessíveis por quem tiver a URL — para dados sensíveis, servir por rota autenticada ou URL assinada.
+- Tokens no `localStorage`; cookies `httpOnly` reduziriam o impacto de um eventual XSS.
+- Exigir segredos JWT de 32+ caracteres na validação de ambiente de produção.
 
-**Gaps administrativos**
-- `companies` ainda é só um serviço interno — não há tela para os dados da empresa.
-- Sem fluxo de recuperação de senha por e-mail ("esqueci minha senha"); hoje um administrador redefine a senha.
-- A busca por conteúdo cobre apenas arquivos de texto; PDFs e documentos Office não são indexados.
+**Produto**
+- Tela de dados da empresa (`companies` ainda é só serviço interno).
+- Recuperação de senha por e-mail.
+- Busca por conteúdo em PDFs e documentos Office.
+- Integração com os demais sistemas Falcão num hub com login único.
+
+---
+
+<p align="center">
+  <sub>Feito para a <strong>Falcão Construções e Engenharia</strong> · parte da família de sistemas Falcão, ao lado do <a href="https://github.com/mdevsec-code/falcao-saude-ocupacional">Saúde Ocupacional</a></sub>
+</p>
