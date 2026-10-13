@@ -27,7 +27,6 @@ export default defineConfig({
             '@radix-ui/react-checkbox',
             '@radix-ui/react-dialog',
             '@radix-ui/react-dropdown-menu',
-            '@radix-ui/react-label',
             '@radix-ui/react-select',
             '@radix-ui/react-separator',
             '@radix-ui/react-slot',

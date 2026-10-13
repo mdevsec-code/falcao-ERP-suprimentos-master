@@ -73,7 +73,6 @@
     "supplies": "供应",
     "contractsFinance": "合同与财务",
     "organization": "组织",
-    "comingSoon": "即将推出",
     "mainNavAriaLabel": "主导航",
     "admin": "管理"
   },
@@ -108,19 +107,6 @@
   },
   "languageSwitcher": {
     "selectLanguage": "选择语言"
-  },
-  "placeholder": {
-    "defaultDescription": "我们正在精心打造此模块，敬请期待。",
-    "features": {
-      "contracts": ["按供应商管理合同", "到期与续约提醒", "补充协议与历史", "附件与签署"],
-      "finance": ["与订单关联的应付账款", "发票对账", "按成本中心的现金流", "管理报表"],
-      "reimbursements": ["附凭证的报销申请", "经理审批", "与财务集成", "按员工查看历史"],
-      "agenda": ["交货与收货日程", "供应商拜访", "到期提醒", "按工地查看"],
-      "documents": ["集中文档库", "分类与标签", "有效期管理", "全文搜索"]
-    },
-    "stamp": "设计中",
-    "scopeLabel": "规划范围",
-    "footnote": "初步图纸 · 可能修订"
   },
   "notFound": {
     "title": "页面未找到",

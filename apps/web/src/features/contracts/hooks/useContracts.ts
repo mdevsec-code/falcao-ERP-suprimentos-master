@@ -27,8 +27,8 @@ export function useActiveContractOptions(enabled = true) {
   });
 }
 
-export function useContractStats() {
-  return useQuery({ queryKey: contractsKeys.stats(), queryFn: contractsApi.stats });
+export function useContractStats(enabled = true) {
+  return useQuery({ queryKey: contractsKeys.stats(), queryFn: contractsApi.stats, enabled });
 }
 
 export function useContract(id: string | undefined) {

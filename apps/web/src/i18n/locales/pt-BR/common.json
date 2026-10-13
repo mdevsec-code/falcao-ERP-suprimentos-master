@@ -73,7 +73,6 @@
     "supplies": "Suprimentos",
     "contractsFinance": "Contratos & Financeiro",
     "organization": "Organização",
-    "comingSoon": "Em breve",
     "mainNavAriaLabel": "Navegação principal",
     "admin": "Administração"
   },
@@ -108,44 +107,6 @@
   },
   "languageSwitcher": {
     "selectLanguage": "Selecionar idioma"
-  },
-  "placeholder": {
-    "defaultDescription": "Estamos preparando este módulo com todo o cuidado. Em breve, novidades por aqui.",
-    "features": {
-      "contracts": [
-        "Cadastro de contratos por fornecedor",
-        "Alertas de vencimento e renovação",
-        "Aditivos e histórico",
-        "Anexos e assinaturas"
-      ],
-      "finance": [
-        "Contas a pagar vinculadas a pedidos",
-        "Conciliação com notas fiscais",
-        "Fluxo de caixa por centro de custo",
-        "Relatórios gerenciais"
-      ],
-      "reimbursements": [
-        "Solicitação de reembolso com comprovantes",
-        "Aprovação pelo gestor",
-        "Integração com o financeiro",
-        "Histórico por colaborador"
-      ],
-      "agenda": [
-        "Agenda de entregas e recebimentos",
-        "Visitas de fornecedores",
-        "Lembretes de vencimentos",
-        "Visão por obra"
-      ],
-      "documents": [
-        "Repositório central de documentos",
-        "Categorias e etiquetas",
-        "Controle de validade",
-        "Busca por conteúdo"
-      ]
-    },
-    "stamp": "Em projeto",
-    "scopeLabel": "Escopo previsto",
-    "footnote": "Prancha preliminar · sujeita a revisão"
   },
   "notFound": {
     "title": "Página não encontrada",

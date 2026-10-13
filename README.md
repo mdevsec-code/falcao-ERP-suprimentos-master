@@ -259,5 +259,4 @@ O projeto está funcional para desenvolvimento local (`npm run dev`), mas ainda 
 **Gaps administrativos**
 - `companies` ainda é só um serviço interno — não há tela para os dados da empresa.
 - Sem fluxo de recuperação de senha por e-mail ("esqueci minha senha"); hoje um administrador redefine a senha.
-- O Dashboard ainda mostra só indicadores de suprimentos — falta trazer KPIs de contratos, financeiro e reembolsos.
 - A busca por conteúdo cobre apenas arquivos de texto; PDFs e documentos Office não são indexados.

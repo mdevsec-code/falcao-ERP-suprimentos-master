@@ -21,7 +21,6 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { cn } from '@/utils/cn';
-import { Badge } from '@/components/ui/Badge';
 import { FalcaoLogo } from '@/assets/logo/FalcaoLogo';
 import { useUIStore } from '@/store/uiStore';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
@@ -34,7 +33,6 @@ interface NavItem {
   label: string;
   to: string;
   icon: LucideIcon;
-  enabled: boolean;
   requires?: Permission;
 }
 
@@ -46,9 +44,7 @@ export interface NavSection {
 const SECTIONS: NavSection[] = [
   {
     title: 'sidebar.overview',
-    items: [
-      { label: 'nav.dashboard', to: ROUTE_PATHS.DASHBOARD, icon: LayoutDashboard, enabled: true },
-    ],
+    items: [{ label: 'nav.dashboard', to: ROUTE_PATHS.DASHBOARD, icon: LayoutDashboard }],
   },
   {
     title: 'sidebar.supplies',
@@ -57,28 +53,24 @@ const SECTIONS: NavSection[] = [
         label: 'nav.suppliers',
         to: ROUTE_PATHS.FORNECEDORES,
         icon: Truck,
-        enabled: true,
         requires: PERMISSIONS.SUPPLIER_READ,
       },
       {
         label: 'nav.products',
         to: ROUTE_PATHS.PRODUTOS,
         icon: Boxes,
-        enabled: true,
         requires: PERMISSIONS.PRODUCT_READ,
       },
       {
         label: 'nav.purchaseRequests',
         to: ROUTE_PATHS.SOLICITACOES,
         icon: ShoppingCart,
-        enabled: true,
         requires: PERMISSIONS.PURCHASE_REQUEST_READ,
       },
       {
         label: 'nav.approvals',
         to: ROUTE_PATHS.APROVACOES,
         icon: ClipboardCheck,
-        enabled: true,
         requires: PERMISSIONS.APPROVALS_READ,
       },
     ],
@@ -90,29 +82,26 @@ const SECTIONS: NavSection[] = [
         label: 'nav.contracts',
         to: ROUTE_PATHS.CONTRATOS,
         icon: FileText,
-        enabled: true,
         requires: PERMISSIONS.CONTRACT_READ,
       },
       {
         label: 'nav.finance',
         to: ROUTE_PATHS.FINANCEIRO,
         icon: Wallet,
-        enabled: true,
         requires: PERMISSIONS.FINANCE_READ,
       },
       {
         label: 'nav.reimbursements',
         to: ROUTE_PATHS.REEMBOLSOS,
         icon: ReceiptText,
-        enabled: true,
       },
     ],
   },
   {
     title: 'sidebar.organization',
     items: [
-      { label: 'nav.agenda', to: ROUTE_PATHS.AGENDA, icon: CalendarDays, enabled: true },
-      { label: 'nav.documents', to: ROUTE_PATHS.DOCUMENTOS, icon: FileStack, enabled: true },
+      { label: 'nav.agenda', to: ROUTE_PATHS.AGENDA, icon: CalendarDays },
+      { label: 'nav.documents', to: ROUTE_PATHS.DOCUMENTOS, icon: FileStack },
     ],
   },
   {
@@ -122,14 +111,12 @@ const SECTIONS: NavSection[] = [
         label: 'nav.users',
         to: ROUTE_PATHS.USUARIOS,
         icon: UserCog,
-        enabled: true,
         requires: PERMISSIONS.USERS_MANAGE,
       },
       {
         label: 'nav.audit',
         to: ROUTE_PATHS.AUDITORIA,
         icon: ScrollText,
-        enabled: true,
         requires: PERMISSIONS.AUDIT_READ,
       },
     ],
@@ -209,9 +196,7 @@ function SidebarBody({ isCompact, onNavigate }: SidebarBodyProps): ReactNode {
   const { t } = useTranslation('common');
   const { can } = useAuth();
 
-  // Itens sem permissão somem da navegação (em vez de aparecerem
-  // desabilitados) — "Em breve" fica reservado para módulos que ainda
-  // não existem, para não sugerir que o usuário vai ganhar acesso.
+  // Itens sem permissão somem da navegação (em vez de aparecerem desabilitados).
   const sections = SECTIONS.map((section) => ({
     ...section,
     items: section.items.filter((item) => !item.requires || can(item.requires)),
@@ -278,7 +263,7 @@ interface SidebarLinkProps {
 }
 
 function SidebarLink({ item, compact, onNavigate }: SidebarLinkProps): ReactNode {
-  const { icon: Icon, label, to, enabled } = item;
+  const { icon: Icon, label, to } = item;
   const { t } = useTranslation('common');
 
   const baseClasses = cn(
@@ -288,26 +273,6 @@ function SidebarLink({ item, compact, onNavigate }: SidebarLinkProps): ReactNode
   );
 
   const labelText = t(label as never);
-
-  if (!enabled) {
-    return (
-      <div
-        aria-disabled="true"
-        className={cn(baseClasses, 'cursor-not-allowed text-ink-soft opacity-70')}
-        title={compact ? `${labelText} · ${t('sidebar.comingSoon')}` : t('sidebar.comingSoon')}
-      >
-        <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
-        {!compact && (
-          <>
-            <span className="flex-1 truncate">{labelText}</span>
-            <Badge variant="outline" size="sm" className="text-2xs">
-              {t('sidebar.comingSoon')}
-            </Badge>
-          </>
-        )}
-      </div>
-    );
-  }
 
   return (
     <NavLink

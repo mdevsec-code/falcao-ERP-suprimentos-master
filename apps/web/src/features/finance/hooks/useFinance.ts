@@ -25,8 +25,8 @@ export function usePayables(params: PayableListParams) {
   });
 }
 
-export function usePayableStats() {
-  return useQuery({ queryKey: financeKeys.stats(), queryFn: financeApi.stats });
+export function usePayableStats(enabled = true) {
+  return useQuery({ queryKey: financeKeys.stats(), queryFn: financeApi.stats, enabled });
 }
 
 export function useCashFlow(costCenter?: string) {

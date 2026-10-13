@@ -23,7 +23,6 @@ export const ROUTE_PATHS = {
   USUARIOS: '/usuarios',
   AUDITORIA: '/auditoria',
   PERFIL: '/perfil',
-  PLACEHOLDER: '/em-construcao',
   NOT_FOUND: '/404',
 } as const;
 

@@ -73,7 +73,6 @@
     "supplies": "Supplies",
     "contractsFinance": "Contracts & Finance",
     "organization": "Organization",
-    "comingSoon": "Coming soon",
     "mainNavAriaLabel": "Main navigation",
     "admin": "Administration"
   },
@@ -108,44 +107,6 @@
   },
   "languageSwitcher": {
     "selectLanguage": "Select language"
-  },
-  "placeholder": {
-    "defaultDescription": "We are carefully building this module. News coming soon.",
-    "features": {
-      "contracts": [
-        "Contracts per supplier",
-        "Expiration and renewal alerts",
-        "Amendments and history",
-        "Attachments and signatures"
-      ],
-      "finance": [
-        "Payables linked to orders",
-        "Invoice reconciliation",
-        "Cash flow by cost center",
-        "Management reports"
-      ],
-      "reimbursements": [
-        "Reimbursement requests with receipts",
-        "Manager approval",
-        "Finance integration",
-        "History per employee"
-      ],
-      "agenda": [
-        "Delivery and receiving schedule",
-        "Supplier visits",
-        "Expiration reminders",
-        "View by job site"
-      ],
-      "documents": [
-        "Central document repository",
-        "Categories and tags",
-        "Expiration control",
-        "Full-text search"
-      ]
-    },
-    "stamp": "In design",
-    "scopeLabel": "Planned scope",
-    "footnote": "Preliminary sheet · subject to revision"
   },
   "notFound": {
     "title": "Page not found",

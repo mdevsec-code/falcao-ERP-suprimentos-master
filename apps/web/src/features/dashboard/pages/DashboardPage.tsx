@@ -10,7 +10,6 @@ import {
   Hourglass,
   ReceiptText,
   ShoppingCart,
-  Sparkles,
   Truck,
   Wallet,
   type LucideIcon,
@@ -22,12 +21,12 @@ import { StatTile } from '@/components/data-display/StatTile';
 import { CountUp } from '@/components/data-display/CountUp';
 import { RankingBarChart } from '@/components/charts/RankingBarChart';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
-import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Separator } from '@/components/ui/Separator';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { EmptyState } from '@/components/feedback/EmptyState';
 import { useAuth } from '@/features/auth/hooks/useAuth';
+import { OperationsOverview } from '../components/OperationsOverview';
 import { useSupplierStats } from '@/features/suppliers/hooks/useSuppliers';
 import { useProductStats } from '@/features/products/hooks/useProducts';
 import { usePurchaseRequestStats } from '@/features/purchase-requests/hooks/usePurchaseRequests';
@@ -70,14 +69,16 @@ const QUICK_LINKS: QuickLink[] = [
     requires: PERMISSIONS.SUPPLIER_READ,
   },
   { id: 'products', to: ROUTE_PATHS.PRODUTOS, icon: Boxes, requires: PERMISSIONS.PRODUCT_READ },
-];
-
-const UPCOMING: { id: string; icon: LucideIcon }[] = [
-  { id: 'contracts', icon: FileText },
-  { id: 'finance', icon: Wallet },
-  { id: 'reimbursements', icon: ReceiptText },
-  { id: 'agenda', icon: CalendarDays },
-  { id: 'documents', icon: FileStack },
+  {
+    id: 'contracts',
+    to: ROUTE_PATHS.CONTRATOS,
+    icon: FileText,
+    requires: PERMISSIONS.CONTRACT_READ,
+  },
+  { id: 'finance', to: ROUTE_PATHS.FINANCEIRO, icon: Wallet, requires: PERMISSIONS.FINANCE_READ },
+  { id: 'reimbursements', to: ROUTE_PATHS.REEMBOLSOS, icon: ReceiptText },
+  { id: 'agenda', to: ROUTE_PATHS.AGENDA, icon: CalendarDays },
+  { id: 'documents', to: ROUTE_PATHS.DOCUMENTOS, icon: FileStack },
 ];
 
 function formatCount(value: number): string {
@@ -262,31 +263,7 @@ export function DashboardPage() {
           </Card>
         </section>
 
-        <Card className="relative overflow-hidden">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-brand-gold-700" aria-hidden="true" />
-              <CardTitle>{t('dashboard:upcoming.title')}</CardTitle>
-            </div>
-            <CardDescription>{t('dashboard:upcoming.description')}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
-              {UPCOMING.map((item) => (
-                <li
-                  key={item.id}
-                  className="flex items-center gap-2.5 rounded-md border border-dashed border-border px-3 py-2.5 text-sm text-ink-soft"
-                >
-                  <item.icon className="h-4 w-4 shrink-0" aria-hidden="true" />
-                  <span className="flex-1 truncate">{t(`common:nav.${item.id}` as never)}</span>
-                  <Badge variant="outline" size="sm">
-                    {t('common:sidebar.comingSoon')}
-                  </Badge>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
+        <OperationsOverview />
       </div>
     </>
   );

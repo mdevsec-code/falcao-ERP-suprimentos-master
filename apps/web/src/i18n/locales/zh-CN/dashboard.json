@@ -2,7 +2,7 @@
   "welcome": {
     "eyebrow": "概览",
     "title": "欢迎，{{name}}",
-    "description": "跟踪 Falcão Engenharia 的供应商、产品与采购申请进度。",
+    "description": "在一处跟踪 Falcão Engenharia 的物资、合同、财务和日程。",
     "openApprovals": "打开审批"
   },
   "kpiSection": {
@@ -17,11 +17,46 @@
   },
   "quickLinks": {
     "title": "快捷方式",
-    "newRequest": { "label": "新建申请", "description": "申请材料或服务" },
-    "approvals": { "label": "审批", "description": "处于您环节的申请" },
-    "requests": { "label": "申请", "description": "跟踪完整流程" },
-    "suppliers": { "label": "供应商", "description": "档案、评价与文档" },
-    "products": { "label": "产品目录", "description": "目录与价格历史" }
+    "newRequest": {
+      "label": "新建申请",
+      "description": "申请材料或服务"
+    },
+    "approvals": {
+      "label": "审批",
+      "description": "处于您环节的申请"
+    },
+    "requests": {
+      "label": "申请",
+      "description": "跟踪完整流程"
+    },
+    "suppliers": {
+      "label": "供应商",
+      "description": "档案、评价与文档"
+    },
+    "products": {
+      "label": "产品目录",
+      "description": "目录与价格历史"
+    },
+    "contracts": {
+      "label": "合同",
+      "description": "有效期、补充协议和附件"
+    },
+    "finance": {
+      "label": "财务",
+      "description": "应付款和现金流"
+    },
+    "reimbursements": {
+      "label": "报销",
+      "description": "费用和凭证"
+    },
+    "agenda": {
+      "label": "日程",
+      "description": "交货、拜访和到期事项"
+    },
+    "documents": {
+      "label": "文档",
+      "description": "证明、许可证和有效期"
+    }
   },
   "charts": {
     "pipeline": {
@@ -39,8 +74,20 @@
       "emptyDescription": "登记供应商后即可查看按类别的分布。"
     }
   },
-  "upcoming": {
-    "title": "即将推出的模块",
-    "description": "Falcão 供应管理持续成长中，以下模块正在路上。"
+  "operations": {
+    "pendingTitle": "待办事项",
+    "pendingDescription": "合同、财务和报销中需要关注的事项。",
+    "contractsExpiring": "即将到期的合同",
+    "contractsExpired_other": "{{count}} 份已到期未结束",
+    "payablesOverdue": "逾期应付款",
+    "payablesNext7": "未来 7 天应付",
+    "bills_other": "{{count}} 笔",
+    "reimbursementsToDecide": "等待您审批的报销",
+    "myReimbursementsOpen": "我待审批的报销",
+    "agendaTitle_other": "未来 {{count}} 天",
+    "agendaDescription": "即将到来的安排和到期事项。",
+    "openAgenda": "打开日程",
+    "agendaEmpty": "近期没有安排。",
+    "today": "今天"
   }
 }

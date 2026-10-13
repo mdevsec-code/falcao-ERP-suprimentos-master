@@ -2,7 +2,7 @@
   "welcome": {
     "eyebrow": "Overview",
     "title": "Welcome, {{name}}",
-    "description": "Track Falcão Engenharia's suppliers, products and purchase requests.",
+    "description": "Track supplies, contracts, finance and the calendar of Falcão Engenharia in one place.",
     "openApprovals": "Open approvals"
   },
   "kpiSection": {
@@ -17,11 +17,46 @@
   },
   "quickLinks": {
     "title": "Shortcuts",
-    "newRequest": { "label": "New request", "description": "Request materials or services" },
-    "approvals": { "label": "Approvals", "description": "Requests at your stage" },
-    "requests": { "label": "Requests", "description": "Follow the whole flow" },
-    "suppliers": { "label": "Suppliers", "description": "Records, ratings and documents" },
-    "products": { "label": "Product Catalog", "description": "Catalog and price history" }
+    "newRequest": {
+      "label": "New request",
+      "description": "Request materials or services"
+    },
+    "approvals": {
+      "label": "Approvals",
+      "description": "Requests at your stage"
+    },
+    "requests": {
+      "label": "Requests",
+      "description": "Follow the whole flow"
+    },
+    "suppliers": {
+      "label": "Suppliers",
+      "description": "Records, ratings and documents"
+    },
+    "products": {
+      "label": "Product Catalog",
+      "description": "Catalog and price history"
+    },
+    "contracts": {
+      "label": "Contracts",
+      "description": "Terms, amendments and attachments"
+    },
+    "finance": {
+      "label": "Finance",
+      "description": "Payables and cash flow"
+    },
+    "reimbursements": {
+      "label": "Reimbursements",
+      "description": "Expenses and receipts"
+    },
+    "agenda": {
+      "label": "Calendar",
+      "description": "Deliveries, visits and deadlines"
+    },
+    "documents": {
+      "label": "Documents",
+      "description": "Certificates, permits and expiry"
+    }
   },
   "charts": {
     "pipeline": {
@@ -42,8 +77,23 @@
       "emptyDescription": "Register suppliers to see the breakdown by category."
     }
   },
-  "upcoming": {
-    "title": "Upcoming modules",
-    "description": "Falcão Supplies keeps growing. These modules are on the way."
+  "operations": {
+    "pendingTitle": "Pending items",
+    "pendingDescription": "What needs attention in contracts, finance and reimbursements.",
+    "contractsExpiring": "Contracts expiring",
+    "contractsExpired_one": "{{count}} expired, not closed",
+    "contractsExpired_other": "{{count}} expired, not closed",
+    "payablesOverdue": "Overdue bills",
+    "payablesNext7": "Due in the next 7 days",
+    "bills_one": "{{count}} bill",
+    "bills_other": "{{count}} bills",
+    "reimbursementsToDecide": "Reimbursements awaiting your decision",
+    "myReimbursementsOpen": "My reimbursements awaiting approval",
+    "agendaTitle_one": "Next {{count}} day",
+    "agendaTitle_other": "Next {{count}} days",
+    "agendaDescription": "Upcoming appointments and deadlines.",
+    "openAgenda": "Open calendar",
+    "agendaEmpty": "Nothing scheduled for the coming days.",
+    "today": "Today"
   }
 }

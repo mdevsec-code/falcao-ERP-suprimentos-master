@@ -2,7 +2,7 @@
   "welcome": {
     "eyebrow": "Visão geral",
     "title": "Bem-vindo, {{name}}",
-    "description": "Acompanhe fornecedores, produtos e o andamento das solicitações de compra da Falcão Engenharia.",
+    "description": "Acompanhe suprimentos, contratos, financeiro e a agenda da Falcão Engenharia em um só lugar.",
     "openApprovals": "Abrir aprovações"
   },
   "kpiSection": {
@@ -17,11 +17,46 @@
   },
   "quickLinks": {
     "title": "Atalhos",
-    "newRequest": { "label": "Nova solicitação", "description": "Peça materiais ou serviços" },
-    "approvals": { "label": "Aprovações", "description": "Solicitações na sua etapa" },
-    "requests": { "label": "Solicitações", "description": "Acompanhe todo o fluxo" },
-    "suppliers": { "label": "Fornecedores", "description": "Cadastro, avaliações e documentos" },
-    "products": { "label": "Banco de Produtos", "description": "Catálogo e histórico de preços" }
+    "newRequest": {
+      "label": "Nova solicitação",
+      "description": "Peça materiais ou serviços"
+    },
+    "approvals": {
+      "label": "Aprovações",
+      "description": "Solicitações na sua etapa"
+    },
+    "requests": {
+      "label": "Solicitações",
+      "description": "Acompanhe todo o fluxo"
+    },
+    "suppliers": {
+      "label": "Fornecedores",
+      "description": "Cadastro, avaliações e documentos"
+    },
+    "products": {
+      "label": "Banco de Produtos",
+      "description": "Catálogo e histórico de preços"
+    },
+    "contracts": {
+      "label": "Contratos",
+      "description": "Vigência, aditivos e anexos"
+    },
+    "finance": {
+      "label": "Financeiro",
+      "description": "Contas a pagar e fluxo de caixa"
+    },
+    "reimbursements": {
+      "label": "Reembolsos",
+      "description": "Despesas e comprovantes"
+    },
+    "agenda": {
+      "label": "Agenda",
+      "description": "Entregas, visitas e prazos"
+    },
+    "documents": {
+      "label": "Documentos",
+      "description": "Certidões, licenças e validade"
+    }
   },
   "charts": {
     "pipeline": {
@@ -42,8 +77,23 @@
       "emptyDescription": "Cadastre fornecedores para ver a distribuição por categoria."
     }
   },
-  "upcoming": {
-    "title": "Próximos módulos",
-    "description": "O Falcão Suprimentos continua crescendo. Estes módulos estão a caminho."
+  "operations": {
+    "pendingTitle": "Pendências",
+    "pendingDescription": "O que precisa de atenção em contratos, financeiro e reembolsos.",
+    "contractsExpiring": "Contratos vencendo",
+    "contractsExpired_one": "{{count}} vencido sem encerrar",
+    "contractsExpired_other": "{{count}} vencidos sem encerrar",
+    "payablesOverdue": "Contas vencidas",
+    "payablesNext7": "A pagar nos próximos 7 dias",
+    "bills_one": "{{count}} conta",
+    "bills_other": "{{count}} contas",
+    "reimbursementsToDecide": "Reembolsos aguardando sua decisão",
+    "myReimbursementsOpen": "Meus reembolsos em aprovação",
+    "agendaTitle_one": "Próximo {{count}} dia",
+    "agendaTitle_other": "Próximos {{count}} dias",
+    "agendaDescription": "Compromissos e vencimentos que vêm por aí.",
+    "openAgenda": "Abrir agenda",
+    "agendaEmpty": "Nada agendado para os próximos dias.",
+    "today": "Hoje"
   }
 }
