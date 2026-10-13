@@ -47,6 +47,7 @@
 - [🔌 API](#-api)
 - [🛡️ Segurança](#️-segurança)
 - [🎨 Padrão visual e de código](#-padrão-visual-e-de-código)
+- [📚 Documentação](#-documentação)
 - [📜 Histórico de construção](#-histórico-de-construção)
 - [📍 Estado atual e próximos passos](#-estado-atual-e-próximos-passos)
 
@@ -102,15 +103,15 @@
 
 | Camada | Ferramentas |
 | --- | --- |
-| **Web** (`apps/web`) | React 18 · Vite 5 · TypeScript strict (`noUncheckedIndexedAccess`) · React Router 6 |
+| **Web** (`apps/web`) | React 18 · Vite 5 · TypeScript strict (`noUncheckedIndexedAccess`) · React Router 7 |
 | Estilo e UI | Tailwind CSS 3 sobre tokens em CSS · Radix UI · Lucide · Framer Motion · Recharts |
 | Estado e dados | TanStack Query 5 · Zustand 4 (sessão e preferências) · Axios com refresh token |
 | Formulários | React Hook Form 7 + Zod |
 | i18n | i18next + react-i18next (pt-BR, en-US, zh-CN) |
 | **API** (`apps/api`) | NestJS 10 · Passport JWT · class-validator · helmet · throttler |
-| Banco | PostgreSQL · Prisma 5 |
+| Banco | PostgreSQL 16 · Prisma 5 (mesmo formato do Saúde Ocupacional) |
 | **Compartilhado** | `packages/shared-types` — DTOs, enums e regras de datas usados por API e Web |
-| Qualidade | Vitest + Testing Library · ESLint (`jsx-a11y`) · Prettier · GitHub Actions |
+| Qualidade | Vitest + Testing Library · ESLint (`jsx-a11y`) · Prettier · husky + lint-staged + commitlint · GitHub Actions |
 | Infra local | npm workspaces · Docker Compose (PostgreSQL) |
 
 ---
@@ -290,6 +291,17 @@ Mesmo design system e convenções do [Falcão Saúde Ocupacional](https://githu
 
 ---
 
+## 📚 Documentação
+
+| Documento | Conteúdo |
+| --- | --- |
+| [docs/documentacao-tecnica.html](docs/documentacao-tecnica.html) | Arquitetura, stack comparada com o Saúde Ocupacional, modelo de dados, módulos, autenticação, isolamento por empresa, fluxo de compra, integrações financeiras, uploads e auditoria |
+| [docs/casos-de-uso.html](docs/casos-de-uso.html) | 57 casos de uso em 12 pacotes, com atores, rotas, pré e pós-condições, fluxos e exceções |
+
+Os arquivos são páginas HTML: baixe e abra no navegador (os diagramas usam Mermaid, carregado da CDN).
+
+---
+
 ## 📜 Histórico de construção
 
 1. **Fundação** — multi-tenancy (`Company`/`User`), JWT com access + refresh e RBAC por papel.
@@ -302,6 +314,7 @@ Mesmo design system e convenções do [Falcão Saúde Ocupacional](https://githu
 8. **Contratos, Financeiro, Reembolsos, Documentos e Agenda** — os módulos que faltavam, integrados entre si: aditivo altera o contrato, aprovação de reembolso gera conta a pagar, pagamento fecha o reembolso e os prazos aparecem na agenda.
 9. **Revisão geral e de segurança** — correção de *path traversal* no upload de anexos, bloqueio de uploads executáveis, `helmet`, limite de tentativas no login, condições de corrida em pagamentos/aprovações, injeção de fórmula no CSV e atualização de dependências vulneráveis.
 10. **Dashboard operacional** — pendências e agenda dos próximos dias no lugar do antigo card "próximos módulos"; remoção das telas "em breve"; CI em Node 22 LTS.
+11. **Stack igual à do Saúde Ocupacional** — Prisma 7 → 5 no mesmo formato da plataforma irmã, React Router 7, helmet 7 e os mesmos hooks de commit (husky, lint-staged, commitlint), pré-requisito do hub com login único.
 
 ---
 

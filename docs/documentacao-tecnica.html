@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Arquitetura do Falcão Suprimentos</title>
+<style>
+  /* Layout: índice fixo à esquerda, documento à direita; uma coluna no celular. */
+  :root {
+    --paper: #eef1f5; --surface: #ffffff; --surface-2: #f5f7fa; --line: #d7dde6;
+    --ink: #131c2e; --ink-soft: #55647d; --ink-faint: #75849c;
+    --accent: #2454c7; --accent-soft: #e4ecfc; --warm: #a8571c; --warm-soft: #fbeadd; --good: #0f8a6b;
+    --chip-ink: #ffffff;
+    --a1: #2454c7; --a2: #0f8a6b; --a3: #a8571c; --a4: #6b5bd6; --a5: #b4235a; --a6: #0f7a94; --a7: #5a6478; --a8: #7a5c00;
+    --shadow: 0 1px 2px rgba(19,28,46,0.06), 0 8px 24px -12px rgba(19,28,46,0.18);
+    --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #0d1220; --surface: #141b2c; --surface-2: #182035; --line: #29334a;
+      --ink: #e8ecf5; --ink-soft: #a7b2c8; --ink-faint: #7f8aa5;
+      --accent: #6c93ff; --accent-soft: #1c2740; --warm: #e0965a; --warm-soft: #2c2113; --good: #4fd3a8;
+      --chip-ink: #0d1220;
+      --a1: #6c93ff; --a2: #4fd3a8; --a3: #e0965a; --a4: #b0a1f5; --a5: #f07fa8; --a6: #5cc8e0; --a7: #a7b2c8; --a8: #d9b44a;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #0d1220; --surface: #141b2c; --surface-2: #182035; --line: #29334a;
+    --ink: #e8ecf5; --ink-soft: #a7b2c8; --ink-faint: #7f8aa5;
+    --accent: #6c93ff; --accent-soft: #1c2740; --warm: #e0965a; --warm-soft: #2c2113; --good: #4fd3a8;
+    --chip-ink: #0d1220;
+    --a1: #6c93ff; --a2: #4fd3a8; --a3: #e0965a; --a4: #b0a1f5; --a5: #f07fa8; --a6: #5cc8e0; --a7: #a7b2c8; --a8: #d9b44a;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font-sans); font-size: 15px; line-height: 1.6; }
+  h1, h2, h3, h4, .mono { font-family: var(--font-mono); }
+  h1, h2, h3 { text-wrap: balance; color: var(--ink); }
+  code { font-family: var(--font-mono); background: var(--surface-2); border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; font-size: 0.86em; overflow-wrap: anywhere; }
+  a { color: var(--accent); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+
+  .shell { display: grid; grid-template-columns: 250px minmax(0, 1fr); max-width: 1220px; margin: 0 auto; align-items: start; }
+  aside { position: sticky; top: env(safe-area-inset-top, 0px); max-height: 100vh; overflow-y: auto; padding: 28px 18px 28px 28px; border-right: 1px solid var(--line); }
+  .brand { font-size: 0.68rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-faint); }
+  .brand strong { display: block; font-size: 0.92rem; letter-spacing: 0.02em; color: var(--accent); margin-top: 4px; text-transform: none; }
+  nav.toc { margin-top: 26px; display: flex; flex-direction: column; gap: 2px; }
+  nav.toc a { display: flex; gap: 8px; align-items: baseline; padding: 6px 10px; border-radius: 6px; color: var(--ink-soft); text-decoration: none; font-size: 0.82rem; }
+  nav.toc a:hover { background: var(--surface-2); color: var(--ink); }
+  nav.toc .tag { font-family: var(--font-mono); font-size: 0.68rem; color: var(--ink-faint); min-width: 20px; }
+  .actors { margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 6px; }
+  .actor-key { display: flex; align-items: center; gap: 8px; font-size: 0.76rem; color: var(--ink-soft); }
+  .actor-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .xlink { margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 0.78rem; color: var(--ink-soft); }
+
+  main { padding: 40px 40px 120px; min-width: 0; }
+  .doc-kicker { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+  h1 { font-size: 1.9rem; margin: 6px 0 10px; font-weight: 700; line-height: 1.25; }
+  .doc-meta { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 0.78rem; color: var(--ink-faint); padding-bottom: 24px; border-bottom: 1px solid var(--line); margin-bottom: 32px; }
+  .doc-meta strong { color: var(--ink-soft); }
+  section.intro p { max-width: 70ch; color: var(--ink-soft); margin: 0 0 14px; }
+  section.intro p:first-of-type { color: var(--ink); }
+
+  .sec, .pkg { margin-top: 52px; scroll-margin-top: 24px; }
+  .sec-head, .pkg-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; padding-bottom: 10px; border-bottom: 2px solid var(--ink); margin-bottom: 18px; }
+  .sec-num, .pkg-num { font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent); font-weight: 700; }
+  .sec-head h2, .pkg-head h2 { font-size: 1.24rem; margin: 0; }
+  .sec p { max-width: 74ch; color: var(--ink-soft); }
+  .sec p strong, ul.plain strong { color: var(--ink); }
+  .pkg-actors { display: flex; flex-wrap: wrap; gap: 6px; margin-left: auto; }
+  .pkg-note { color: var(--ink-faint); font-size: 0.84rem; max-width: 70ch; margin: 10px 0 20px; }
+  .actor-chip { font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.03em; padding: 2px 8px; border-radius: 999px; color: var(--chip-ink); white-space: nowrap; }
+
+  figure { margin: 24px 0 32px; }
+  figure .frame { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; box-shadow: var(--shadow); overflow-x: auto; }
+  figure pre.mermaid { margin: 0; display: flex; justify-content: center; font-family: var(--font-mono); font-size: 0.8rem; color: var(--ink-soft); }
+  figcaption { margin-top: 10px; font-size: 0.8rem; color: var(--ink-faint); max-width: 74ch; }
+
+  .table-wrap { overflow-x: auto; margin: 18px 0 28px; }
+  table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; box-shadow: var(--shadow); font-size: 0.86rem; }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { background: var(--surface-2); font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-faint); white-space: nowrap; }
+  td { color: var(--ink-soft); }
+  td strong { color: var(--ink); }
+  tr:last-child td { border-bottom: none; }
+  td.mono { font-family: var(--font-mono); font-size: 0.8rem; color: var(--ink); white-space: nowrap; }
+  .pill { display: inline-block; font-family: var(--font-mono); font-size: 0.66rem; padding: 2px 7px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); white-space: nowrap; margin: 1px 0; }
+  .pill.warm { background: var(--warm-soft); color: var(--warm); }
+  .same { color: var(--good); font-family: var(--font-mono); font-size: 0.74rem; white-space: nowrap; }
+
+  .callout { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 18px 0; box-shadow: var(--shadow); max-width: 80ch; }
+  .callout p { margin: 0; color: var(--ink-soft); }
+  .callout .k { font-family: var(--font-mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); display: block; margin-bottom: 6px; }
+  .callout.warn { border-left-color: var(--warm); }
+  .callout.warn .k { color: var(--warm); }
+  ul.plain { margin: 0; padding-left: 20px; color: var(--ink-soft); display: flex; flex-direction: column; gap: 6px; max-width: 76ch; }
+
+  .uc { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; margin-bottom: 14px; box-shadow: var(--shadow); overflow: hidden; }
+  .uc-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 12px 16px; background: var(--surface-2); border-bottom: 1px solid var(--line); }
+  .uc-id { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; color: var(--accent); flex-shrink: 0; }
+  .uc-head h3 { font-size: 0.96rem; margin: 0; font-weight: 600; flex: 1 1 220px; }
+  .uc-route { font-family: var(--font-mono); font-size: 0.68rem; color: var(--ink-faint); background: var(--paper); border: 1px solid var(--line); border-radius: 4px; padding: 2px 6px; overflow-wrap: anywhere; }
+  .uc-body { display: grid; grid-template-columns: 128px minmax(0, 1fr); }
+  .uc-label { font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-faint); padding: 10px 12px; border-top: 1px solid var(--line); background: var(--surface-2); }
+  .uc-value { font-size: 0.86rem; color: var(--ink-soft); padding: 10px 16px; border-top: 1px solid var(--line); min-width: 0; }
+  .uc-value strong { color: var(--ink); font-weight: 600; }
+  .uc-value ol { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 3px; }
+  .uc-value.alt { color: var(--warm); }
+  .uc-body > :nth-child(1), .uc-body > :nth-child(2) { border-top: none; }
+
+  @media (max-width: 880px) {
+    .shell { grid-template-columns: 1fr; }
+    aside { position: static; max-height: none; border-right: none; border-bottom: 1px solid var(--line); padding: 24px 20px; }
+    main { padding: 28px 20px 100px; }
+    .uc-body { grid-template-columns: 96px minmax(0, 1fr); }
+    .pkg-actors { margin-left: 0; }
+  }
+  ::selection { background: var(--accent-soft); }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+</head>
+<body>
+<div class="shell">
+  <aside>
+    <div class="brand">Documento técnico<strong>Falcão ERP Suprimentos</strong></div>
+    <nav class="toc" aria-label="Sumário">
+      <a href="#visao-geral"><span class="tag">—</span> Visão geral</a>
+      <a href="#s1"><span class="tag">01</span> Arquitetura da solução</a>
+      <a href="#s2"><span class="tag">02</span> Stack tecnológica</a>
+      <a href="#s3"><span class="tag">03</span> Modelo de dados</a>
+      <a href="#s4"><span class="tag">04</span> Módulos da API</a>
+      <a href="#s5"><span class="tag">05</span> Autenticação e autorização</a>
+      <a href="#s6"><span class="tag">06</span> Isolamento por empresa</a>
+      <a href="#s7"><span class="tag">07</span> Fluxo da solicitação de compra</a>
+      <a href="#s8"><span class="tag">08</span> Financeiro e integrações</a>
+      <a href="#s9"><span class="tag">09</span> Arquivos e uploads</a>
+      <a href="#s10"><span class="tag">10</span> Auditoria</a>
+      <a href="#s11"><span class="tag">11</span> Frontend</a>
+      <a href="#s12"><span class="tag">12</span> Qualidade, CI e ambiente</a>
+    </nav>
+    <div class="xlink">Ver também: <a href="casos-de-uso.html">Casos de uso →</a></div>
+  </aside>
+
+  <main>
+    <div id="visao-geral">
+      <div class="doc-kicker">Documentação técnica de arquitetura</div>
+      <h1>Falcão ERP Suprimentos</h1>
+    </div>
+    <div class="doc-meta"><span><strong>NestJS 10 / Prisma 5</strong> API</span><span><strong>React 18 / Vite 5</strong> web</span><span><strong>PostgreSQL 16</strong> banco</span><span>Monorepo npm workspaces</span><span>Mesma stack do Saúde Ocupacional</span></div>
+    <section class="intro"><p>Este documento descreve como o ERP de Suprimentos da Falcão Construções e Engenharia é construído por dentro: arquitetura, modelo de dados, módulos, autenticação e as decisões técnicas que um desenvolvedor precisa conhecer para manter ou evoluir o sistema sem ter acompanhado sua construção.</p><p>O sistema cobre o ciclo de suprimentos de ponta a ponta: fornecedores, produtos com histórico de preços, <strong>solicitações de compra com aprovação em etapas</strong>, contratos com aditivos, contas a pagar, reembolsos, documentos e uma agenda que junta todos os prazos. Ele usa a mesma stack e o mesmo design system do <strong>Falcão Saúde Ocupacional</strong>, para que os dois sistemas possam ser reunidos num hub com login único.</p></section>
+    <div class="sec" id="s1">
+      <div class="sec-head"><span class="sec-num">01</span><h2>Arquitetura da solução</h2></div>
+      <p>Três pacotes num monorepo com <code>npm workspaces</code>. A API concentra toda regra de negócio, autorização e acesso ao banco; o web é uma SPA que só fala com a API por HTTP/JSON; os tipos e regras compartilhadas vivem num pacote próprio, usado pelos dois lados.</p>
+      <figure>
+        <div class="frame">
+          <pre class="mermaid">
+flowchart LR
+  U["Navegador"] -->|"HTTPS · HTML/JS"| WEB["Web · SPA React<br/>(build estático do Vite)"]
+  WEB -->|"JSON · /api/v1<br/>Bearer JWT"| API["API · NestJS 10"]
+  API -->|"Prisma 5"| DB[("PostgreSQL 16")]
+  API -->|"grava e serve<br/>/uploads"| FS[("Disco · UPLOADS_DIR")]
+  ST["packages/shared-types"] -.->|"tipos e regras"| WEB
+  ST -.->|"tipos e regras"| API
+          </pre>
+        </div>
+        <figcaption>Topologia. O navegador nunca acessa o banco nem o disco: arquivos enviados passam pela API, que valida extensão e caminho antes de gravar, e são servidos de volta com cabeçalhos de segurança (seção 09).</figcaption>
+      </figure>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Pacote</th><th>Papel</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">apps/api</td><td>API REST em NestJS: módulos por domínio, guardas de autenticação e papel, Prisma, auditoria e uploads.</td></tr>
+          <tr><td class="mono">apps/web</td><td>SPA em React 18 + Vite 5: telas por módulo, cache de servidor com TanStack Query, sessão em Zustand, 3 idiomas.</td></tr>
+          <tr><td class="mono">packages/shared-types</td><td>Enums, DTOs e regras puras compartilhadas, como a tabela de transições da solicitação de compra e funções de data.</td></tr>
+        </tbody>
+      </table></div>
+
+    </div>
+    <div class="sec" id="s2">
+      <div class="sec-head"><span class="sec-num">02</span><h2>Stack tecnológica</h2></div>
+      <p>A coluna da direita compara com o Falcão Saúde Ocupacional. Os dois sistemas foram alinhados para usar as mesmas bibliotecas nas mesmas versões principais, condição para o hub com login único.</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Camada</th><th>Tecnologia</th><th>Saúde Ocupacional</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Interface</strong></td><td class="mono">React 18 · TypeScript 5 · Vite 5</td><td><span class="same">● igual</span></td></tr>
+          <tr><td><strong>Estilo e componentes</strong></td><td class="mono">Tailwind CSS 3 · Radix UI · lucide-react</td><td><span class="same">● igual</span></td></tr>
+          <tr><td><strong>Dados do servidor</strong></td><td class="mono">TanStack Query 5 · axios</td><td><span class="same">● igual</span></td></tr>
+          <tr><td><strong>Estado local e sessão</strong></td><td class="mono">Zustand</td><td><span class="same">● igual</span></td></tr>
+          <tr><td><strong>Rotas</strong></td><td class="mono">React Router 7</td><td><span class="same">● igual</span></td></tr>
+          <tr><td><strong>Formulários</strong></td><td class="mono">react-hook-form · zod</td><td><span class="same">● igual</span></td></tr>
+          <tr><td><strong>Animação e gráficos</strong></td><td class="mono">framer-motion · recharts · sonner</td><td><span class="same">● igual</span></td></tr>
+          <tr><td><strong>Idiomas</strong></td><td class="mono">i18next (pt-BR, en-US, zh-CN)</td><td><span class="same">● igual</span></td></tr>
+          <tr><td><strong>API</strong></td><td class="mono">NestJS 10 · class-validator · passport-jwt</td><td><span class="same">● igual</span></td></tr>
+          <tr><td><strong>ORM e banco</strong></td><td class="mono">Prisma 5.22 · PostgreSQL 16</td><td><span class="same">● igual</span></td></tr>
+          <tr><td><strong>Proteções HTTP</strong></td><td class="mono">helmet 7 · @nestjs/throttler</td><td><span class="same">● igual</span></td></tr>
+          <tr><td><strong>Qualidade</strong></td><td class="mono">ESLint · Prettier · Vitest · husky · lint-staged · commitlint</td><td><span class="same">● igual</span></td></tr>
+          <tr><td><strong>Organização do repositório</strong></td><td class="mono">monorepo npm workspaces</td><td><span class="same">● diferente: o Saúde é um repositório único com server/</span></td></tr>
+        </tbody>
+      </table></div>
+
+    </div>
+    <div class="sec" id="s3">
+      <div class="sec-head"><span class="sec-num">03</span><h2>Modelo de dados</h2></div>
+      <p>Toda tabela de negócio carrega <code>companyId</code>. O isolamento entre empresas é aplicado na camada de consulta (seção 06), então o schema já suporta várias empresas no mesmo banco. Valores monetários são <code>Decimal(14,2)</code> e datas de negócio (vencimento, vigência) são <code>date</code>, sem hora.</p>
+      <figure>
+        <div class="frame">
+          <pre class="mermaid">
+erDiagram
+  COMPANY ||--o{ USER : "possui"
+  COMPANY ||--o{ SUPPLIER : "possui"
+  COMPANY ||--o{ PRODUCT : "possui"
+  SUPPLIER ||--o{ SUPPLIER_EVALUATION : "recebe nota 1-5"
+  SUPPLIER ||--o{ SUPPLIER_DOCUMENT : "guarda"
+  PRODUCT ||--o{ PRODUCT_PRICE_ENTRY : "histórico de preço"
+  USER ||--o{ PURCHASE_REQUEST : "solicita"
+  PURCHASE_REQUEST ||--o{ PURCHASE_REQUEST_ITEM : "contém"
+  PURCHASE_REQUEST ||--o{ PURCHASE_REQUEST_APPROVAL : "registra etapa"
+  SUPPLIER ||--o{ CONTRACT : "firma"
+  CONTRACT ||--o{ CONTRACT_AMENDMENT : "aditivo"
+  CONTRACT ||--o{ PAYABLE : "gera"
+  PURCHASE_REQUEST ||--o{ PAYABLE : "gera"
+  REIMBURSEMENT ||--o| PAYABLE : "gera ao aprovar"
+  USER ||--o{ REIMBURSEMENT : "pede"
+  CONTRACT ||--o{ DOCUMENT : "anexa"
+  USER ||--o{ AGENDA_EVENT : "cria"
+  USER ||--o{ AUDIT_LOG : "registra"
+  PURCHASE_REQUEST {
+    enum status "7 etapas"
+  }
+  CONTRACT {
+    string numero UK
+    decimal valorTotal
+    date dataFim
+    int alertaDias
+    enum status "VIGENTE SUSPENSO ENCERRADO CANCELADO"
+  }
+  PAYABLE {
+    enum origem "MANUAL PEDIDO CONTRATO REEMBOLSO"
+    decimal valor
+    date vencimento
+    enum status "ABERTO PAGO CANCELADO"
+  }
+  REIMBURSEMENT {
+    enum status "ENVIADO APROVADO REJEITADO PAGO"
+  }
+  DOCUMENT {
+    enum categoria
+    string tags "lista de etiquetas"
+    date validoAte
+  }
+          </pre>
+        </div>
+        <figcaption>Núcleo do modelo (simplificado). Ficaram de fora do diagrama os contatos de fornecedor, o vínculo produto × fornecedor, comentários e anexos das solicitações, itens e anexos de reembolso e os refresh tokens.</figcaption>
+      </figure>
+      <div class="callout"><span class="k">Decisão notável</span><p>Contas a pagar são uma tabela só, com <code>origem</code> e vínculos opcionais a fornecedor, contrato, solicitação de compra ou reembolso. Assim o fluxo de caixa, os indicadores e a agenda leem um único lugar, venha a conta de onde vier. <code>reimbursementId</code> é único: um reembolso aprovado gera no máximo uma conta.</p></div>
+
+    </div>
+    <div class="sec" id="s4">
+      <div class="sec-head"><span class="sec-num">04</span><h2>Módulos da API</h2></div>
+      <p>Cada módulo em <code>apps/api/src/modules/</code> segue o mesmo padrão: <code>controller</code> (rotas, DTOs validados e <code>@Roles</code>), <code>service</code> (regra de negócio) e <code>repository</code> (Prisma). Os papéis por módulo ficam centralizados em <code>common/auth/module-roles.ts</code> e o web espelha a mesma tabela em <code>constants/permissions.ts</code>. Todas as rotas ficam sob <code>/api/v1</code>.</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Módulo</th><th>Responsabilidade</th><th>Leitura</th><th>Escrita</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">auth</td><td>Login, renovação e encerramento de sessão</td><td>público (com limite)</td><td>—</td></tr>
+          <tr><td class="mono">users</td><td>Meu perfil e senha; contas da equipe</td><td>própria conta · ADMIN</td><td><span class="pill warm">ADMIN</span></td></tr>
+          <tr><td class="mono">suppliers</td><td>Fornecedores, contatos, avaliações e documentos</td><td>todos</td><td><span class="pill">ADMIN MANAGER BUYER</span></td></tr>
+          <tr><td class="mono">products</td><td>Catálogo e histórico de preços</td><td>todos</td><td><span class="pill">ADMIN MANAGER BUYER</span></td></tr>
+          <tr><td class="mono">purchase-requests</td><td>Solicitações, etapas, comentários e anexos</td><td>todos</td><td><span class="pill">todos, menos AUDITOR</span> · etapa por papel</td></tr>
+          <tr><td class="mono">contracts</td><td>Contratos, situação e aditivos</td><td><span class="pill">ADMIN MANAGER BUYER FINANCE AUDITOR</span></td><td><span class="pill">ADMIN MANAGER BUYER</span></td></tr>
+          <tr><td class="mono">finance</td><td>Contas a pagar, baixa, nota fiscal, fluxo de caixa</td><td><span class="pill">ADMIN MANAGER FINANCE AUDITOR</span></td><td><span class="pill">ADMIN FINANCE</span></td></tr>
+          <tr><td class="mono">reimbursements</td><td>Pedidos de reembolso e decisão</td><td>próprios · todos para ADMIN MANAGER FINANCE AUDITOR</td><td>pedido: todos, menos AUDITOR · decisão: <span class="pill warm">ADMIN MANAGER</span></td></tr>
+          <tr><td class="mono">documents</td><td>Repositório com categoria, etiquetas e validade</td><td>todos</td><td><span class="pill">ADMIN MANAGER BUYER FINANCE WAREHOUSE</span></td></tr>
+          <tr><td class="mono">agenda</td><td>Prazos de todos os módulos e eventos de obra</td><td>todos (filtrado por papel)</td><td>todos, menos AUDITOR</td></tr>
+          <tr><td class="mono">audit</td><td>Histórico de alterações e indicadores</td><td><span class="pill warm">ADMIN AUDITOR</span></td><td>— (gravado pelo sistema)</td></tr>
+          <tr><td class="mono">health</td><td>Verificação de disponibilidade</td><td>público</td><td>—</td></tr>
+        </tbody>
+      </table></div>
+
+    </div>
+    <div class="sec" id="s5">
+      <div class="sec-head"><span class="sec-num">05</span><h2>Autenticação e autorização</h2></div>
+      <p>A sessão usa dois tokens JWT. O <strong>access token</strong> (15 minutos) vai no cabeçalho <code>Authorization</code> de cada requisição. O <strong>refresh token</strong> (7 dias) só serve para obter um novo par; no banco fica apenas o hash bcrypt dele, e cada uso o revoga (rotação).</p>
+      <figure>
+        <div class="frame">
+          <pre class="mermaid">
+sequenceDiagram
+  participant W as Web (React)
+  participant A as API · Guards
+  participant S as Serviço
+  participant D as PostgreSQL
+  W->>A: POST /auth/login (e-mail, senha)
+  A->>D: busca usuário ativo
+  A->>A: bcrypt.compare
+  A->>D: grava hash do refresh token
+  A-->>W: access 15 min + refresh 7 dias + usuário
+  W->>A: GET /contracts (Bearer access)
+  A->>A: JwtAuthGuard valida assinatura e validade
+  A->>A: RolesGuard confere @Roles do módulo
+  alt papel autorizado
+    A->>S: encaminha
+    S->>D: consulta com companyId
+    S-->>W: 200 JSON
+  else sem permissão
+    A-->>W: 403
+  end
+  W->>A: POST /auth/refresh (ao receber 401)
+  A->>D: revoga o refresh usado e grava o novo
+  A-->>W: novo par de tokens
+          </pre>
+        </div>
+        <figcaption>Fluxo de sessão. No web, várias requisições que recebem 401 ao mesmo tempo esperam uma única renovação compartilhada, em vez de cada uma disparar a sua.</figcaption>
+      </figure>
+      <ul class="plain">
+        <li><strong>Limite de tentativas</strong>: login e renovação aceitam 10 requisições por minuto por IP (<code>@nestjs/throttler</code>).</li>
+        <li><strong>Encerrar sessão</strong> revoga todos os refresh tokens ativos do usuário.</li>
+        <li><strong>Manter conectado</strong>: marcado, a sessão fica no <code>localStorage</code>; desmarcado, no <code>sessionStorage</code>, e some ao fechar a aba.</li>
+        <li><strong>Papéis</strong>: <code>ADMIN</code>, <code>MANAGER</code>, <code>BUYER</code>, <code>FINANCE</code>, <code>WAREHOUSE</code>, <code>REQUESTER</code> e <code>AUDITOR</code>. Esconder um botão no web é conveniência; a regra vale no backend.</li>
+      </ul>
+
+    </div>
+    <div class="sec" id="s6">
+      <div class="sec-head"><span class="sec-num">06</span><h2>Isolamento por empresa</h2></div>
+      <p>O <code>PrismaService.forCompany(companyId)</code> devolve um client estendido (<code>$extends</code>) que injeta o <code>companyId</code> do usuário logado no <code>where</code> de toda leitura, atualização e exclusão, e no <code>data</code> de toda criação, para os modelos de negócio. Um repositório que esqueça o filtro não consegue ler dados de outra empresa.</p>
+      <ul class="plain">
+        <li>Consultas em SQL bruto (fluxo de caixa, agrupamentos) são sempre parametrizadas e filtram por <code>company_id</code> explicitamente.</li>
+        <li>A validação global usa <code>whitelist</code> + <code>forbidNonWhitelisted</code>: um corpo que tente enviar <code>companyId</code> é recusado com 400.</li>
+        <li>Erros conhecidos do Prisma viram respostas HTTP claras: registro inexistente → 404, valor único repetido → 409.</li>
+      </ul>
+
+    </div>
+    <div class="sec" id="s7">
+      <div class="sec-head"><span class="sec-num">07</span><h2>Fluxo da solicitação de compra</h2></div>
+      <p>A solicitação percorre sete situações. Quais mudanças são permitidas e quem pode fazê-las em cada etapa está em <code>packages/shared-types/src/purchase-request-workflow.ts</code>, a mesma tabela usada pela API para validar e pelo web para mostrar só os botões possíveis. <code>ADMIN</code> pode agir em qualquer etapa.</p>
+      <figure>
+        <div class="frame">
+          <pre class="mermaid">
+stateDiagram-v2
+  [*] --> AGUARDANDO_APROVACAO: solicitante abre
+  AGUARDANDO_APROVACAO --> AGUARDANDO_APROVACAO: gestor pede ajuste
+  AGUARDANDO_APROVACAO --> EM_COMPRAS: gestor aprova
+  EM_COMPRAS --> EM_COTACAO: comprador
+  EM_COTACAO --> PEDIDO_REALIZADO: comprador
+  PEDIDO_REALIZADO --> AGUARDANDO_RECEBIMENTO: comprador ou almoxarifado
+  AGUARDANDO_RECEBIMENTO --> FINALIZADO: almoxarifado
+  AGUARDANDO_APROVACAO --> REJEITADO
+  EM_COMPRAS --> REJEITADO
+  EM_COTACAO --> REJEITADO
+  PEDIDO_REALIZADO --> REJEITADO
+  AGUARDANDO_RECEBIMENTO --> REJEITADO
+  FINALIZADO --> [*]
+  REJEITADO --> [*]
+          </pre>
+        </div>
+        <figcaption>Máquina de estados da solicitação. Cada mudança grava um registro de aprovação com a ação (<code>APPROVE</code>, <code>REJECT</code> ou <code>REQUEST_CHANGES</code>), quem fez e o comentário, que formam a linha do tempo da solicitação.</figcaption>
+      </figure>
+      <div class="callout"><span class="k">Regra de edição</span><p>Só o autor edita a solicitação, e só enquanto ela está em <code>AGUARDANDO_APROVACAO</code>. Depois da aprovação, mudanças acontecem por comentários e pela própria linha do tempo.</p></div>
+
+    </div>
+    <div class="sec" id="s8">
+      <div class="sec-head"><span class="sec-num">08</span><h2>Financeiro e integrações</h2></div>
+      <p>Os módulos se conectam por dados, sem filas nem jobs em segundo plano: tudo acontece na própria requisição.</p>
+      <figure>
+        <div class="frame">
+          <pre class="mermaid">
+flowchart LR
+  PR["Solicitação de compra"] -->|"conta com origem PEDIDO"| PAY["Contas a pagar"]
+  CT["Contrato"] -->|"conta com origem CONTRATO"| PAY
+  RB["Reembolso aprovado"] -->|"gera conta automaticamente"| PAY
+  PAY -->|"vencimentos"| AG["Agenda"]
+  CT -->|"fim de vigência"| AG
+  DOC["Documento com validade"] -->|"vencimento"| AG
+  EV["Evento de obra"] --> AG
+          </pre>
+        </div>
+        <figcaption>Integrações entre módulos. A agenda não guarda cópia dos prazos: consulta as tabelas de origem a cada pedido, então nunca fica desatualizada.</figcaption>
+      </figure>
+      <ul class="plain">
+        <li><strong>Situações da conta</strong>: só contas <code>ABERTO</code> podem ser editadas, baixadas ou canceladas. A baixa não aceita data de pagamento no futuro; conta cancelada não recebe nota fiscal; conta de reembolso aprovado não pode ser cancelada nem ter o valor alterado.</li>
+        <li><strong>Corridas</strong>: baixa, cancelamento e decisão de reembolso usam <code>updateMany</code> condicionado à situação atual. Se duas pessoas clicarem ao mesmo tempo, só uma operação vale e a outra recebe erro, sem pagamento duplicado.</li>
+        <li><strong>Reembolso aprovado</strong> cria a conta a pagar na mesma operação, com o total dos itens e vencimento padrão de 7 dias. Ninguém decide o próprio reembolso, e rejeitar exige motivo.</li>
+        <li><strong>Agenda</strong>: junta vencimentos de contas, fim de contratos, validade de documentos e eventos criados pela equipe, num intervalo de até 92 dias por consulta. Cada usuário só vê prazos dos módulos que pode ler.</li>
+        <li><strong>Contratos</strong>: <code>VIGENTE ↔ SUSPENSO</code>, e ambos podem ir para <code>ENCERRADO</code> ou <code>CANCELADO</code>, que são finais. Aditivos alteram valor e/ou data de término e são recusados se deixarem o valor negativo.</li>
+      </ul>
+
+    </div>
+    <div class="sec" id="s9">
+      <div class="sec-head"><span class="sec-num">09</span><h2>Arquivos e uploads</h2></div>
+      <p>Anexos de solicitações, reembolsos, fornecedores e o repositório de documentos passam pelo mesmo <code>StorageService</code>, que hoje grava em disco local (<code>UPLOADS_DIR</code>).</p>
+      <ul class="plain">
+        <li><strong>Lista de extensões permitidas</strong> (<code>upload-policy.ts</code>): PDF, imagens, textos, planilhas, documentos do Office/LibreOffice, DWG/DXF e ZIP. Ficam de fora HTML, SVG, JS e qualquer formato que o navegador executaria, que viraria XSS armazenado.</li>
+        <li><strong>Caminho seguro</strong>: o provedor confere que o destino final continua dentro da pasta de uploads antes de gravar ou apagar (<code>insideRoot</code>).</li>
+        <li><strong>Entrega</strong>: <code>/uploads</code> responde com <code>X-Content-Type-Options: nosniff</code>; PDF, imagens e texto abrem no navegador, o resto vai como download, sempre com CSP <code>sandbox</code>.</li>
+        <li><strong>Busca por conteúdo</strong>: o texto de arquivos txt, csv, md, json, xml e log é extraído no envio e guardado em <code>Document.conteudo</code>.</li>
+        <li><strong>Exportação CSV</strong>: células que começam com <code>=</code>, <code>+</code>, <code>-</code> ou <code>@</code> são neutralizadas para não virarem fórmula no Excel.</li>
+      </ul>
+
+    </div>
+    <div class="sec" id="s10">
+      <div class="sec-head"><span class="sec-num">10</span><h2>Auditoria</h2></div>
+      <p>Um interceptor transversal grava toda criação, alteração e exclusão feita por usuário autenticado: quem, quando, qual registro e um retrato dos dados. Campos sensíveis, como o hash de senha, são removidos antes de gravar. A consulta, com filtros por texto, período, ação, tipo de registro e pessoa, e os indicadores ficam restritos a <code>ADMIN</code> e <code>AUDITOR</code>.</p>
+
+    </div>
+    <div class="sec" id="s11">
+      <div class="sec-head"><span class="sec-num">11</span><h2>Frontend</h2></div>
+      <p>Organizado por funcionalidade em <code>apps/web/src/features/</code>: auth, dashboard, suppliers, products, purchase-requests, contracts, finance, reimbursements, documents, agenda, users, audit e profile. O visual segue a linguagem "planta técnica" do Saúde Ocupacional.</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Tipo de estado</th><th>Ferramenta</th></tr></thead>
+        <tbody>
+          <tr><td>Dados do servidor (listas, detalhes, indicadores)</td><td>TanStack Query, com invalidação por chave após cada escrita</td></tr>
+          <tr><td>Sessão (usuário e tokens)</td><td>Zustand com persistência no armazenamento escolhido em "manter conectado"</td></tr>
+          <tr><td>Formulários</td><td>react-hook-form + schemas zod</td></tr>
+          <tr><td>Permissões na interface</td><td><code>constants/permissions.ts</code>, espelho de <code>module-roles.ts</code></td></tr>
+          <tr><td>Textos</td><td>i18next com pt-BR, en-US e zh-CN, um arquivo por módulo</td></tr>
+        </tbody>
+      </table></div>
+      <p>O painel inicial reúne pendências por papel (aprovações, contas vencendo, reembolsos aguardando decisão) e os próximos itens da agenda.</p>
+
+    </div>
+    <div class="sec" id="s12">
+      <div class="sec-head"><span class="sec-num">12</span><h2>Qualidade, CI e ambiente</h2></div>
+      <ul class="plain">
+        <li><strong>CI</strong> (GitHub Actions, Node 22): o job do web roda formatação, lint, typecheck, testes e build; o da API gera o client do Prisma e roda lint, typecheck e build.</li>
+        <li><strong>Hooks de commit</strong>: <code>lint-staged</code> formata e corrige os arquivos alterados e o <code>commitlint</code> exige mensagens no padrão Conventional Commits, com a mesma configuração do Saúde.</li>
+        <li><strong>Banco local</strong>: <code>docker compose up -d</code> sobe um PostgreSQL 16. Em seguida, <code>npm run db:migrate</code> e <code>npm run db:seed</code> criam as tabelas e os dados de exemplo.</li>
+        <li><strong>Variáveis</strong>: o <code>.env</code> fica na raiz do monorepo (<code>.env.example</code> como modelo). A API e os comandos do Prisma leem esse arquivo.</li>
+      </ul>
+
+    </div>
+
+  </main>
+</div>
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";
+  const dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  mermaid.initialize({ startOnLoad: true, theme: dark ? "dark" : "neutral", fontFamily: "IBM Plex Mono, monospace" });
+</script>
+</body>
+</html>
