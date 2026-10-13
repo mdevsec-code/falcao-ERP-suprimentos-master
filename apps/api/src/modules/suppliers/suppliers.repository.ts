@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import type { Prisma, SupplierCategory } from "../../../generated/prisma";
+import type { Prisma, SupplierCategory } from "@prisma/client";
 import { PrismaService } from "../../database/prisma.service";
 import { CreateSupplierDto } from "./dto/create-supplier.dto";
 import { UpdateSupplierDto } from "./dto/update-supplier.dto";

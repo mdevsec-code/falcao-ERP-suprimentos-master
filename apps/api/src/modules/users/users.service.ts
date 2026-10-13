@@ -9,7 +9,7 @@ import type {
   UserStatsDto,
   UserSummaryDto,
 } from "@falcao-erp/shared-types";
-import type { User } from "../../../generated/prisma";
+import type { User } from "@prisma/client";
 import { PrismaService } from "../../database/prisma.service";
 import { ChangePasswordDto } from "./dto/change-password.dto";
 import { CreateUserDto } from "./dto/create-user.dto";

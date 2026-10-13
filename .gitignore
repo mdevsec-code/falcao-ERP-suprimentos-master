@@ -5,7 +5,6 @@ build/
 .env.local
 apps/api/uploads/*
 !apps/api/uploads/.gitkeep
-apps/api/generated/
 *.log
 .DS_Store
 .vscode/*

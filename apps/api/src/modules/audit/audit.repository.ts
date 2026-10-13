@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import type { AuditAction, Prisma } from "../../../generated/prisma";
+import type { AuditAction, Prisma } from "@prisma/client";
 import { PrismaService } from "../../database/prisma.service";
 
 export interface AuditLogFilters {

@@ -1,5 +1,5 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
-import { Prisma, type ReimbursementStatus } from "../../../generated/prisma";
+import { Prisma, type ReimbursementStatus } from "@prisma/client";
 import { PrismaService } from "../../database/prisma.service";
 import { fromDateOnly } from "../../common/utils/date-only";
 import { CreateReimbursementDto } from "./dto/create-reimbursement.dto";

@@ -8,10 +8,10 @@
     "start": "node dist/main.js",
     "lint": "eslint \"src/**/*.ts\"",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev",
-    "prisma:deploy": "prisma migrate deploy",
-    "prisma:seed": "tsx prisma/seed.ts",
-    "prisma:studio": "prisma studio",
+    "prisma:migrate": "dotenv -e .env -e ../../.env -- prisma migrate dev",
+    "prisma:deploy": "dotenv -e .env -e ../../.env -- prisma migrate deploy",
+    "prisma:seed": "dotenv -e .env -e ../../.env -- tsx prisma/seed.ts",
+    "prisma:studio": "dotenv -e .env -e ../../.env -- prisma studio",
     "typecheck": "tsc -p tsconfig.build.json --noEmit"
   },
   "dependencies": {
@@ -25,16 +25,14 @@
     "@nestjs/platform-express": "^10.4.15",
     "@nestjs/serve-static": "^4.0.2",
     "@nestjs/throttler": "^6.7.1",
-    "@prisma/adapter-pg": "^7.10.0",
-    "@prisma/client": "^7.10.0",
+    "@prisma/client": "^5.22.0",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "dotenv": "^16.4.5",
-    "helmet": "^8.3.0",
+    "helmet": "^7.1.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
-    "pg": "^8.22.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "zod": "^3.23.8"
@@ -44,17 +42,20 @@
     "@nestjs/schematics": "^10.2.3",
     "@nestjs/testing": "^10.4.15",
     "@types/bcryptjs": "^2.4.6",
-    "@types/express": "^5.0.0",
+    "@types/express": "^4.17.21",
     "@types/multer": "^1.4.12",
     "@types/node": "^22.9.0",
     "@types/passport-jwt": "^4.0.1",
-    "@types/pg": "^8.20.4",
     "@typescript-eslint/eslint-plugin": "^8.14.0",
     "@typescript-eslint/parser": "^8.14.0",
+    "dotenv-cli": "^7.4.2",
     "eslint": "^8.57.1",
-    "prisma": "^7.10.0",
+    "prisma": "^5.22.0",
     "source-map-support": "^0.5.21",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   }
 }

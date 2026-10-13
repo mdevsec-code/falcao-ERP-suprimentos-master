@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import type { Prisma, PurchaseRequestStatus } from "../../../generated/prisma";
+import type { Prisma, PurchaseRequestStatus } from "@prisma/client";
 import { PrismaService } from "../../database/prisma.service";
 import { ChangeStatusDto } from "./dto/change-status.dto";
 import { CreatePurchaseRequestDto } from "./dto/create-purchase-request.dto";

@@ -1,16 +1,13 @@
 import { config } from "dotenv";
 // `.env` do app primeiro; depois o da raiz do monorepo.
 config({ path: [".env", "../../.env"] });
-import { PrismaPg } from "@prisma/adapter-pg";
 import * as bcrypt from "bcryptjs";
 import { randomUUID } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
 import { extname, join } from "node:path";
-import { PrismaClient } from "../generated/prisma";
+import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient({
-  adapter: new PrismaPg(process.env.DATABASE_URL as string),
-});
+const prisma = new PrismaClient();
 
 async function main() {
   const company = await prisma.company.upsert({

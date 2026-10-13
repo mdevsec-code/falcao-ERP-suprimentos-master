@@ -11,8 +11,8 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# O Prisma 7 lê a URL do banco na configuração (prisma.config.ts) até para
-# gerar o client — nenhum job aqui conecta de fato a um banco.
+# O schema do Prisma referencia env("DATABASE_URL"); nenhum job aqui conecta
+# de fato a um banco, a URL só precisa existir.
 env:
   DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
 

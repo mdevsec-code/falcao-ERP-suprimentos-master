@@ -1,7 +1,5 @@
 import { Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "../../generated/prisma";
+import { PrismaClient } from "@prisma/client";
 
 /**
  * Every tenant-scoped model gets its `where`/`data` injected with the
@@ -10,10 +8,6 @@ import { PrismaClient } from "../../generated/prisma";
  */
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
-  constructor(config: ConfigService) {
-    super({ adapter: new PrismaPg(config.getOrThrow<string>("DATABASE_URL")) });
-  }
-
   async onModuleInit() {
     await this.$connect();
   }

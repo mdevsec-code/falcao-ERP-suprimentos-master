@@ -1,10 +1,15 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  provider   = "prisma-client-js"
+  // "binary" roda o motor do Prisma como processo separado em vez de
+  // carregar um .dll.node dentro do Node — evita um bug comum no Windows
+  // onde antivírus/Defender corrompem o carregamento da lib nativa
+  // ("... is not a valid Win32 application"). Mesmo ajuste do Saúde Ocupacional.
+  engineType = "binary"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 // ─────────────────────────────────────────────────────────────

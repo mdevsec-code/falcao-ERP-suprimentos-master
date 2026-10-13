@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { Prisma, type ContractStatus } from "../../../generated/prisma";
+import { Prisma, type ContractStatus } from "@prisma/client";
 import { PrismaService } from "../../database/prisma.service";
 import { fromDateOnly } from "../../common/utils/date-only";
 

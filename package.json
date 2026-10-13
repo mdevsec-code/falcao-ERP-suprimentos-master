@@ -24,23 +24,39 @@
     "db:down": "docker compose down",
     "db:migrate": "npm run prisma:migrate -w apps/api",
     "db:seed": "npm run prisma:seed -w apps/api",
-    "db:studio": "npm run prisma:studio -w apps/api"
+    "db:studio": "npm run prisma:studio -w apps/api",
+    "prepare": "husky",
+    "coverage": "npm run coverage -w apps/web"
   },
   "devDependencies": {
-    "concurrently": "^9.1.0"
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "concurrently": "^9.1.0",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
+    "typescript": "^5.6.3"
   },
   "allowScripts": {
     "@nestjs/core@10.4.22": true,
-    "@prisma/client@7.10.0": true,
-    "@prisma/engines@7.10.0": true,
-    "esbuild@0.28.2": true,
+    "@prisma/client@5.22.0": true,
+    "@prisma/engines@5.22.0": true,
     "esbuild@0.21.5": true,
-    "prisma@7.10.0": true
+    "esbuild@0.28.2": true,
+    "prisma@5.22.0": true
   },
   "overrides": {
     "multer": "^2.4.0",
     "body-parser": "~1.20.8",
     "lodash": "^4.18.1",
     "qs": "^6.16.0"
+  },
+  "lint-staged": {
+    "apps/web/**/*.{ts,tsx,js,cjs,mjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "apps/web/**/*.{json,md,css,html}": [
+      "prettier --write"
+    ]
   }
 }

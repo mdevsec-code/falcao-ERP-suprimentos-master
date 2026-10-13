@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { Prisma, type DocumentCategory } from "../../../generated/prisma";
+import { Prisma, type DocumentCategory } from "@prisma/client";
 import { PrismaService } from "../../database/prisma.service";
 import { fromDateOnly } from "../../common/utils/date-only";
 

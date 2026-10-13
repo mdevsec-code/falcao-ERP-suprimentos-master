@@ -6,7 +6,7 @@ import {
   NestInterceptor,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import type { Prisma } from "../../../generated/prisma";
+import type { Prisma } from "@prisma/client";
 import { Observable, tap } from "rxjs";
 import { PrismaService } from "../../database/prisma.service";
 import { AUDIT_LOG_KEY, AuditLogMetadata } from "../decorators/audit-log.decorator";

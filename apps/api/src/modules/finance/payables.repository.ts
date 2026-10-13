@@ -1,5 +1,5 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
-import { Prisma, type PayableSource, type PayableStatus, type PaymentMethod } from "../../../generated/prisma";
+import { Prisma, type PayableSource, type PayableStatus, type PaymentMethod } from "@prisma/client";
 import { PrismaService } from "../../database/prisma.service";
 import { fromDateOnly } from "../../common/utils/date-only";
 

@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import type { Prisma, Role, User } from "../../../generated/prisma";
+import type { Prisma, Role, User } from "@prisma/client";
 import { PrismaService } from "../../database/prisma.service";
 
 export interface UserFilters {

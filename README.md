@@ -108,7 +108,7 @@
 | Formulários | React Hook Form 7 + Zod |
 | i18n | i18next + react-i18next (pt-BR, en-US, zh-CN) |
 | **API** (`apps/api`) | NestJS 10 · Passport JWT · class-validator · helmet · throttler |
-| Banco | PostgreSQL · Prisma 7 (`@prisma/adapter-pg`) |
+| Banco | PostgreSQL · Prisma 5 |
 | **Compartilhado** | `packages/shared-types` — DTOs, enums e regras de datas usados por API e Web |
 | Qualidade | Vitest + Testing Library · ESLint (`jsx-a11y`) · Prettier · GitHub Actions |
 | Infra local | npm workspaces · Docker Compose (PostgreSQL) |
