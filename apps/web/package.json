@@ -34,6 +34,7 @@
     "@tanstack/react-query-devtools": "^5.59.20",
     "axios": "^1.7.7",
     "clsx": "^2.1.1",
+    "exceljs": "^4.4.0",
     "framer-motion": "^11.11.17",
     "i18next": "^23.16.0",
     "i18next-browser-languagedetector": "^8.0.0",

@@ -21,6 +21,7 @@ export type {
   PurchaseRequestAttachmentDto,
   PurchaseRequestCommentDto,
 } from '@falcao-erp/shared-types';
+import { MAX_UPLOAD_BYTES as UPLOAD_LIMIT_BYTES } from '@/constants/uploads';
 
 export { PurchaseRequestStatus };
 
@@ -40,7 +41,7 @@ export interface PurchaseRequestFilters {
 export const MAX_PAGE_SIZE = 100;
 
 /** Limite de upload da API (`addMaxSizeValidator` no controller). */
-export const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
+export const MAX_UPLOAD_BYTES = UPLOAD_LIMIT_BYTES;
 
 /**
  * Fila de "Aprovações" por papel: em quais etapas do fluxo cada perfil
@@ -78,6 +79,8 @@ export const purchaseRequestItemSchema = z.object({
         .refine(decimal2, i18n.t('validation:maxDecimals', { count: 2 })),
     ])
     .optional(),
+  marca: optionalText(80),
+  referencia: optionalText(80),
 });
 
 export const purchaseRequestFormSchema = z.object({
@@ -103,6 +106,8 @@ export interface PurchaseRequestPayload {
     quantity: number;
     unit: string;
     estimatedPrice?: number;
+    marca?: string;
+    referencia?: string;
   }[];
 }
 
@@ -117,6 +122,8 @@ export function fromFormInput(input: PurchaseRequestFormInput): PurchaseRequestP
       quantity: Number(item.quantity),
       unit: item.unit,
       estimatedPrice: toOptionalNumber(item.estimatedPrice),
+      marca: emptyToUndefined(item.marca),
+      referencia: emptyToUndefined(item.referencia),
     })),
   };
 }

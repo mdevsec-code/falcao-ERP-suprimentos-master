@@ -9,25 +9,45 @@
     "backToList": "Ver produtos",
     "deactivate": "Desativar",
     "reactivate": "Reativar",
-    "addPrice": "Registrar preço"
+    "addPrice": "Registrar preço",
+    "disciplines": "Disciplinas"
   },
   "kpi": {
     "title": "Indicadores de produtos",
     "total": "Cadastrados",
     "active": "Ativos",
     "inactive": "Inativos",
-    "categories": "Categorias"
+    "categories": "Categorias",
+    "disciplines": "Disciplinas em uso"
   },
   "filters": {
     "title": "Filtros",
     "search": {
       "label": "Buscar",
-      "placeholder": "Código, nome ou marca…"
+      "placeholder": "Código, nome, marca ou referência…"
     },
-    "category": { "label": "Categoria" },
+    "category": {
+      "label": "Categoria"
+    },
     "allCategories": "Todas as categorias",
     "chipCategory": "Categoria: {{value}}",
-    "chipSearch": "Busca: {{value}}"
+    "chipSearch": "Busca: {{value}}",
+    "discipline": {
+      "label": "Disciplina"
+    },
+    "allDisciplines": "Todas",
+    "noDiscipline": "Sem disciplina",
+    "brand": {
+      "label": "Marca",
+      "placeholder": "Ex.: WEG"
+    },
+    "supplier": {
+      "label": "Fornecedor"
+    },
+    "allSuppliers": "Todos os fornecedores",
+    "chipDiscipline": "Disciplina: {{value}}",
+    "chipBrand": "Marca: {{value}}",
+    "chipSupplier": "Fornecedor: {{value}}"
   },
   "table": {
     "product": "Produto",
@@ -35,7 +55,10 @@
     "unit": "Unidade",
     "primarySupplier": "Fornecedor principal",
     "lastPrice": "Último preço",
-    "status": "Status"
+    "status": "Status",
+    "discipline": "Disciplina",
+    "lastPriceDetail": "{{quantity}} {{unit}} em {{date}}",
+    "ref": "Ref. {{value}}"
   },
   "empty": {
     "title": "Nenhum produto cadastrado",
@@ -74,15 +97,19 @@
       "date": "Data",
       "supplier": "Fornecedor",
       "price": "Preço",
-      "variation": "Variação"
+      "variation": "Variação",
+      "brandRef": "Marca / referência",
+      "quantity": "Qtd."
     },
     "dialog": {
       "title": "Registrar preço",
       "description": "Adicione um novo ponto ao histórico de preços deste produto.",
       "price": "Preço (R$)",
       "supplier": "Fornecedor",
-      "submit": "Registrar"
-    }
+      "submit": "Registrar",
+      "quantity": "Quantidade"
+    },
+    "fromQuotation": "Cotação nº {{numero}}"
   },
   "form": {
     "createTitle": "Novo produto",
@@ -108,16 +135,20 @@
       "initialPrice": "Preço inicial (R$)",
       "observacoes": "Observações",
       "primarySupplier": "Fornecedor principal",
-      "alternativeSuppliers": "Fornecedores alternativos"
+      "alternativeSuppliers": "Fornecedores alternativos",
+      "disciplina": "Disciplina",
+      "referencia": "Referência"
     },
     "hints": {
       "leadTimeDays": "Prazo médio de entrega",
-      "initialPrice": "Inicia o histórico de preços"
+      "initialPrice": "Inicia o histórico de preços",
+      "referencia": "Código do fabricante (part number)"
     },
     "placeholders": {
       "category": "Selecione a categoria",
       "unit": "Selecione a unidade"
-    }
+    },
+    "noDiscipline": "Sem disciplina"
   },
   "confirm": {
     "deactivateTitle": "Desativar produto",
@@ -133,6 +164,23 @@
     "deactivated": "Produto desativado.",
     "reactivated": "Produto reativado.",
     "priceAdded": "Preço registrado.",
-    "priceError": "Não foi possível registrar o preço."
+    "priceError": "Não foi possível registrar o preço.",
+    "catalogFromItem": "Item incluído no catálogo e ligado à solicitação."
+  },
+  "disciplines": {
+    "title": "Disciplinas",
+    "description": "Agrupe o catálogo pela disciplina da obra (Civil, Elétrica…). Disciplinas desativadas somem dos filtros, mas os produtos continuam ligados a elas.",
+    "newLabel": "Nova disciplina",
+    "newPlaceholder": "Ex.: Telecom",
+    "add": "Adicionar",
+    "renameAria": "Renomear {{name}}",
+    "activeAria": "Ativar ou desativar {{name}}",
+    "productCount_one": "{{count}} produto",
+    "productCount_other": "{{count}} produtos",
+    "inactiveHint": "Desativar não apaga nada: a disciplina só deixa de aparecer nos filtros e cadastros.",
+    "toast": {
+      "created": "Disciplina criada.",
+      "updated": "Disciplina atualizada."
+    }
   }
 }

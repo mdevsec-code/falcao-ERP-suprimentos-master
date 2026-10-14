@@ -148,6 +148,21 @@
     "EVENT": "事件",
     "PAYABLE_DUE": "付款到期",
     "CONTRACT_END": "合同到期",
-    "DOCUMENT_EXPIRY": "文档到期"
+    "DOCUMENT_EXPIRY": "文档到期",
+    "QUOTATION_DUE": "询价截止"
+  },
+  "quotationStatus": {
+    "ABERTA": "进行中",
+    "ENCERRADA": "已结束",
+    "CANCELADA": "已取消"
+  },
+  "quotationSupplierStatus": {
+    "CONVIDADO": "待回复",
+    "RESPONDIDO": "已回复",
+    "RECUSOU": "已拒绝"
+  },
+  "priceEntrySource": {
+    "MANUAL": "手工",
+    "COTACAO": "询价"
   }
 }

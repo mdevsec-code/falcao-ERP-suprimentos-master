@@ -148,6 +148,21 @@
     "EVENT": "Evento",
     "PAYABLE_DUE": "Vencimento de conta",
     "CONTRACT_END": "Fim de contrato",
-    "DOCUMENT_EXPIRY": "Validade de documento"
+    "DOCUMENT_EXPIRY": "Validade de documento",
+    "QUOTATION_DUE": "Prazo de cotação"
+  },
+  "quotationStatus": {
+    "ABERTA": "Aberta",
+    "ENCERRADA": "Encerrada",
+    "CANCELADA": "Cancelada"
+  },
+  "quotationSupplierStatus": {
+    "CONVIDADO": "Aguardando",
+    "RESPONDIDO": "Respondeu",
+    "RECUSOU": "Recusou"
+  },
+  "priceEntrySource": {
+    "MANUAL": "Manual",
+    "COTACAO": "Cotação"
   }
 }

@@ -33,6 +33,8 @@ interface PayableDialogProps {
   onOpenChange: (open: boolean) => void;
   /** `null` = lançar nova conta; uma conta = editar. */
   payable: PayableDto | null;
+  /** Valores sugeridos numa conta nova (ex.: lidos do XML da NF-e). */
+  initialValues?: Partial<PayableFormInput> | null;
   onSubmit: (values: PayableFormInput) => void;
   isSubmitting: boolean;
 }
@@ -41,6 +43,7 @@ export function PayableDialog({
   open,
   onOpenChange,
   payable,
+  initialValues,
   onSubmit,
   isSubmitting,
 }: PayableDialogProps) {
@@ -62,8 +65,8 @@ export function PayableDialog({
   });
 
   useEffect(() => {
-    if (open) reset(payable ? toPayableForm(payable) : emptyPayableForm());
-  }, [open, payable, reset]);
+    if (open) reset(payable ? toPayableForm(payable) : { ...emptyPayableForm(), ...initialValues });
+  }, [open, payable, initialValues, reset]);
 
   const { data: suppliersPage } = useActiveSupplierOptions();
   const { data: contractsPage } = useActiveContractOptions(open && !isReimbursement);

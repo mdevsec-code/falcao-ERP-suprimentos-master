@@ -18,6 +18,7 @@ export type {
   ReimbursementStatsDto,
   ReimbursementSummaryDto,
 } from '@falcao-erp/shared-types';
+import { MAX_UPLOAD_BYTES as UPLOAD_LIMIT_BYTES } from '@/constants/uploads';
 
 export interface ReimbursementListParams {
   page?: number;
@@ -34,7 +35,7 @@ export interface ReimbursementFilters {
 }
 
 /** Limite de upload da API (comprovantes). */
-export const MAX_RECEIPT_BYTES = 10 * 1024 * 1024;
+export const MAX_RECEIPT_BYTES = UPLOAD_LIMIT_BYTES;
 
 export const expenseItemSchema = z.object({
   data: dateOnlySchema.refine((v) => v <= toDateOnly(), i18n.t('validation:futureDate')),

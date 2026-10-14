@@ -59,7 +59,7 @@
   },
   "dialog": {
     "uploadTitle": "Enviar documento",
-    "uploadDescription": "Até 20 MB. Arquivos de texto ficam pesquisáveis pelo conteúdo.",
+    "uploadDescription": "Até 50 MB. Arquivos de texto ficam pesquisáveis pelo conteúdo.",
     "editTitle": "Editar documento",
     "editDescription": "Arquivo: {{name}}. Para trocar o arquivo, envie um novo documento.",
     "file": "Arquivo",

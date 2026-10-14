@@ -10,6 +10,7 @@ import type {
 } from '@falcao-erp/shared-types';
 import { httpClient } from '@/services/http/client';
 import type { PurchaseRequestListParams, PurchaseRequestPayload } from '../types';
+import { UPLOAD_TIMEOUT_MS } from '@/constants/uploads';
 
 export const purchaseRequestsApi = {
   async list(
@@ -70,6 +71,7 @@ export const purchaseRequestsApi = {
     const { data } = await httpClient.post<PurchaseRequestAttachmentDto>(
       `/purchase-requests/${id}/attachments`,
       formData,
+      { timeout: UPLOAD_TIMEOUT_MS },
     );
     return data;
   },

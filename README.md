@@ -79,12 +79,15 @@
 
 **Suprimentos**
 - **Fornecedores** — cadastro completo (razão social, CNPJ, categoria, localização), contatos, avaliações de desempenho e upload de documentos.
-- **Banco de produtos** — catálogo por empresa, fornecedor primário e alternativos, histórico de preços por fornecedor e unidade de medida.
+- **Banco de produtos** — catálogo por empresa com **disciplina** (Civil, Elétrica, Mecânica, Eletromecânica, Hidráulica, Instrumentação — lista editável), marca e **referência** do fabricante; filtros por disciplina, categoria, marca e fornecedor; histórico de preços com **quantidade, marca, referência e origem** (manual ou cotação).
+- **Catálogo vivo** — o solicitante escolhe os itens do catálogo (com marca, referência e último preço pago) ao montar o pedido; o que ele descrever à mão, compras inclui no catálogo com um clique, e o item já fica ligado ao produto.
 - **Solicitações de compra** — fluxo `aguardando aprovação → em compras → em cotação → pedido realizado → aguardando recebimento → finalizado` (ou rejeição), com itens, comentários, anexos, trilha de aprovações e fila "Aprovações" por papel.
+- **Cotações (mapa de cotação)** — abertas a partir da solicitação aprovada; cada fornecedor recebe um **link próprio, sem login**, com a descrição dos materiais, e responde preço, marca, referência, prazo, pagamento e frete (ou recusa). O comprador pode lançar propostas recebidas por e-mail. O mapa coloca os **fornecedores lado a lado**, destaca o menor preço, mostra a **variação contra o último preço pago**, totais com frete, ranking e economia; o vencedor é escolhido por item e, ao encerrar, os preços entram no histórico do catálogo. Exporta o mapa em Excel e compartilha o link por WhatsApp ou e-mail.
 
 **Contratos & Financeiro**
 - **Contratos** — vigência com janela de alerta e régua visual do prazo, aditivos que alteram valor e/ou término, status (vigente, suspenso, encerrado, cancelado), anexos e execução financeira (lançado × pago × saldo).
-- **Financeiro** — contas a pagar vinculadas a contrato, pedido ou reembolso (herdando fornecedor e centro de custo), baixa com forma de pagamento, conciliação de nota fiscal, fluxo de caixa previsto × pago, ranking por centro de custo e exportação CSV.
+- **Financeiro** — contas a pagar vinculadas a contrato, pedido ou reembolso (herdando fornecedor e centro de custo), baixa com forma de pagamento, fluxo de caixa previsto × pago, ranking por centro de custo e exportação CSV.
+- **Nota fiscal** — anexo do PDF (DANFE) e do XML da NF-e na conta; o XML é lido (número, emissão, chave, valor, emitente, vencimentos) e conferido com a conta e o cadastro (valor, fornecedor, destinatário, nota lançada em dobro). "Importar XML" abre a conta já preenchida. Planilha Excel das notas fiscais com links para os arquivos.
 - **Reembolsos** — despesas com comprovantes; o gestor aprova (gerando a conta a pagar) ou rejeita com motivo; quando o financeiro paga, o reembolso vira "pago".
 
 **Organização**
@@ -96,6 +99,7 @@
 - **Autenticação e multi-tenancy** — JWT (access + refresh), dados isolados por empresa (`Company`), RBAC por papel no back e por permissão no front.
 - **Usuários, perfil e auditoria** — administração de usuários, "Meu perfil" e trilha de auditoria com filtros.
 - **Internacionalização** — pt-BR, en-US e zh-CN, com teste que garante a paridade das traduções.
+- **Uploads de até 50 MB** em todos os anexos (documentos, notas, comprovantes, propostas).
 
 ---
 
@@ -255,7 +259,12 @@ Prefixo `/api/v1` · autenticação `Authorization: Bearer <accessToken>` (de `P
 | --- | --- |
 | Usuários | `GET/POST /users`, `GET /users/stats`, `PATCH /users/:id`, `PATCH /users/:id/password`, `GET/PATCH /users/me`, `PATCH /users/me/password` |
 | Contratos | `GET/POST /contracts`, `GET /contracts/stats`, `GET/PATCH /contracts/:id`, `PATCH /contracts/:id/status`, `POST /contracts/:id/amendments` |
-| Financeiro | `GET/POST /payables`, `GET /payables/stats`, `GET /payables/cash-flow`, `GET /payables/by-cost-center`, `GET /payables/cost-centers`, `GET/PATCH /payables/:id`, `PATCH /payables/:id/pay`, `PATCH /payables/:id/invoice`, `PATCH /payables/:id/cancel` |
+| Financeiro | `GET/POST /payables` (`?comNota=true` para a planilha de notas), `GET /payables/stats`, `GET /payables/cash-flow`, `GET /payables/by-cost-center`, `GET /payables/cost-centers`, `GET/PATCH /payables/:id`, `PATCH /payables/:id/pay`, `PATCH /payables/:id/invoice`, `PATCH /payables/:id/cancel` |
+| Nota fiscal | `POST /payables/:id/invoice-file` (PDF ou XML, multipart), `DELETE /payables/:id/invoice-file/:kind` (`pdf`/`xml`), `POST /payables/invoice-xml/preview` |
+| Cotações | `GET/POST /quotations`, `GET /quotations/stats`, `GET/PATCH /quotations/:id`, `POST /quotations/:id/suppliers`, `DELETE /quotations/:id/suppliers/:qsId`, `POST /quotations/:id/suppliers/:qsId/link`, `PUT /quotations/:id/suppliers/:qsId/prices`, `PATCH /quotations/:id/items/:itemId/winner`, `POST /quotations/:id/pick-cheapest`, `POST /quotations/:id/close`, `POST /quotations/:id/cancel` |
+| Link do fornecedor | `GET/PUT /public/quotations/:token`, `POST /public/quotations/:token/decline` (público, autorizado pelo token assinado; 30 req/min) |
+| Disciplinas | `GET /disciplines`, `POST /disciplines`, `PATCH /disciplines/:id` |
+| Catálogo vivo | `POST /products/from-request-item` (inclui no catálogo um item digitado na solicitação) |
 | Reembolsos | `GET/POST /reimbursements`, `GET /reimbursements/stats`, `GET/DELETE /reimbursements/:id`, `PATCH /reimbursements/:id/decision`, `POST /reimbursements/:id/attachments`, `DELETE /reimbursements/:id/attachments/:attachmentId` |
 | Documentos | `GET/POST /documents` (multipart), `GET /documents/stats`, `GET /documents/tags`, `GET/PATCH/DELETE /documents/:id` |
 | Agenda | `GET /agenda?from&to&obra`, `GET /agenda/obras`, `POST /agenda/events`, `PATCH/DELETE /agenda/events/:id` |
@@ -315,6 +324,7 @@ Os arquivos são páginas HTML: baixe e abra no navegador (os diagramas usam Mer
 9. **Revisão geral e de segurança** — correção de *path traversal* no upload de anexos, bloqueio de uploads executáveis, `helmet`, limite de tentativas no login, condições de corrida em pagamentos/aprovações, injeção de fórmula no CSV e atualização de dependências vulneráveis.
 10. **Dashboard operacional** — pendências e agenda dos próximos dias no lugar do antigo card "próximos módulos"; remoção das telas "em breve"; CI em Node 22 LTS.
 11. **Stack igual à do Saúde Ocupacional** — Prisma 7 → 5 no mesmo formato da plataforma irmã, React Router 7, helmet 7 e os mesmos hooks de commit (husky, lint-staged, commitlint), pré-requisito do hub com login único.
+12. **Cotações, catálogo vivo e nota fiscal** — mapa de cotação com link do fornecedor (HMAC), disciplinas editáveis, catálogo com marca/referência/quantidade, inclusão de itens digitados no catálogo, NF-e (PDF/XML com leitura e conferência), planilhas Excel (`exceljs`, a mesma do Saúde) e uploads de 50 MB.
 
 ---
 

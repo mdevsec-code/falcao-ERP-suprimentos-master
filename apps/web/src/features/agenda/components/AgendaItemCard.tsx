@@ -28,6 +28,8 @@ function sourceLink(item: AgendaItemDto): string | null {
       return routeTo.contract(item.sourceId);
     case 'DOCUMENT_EXPIRY':
       return ROUTE_PATHS.DOCUMENTOS;
+    case 'QUOTATION_DUE':
+      return routeTo.quotation(item.sourceId);
     default:
       return null;
   }

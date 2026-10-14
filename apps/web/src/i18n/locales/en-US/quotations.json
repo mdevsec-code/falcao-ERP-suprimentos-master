@@ -1,0 +1,270 @@
+{
+  "page": {
+    "eyebrow": "Procurement",
+    "title": "Quotations",
+    "description": "Quotation map: suppliers side by side, price feedback and the winner chosen per item.",
+    "fromRequests": "Requests to quote"
+  },
+  "kpi": {
+    "title": "Quotation indicators",
+    "open": "Open",
+    "waiting": "Waiting for answers",
+    "waitingHint": "With a supplier that hasn't answered yet",
+    "dueSoon": "Due within 2 days",
+    "dueSoonHint": "Open ones closing soon",
+    "closedThisMonth": "Closed this month"
+  },
+  "filters": {
+    "search": "Search",
+    "searchPlaceholder": "Number, title or request…",
+    "status": "Status",
+    "all": "All"
+  },
+  "table": {
+    "number": "#",
+    "title": "Quotation",
+    "status": "Status",
+    "deadline": "Deadline",
+    "answers": "Answers",
+    "items": "Items",
+    "request": "Request: {{title}}",
+    "overdue": "Past deadline"
+  },
+  "empty": {
+    "title": "No quotations here",
+    "description": "Quotations are opened from an approved request (in purchasing or in quotation)."
+  },
+  "error": {
+    "title": "Could not load the quotations",
+    "description": "Check your connection and try again."
+  },
+  "create": {
+    "title": "Open quotation",
+    "description": "Choose the items and the suppliers. Each supplier gets its own link to answer, no login needed.",
+    "fields": {
+      "title": "Title",
+      "deadline": "Answer deadline",
+      "notes": "Notes for suppliers",
+      "items_one": "Items to quote ({{count}})",
+      "items_other": "Items to quote ({{count}})",
+      "suppliers_one": "Suppliers ({{count}} of up to {{max}})",
+      "suppliers_other": "Suppliers ({{count}} of up to {{max}})"
+    },
+    "hints": {
+      "deadline": "After this date the link stops accepting answers.",
+      "notes": "Delivery site, desired lead time, technical requirements…"
+    },
+    "supplierSearch": "Search supplier or category…",
+    "noSuppliers": "No suppliers found.",
+    "errors": {
+      "deadline": "Pick a date from today on.",
+      "tooManySuppliers": "Invite at most {{max}} suppliers."
+    },
+    "submit": "Open quotation"
+  },
+  "detail": {
+    "eyebrow": "Quotation #{{numero}}",
+    "createdBy": "Opened by {{name}} on {{date}}",
+    "back": "Quotations",
+    "export": "Export map (Excel)",
+    "pickCheapest": "Pick lowest prices",
+    "close": "Close quotation",
+    "cancel": "Cancel quotation",
+    "status": "Status",
+    "deadline": "Answer deadline",
+    "request": "Request",
+    "requester": "Requester · cost center",
+    "notes": "Notes:",
+    "notFoundTitle": "Quotation not found",
+    "notFoundDescription": "It may have been removed or the address is wrong."
+  },
+  "feedback": {
+    "title": "Price feedback",
+    "answers": "Answers",
+    "answersHint": "Suppliers that already quoted",
+    "bestTotal": "Total at lowest prices",
+    "bestTotalHint": "Buying each item from whoever charged less",
+    "winnersTotal": "Total of chosen suppliers",
+    "winnersHint_one": "{{count}} of {{total}} item with a chosen supplier",
+    "winnersHint_other": "{{count}} of {{total}} items with a chosen supplier",
+    "savings": "Savings over last purchase",
+    "savingsHint": "Difference against the last price paid for catalog items",
+    "savingsNegative": "More expensive than the last purchase"
+  },
+  "map": {
+    "title": "Quotation map",
+    "legend": "Green: lowest price for the item · Crown: chosen supplier",
+    "caption": "Map of quotation #{{numero}}",
+    "item": "Item",
+    "reference": "Last price paid",
+    "bestTotal": "Lowest total among those who quoted everything",
+    "deliveryDays_one": "delivery in {{count}} day",
+    "deliveryDays_other": "delivery in {{count}} days",
+    "inCatalog": "Catalog: {{codigo}}",
+    "noHistory": "No history",
+    "variationHint": "Lowest price in this quotation against the last price paid",
+    "noAnswer": "No answer",
+    "unavailable": "Not available",
+    "bestPrice": "(lowest price)",
+    "lineTotal": "Total {{value}}",
+    "choose": "Choose",
+    "chosen": "Chosen",
+    "supplierTotal": "Supplier total",
+    "withFreight": "with freight",
+    "ranking": "#{{position}} lowest total",
+    "partial": "Quoted {{count}} of {{total}} items",
+    "freight": "Freight {{value}}",
+    "cheapestItems_one": "Lowest price on {{count}} item",
+    "cheapestItems_other": "Lowest price on {{count}} items"
+  },
+  "suppliers": {
+    "title_one": "Invited supplier ({{count}})",
+    "title_other": "Invited suppliers ({{count}})",
+    "add": "Invite supplier",
+    "answeredBy": "Answered by {{name}} on {{date}}",
+    "waiting": "Hasn't answered yet",
+    "payment": "Payment: {{value}}",
+    "copyLink": "Copy link",
+    "whatsapp": "WhatsApp",
+    "moreAria": "More actions for {{name}}",
+    "email": "Send by e-mail",
+    "copyMessage": "Copy message",
+    "openLink": "Open link",
+    "enterPrices": "Enter received proposal",
+    "regenerate": "Generate new link",
+    "remove": "Remove from quotation"
+  },
+  "share": {
+    "subject": "Quotation #{{numero}} — {{titulo}}",
+    "message": "Hello, {{contato}}!\n\nWe'd like a quote for the materials below (quotation #{{numero}} — {{titulo}}):\n\n{{itens}}\n\nPlease answer through the link by {{prazo}}, with price, brand and reference for each item:\n{{link}}\n\nThank you!"
+  },
+  "confirm": {
+    "regenerateTitle": "Generate a new link?",
+    "regenerateDescription": "The link sent to {{name}} will stop working. Any answer already received still counts.",
+    "removeSupplierTitle": "Remove supplier?",
+    "removeSupplierDescription": "{{name}} leaves the quotation and the prices it sent are deleted.",
+    "closeTitle": "Close the quotation?",
+    "closeDescription_one": "{{count}} of {{total}} item has a chosen supplier. Chosen prices go into the catalog price history and the link stops accepting answers.",
+    "closeDescription_other": "{{count}} of {{total}} items have a chosen supplier. Chosen prices go into the catalog price history and the link stops accepting answers.",
+    "cancelTitle": "Cancel the quotation?",
+    "cancelDescription": "Links stop accepting answers and no price goes into the catalog."
+  },
+  "addSupplier": {
+    "title": "Invite supplier",
+    "description": "They get their own link to answer this quotation.",
+    "label": "Supplier",
+    "placeholder": "Select",
+    "none": "All active suppliers have already been invited.",
+    "submit": "Invite"
+  },
+  "manual": {
+    "title": "Proposal from {{name}}",
+    "description": "Enter the proposal received by e-mail, phone or PDF. It counts as the supplier's answer.",
+    "submit": "Save proposal"
+  },
+  "response": {
+    "itemsLegend": "Quotation items",
+    "itemNumber": "Item {{index}}",
+    "requested": "requested: {{value}}",
+    "available": "Available",
+    "unavailable": "Not available",
+    "unitPrice": "Unit price (R$/{{unit}})",
+    "brand": "Brand",
+    "reference": "Reference",
+    "itemNote": "Item note",
+    "lineTotal": "Item total:",
+    "conditions": "Proposal terms",
+    "deliveryDays": "Lead time (days)",
+    "payment": "Payment terms",
+    "paymentPlaceholder": "E.g.: 28 days, bank slip",
+    "validity": "Proposal valid until",
+    "freight": "Freight (R$)",
+    "notes": "Notes",
+    "name": "Your name",
+    "total": "Proposal total:",
+    "errors": {
+      "price": "Enter the price or mark “Not available”.",
+      "name": "Enter your name."
+    }
+  },
+  "public": {
+    "portal": "Quotation portal",
+    "eyebrow": "Quotation #{{numero}} · {{empresa}}",
+    "greeting": "Hello, {{fornecedor}}! Please enter your prices for the requested materials below.",
+    "deadline": "Answer by {{date}}",
+    "itemCount_one": "{{count}} item",
+    "itemCount_other": "{{count}} items",
+    "answeredBanner": "Proposal received from {{name}} on {{date}}.",
+    "canEdit": "You can change it until the deadline.",
+    "refusedBanner": "On {{date}} you said you won't quote.",
+    "closed": {
+      "ENCERRADA": "This quotation has been closed. Thank you for taking part!",
+      "CANCELADA": "This quotation was cancelled.",
+      "PRAZO": "The deadline to answer has passed."
+    },
+    "submit": "Send proposal",
+    "update": "Update proposal",
+    "sent": "Proposal sent. Thank you!",
+    "sendError": "Could not send. Please try again.",
+    "decline": "We won't quote",
+    "declineTitle": "Not quoting?",
+    "declineDescription": "Let the buyer know; you can explain why if you like.",
+    "declineReason": "Reason (optional)",
+    "declineConfirm": "Confirm",
+    "declined": "Decline recorded. Thanks for letting us know.",
+    "invalidTitle": "Invalid or expired link",
+    "invalidDescription": "Ask the buyer who sent the quotation for a new link.",
+    "privacy": "Your prices are seen only by the purchasing team at {{empresa}}."
+  },
+  "toast": {
+    "created": "Quotation #{{numero}} opened.",
+    "createError": "Could not open the quotation.",
+    "updated": "Quotation updated.",
+    "supplierAdded": "Supplier invited.",
+    "supplierRemoved": "Supplier removed.",
+    "linkRegenerated": "New link generated.",
+    "pricesSaved": "Proposal saved.",
+    "cheapestPicked": "Lowest price chosen for each item.",
+    "closed": "Quotation closed. Prices sent to the catalog.",
+    "cancelled": "Quotation cancelled.",
+    "linkCopied": "Link copied.",
+    "messageCopied": "Message copied.",
+    "copyFailed": "Could not copy. Select it and copy manually.",
+    "exportError": "Could not export the map."
+  },
+  "export": {
+    "sheet": "Quotation map",
+    "title": "Quotation map #{{numero}} — {{titulo}}",
+    "request": "Request: {{title}}",
+    "meta": "Status: {{status}} · Deadline: {{prazo}} · Cost center: {{centro}}",
+    "generatedAt": "Generated on {{date}}",
+    "col": {
+      "item": "#",
+      "description": "Description",
+      "quantity": "Qty.",
+      "unit": "Unit",
+      "requested": "Requested brand/ref.",
+      "lastPrice": "Last price",
+      "unitPrice": "Unit",
+      "total": "Total",
+      "best": "Lowest price",
+      "winner": "Chosen"
+    },
+    "unavailable": "not available",
+    "summary": {
+      "freight": "Freight",
+      "total": "Total with freight",
+      "ranking": "Ranking",
+      "delivery": "Lead time",
+      "payment": "Payment",
+      "validity": "Valid until",
+      "status": "Status",
+      "bestTotal": "Total at lowest prices",
+      "winnersTotal": "Total of chosen suppliers",
+      "savings": "Savings over last purchase"
+    },
+    "days_one": "{{count}} day",
+    "days_other": "{{count}} days",
+    "fileName": "quotation-map-{{numero}}"
+  }
+}

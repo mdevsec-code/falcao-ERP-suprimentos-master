@@ -1,4 +1,6 @@
 import type {
+  InvoiceXmlCheckDto,
+  PayableWithInvoiceCheckDto,
   CashFlowPointDto,
   CostCenterTotalDto,
   PaginatedResult,
@@ -6,6 +8,7 @@ import type {
   PayableStatsDto,
 } from '@falcao-erp/shared-types';
 import { httpClient } from '@/services/http/client';
+import { UPLOAD_TIMEOUT_MS } from '@/constants/uploads';
 import type { InvoiceFormInput, PayableListParams, PayablePayload, PayPayload } from '../types';
 
 export const financeApi = {
@@ -56,6 +59,37 @@ export const financeApi = {
       notaFiscal: input.notaFiscal,
       notaFiscalEmissao: input.notaFiscalEmissao || undefined,
     });
+    return data;
+  },
+
+  /** PDF (DANFE) ou XML da NF-e; o XML preenche número, emissão e chave e volta conferido. */
+  async uploadInvoiceFile(id: string, file: File): Promise<PayableWithInvoiceCheckDto> {
+    const form = new FormData();
+    form.append('file', file);
+    const { data } = await httpClient.post<PayableWithInvoiceCheckDto>(
+      `/payables/${id}/invoice-file`,
+      form,
+      { timeout: UPLOAD_TIMEOUT_MS },
+    );
+    return data;
+  },
+
+  async removeInvoiceFile(id: string, kind: 'pdf' | 'xml'): Promise<PayableDto> {
+    const { data } = await httpClient.delete<PayableDto>(`/payables/${id}/invoice-file/${kind}`);
+    return data;
+  },
+
+  /** Lê o XML sem gravar, para abrir uma conta já preenchida. */
+  async previewInvoiceXml(file: File): Promise<InvoiceXmlCheckDto> {
+    const form = new FormData();
+    form.append('file', file);
+    const { data } = await httpClient.post<InvoiceXmlCheckDto>(
+      '/payables/invoice-xml/preview',
+      form,
+      {
+        timeout: UPLOAD_TIMEOUT_MS,
+      },
+    );
     return data;
   },
 

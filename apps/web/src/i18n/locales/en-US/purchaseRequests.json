@@ -23,7 +23,9 @@
       "label": "Search",
       "placeholder": "Request title…"
     },
-    "status": { "label": "Status" },
+    "status": {
+      "label": "Status"
+    },
     "allStatuses": "All statuses",
     "chipStatus": "Status: {{value}}",
     "chipSearch": "Search: {{value}}"
@@ -93,7 +95,8 @@
       "attachments": "Files ({{count}})"
     },
     "notFoundTitle": "Request not found",
-    "notFoundDescription": "It may have been removed or the address is wrong."
+    "notFoundDescription": "It may have been removed or the address is wrong.",
+    "addToCatalog": "Add to catalog"
   },
   "timeline": {
     "created": "created the request",
@@ -146,12 +149,19 @@
       "quantity": "Quantity",
       "unit": "Unit",
       "estimatedPrice": "Est. unit price (R$)",
-      "subtotal": "Subtotal"
+      "subtotal": "Subtotal",
+      "marca": "Brand",
+      "referencia": "Reference"
     },
     "placeholders": {
       "title": "E.g.: Materials for the Sector B job site",
       "justification": "What it is for, deadline, job site/project…"
-    }
+    },
+    "fromCatalog": "Catalog item",
+    "looseItemHint": "Item described by hand (not in the catalog).",
+    "pickFromCatalog": "Pick from catalog",
+    "changeProduct": "Change",
+    "unlinkProduct": "Unlink"
   },
   "confirm": {
     "removeAttachmentTitle": "Remove file",
@@ -169,5 +179,37 @@
     "attachmentUploaded": "File uploaded successfully.",
     "attachmentError": "Could not upload the file.",
     "attachmentRemoved": "File removed."
+  },
+  "catalog": {
+    "title": "Pick from catalog",
+    "description": "Filter by discipline and category. Brand, reference and the last price paid come along.",
+    "disciplineGroup": "Discipline",
+    "allDisciplines": "All",
+    "search": "Search",
+    "searchPlaceholder": "Name, code, brand or reference…",
+    "category": "Category",
+    "allCategories": "All categories",
+    "emptyTitle": "Nothing found",
+    "emptyDescription": "Adjust the filters or describe the item by hand in the request.",
+    "lastPaid": "paid on {{date}}",
+    "notFoundHint": "Can't find it? Close this and describe the item by hand: purchasing can add it to the catalog later."
+  },
+  "quotations": {
+    "title": "Quotations",
+    "open": "Open quotation",
+    "none": "No quotation opened for this request.",
+    "summary": "{{answered}}/{{invited}} answers · due {{deadline}}"
+  },
+  "toCatalog": {
+    "title": "Add to catalog",
+    "description": "The item becomes a product in the product database and stays linked to this request. Next time, requesters will find it in the search.",
+    "code": "Code",
+    "name": "Name",
+    "category": "Category",
+    "unit": "Unit",
+    "discipline": "Discipline",
+    "noDiscipline": "No discipline",
+    "select": "Select",
+    "submit": "Add to catalog"
   }
 }

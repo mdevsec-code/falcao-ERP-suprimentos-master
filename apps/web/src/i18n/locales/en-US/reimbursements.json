@@ -60,7 +60,7 @@
       "expenses": "Expenses",
       "expensesDescription": "One line per expense, with the date it happened.",
       "receipts": "Receipts",
-      "receiptsDescription": "Photos or PDFs of invoices and receipts (up to 10 MB each)."
+      "receiptsDescription": "Photos or PDFs of invoices and receipts (up to 50 MB each)."
     },
     "fields": {
       "titulo": "Title",

@@ -1,4 +1,4 @@
-import { CalendarDays, FileClock, FileText, Wallet, type LucideIcon } from 'lucide-react';
+import { CalendarDays, FileClock, FileText, Scale, Wallet, type LucideIcon } from 'lucide-react';
 import type { AgendaItemKind } from '@falcao-erp/shared-types';
 
 /**
@@ -29,6 +29,11 @@ export const KIND_STYLE: Record<
     className: 'border-danger/30 bg-danger/10 text-ink',
     dot: 'bg-danger',
   },
+  QUOTATION_DUE: {
+    icon: Scale,
+    className: 'border-success/30 bg-success/10 text-ink',
+    dot: 'bg-success',
+  },
 };
 
 export const ALL_KINDS: AgendaItemKind[] = [
@@ -36,4 +41,5 @@ export const ALL_KINDS: AgendaItemKind[] = [
   'PAYABLE_DUE',
   'CONTRACT_END',
   'DOCUMENT_EXPIRY',
+  'QUOTATION_DUE',
 ];

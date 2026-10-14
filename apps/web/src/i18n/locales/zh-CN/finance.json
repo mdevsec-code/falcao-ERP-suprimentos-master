@@ -11,7 +11,9 @@
     "invoice": "填写发票",
     "invoiceEdit": "修改发票",
     "cancel": "取消应付款",
-    "cancelReimbursementBlocked": "已批准报销生成的应付款不能取消"
+    "cancelReimbursementBlocked": "已批准报销生成的应付款不能取消",
+    "exportInvoices": "发票（Excel）",
+    "importXml": "导入 NF-e XML"
   },
   "kpi": {
     "title": "财务指标",
@@ -70,7 +72,9 @@
     "paidAmount": "实付：{{value}}",
     "overdue": "逾期",
     "noInvoice": "无发票",
-    "openReimbursement": "查看报销"
+    "openReimbursement": "查看报销",
+    "hasPdf": "已附 PDF",
+    "hasXml": "已附 XML"
   },
   "empty": {
     "title": "暂无应付款",
@@ -121,7 +125,13 @@
   },
   "invoiceDialog": {
     "title": "发票",
-    "description": "将发票关联到\"{{name}}\"以完成对账。"
+    "description": "将发票关联到\"{{name}}\"以完成对账。",
+    "files": "发票文件",
+    "attach": "附加 PDF 或 XML",
+    "filesHint": "DANFE 的 PDF 和/或 NF-e 的 XML，最大 {{max}}。XML 会自动填写号码、开票日期和访问密钥，并与应付款核对。",
+    "noFiles": "未附加文件。",
+    "removeFile": "删除 {{name}}",
+    "key": "访问密钥：{{key}}"
   },
   "confirm": {
     "cancelTitle": "取消应付款？",
@@ -145,6 +155,36 @@
     "updated": "应付款已更新。",
     "paid": "付款已登记。",
     "invoiced": "发票已登记。",
-    "cancelled": "应付款已取消。"
+    "cancelled": "应付款已取消。",
+    "attachError": "无法附加文件。",
+    "fileRemoved": "文件已删除。",
+    "pdfAttached": "发票 PDF 已附加。",
+    "xmlAttached": "发票 {{numero}} 的 XML 已读取并附加。",
+    "xmlReadError": "无法读取 XML。",
+    "xmlWarnings_other": "发票有 {{count}} 处与应付款不一致，请查看提示。"
+  },
+  "importXml": {
+    "description": "发票 {{numero}} — {{emitente}}"
+  },
+  "invoiceExport": {
+    "sheet": "发票",
+    "number": "发票号",
+    "issuedAt": "开票日期",
+    "supplier": "供应商",
+    "description": "说明",
+    "costCenter": "成本中心",
+    "amount": "金额",
+    "due": "到期日",
+    "status": "状态",
+    "paidOn": "付款日期",
+    "paidAmount": "已付金额",
+    "method": "方式",
+    "key": "访问密钥",
+    "pdf": "PDF",
+    "xml": "XML",
+    "open": "打开",
+    "total": "合计",
+    "empty": "此筛选下没有带发票的应付款。",
+    "error": "无法生成表格。"
   }
 }

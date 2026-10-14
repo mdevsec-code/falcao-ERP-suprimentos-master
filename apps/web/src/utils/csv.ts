@@ -31,7 +31,11 @@ export function csvNumber(value: number | string | null | undefined): string {
 
 /** Dispara o download de um texto como arquivo. */
 export function downloadText(content: string, fileName: string, mimeType = 'text/csv') {
-  const blob = new Blob([content], { type: `${mimeType};charset=utf-8` });
+  downloadBlob(new Blob([content], { type: `${mimeType};charset=utf-8` }), fileName);
+}
+
+/** Dispara o download de um arquivo gerado no navegador (planilha, CSV…). */
+export function downloadBlob(blob: Blob, fileName: string) {
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;

@@ -62,7 +62,8 @@
     "documents": "文档",
     "users": "用户",
     "audit": "审计",
-    "profile": "个人资料"
+    "profile": "个人资料",
+    "quotations": "询价"
   },
   "theme": {
     "switchToLight": "切换到浅色主题",

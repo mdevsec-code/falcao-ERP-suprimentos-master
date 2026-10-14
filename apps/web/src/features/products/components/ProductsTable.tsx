@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/Table';
 import { routeTo } from '@/constants/routes';
 import { UNIT_LABELS } from '@/constants/enums';
-import { formatCurrencyBRL } from '@/utils/format';
+import { formatCurrencyBRL, formatDate } from '@/utils/format';
 import { cn } from '@/utils/cn';
 import { ProductCategoryBadge, ProductStatusBadge } from './ProductBadges';
 import type { ProductSummaryDto } from '../types';
@@ -31,6 +31,7 @@ export function ProductsTable({ rows, isFetching }: ProductsTableProps) {
       <TableHeader>
         <TableRow>
           <TableHead>{t('products:table.product')}</TableHead>
+          <TableHead>{t('products:table.discipline')}</TableHead>
           <TableHead>{t('products:table.category')}</TableHead>
           <TableHead>{t('products:table.unit')}</TableHead>
           <TableHead>{t('products:table.primarySupplier')}</TableHead>
@@ -59,8 +60,17 @@ export function ProductsTable({ rows, isFetching }: ProductsTableProps) {
               <p className="text-xs text-ink-soft">
                 <span className="font-mono">{product.codigo}</span>
                 {product.marca ? ` · ${product.marca}` : ''}
+                {product.referencia ? (
+                  <>
+                    {' · '}
+                    <span className="font-mono">
+                      {t('products:table.ref', { value: product.referencia })}
+                    </span>
+                  </>
+                ) : null}
               </p>
             </TableCell>
+            <TableCell className="text-ink-soft">{product.discipline?.nome ?? '—'}</TableCell>
             <TableCell>
               <ProductCategoryBadge categoria={product.categoria} />
             </TableCell>
@@ -68,8 +78,19 @@ export function ProductsTable({ rows, isFetching }: ProductsTableProps) {
             <TableCell className="text-ink-soft">
               {product.primarySupplier?.nomeFantasia ?? '—'}
             </TableCell>
-            <TableCell className="whitespace-nowrap text-right font-semibold tabular-nums">
-              {formatCurrencyBRL(product.lastPrice)}
+            <TableCell className="whitespace-nowrap text-right tabular-nums">
+              <span className="font-semibold">{formatCurrencyBRL(product.lastPrice)}</span>
+              {product.lastPriceAt && (
+                <p className="text-xs text-ink-soft">
+                  {product.lastQuantity
+                    ? t('products:table.lastPriceDetail', {
+                        quantity: Number(product.lastQuantity).toLocaleString(),
+                        unit: product.unidade,
+                        date: formatDate(product.lastPriceAt),
+                      })
+                    : formatDate(product.lastPriceAt)}
+                </p>
+              )}
             </TableCell>
             <TableCell>
               <ProductStatusBadge isActive={product.isActive} />

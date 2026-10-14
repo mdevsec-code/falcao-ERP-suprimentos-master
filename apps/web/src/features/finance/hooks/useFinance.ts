@@ -104,3 +104,41 @@ export function useRegisterInvoice() {
 export function useCancelPayable() {
   return useFinanceMutation((id: string) => financeApi.cancel(id), 'finance:toast.cancelled');
 }
+
+export function useUploadInvoiceFile() {
+  const invalidate = useInvalidateFinance();
+  return useMutation({
+    mutationFn: ({ id, file }: { id: string; file: File }) =>
+      financeApi.uploadInvoiceFile(id, file),
+    onSuccess: (result) => {
+      invalidate();
+      toast.success(
+        i18n.t(result.xml ? 'finance:toast.xmlAttached' : 'finance:toast.pdfAttached', {
+          numero: result.xml?.numero ?? '',
+        }),
+      );
+      if (result.xml && result.xml.avisos.length > 0) {
+        toast.warning(i18n.t('finance:toast.xmlWarnings', { count: result.xml.avisos.length }));
+      }
+    },
+    onError: (error: Error) => {
+      toast.error(getErrorMessage(error, i18n.t('finance:toast.attachError')));
+    },
+  });
+}
+
+export function useRemoveInvoiceFile() {
+  return useFinanceMutation(
+    ({ id, kind }: { id: string; kind: 'pdf' | 'xml' }) => financeApi.removeInvoiceFile(id, kind),
+    'finance:toast.fileRemoved',
+  );
+}
+
+export function usePreviewInvoiceXml() {
+  return useMutation({
+    mutationFn: (file: File) => financeApi.previewInvoiceXml(file),
+    onError: (error: Error) => {
+      toast.error(getErrorMessage(error, i18n.t('finance:toast.xmlReadError')));
+    },
+  });
+}

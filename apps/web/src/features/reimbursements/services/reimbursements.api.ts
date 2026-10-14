@@ -7,6 +7,7 @@ import type {
 } from '@falcao-erp/shared-types';
 import { httpClient } from '@/services/http/client';
 import type { DecisionPayload, ReimbursementListParams, ReimbursementPayload } from '../types';
+import { UPLOAD_TIMEOUT_MS } from '@/constants/uploads';
 
 export const reimbursementsApi = {
   async list(params: ReimbursementListParams): Promise<PaginatedResult<ReimbursementSummaryDto>> {
@@ -50,6 +51,7 @@ export const reimbursementsApi = {
     const { data } = await httpClient.post<ReimbursementAttachmentDto>(
       `/reimbursements/${id}/attachments`,
       form,
+      { timeout: UPLOAD_TIMEOUT_MS },
     );
     return data;
   },

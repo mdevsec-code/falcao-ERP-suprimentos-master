@@ -9,25 +9,45 @@
     "backToList": "查看产品",
     "deactivate": "停用",
     "reactivate": "重新启用",
-    "addPrice": "记录价格"
+    "addPrice": "记录价格",
+    "disciplines": "专业"
   },
   "kpi": {
     "title": "产品指标",
     "total": "已登记",
     "active": "启用",
     "inactive": "停用",
-    "categories": "类别"
+    "categories": "类别",
+    "disciplines": "使用中的专业"
   },
   "filters": {
     "title": "筛选",
     "search": {
       "label": "搜索",
-      "placeholder": "编码、名称或品牌…"
+      "placeholder": "编码、名称、品牌或型号……"
     },
-    "category": { "label": "类别" },
+    "category": {
+      "label": "类别"
+    },
     "allCategories": "全部类别",
     "chipCategory": "类别：{{value}}",
-    "chipSearch": "搜索：{{value}}"
+    "chipSearch": "搜索：{{value}}",
+    "discipline": {
+      "label": "专业"
+    },
+    "allDisciplines": "全部",
+    "noDiscipline": "无专业",
+    "brand": {
+      "label": "品牌",
+      "placeholder": "例如：WEG"
+    },
+    "supplier": {
+      "label": "供应商"
+    },
+    "allSuppliers": "全部供应商",
+    "chipDiscipline": "专业：{{value}}",
+    "chipBrand": "品牌：{{value}}",
+    "chipSupplier": "供应商：{{value}}"
   },
   "table": {
     "product": "产品",
@@ -35,7 +55,10 @@
     "unit": "单位",
     "primarySupplier": "主供应商",
     "lastPrice": "最近价格",
-    "status": "状态"
+    "status": "状态",
+    "discipline": "专业",
+    "lastPriceDetail": "{{date}} · {{quantity}} {{unit}}",
+    "ref": "型号 {{value}}"
   },
   "empty": {
     "title": "暂无产品",
@@ -73,15 +96,19 @@
       "date": "日期",
       "supplier": "供应商",
       "price": "价格",
-      "variation": "变动"
+      "variation": "变动",
+      "brandRef": "品牌 / 型号",
+      "quantity": "数量"
     },
     "dialog": {
       "title": "记录价格",
       "description": "为该产品的价格历史添加一个新数据点。",
       "price": "价格（R$）",
       "supplier": "供应商",
-      "submit": "记录"
-    }
+      "submit": "记录",
+      "quantity": "数量"
+    },
+    "fromQuotation": "询价单 {{numero}} 号"
   },
   "form": {
     "createTitle": "新建产品",
@@ -107,16 +134,20 @@
       "initialPrice": "初始价格（R$）",
       "observacoes": "备注",
       "primarySupplier": "主供应商",
-      "alternativeSuppliers": "备选供应商"
+      "alternativeSuppliers": "备选供应商",
+      "disciplina": "专业",
+      "referencia": "型号"
     },
     "hints": {
       "leadTimeDays": "平均交货时间",
-      "initialPrice": "作为价格历史的起点"
+      "initialPrice": "作为价格历史的起点",
+      "referencia": "制造商编码（零件号）"
     },
     "placeholders": {
       "category": "选择类别",
       "unit": "选择单位"
-    }
+    },
+    "noDiscipline": "无专业"
   },
   "confirm": {
     "deactivateTitle": "停用产品",
@@ -132,6 +163,22 @@
     "deactivated": "产品已停用。",
     "reactivated": "产品已重新启用。",
     "priceAdded": "价格已记录。",
-    "priceError": "无法记录价格。"
+    "priceError": "无法记录价格。",
+    "catalogFromItem": "物料已加入目录并关联到申请。"
+  },
+  "disciplines": {
+    "title": "专业",
+    "description": "按工程专业（土建、电气……）对目录分组。停用的专业不再出现在筛选中，但产品仍与其关联。",
+    "newLabel": "新专业",
+    "newPlaceholder": "例如：通信",
+    "add": "添加",
+    "renameAria": "重命名 {{name}}",
+    "activeAria": "启用或停用 {{name}}",
+    "productCount_other": "{{count}} 个产品",
+    "inactiveHint": "停用不会删除任何内容：该专业只是不再出现在筛选和表单中。",
+    "toast": {
+      "created": "专业已创建。",
+      "updated": "专业已更新。"
+    }
   }
 }

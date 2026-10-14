@@ -66,6 +66,19 @@ const ApprovalsPage = lazy(() =>
   })),
 );
 
+const QuotationsPage = lazy(() =>
+  import('@/features/quotations/pages/QuotationsPage').then((m) => ({ default: m.QuotationsPage })),
+);
+const QuotationDetailPage = lazy(() =>
+  import('@/features/quotations/pages/QuotationDetailPage').then((m) => ({
+    default: m.QuotationDetailPage,
+  })),
+);
+const SupplierQuotationPage = lazy(() =>
+  import('@/features/quotations/pages/SupplierQuotationPage').then((m) => ({
+    default: m.SupplierQuotationPage,
+  })),
+);
 const ContractsPage = lazy(() =>
   import('@/features/contracts/pages/ContractsPage').then((m) => ({ default: m.ContractsPage })),
 );
@@ -178,6 +191,14 @@ const protectedRoutes: RouteObject[] = [
     element: withPermission(PERMISSIONS.APPROVALS_READ, <ApprovalsPage />),
   },
   {
+    path: ROUTE_PATHS.COTACOES,
+    element: withPermission(PERMISSIONS.QUOTATION_READ, <QuotationsPage />),
+  },
+  {
+    path: `${ROUTE_PATHS.COTACOES}/:id`,
+    element: withPermission(PERMISSIONS.QUOTATION_READ, <QuotationDetailPage />),
+  },
+  {
     path: ROUTE_PATHS.USUARIOS,
     element: withPermission(PERMISSIONS.USERS_MANAGE, <UsersPage />),
   },
@@ -223,6 +244,12 @@ const routes: RouteObject[] = [
   {
     path: ROUTE_PATHS.LOGIN,
     element: withSuspense(<LoginPage />),
+    errorElement: <RootBoundary />,
+  },
+  // Fornecedor responde à cotação pelo link, sem conta no sistema.
+  {
+    path: `${ROUTE_PATHS.COTACAO_FORNECEDOR}/:token`,
+    element: withSuspense(<SupplierQuotationPage />),
     errorElement: <RootBoundary />,
   },
   {

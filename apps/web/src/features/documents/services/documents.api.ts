@@ -1,6 +1,7 @@
 import type { DocumentDto, DocumentStatsDto, PaginatedResult } from '@falcao-erp/shared-types';
 import { httpClient } from '@/services/http/client';
 import type { DocumentListParams, DocumentUpdatePayload } from '../types';
+import { UPLOAD_TIMEOUT_MS } from '@/constants/uploads';
 
 export const documentsApi = {
   async list(params: DocumentListParams): Promise<PaginatedResult<DocumentDto>> {
@@ -19,7 +20,9 @@ export const documentsApi = {
   },
 
   async upload(form: FormData): Promise<DocumentDto> {
-    const { data } = await httpClient.post<DocumentDto>('/documents', form);
+    const { data } = await httpClient.post<DocumentDto>('/documents', form, {
+      timeout: UPLOAD_TIMEOUT_MS,
+    });
     return data;
   },
 

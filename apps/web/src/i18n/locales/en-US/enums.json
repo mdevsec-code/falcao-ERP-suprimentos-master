@@ -148,6 +148,21 @@
     "EVENT": "Event",
     "PAYABLE_DUE": "Payment due",
     "CONTRACT_END": "Contract end",
-    "DOCUMENT_EXPIRY": "Document expiry"
+    "DOCUMENT_EXPIRY": "Document expiry",
+    "QUOTATION_DUE": "Quotation deadline"
+  },
+  "quotationStatus": {
+    "ABERTA": "Open",
+    "ENCERRADA": "Closed",
+    "CANCELADA": "Cancelled"
+  },
+  "quotationSupplierStatus": {
+    "CONVIDADO": "Waiting",
+    "RESPONDIDO": "Answered",
+    "RECUSOU": "Declined"
+  },
+  "priceEntrySource": {
+    "MANUAL": "Manual",
+    "COTACAO": "Quotation"
   }
 }

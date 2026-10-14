@@ -22,13 +22,31 @@ export interface ProductListParams {
   pageSize?: number;
   search?: string;
   categoria?: string;
+  /** Id da disciplina ou `none` (sem disciplina). */
+  disciplineId?: string;
+  marca?: string;
   primarySupplierId?: string;
+  /** Fornecedor principal ou alternativo. */
+  supplierId?: string;
   isActive?: boolean;
+  sort?: 'nome' | 'codigo' | 'recentes';
 }
 
 export interface ProductFilters {
   busca?: string;
   categoria?: ProductCategory;
+  disciplineId?: string;
+  marca?: string;
+  supplierId?: string;
+}
+
+/** Corpo de `POST /products/{id}/price-entries`. */
+export interface PriceEntryPayload {
+  price: number;
+  supplierId?: string;
+  quantity?: number;
+  marca?: string;
+  referencia?: string;
 }
 
 /** A API aceita no máximo 2 casas decimais em preços (`IsNumber({ maxDecimalPlaces: 2 })`). */
@@ -48,6 +66,8 @@ export const productFormSchema = z.object({
     errorMap: () => ({ message: i18n.t('validation:selectOption') }),
   }),
   marca: optionalText(80),
+  referencia: optionalText(80),
+  disciplineId: z.string().optional(),
   unidade: z.nativeEnum(UnitOfMeasure, {
     errorMap: () => ({ message: i18n.t('validation:selectOption') }),
   }),
@@ -69,6 +89,9 @@ export interface ProductPayload {
   nome: string;
   categoria: ProductCategory;
   marca?: string;
+  referencia?: string;
+  /** `null` tira o produto da disciplina (só na edição). */
+  disciplineId?: string | null;
   unidade: UnitOfMeasure;
   leadTimeDays?: number;
   observacoes?: string;
@@ -83,6 +106,8 @@ export function toFormInput(product: ProductDetailDto): ProductFormInput {
     nome: product.nome,
     categoria: product.categoria,
     marca: product.marca ?? '',
+    referencia: product.referencia ?? '',
+    disciplineId: product.discipline?.id ?? '',
     unidade: product.unidade,
     leadTimeDays: product.leadTimeDays ?? '',
     observacoes: product.observacoes ?? '',
@@ -98,6 +123,8 @@ export function fromFormInput(input: ProductFormInput, { isEdit }: { isEdit: boo
     nome: input.nome,
     categoria: input.categoria,
     marca: emptyToUndefined(input.marca),
+    referencia: emptyToUndefined(input.referencia),
+    disciplineId: input.disciplineId ? input.disciplineId : isEdit ? null : undefined,
     unidade: input.unidade,
     leadTimeDays: toOptionalNumber(input.leadTimeDays),
     observacoes: emptyToUndefined(input.observacoes),
@@ -111,4 +138,16 @@ export function fromFormInput(input: ProductFormInput, { isEdit }: { isEdit: boo
   // pelo diálogo "Registrar preço".
   if (!isEdit) payload.initialPrice = toOptionalNumber(input.initialPrice);
   return payload;
+}
+
+/** Corpo de `POST /products/from-request-item`. */
+export interface CatalogFromItemPayload {
+  purchaseRequestItemId: string;
+  codigo: string;
+  nome: string;
+  categoria: ProductCategory;
+  unidade: UnitOfMeasure;
+  disciplineId?: string;
+  marca?: string;
+  referencia?: string;
 }

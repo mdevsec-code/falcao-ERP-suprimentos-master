@@ -59,7 +59,7 @@
   },
   "dialog": {
     "uploadTitle": "上传文档",
-    "uploadDescription": "最大 20 MB。文本文件可按内容搜索。",
+    "uploadDescription": "最大 50 MB。文本文件可按内容搜索。",
     "editTitle": "编辑文档",
     "editDescription": "文件：{{name}}。如需更换文件，请上传新文档。",
     "file": "文件",

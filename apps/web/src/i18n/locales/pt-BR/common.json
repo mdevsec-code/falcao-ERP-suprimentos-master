@@ -62,7 +62,8 @@
     "documents": "Documentos",
     "users": "Usuários",
     "audit": "Auditoria",
-    "profile": "Meu perfil"
+    "profile": "Meu perfil",
+    "quotations": "Cotações"
   },
   "theme": {
     "switchToLight": "Ativar tema claro",

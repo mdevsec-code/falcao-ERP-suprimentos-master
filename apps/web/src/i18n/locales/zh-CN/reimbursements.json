@@ -58,7 +58,7 @@
       "expenses": "费用",
       "expensesDescription": "每项费用一行，并填写发生日期。",
       "receipts": "凭证",
-      "receiptsDescription": "发票或收据的照片或 PDF（每个最大 10 MB）。"
+      "receiptsDescription": "发票或收据的照片或 PDF（每个最大 50 MB）。"
     },
     "fields": {
       "titulo": "标题",

@@ -60,7 +60,7 @@
       "expenses": "Despesas",
       "expensesDescription": "Uma linha por despesa, com a data em que aconteceu.",
       "receipts": "Comprovantes",
-      "receiptsDescription": "Fotos ou PDFs das notas e recibos (até 10 MB cada)."
+      "receiptsDescription": "Fotos ou PDFs das notas e recibos (até 50 MB cada)."
     },
     "fields": {
       "titulo": "Título",

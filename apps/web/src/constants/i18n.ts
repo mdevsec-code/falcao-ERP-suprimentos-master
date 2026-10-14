@@ -16,6 +16,7 @@ export const NAMESPACES = [
   'suppliers',
   'products',
   'purchaseRequests',
+  'quotations',
   'contracts',
   'finance',
   'reimbursements',

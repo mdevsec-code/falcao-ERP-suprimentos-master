@@ -12,7 +12,10 @@ import type {
   PayableStatus,
   PaymentMethod,
   ProductCategory,
+  PriceEntrySource,
   PurchaseRequestStatus,
+  QuotationStatus,
+  QuotationSupplierStatus,
   ReimbursementStatus,
   SupplierCategory,
   SupplierDocumentCategory,
@@ -67,3 +70,11 @@ export const CENTRAL_DOCUMENT_CATEGORY_LABELS =
 export const AGENDA_EVENT_TYPE_LABELS = createTranslatedLabels<AgendaEventType>('agendaEventType');
 
 export const AGENDA_ITEM_KIND_LABELS = createTranslatedLabels<AgendaItemKind>('agendaItemKind');
+
+export const QUOTATION_STATUS_LABELS = createTranslatedLabels<QuotationStatus>('quotationStatus');
+
+export const QUOTATION_SUPPLIER_STATUS_LABELS =
+  createTranslatedLabels<QuotationSupplierStatus>('quotationSupplierStatus');
+
+export const PRICE_ENTRY_SOURCE_LABELS =
+  createTranslatedLabels<PriceEntrySource>('priceEntrySource');

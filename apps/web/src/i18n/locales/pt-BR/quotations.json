@@ -1,0 +1,270 @@
+{
+  "page": {
+    "eyebrow": "Suprimentos",
+    "title": "Cotações",
+    "description": "Mapa de cotações: fornecedores lado a lado, retorno de preços e escolha do vencedor por item.",
+    "fromRequests": "Solicitações para cotar"
+  },
+  "kpi": {
+    "title": "Indicadores de cotações",
+    "open": "Abertas",
+    "waiting": "Aguardando resposta",
+    "waitingHint": "Com fornecedor que ainda não respondeu",
+    "dueSoon": "Prazo em até 2 dias",
+    "dueSoonHint": "Abertas que vencem logo",
+    "closedThisMonth": "Encerradas no mês"
+  },
+  "filters": {
+    "search": "Buscar",
+    "searchPlaceholder": "Número, título ou solicitação…",
+    "status": "Situação",
+    "all": "Todas"
+  },
+  "table": {
+    "number": "Nº",
+    "title": "Cotação",
+    "status": "Situação",
+    "deadline": "Prazo",
+    "answers": "Respostas",
+    "items": "Itens",
+    "request": "Solicitação: {{title}}",
+    "overdue": "Prazo vencido"
+  },
+  "empty": {
+    "title": "Nenhuma cotação aqui",
+    "description": "Cotações são abertas a partir de uma solicitação aprovada (em compras ou em cotação)."
+  },
+  "error": {
+    "title": "Não foi possível carregar as cotações",
+    "description": "Verifique sua conexão e tente novamente."
+  },
+  "create": {
+    "title": "Abrir cotação",
+    "description": "Escolha os itens e os fornecedores. Cada fornecedor recebe um link próprio para responder, sem precisar de login.",
+    "fields": {
+      "title": "Título",
+      "deadline": "Prazo de resposta",
+      "notes": "Observações para os fornecedores",
+      "items_one": "Itens a cotar ({{count}})",
+      "items_other": "Itens a cotar ({{count}})",
+      "suppliers_one": "Fornecedores ({{count}} de até {{max}})",
+      "suppliers_other": "Fornecedores ({{count}} de até {{max}})"
+    },
+    "hints": {
+      "deadline": "Depois dessa data o link para de aceitar respostas.",
+      "notes": "Local de entrega, prazo desejado, exigências técnicas…"
+    },
+    "supplierSearch": "Buscar fornecedor ou categoria…",
+    "noSuppliers": "Nenhum fornecedor encontrado.",
+    "errors": {
+      "deadline": "Escolha uma data a partir de hoje.",
+      "tooManySuppliers": "Convide no máximo {{max}} fornecedores."
+    },
+    "submit": "Abrir cotação"
+  },
+  "detail": {
+    "eyebrow": "Cotação nº {{numero}}",
+    "createdBy": "Aberta por {{name}} em {{date}}",
+    "back": "Cotações",
+    "export": "Exportar mapa (Excel)",
+    "pickCheapest": "Escolher menor preço",
+    "close": "Encerrar cotação",
+    "cancel": "Cancelar cotação",
+    "status": "Situação",
+    "deadline": "Prazo de resposta",
+    "request": "Solicitação",
+    "requester": "Solicitante · centro de custo",
+    "notes": "Observações:",
+    "notFoundTitle": "Cotação não encontrada",
+    "notFoundDescription": "Ela pode ter sido removida ou o endereço está incorreto."
+  },
+  "feedback": {
+    "title": "Retorno de preços",
+    "answers": "Respostas",
+    "answersHint": "Fornecedores que já cotaram",
+    "bestTotal": "Total no menor preço",
+    "bestTotalHint": "Comprando cada item de quem cobrou menos",
+    "winnersTotal": "Total dos escolhidos",
+    "winnersHint_one": "{{count}} de {{total}} item com fornecedor escolhido",
+    "winnersHint_other": "{{count}} de {{total}} itens com fornecedor escolhido",
+    "savings": "Economia sobre a última compra",
+    "savingsHint": "Diferença contra o último preço pago dos itens do catálogo",
+    "savingsNegative": "Mais caro que a última compra"
+  },
+  "map": {
+    "title": "Mapa de cotação",
+    "legend": "Verde: menor preço do item · Coroa: fornecedor escolhido",
+    "caption": "Mapa da cotação nº {{numero}}",
+    "item": "Item",
+    "reference": "Último preço pago",
+    "bestTotal": "Menor total entre quem cotou tudo",
+    "deliveryDays_one": "entrega em {{count}} dia",
+    "deliveryDays_other": "entrega em {{count}} dias",
+    "inCatalog": "Catálogo: {{codigo}}",
+    "noHistory": "Sem histórico",
+    "variationHint": "Menor preço desta cotação contra o último preço pago",
+    "noAnswer": "Sem resposta",
+    "unavailable": "Não tem",
+    "bestPrice": "(menor preço)",
+    "lineTotal": "Total {{value}}",
+    "choose": "Escolher",
+    "chosen": "Escolhido",
+    "supplierTotal": "Total do fornecedor",
+    "withFreight": "com frete",
+    "ranking": "{{position}}º menor total",
+    "partial": "Cotou {{count}} de {{total}} itens",
+    "freight": "Frete {{value}}",
+    "cheapestItems_one": "Menor preço em {{count}} item",
+    "cheapestItems_other": "Menor preço em {{count}} itens"
+  },
+  "suppliers": {
+    "title_one": "Fornecedor convidado ({{count}})",
+    "title_other": "Fornecedores convidados ({{count}})",
+    "add": "Convidar fornecedor",
+    "answeredBy": "Respondido por {{name}} em {{date}}",
+    "waiting": "Ainda não respondeu",
+    "payment": "Pagamento: {{value}}",
+    "copyLink": "Copiar link",
+    "whatsapp": "WhatsApp",
+    "moreAria": "Mais ações para {{name}}",
+    "email": "Enviar por e-mail",
+    "copyMessage": "Copiar mensagem",
+    "openLink": "Abrir link",
+    "enterPrices": "Lançar proposta recebida",
+    "regenerate": "Gerar novo link",
+    "remove": "Remover da cotação"
+  },
+  "share": {
+    "subject": "Cotação nº {{numero}} — {{titulo}}",
+    "message": "Olá, {{contato}}!\n\nGostaríamos de uma cotação para os materiais abaixo (cotação nº {{numero}} — {{titulo}}):\n\n{{itens}}\n\nResponda pelo link até {{prazo}}, informando preço, marca e referência de cada item:\n{{link}}\n\nObrigado!"
+  },
+  "confirm": {
+    "regenerateTitle": "Gerar um novo link?",
+    "regenerateDescription": "O link enviado para {{name}} deixa de funcionar. A resposta já recebida continua valendo.",
+    "removeSupplierTitle": "Remover fornecedor?",
+    "removeSupplierDescription": "{{name}} sai da cotação e os preços que enviou são apagados.",
+    "closeTitle": "Encerrar a cotação?",
+    "closeDescription_one": "{{count}} de {{total}} item tem fornecedor escolhido. Os preços escolhidos entram no histórico do catálogo e o link deixa de aceitar respostas.",
+    "closeDescription_other": "{{count}} de {{total}} itens têm fornecedor escolhido. Os preços escolhidos entram no histórico do catálogo e o link deixa de aceitar respostas.",
+    "cancelTitle": "Cancelar a cotação?",
+    "cancelDescription": "Os links deixam de aceitar respostas e nenhum preço entra no catálogo."
+  },
+  "addSupplier": {
+    "title": "Convidar fornecedor",
+    "description": "Ele recebe um link próprio para responder a esta cotação.",
+    "label": "Fornecedor",
+    "placeholder": "Selecione",
+    "none": "Todos os fornecedores ativos já foram convidados.",
+    "submit": "Convidar"
+  },
+  "manual": {
+    "title": "Proposta de {{name}}",
+    "description": "Lance a proposta recebida por e-mail, telefone ou PDF. Ela vale como resposta do fornecedor.",
+    "submit": "Salvar proposta"
+  },
+  "response": {
+    "itemsLegend": "Itens da cotação",
+    "itemNumber": "Item {{index}}",
+    "requested": "pedido: {{value}}",
+    "available": "Tenho",
+    "unavailable": "Não tenho",
+    "unitPrice": "Preço unitário (R$/{{unit}})",
+    "brand": "Marca",
+    "reference": "Referência",
+    "itemNote": "Observação do item",
+    "lineTotal": "Total do item:",
+    "conditions": "Condições da proposta",
+    "deliveryDays": "Prazo de entrega (dias)",
+    "payment": "Condição de pagamento",
+    "paymentPlaceholder": "Ex.: 28 dias, boleto",
+    "validity": "Validade da proposta",
+    "freight": "Frete (R$)",
+    "notes": "Observações",
+    "name": "Seu nome",
+    "total": "Total da proposta:",
+    "errors": {
+      "price": "Informe o preço ou marque “Não tenho”.",
+      "name": "Informe seu nome."
+    }
+  },
+  "public": {
+    "portal": "Portal de cotação",
+    "eyebrow": "Cotação nº {{numero}} · {{empresa}}",
+    "greeting": "Olá, {{fornecedor}}! Informe abaixo seus preços para os materiais solicitados.",
+    "deadline": "Responda até {{date}}",
+    "itemCount_one": "{{count}} item",
+    "itemCount_other": "{{count}} itens",
+    "answeredBanner": "Proposta recebida de {{name}} em {{date}}.",
+    "canEdit": "Você pode alterar até o prazo.",
+    "refusedBanner": "Você informou em {{date}} que não vai cotar.",
+    "closed": {
+      "ENCERRADA": "Esta cotação foi encerrada. Obrigado pela participação!",
+      "CANCELADA": "Esta cotação foi cancelada.",
+      "PRAZO": "O prazo para responder terminou."
+    },
+    "submit": "Enviar proposta",
+    "update": "Atualizar proposta",
+    "sent": "Proposta enviada. Obrigado!",
+    "sendError": "Não foi possível enviar. Tente de novo.",
+    "decline": "Não vamos cotar",
+    "declineTitle": "Não vai cotar?",
+    "declineDescription": "Avise o comprador; se quiser, explique o motivo.",
+    "declineReason": "Motivo (opcional)",
+    "declineConfirm": "Confirmar",
+    "declined": "Recusa registrada. Obrigado por avisar.",
+    "invalidTitle": "Link inválido ou expirado",
+    "invalidDescription": "Peça um novo link ao comprador que enviou a cotação.",
+    "privacy": "Seus preços são vistos apenas pela equipe de compras de {{empresa}}."
+  },
+  "toast": {
+    "created": "Cotação nº {{numero}} aberta.",
+    "createError": "Não foi possível abrir a cotação.",
+    "updated": "Cotação atualizada.",
+    "supplierAdded": "Fornecedor convidado.",
+    "supplierRemoved": "Fornecedor removido.",
+    "linkRegenerated": "Novo link gerado.",
+    "pricesSaved": "Proposta salva.",
+    "cheapestPicked": "Menor preço escolhido em cada item.",
+    "closed": "Cotação encerrada. Preços enviados ao catálogo.",
+    "cancelled": "Cotação cancelada.",
+    "linkCopied": "Link copiado.",
+    "messageCopied": "Mensagem copiada.",
+    "copyFailed": "Não foi possível copiar. Selecione e copie manualmente.",
+    "exportError": "Não foi possível exportar o mapa."
+  },
+  "export": {
+    "sheet": "Mapa de cotação",
+    "title": "Mapa de cotação nº {{numero}} — {{titulo}}",
+    "request": "Solicitação: {{title}}",
+    "meta": "Situação: {{status}} · Prazo: {{prazo}} · Centro de custo: {{centro}}",
+    "generatedAt": "Gerado em {{date}}",
+    "col": {
+      "item": "Nº",
+      "description": "Descrição",
+      "quantity": "Qtd.",
+      "unit": "Un.",
+      "requested": "Marca/ref. pedida",
+      "lastPrice": "Último preço",
+      "unitPrice": "Unitário",
+      "total": "Total",
+      "best": "Menor preço",
+      "winner": "Escolhido"
+    },
+    "unavailable": "não tem",
+    "summary": {
+      "freight": "Frete",
+      "total": "Total com frete",
+      "ranking": "Ranking",
+      "delivery": "Prazo de entrega",
+      "payment": "Pagamento",
+      "validity": "Validade",
+      "status": "Situação",
+      "bestTotal": "Total no menor preço",
+      "winnersTotal": "Total dos escolhidos",
+      "savings": "Economia sobre a última compra"
+    },
+    "days_one": "{{count}} dia",
+    "days_other": "{{count}} dias",
+    "fileName": "mapa-cotacao-{{numero}}"
+  }
+}

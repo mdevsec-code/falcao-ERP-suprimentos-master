@@ -1,22 +1,16 @@
-import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form';
+import { useState } from 'react';
+import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
-import { Plus, Send, Trash2 } from 'lucide-react';
+import { BookOpen, Plus, Send, Trash2, X } from 'lucide-react';
+import type { ProductSummaryDto } from '@falcao-erp/shared-types';
 
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { Label } from '@/components/ui/Label';
 import { Textarea } from '@/components/ui/Textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/Select';
 import { FormSection } from '@/components/common/FormSection';
-import { useActiveProductOptions } from '@/features/products/hooks/useProducts';
 import { formatCurrencyBRL } from '@/utils/format';
+import { CatalogPickerDialog } from './CatalogPickerDialog';
 import {
   itemSubtotal,
   purchaseRequestFormSchema,
@@ -24,14 +18,14 @@ import {
   type PurchaseRequestItemInput,
 } from '../types';
 
-const NONE = '__none';
-
 const EMPTY_ITEM: PurchaseRequestItemInput = {
   productId: '',
   description: '',
   quantity: 1,
   unit: 'UN',
   estimatedPrice: '',
+  marca: '',
+  referencia: '',
 };
 
 interface PurchaseRequestFormProps {
@@ -63,24 +57,35 @@ export function PurchaseRequestForm({
   const items = useWatch({ control, name: 'items' });
   const total = (items ?? []).reduce((sum, item) => sum + itemSubtotal(item), 0);
 
-  const { data: productsPage } = useActiveProductOptions();
-  const products = productsPage?.data ?? [];
+  /** Item cujo "escolher do catálogo" está aberto. */
+  const [pickingIndex, setPickingIndex] = useState<number | null>(null);
+  /** Nome do produto escolhido em cada linha, só para exibir. */
+  const [pickedNames, setPickedNames] = useState<Record<string, string>>({});
 
-  /** Ao escolher um produto do catálogo, sugere descrição, unidade e último preço. */
-  function handleProductChange(index: number, productId: string) {
-    setValue(`items.${index}.productId`, productId, { shouldDirty: true });
-    const product = products.find((p) => p.id === productId);
-    if (!product) return;
-    const current = getValues(`items.${index}`);
-    if (!current.description) {
-      setValue(`items.${index}.description`, product.nome, { shouldValidate: true });
-    }
+  /** Ao escolher do catálogo, preenche descrição, unidade, marca, referência e último preço. */
+  function handlePick(product: ProductSummaryDto) {
+    if (pickingIndex === null) return;
+    const index = pickingIndex;
+    const fieldId = fields[index]?.id;
+    setValue(`items.${index}.productId`, product.id, { shouldDirty: true });
+    setValue(`items.${index}.description`, product.nome, { shouldValidate: true });
     setValue(`items.${index}.unit`, product.unidade, { shouldValidate: true });
+    setValue(`items.${index}.marca`, product.marca ?? '');
+    setValue(`items.${index}.referencia`, product.referencia ?? '');
+    const current = getValues(`items.${index}`);
     if (current.estimatedPrice === '' && product.lastPrice !== null) {
       setValue(`items.${index}.estimatedPrice`, Number(product.lastPrice), {
         shouldValidate: true,
       });
     }
+    if (fieldId) {
+      setPickedNames((prev) => ({ ...prev, [fieldId]: `${product.codigo} · ${product.nome}` }));
+    }
+    setPickingIndex(null);
+  }
+
+  function unlinkProduct(index: number) {
+    setValue(`items.${index}.productId`, '', { shouldDirty: true });
   }
 
   return (
@@ -160,41 +165,68 @@ export function PurchaseRequestForm({
                   </Button>
                 </div>
 
-                <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
-                  <div className="flex flex-col gap-1.5">
-                    <Label htmlFor={`item-product-${index}`}>
-                      {t('purchaseRequests:form.fields.product')}
-                    </Label>
-                    <Controller
-                      control={control}
-                      name={`items.${index}.productId`}
-                      render={({ field: productField }) => (
-                        <Select
-                          value={productField.value || NONE}
-                          onValueChange={(v) => handleProductChange(index, v === NONE ? '' : v)}
-                        >
-                          <SelectTrigger id={`item-product-${index}`}>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value={NONE}>
-                              {t('purchaseRequests:form.looseItem')}
-                            </SelectItem>
-                            {products.map((p) => (
-                              <SelectItem key={p.id} value={p.id}>
-                                {p.codigo} · {p.nome}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      )}
-                    />
-                  </div>
+                <div className="flex flex-wrap items-center gap-2 rounded-md border border-dashed border-border bg-surface px-3 py-2">
+                  {items?.[index]?.productId ? (
+                    <>
+                      <BookOpen className="h-4 w-4 text-brand-gold-700" aria-hidden="true" />
+                      <span className="min-w-0 flex-1 truncate text-sm text-ink">
+                        {pickedNames[field.id] ?? t('purchaseRequests:form.fromCatalog')}
+                      </span>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setPickingIndex(index)}
+                      >
+                        {t('purchaseRequests:form.changeProduct')}
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        leftIcon={<X className="h-3.5 w-3.5" />}
+                        onClick={() => unlinkProduct(index)}
+                      >
+                        {t('purchaseRequests:form.unlinkProduct')}
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <span className="min-w-0 flex-1 text-sm text-ink-soft">
+                        {t('purchaseRequests:form.looseItemHint')}
+                      </span>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        leftIcon={<BookOpen className="h-3.5 w-3.5" />}
+                        onClick={() => setPickingIndex(index)}
+                      >
+                        {t('purchaseRequests:form.pickFromCatalog')}
+                      </Button>
+                    </>
+                  )}
+                </div>
+
+                <Input
+                  {...register(`items.${index}.description`)}
+                  label={t('purchaseRequests:form.fields.description')}
+                  error={itemErrors?.description?.message}
+                  required
+                />
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   <Input
-                    {...register(`items.${index}.description`)}
-                    label={t('purchaseRequests:form.fields.description')}
-                    error={itemErrors?.description?.message}
-                    required
+                    {...register(`items.${index}.marca`)}
+                    label={t('purchaseRequests:form.fields.marca')}
+                    hint={t('common:form.optional')}
+                    error={itemErrors?.marca?.message}
+                  />
+                  <Input
+                    {...register(`items.${index}.referencia`)}
+                    label={t('purchaseRequests:form.fields.referencia')}
+                    hint={t('common:form.optional')}
+                    inputClassName="font-mono"
+                    error={itemErrors?.referencia?.message}
                   />
                 </div>
 
@@ -243,6 +275,14 @@ export function PurchaseRequestForm({
           </span>
         </div>
       </FormSection>
+
+      <CatalogPickerDialog
+        open={pickingIndex !== null}
+        onOpenChange={(open) => {
+          if (!open) setPickingIndex(null);
+        }}
+        onPick={handlePick}
+      />
 
       <div className="flex flex-wrap justify-end gap-2">
         <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting}>

@@ -16,6 +16,7 @@ export type {
   SupplierDocumentDto,
   SupplierEvaluationDto,
 } from '@falcao-erp/shared-types';
+import { MAX_UPLOAD_BYTES as UPLOAD_LIMIT_BYTES } from '@/constants/uploads';
 
 export interface SupplierListParams {
   page?: number;
@@ -81,4 +82,4 @@ export function fromFormInput(input: SupplierFormInput): SupplierPayload {
 }
 
 /** Limite de upload da API (`addMaxSizeValidator` nos controllers). */
-export const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
+export const MAX_UPLOAD_BYTES = UPLOAD_LIMIT_BYTES;

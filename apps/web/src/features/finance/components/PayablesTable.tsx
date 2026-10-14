@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Ban, CircleCheck, FileCheck2, Pencil } from 'lucide-react';
+import { Ban, CircleCheck, FileCheck2, FileCode2, FileText, Pencil } from 'lucide-react';
 
 import {
   Table,
@@ -89,7 +89,21 @@ export function PayablesTable({
               <TableCell className="text-ink-soft">{payable.supplierName ?? '—'}</TableCell>
               <TableCell className="whitespace-nowrap">
                 {payable.notaFiscal ? (
-                  <span className="font-mono text-xs text-ink">{payable.notaFiscal}</span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <span className="font-mono text-xs text-ink">{payable.notaFiscal}</span>
+                    {payable.notaFiscalPdfUrl && (
+                      <FileText
+                        className="h-3.5 w-3.5 text-ink-soft"
+                        aria-label={t('finance:table.hasPdf')}
+                      />
+                    )}
+                    {payable.notaFiscalXmlUrl && (
+                      <FileCode2
+                        className="h-3.5 w-3.5 text-ink-soft"
+                        aria-label={t('finance:table.hasXml')}
+                      />
+                    )}
+                  </span>
                 ) : payable.status !== 'CANCELADO' ? (
                   <Badge variant="warning" size="sm">
                     {t('finance:table.noInvoice')}

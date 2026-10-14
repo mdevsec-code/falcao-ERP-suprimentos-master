@@ -59,7 +59,7 @@
   },
   "dialog": {
     "uploadTitle": "Upload document",
-    "uploadDescription": "Up to 20 MB. Text files become searchable by content.",
+    "uploadDescription": "Up to 50 MB. Text files become searchable by content.",
     "editTitle": "Edit document",
     "editDescription": "File: {{name}}. To replace the file, upload a new document.",
     "file": "File",

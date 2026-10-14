@@ -23,7 +23,9 @@
       "label": "搜索",
       "placeholder": "申请标题…"
     },
-    "status": { "label": "状态" },
+    "status": {
+      "label": "状态"
+    },
     "allStatuses": "全部状态",
     "chipStatus": "状态：{{value}}",
     "chipSearch": "搜索：{{value}}"
@@ -92,7 +94,8 @@
       "attachments": "文件（{{count}}）"
     },
     "notFoundTitle": "未找到申请",
-    "notFoundDescription": "它可能已被删除，或地址有误。"
+    "notFoundDescription": "它可能已被删除，或地址有误。",
+    "addToCatalog": "加入目录"
   },
   "timeline": {
     "created": "创建了申请",
@@ -145,12 +148,19 @@
       "quantity": "数量",
       "unit": "单位",
       "estimatedPrice": "预估单价（R$）",
-      "subtotal": "小计"
+      "subtotal": "小计",
+      "marca": "品牌",
+      "referencia": "型号"
     },
     "placeholders": {
       "title": "例如：B 区工地材料",
       "justification": "用途、所需时间、工地/项目…"
-    }
+    },
+    "fromCatalog": "目录物料",
+    "looseItemHint": "手动描述的物料（不在目录中）。",
+    "pickFromCatalog": "从目录选择",
+    "changeProduct": "更换",
+    "unlinkProduct": "解除关联"
   },
   "confirm": {
     "removeAttachmentTitle": "移除文件",
@@ -168,5 +178,37 @@
     "attachmentUploaded": "文件上传成功。",
     "attachmentError": "无法上传文件。",
     "attachmentRemoved": "文件已移除。"
+  },
+  "catalog": {
+    "title": "从目录选择",
+    "description": "按专业和类别筛选，同时显示品牌、型号和最近一次采购价。",
+    "disciplineGroup": "专业",
+    "allDisciplines": "全部",
+    "search": "搜索",
+    "searchPlaceholder": "名称、编码、品牌或型号……",
+    "category": "类别",
+    "allCategories": "全部类别",
+    "emptyTitle": "未找到",
+    "emptyDescription": "调整筛选条件，或在申请中手动描述物料。",
+    "lastPaid": "{{date}} 采购",
+    "notFoundHint": "找不到？关闭后手动描述物料：采购部门稍后可将其加入目录。"
+  },
+  "quotations": {
+    "title": "询价",
+    "open": "发起询价",
+    "none": "此申请尚未发起询价。",
+    "summary": "{{answered}}/{{invited}} 已回复 · 截止 {{deadline}}"
+  },
+  "toCatalog": {
+    "title": "加入目录",
+    "description": "该物料将成为产品库中的产品，并与此申请关联。下次申请人即可在搜索中找到它。",
+    "code": "编码",
+    "name": "名称",
+    "category": "类别",
+    "unit": "单位",
+    "discipline": "专业",
+    "noDiscipline": "无专业",
+    "select": "请选择",
+    "submit": "加入目录"
   }
 }

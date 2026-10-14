@@ -8,6 +8,7 @@ import type {
 } from '@falcao-erp/shared-types';
 import { httpClient } from '@/services/http/client';
 import type { SupplierListParams, SupplierPayload } from '../types';
+import { UPLOAD_TIMEOUT_MS } from '@/constants/uploads';
 
 export const suppliersApi = {
   async list(params: SupplierListParams): Promise<PaginatedResult<SupplierSummaryDto>> {
@@ -62,6 +63,7 @@ export const suppliersApi = {
     const { data } = await httpClient.post<SupplierDocumentDto>(
       `/suppliers/${id}/documents`,
       formData,
+      { timeout: UPLOAD_TIMEOUT_MS },
     );
     return data;
   },

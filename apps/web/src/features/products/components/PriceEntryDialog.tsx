@@ -24,13 +24,22 @@ import {
   SelectValue,
 } from '@/components/ui/Select';
 import { useActiveSupplierOptions } from '@/features/suppliers/hooks/useSuppliers';
-import { priceSchema } from '../types';
+import {
+  optionalNumber,
+  optionalText,
+  toOptionalNumber,
+  emptyToUndefined,
+} from '@/validators/common';
+import { priceSchema, type PriceEntryPayload } from '../types';
 
 const NONE = '__none';
 
 const priceEntrySchema = z.object({
   price: priceSchema,
   supplierId: z.string(),
+  quantity: optionalNumber(0.01),
+  marca: optionalText(80),
+  referencia: optionalText(80),
 });
 
 type PriceEntryInput = z.infer<typeof priceEntrySchema>;
@@ -40,7 +49,10 @@ interface PriceEntryDialogProps {
   onOpenChange: (open: boolean) => void;
   /** Fornecedor pré-selecionado (o principal do produto, quando houver). */
   defaultSupplierId?: string;
-  onSubmit: (input: { price: number; supplierId?: string }) => void;
+  /** Marca e referência do cadastro, sugeridas no preço novo. */
+  defaultMarca?: string | null;
+  defaultReferencia?: string | null;
+  onSubmit: (input: PriceEntryPayload) => void;
   isSubmitting: boolean;
 }
 
@@ -48,6 +60,8 @@ export function PriceEntryDialog({
   open,
   onOpenChange,
   defaultSupplierId,
+  defaultMarca,
+  defaultReferencia,
   onSubmit,
   isSubmitting,
 }: PriceEntryDialogProps) {
@@ -63,18 +77,33 @@ export function PriceEntryDialog({
     formState: { errors },
   } = useForm<PriceEntryInput>({
     resolver: zodResolver(priceEntrySchema),
-    defaultValues: { price: undefined as unknown as number, supplierId: NONE },
+    defaultValues: {
+      price: undefined as unknown as number,
+      supplierId: NONE,
+      quantity: '',
+      marca: '',
+      referencia: '',
+    },
   });
 
   useEffect(() => {
     if (!open) return;
-    reset({ price: undefined as unknown as number, supplierId: defaultSupplierId ?? NONE });
-  }, [open, defaultSupplierId, reset]);
+    reset({
+      price: undefined as unknown as number,
+      supplierId: defaultSupplierId ?? NONE,
+      quantity: '',
+      marca: defaultMarca ?? '',
+      referencia: defaultReferencia ?? '',
+    });
+  }, [open, defaultSupplierId, defaultMarca, defaultReferencia, reset]);
 
   const submit = handleSubmit((data) =>
     onSubmit({
       price: data.price,
       supplierId: data.supplierId === NONE ? undefined : data.supplierId,
+      quantity: toOptionalNumber(data.quantity),
+      marca: emptyToUndefined(data.marca),
+      referencia: emptyToUndefined(data.referencia),
     }),
   );
 
@@ -97,6 +126,30 @@ export function PriceEntryDialog({
             error={errors.price?.message}
             required
           />
+          <Input
+            {...register('quantity')}
+            type="number"
+            min={0}
+            step="0.01"
+            label={t('products:prices.dialog.quantity')}
+            hint={t('common:form.optional')}
+            error={errors.quantity?.message}
+          />
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <Input
+              {...register('marca')}
+              label={t('products:form.fields.marca')}
+              hint={t('common:form.optional')}
+              error={errors.marca?.message}
+            />
+            <Input
+              {...register('referencia')}
+              label={t('products:form.fields.referencia')}
+              hint={t('common:form.optional')}
+              inputClassName="font-mono"
+              error={errors.referencia?.message}
+            />
+          </div>
 
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="price-supplier">{t('products:prices.dialog.supplier')}</Label>

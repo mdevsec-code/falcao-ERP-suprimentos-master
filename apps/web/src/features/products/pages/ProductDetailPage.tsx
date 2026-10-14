@@ -3,9 +3,11 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import {
   ArrowLeft,
+  Barcode,
   Clock,
   DollarSign,
   Hash,
+  Layers,
   NotebookText,
   Package,
   Pencil,
@@ -136,6 +138,18 @@ export function ProductDetailPage() {
                 icon={Tag}
                 label={t('products:form.fields.marca')}
                 value={product.marca ?? '—'}
+              />
+              <InfoTile
+                icon={Barcode}
+                label={t('products:form.fields.referencia')}
+                value={
+                  product.referencia ? <span className="font-mono">{product.referencia}</span> : '—'
+                }
+              />
+              <InfoTile
+                icon={Layers}
+                label={t('products:form.fields.disciplina')}
+                value={product.discipline?.nome ?? '—'}
               />
               <InfoTile
                 icon={Package}
@@ -283,6 +297,8 @@ export function ProductDetailPage() {
         open={priceOpen}
         onOpenChange={setPriceOpen}
         defaultSupplierId={product.primarySupplier?.id}
+        defaultMarca={product.marca}
+        defaultReferencia={product.referencia}
         isSubmitting={addPriceEntry.isPending}
         onSubmit={(input) => addPriceEntry.mutate(input, { onSuccess: () => setPriceOpen(false) })}
       />

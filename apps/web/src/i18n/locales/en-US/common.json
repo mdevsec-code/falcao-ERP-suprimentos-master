@@ -62,7 +62,8 @@
     "documents": "Documents",
     "users": "Users",
     "audit": "Audit",
-    "profile": "My profile"
+    "profile": "My profile",
+    "quotations": "Quotations"
   },
   "theme": {
     "switchToLight": "Switch to light theme",

@@ -16,6 +16,8 @@ import { formatCurrencyBRL, formatDate, formatDateTime } from '@/utils/format';
 import { getIntlLocale } from '@/utils/locale';
 import { cn } from '@/utils/cn';
 import type { ProductPriceEntryDto } from '../types';
+import { Link } from 'react-router-dom';
+import { routeTo } from '@/constants/routes';
 
 function formatPercentChange(pct: number): string {
   return new Intl.NumberFormat(getIntlLocale(), {
@@ -75,6 +77,8 @@ export function PriceHistory({ entries }: { entries: readonly ProductPriceEntryD
           <TableRow>
             <TableHead>{t('products:prices.table.date')}</TableHead>
             <TableHead>{t('products:prices.table.supplier')}</TableHead>
+            <TableHead>{t('products:prices.table.brandRef')}</TableHead>
+            <TableHead className="text-right">{t('products:prices.table.quantity')}</TableHead>
             <TableHead className="text-right">{t('products:prices.table.price')}</TableHead>
             <TableHead className="text-right">{t('products:prices.table.variation')}</TableHead>
           </TableRow>
@@ -93,7 +97,26 @@ export function PriceHistory({ entries }: { entries: readonly ProductPriceEntryD
                 <TableCell className="whitespace-nowrap text-ink-soft">
                   {formatDateTime(entry.recordedAt)}
                 </TableCell>
-                <TableCell>{entry.supplierName ?? t('products:prices.noSupplier')}</TableCell>
+                <TableCell>
+                  {entry.supplierName ?? t('products:prices.noSupplier')}
+                  {entry.origem === 'COTACAO' && entry.quotationId && (
+                    <Link
+                      to={routeTo.quotation(entry.quotationId)}
+                      className="block text-xs text-brand-gold-700 hover:underline"
+                    >
+                      {t('products:prices.fromQuotation', { numero: entry.quotationNumero })}
+                    </Link>
+                  )}
+                </TableCell>
+                <TableCell className="text-ink-soft">
+                  {entry.marca ?? '—'}
+                  {entry.referencia && (
+                    <span className="block font-mono text-xs">{entry.referencia}</span>
+                  )}
+                </TableCell>
+                <TableCell className="whitespace-nowrap text-right tabular-nums text-ink-soft">
+                  {entry.quantity ? Number(entry.quantity).toLocaleString() : '—'}
+                </TableCell>
                 <TableCell className="whitespace-nowrap text-right font-semibold tabular-nums">
                   {formatCurrencyBRL(entry.price)}
                 </TableCell>

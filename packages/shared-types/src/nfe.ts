@@ -30,14 +30,14 @@ const tagRegex = (tag: string) =>
 
 function block(xml: string, tag: string): string | null {
   const match = tagRegex(tag).exec(xml);
-  return match ? match[1] : null;
+  return match?.[1] ?? null;
 }
 
 function blocks(xml: string, tag: string): string[] {
   const regex = new RegExp(tagRegex(tag).source, "gi");
   const found: string[] = [];
   let match: RegExpExecArray | null;
-  while ((match = regex.exec(xml)) !== null) found.push(match[1]);
+  while ((match = regex.exec(xml)) !== null) found.push(match[1] ?? "");
   return found;
 }
 
@@ -72,7 +72,7 @@ export function parseNfeXml(xml: string): NfeData | null {
   const numero = value(ide, "nNF");
   if (!numero) return null;
 
-  const idAttr = /\bId\s*=\s*"NFe(\d{44})"/i.exec(infNFe[1]);
+  const idAttr = /\bId\s*=\s*"NFe(\d{44})"/i.exec(infNFe[1] ?? "");
   const chave = idAttr?.[1] ?? onlyDigits(value(xml, "chNFe"));
 
   const emit = block(xml, "emit");

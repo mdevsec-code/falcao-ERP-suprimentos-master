@@ -11,7 +11,9 @@
     "invoice": "Add invoice",
     "invoiceEdit": "Change invoice",
     "cancel": "Cancel payable",
-    "cancelReimbursementBlocked": "Payables from approved reimbursements can't be cancelled"
+    "cancelReimbursementBlocked": "Payables from approved reimbursements can't be cancelled",
+    "exportInvoices": "Invoices (Excel)",
+    "importXml": "Import NF-e XML"
   },
   "kpi": {
     "title": "Finance indicators",
@@ -72,7 +74,9 @@
     "paidAmount": "Paid: {{value}}",
     "overdue": "Overdue",
     "noInvoice": "No invoice",
-    "openReimbursement": "View reimbursement"
+    "openReimbursement": "View reimbursement",
+    "hasPdf": "PDF attached",
+    "hasXml": "XML attached"
   },
   "empty": {
     "title": "No payables yet",
@@ -123,7 +127,13 @@
   },
   "invoiceDialog": {
     "title": "Invoice",
-    "description": "Link the invoice to \"{{name}}\" to complete the reconciliation."
+    "description": "Link the invoice to \"{{name}}\" to complete the reconciliation.",
+    "files": "Invoice files",
+    "attach": "Attach PDF or XML",
+    "filesHint": "DANFE PDF and/or NF-e XML, up to {{max}}. The XML fills in number, issue date and access key, and is checked against the payable.",
+    "noFiles": "No files attached.",
+    "removeFile": "Remove {{name}}",
+    "key": "Access key: {{key}}"
   },
   "confirm": {
     "cancelTitle": "Cancel payable?",
@@ -147,6 +157,37 @@
     "updated": "Payable updated.",
     "paid": "Payment recorded.",
     "invoiced": "Invoice recorded.",
-    "cancelled": "Payable cancelled."
+    "cancelled": "Payable cancelled.",
+    "attachError": "Could not attach the file.",
+    "fileRemoved": "File removed.",
+    "pdfAttached": "Invoice PDF attached.",
+    "xmlAttached": "Invoice {{numero}} XML read and attached.",
+    "xmlReadError": "Could not read the XML.",
+    "xmlWarnings_one": "{{count}} detail of the invoice doesn't match the payable. See the warnings.",
+    "xmlWarnings_other": "{{count}} details of the invoice don't match the payable. See the warnings."
+  },
+  "importXml": {
+    "description": "Invoice {{numero}} — {{emitente}}"
+  },
+  "invoiceExport": {
+    "sheet": "Invoices",
+    "number": "Invoice #",
+    "issuedAt": "Issued on",
+    "supplier": "Supplier",
+    "description": "Description",
+    "costCenter": "Cost center",
+    "amount": "Amount",
+    "due": "Due date",
+    "status": "Status",
+    "paidOn": "Paid on",
+    "paidAmount": "Amount paid",
+    "method": "Method",
+    "key": "Access key",
+    "pdf": "PDF",
+    "xml": "XML",
+    "open": "Open",
+    "total": "Total",
+    "empty": "No payable with an invoice in this filter.",
+    "error": "Could not generate the spreadsheet."
   }
 }

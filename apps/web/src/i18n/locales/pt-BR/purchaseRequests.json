@@ -23,7 +23,9 @@
       "label": "Buscar",
       "placeholder": "Título da solicitação…"
     },
-    "status": { "label": "Status" },
+    "status": {
+      "label": "Status"
+    },
     "allStatuses": "Todos os status",
     "chipStatus": "Status: {{value}}",
     "chipSearch": "Busca: {{value}}"
@@ -93,7 +95,8 @@
       "attachments": "Arquivos ({{count}})"
     },
     "notFoundTitle": "Solicitação não encontrada",
-    "notFoundDescription": "Ela pode ter sido removida ou o endereço está incorreto."
+    "notFoundDescription": "Ela pode ter sido removida ou o endereço está incorreto.",
+    "addToCatalog": "Incluir no catálogo"
   },
   "timeline": {
     "created": "criou a solicitação",
@@ -146,12 +149,19 @@
       "quantity": "Quantidade",
       "unit": "Unidade",
       "estimatedPrice": "Preço unit. estimado (R$)",
-      "subtotal": "Subtotal"
+      "subtotal": "Subtotal",
+      "marca": "Marca",
+      "referencia": "Referência"
     },
     "placeholders": {
       "title": "Ex.: Materiais para a obra do Setor B",
       "justification": "Para que serve, prazo necessário, obra/projeto…"
-    }
+    },
+    "fromCatalog": "Item do catálogo",
+    "looseItemHint": "Item descrito à mão (fora do catálogo).",
+    "pickFromCatalog": "Escolher do catálogo",
+    "changeProduct": "Trocar",
+    "unlinkProduct": "Desvincular"
   },
   "confirm": {
     "removeAttachmentTitle": "Remover arquivo",
@@ -169,5 +179,37 @@
     "attachmentUploaded": "Arquivo enviado com sucesso.",
     "attachmentError": "Não foi possível enviar o arquivo.",
     "attachmentRemoved": "Arquivo removido."
+  },
+  "catalog": {
+    "title": "Escolher do catálogo",
+    "description": "Filtre por disciplina e categoria. Marca, referência e o último preço pago vêm junto.",
+    "disciplineGroup": "Disciplina",
+    "allDisciplines": "Todas",
+    "search": "Buscar",
+    "searchPlaceholder": "Nome, código, marca ou referência…",
+    "category": "Categoria",
+    "allCategories": "Todas as categorias",
+    "emptyTitle": "Nada encontrado",
+    "emptyDescription": "Ajuste os filtros ou descreva o item à mão no pedido.",
+    "lastPaid": "pago em {{date}}",
+    "notFoundHint": "Não achou? Feche e descreva o item à mão: compras pode incluí-lo no catálogo depois."
+  },
+  "quotations": {
+    "title": "Cotações",
+    "open": "Abrir cotação",
+    "none": "Nenhuma cotação aberta para esta solicitação.",
+    "summary": "{{answered}}/{{invited}} respostas · prazo {{deadline}}"
+  },
+  "toCatalog": {
+    "title": "Incluir no catálogo",
+    "description": "O item vira produto do banco de produtos e fica ligado a esta solicitação. Da próxima vez, quem pedir encontra o item na busca.",
+    "code": "Código",
+    "name": "Nome",
+    "category": "Categoria",
+    "unit": "Unidade",
+    "discipline": "Disciplina",
+    "noDiscipline": "Sem disciplina",
+    "select": "Selecione",
+    "submit": "Incluir no catálogo"
   }
 }

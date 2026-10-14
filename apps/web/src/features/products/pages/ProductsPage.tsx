@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Boxes, CheckCircle2, CircleOff, Layers, Plus } from 'lucide-react';
+import { Boxes, CheckCircle2, CircleOff, Layers, ListTree, Plus } from 'lucide-react';
 
 import { PageHeader } from '@/components/layout/PageHeader';
 import { StatTile } from '@/components/data-display/StatTile';
@@ -17,6 +17,7 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { PERMISSIONS } from '@/constants/permissions';
 import { ROUTE_PATHS } from '@/constants/routes';
 
+import { DisciplinesDialog } from '@/features/disciplines/components/DisciplinesDialog';
 import { useProductStats, useProducts } from '../hooks/useProducts';
 import { FiltersBar } from '../components/FiltersBar';
 import { ProductsTable } from '../components/ProductsTable';
@@ -29,7 +30,9 @@ export function ProductsPage() {
   const navigate = useNavigate();
   const [filters, setFilters] = useState<ProductFilters>({});
   const [page, setPage] = useState(1);
+  const [disciplinesOpen, setDisciplinesOpen] = useState(false);
   const debouncedSearch = useDebounce(filters.busca, 300);
+  const debouncedBrand = useDebounce(filters.marca, 300);
 
   const stats = useProductStats();
   const list = useProducts({
@@ -37,6 +40,9 @@ export function ProductsPage() {
     pageSize: PAGE_SIZE,
     search: debouncedSearch || undefined,
     categoria: filters.categoria,
+    disciplineId: filters.disciplineId,
+    marca: debouncedBrand || undefined,
+    supplierId: filters.supplierId,
   });
 
   function handleFilterChange(patch: Partial<ProductFilters>) {
@@ -49,8 +55,26 @@ export function ProductsPage() {
     setPage(1);
   }
 
-  const hasFilters = Boolean(filters.busca || filters.categoria);
+  const hasFilters = Boolean(
+    filters.busca ||
+    filters.categoria ||
+    filters.disciplineId ||
+    filters.marca ||
+    filters.supplierId,
+  );
   const rows = list.data?.data ?? [];
+
+  const disciplinesButton = (
+    <Can permission={PERMISSIONS.DISCIPLINE_WRITE}>
+      <Button
+        variant="outline"
+        leftIcon={<ListTree className="h-4 w-4" />}
+        onClick={() => setDisciplinesOpen(true)}
+      >
+        {t('products:actions.disciplines')}
+      </Button>
+    </Can>
+  );
 
   const newProductButton = (
     <Can permission={PERMISSIONS.PRODUCT_WRITE}>
@@ -70,7 +94,12 @@ export function ProductsPage() {
         eyebrow={t('products:page.eyebrow')}
         title={t('products:page.title')}
         description={t('products:page.description')}
-        actions={newProductButton}
+        actions={
+          <div className="flex flex-wrap gap-2">
+            {disciplinesButton}
+            {newProductButton}
+          </div>
+        }
       />
 
       <div className="space-y-8 px-6 py-8 sm:px-8">
@@ -103,8 +132,10 @@ export function ProductsPage() {
                 icon={<CircleOff className="h-4 w-4" />}
               />
               <StatTile
-                label={t('products:kpi.categories')}
-                value={<CountUp value={stats.data.byCategory.length} />}
+                label={t('products:kpi.disciplines')}
+                value={
+                  <CountUp value={stats.data.byDiscipline.filter((d) => d.disciplineId).length} />
+                }
                 icon={<Layers className="h-4 w-4" />}
               />
             </>
@@ -166,6 +197,7 @@ export function ProductsPage() {
           </div>
         )}
       </div>
+      <DisciplinesDialog open={disciplinesOpen} onOpenChange={setDisciplinesOpen} />
     </>
   );
 }

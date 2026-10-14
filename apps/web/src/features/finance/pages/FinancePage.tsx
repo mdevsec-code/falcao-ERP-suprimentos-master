@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { useRef, useState, type ChangeEvent } from 'react';
+import { toast } from 'sonner';
 import { Trans, useTranslation } from 'react-i18next';
 import {
   AlarmClock,
   CalendarClock,
   CircleCheckBig,
   Download,
+  FileCode2,
+  FileSpreadsheet,
   FileX2,
   Plus,
   Wallet,
@@ -45,8 +48,10 @@ import {
   usePayables,
   usePayableStats,
   usePayPayable,
+  usePreviewInvoiceXml,
   useRegisterInvoice,
   useUpdatePayable,
+  useUploadInvoiceFile,
 } from '../hooks/useFinance';
 import { financeApi } from '../services/finance.api';
 import { CashFlowChart } from '../components/CashFlowChart';
@@ -100,6 +105,13 @@ export function FinancePage() {
   const [invoicing, setInvoicing] = useState<PayableDto | null>(null);
   const [cancelling, setCancelling] = useState<PayableDto | null>(null);
   const [exporting, setExporting] = useState(false);
+  const [exportingInvoices, setExportingInvoices] = useState(false);
+  /** Conta nova aberta a partir do XML: valores sugeridos e o arquivo, anexado depois de criar. */
+  const [prefill, setPrefill] = useState<Partial<PayableFormInput> | null>(null);
+  const [pendingXml, setPendingXml] = useState<File | null>(null);
+  const xmlInput = useRef<HTMLInputElement>(null);
+  const previewXml = usePreviewInvoiceXml();
+  const uploadInvoiceFile = useUploadInvoiceFile();
 
   function handleFilterChange(patch: Partial<PayableFilters>) {
     setFilters((prev) => ({ ...prev, ...patch }));
@@ -113,7 +125,35 @@ export function FinancePage() {
 
   function openCreate() {
     setEditing(null);
+    setPrefill(null);
+    setPendingXml(null);
     setFormOpen(true);
+  }
+
+  /** Lê o XML da NF-e e abre o lançamento já preenchido (fornecedor, valor, vencimento). */
+  function handleXmlChosen(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+    previewXml.mutate(file, {
+      onSuccess: (check) => {
+        setEditing(null);
+        setPendingXml(file);
+        setPrefill({
+          descricao: t('finance:importXml.description', {
+            numero: check.numero,
+            emitente: check.supplierName ?? check.emitenteNome ?? '',
+          }).slice(0, 200),
+          valor: check.valor ? Number(check.valor) : ('' as unknown as number),
+          vencimento: check.primeiroVencimento ?? '',
+          supplierId: check.supplierId ?? '',
+          notaFiscal: check.numero,
+          notaFiscalEmissao: check.emissao ?? '',
+        });
+        check.avisos.forEach((aviso) => toast.warning(aviso));
+        setFormOpen(true);
+      },
+    });
   }
 
   function handleSubmit(values: PayableFormInput) {
@@ -124,7 +164,46 @@ export function FinancePage() {
         close,
       );
     } else {
-      createPayable.mutate(fromPayableForm(values), close);
+      createPayable.mutate(fromPayableForm(values), {
+        onSuccess: (created) => {
+          setFormOpen(false);
+          // Conta veio do XML: o arquivo vai junto, e a chave de acesso fica gravada.
+          if (pendingXml) {
+            uploadInvoiceFile.mutate({ id: (created as PayableDto).id, file: pendingXml });
+          }
+          setPendingXml(null);
+          setPrefill(null);
+        },
+      });
+    }
+  }
+
+  /** Planilha das notas fiscais do filtro atual (todas as páginas). */
+  async function handleExportInvoices() {
+    setExportingInvoices(true);
+    try {
+      const rows: PayableDto[] = [];
+      for (let current = 1; ; current++) {
+        const result = await financeApi.list({
+          ...listParams,
+          semNota: undefined,
+          comNota: true,
+          page: current,
+          pageSize: EXPORT_PAGE_SIZE,
+        });
+        rows.push(...result.data);
+        if (current >= result.meta.totalPages) break;
+      }
+      if (rows.length === 0) {
+        toast.info(t('finance:invoiceExport.empty'));
+        return;
+      }
+      const { exportInvoices } = await import('../lib/invoice-export');
+      await exportInvoices(rows, `notas-fiscais-${toDateOnly()}.xlsx`);
+    } catch {
+      toast.error(t('finance:invoiceExport.error'));
+    } finally {
+      setExportingInvoices(false);
     }
   }
 
@@ -194,6 +273,34 @@ export function FinancePage() {
             >
               {t('finance:actions.export')}
             </Button>
+            <Button
+              variant="outline"
+              leftIcon={<FileSpreadsheet className="h-4 w-4" />}
+              onClick={() => void handleExportInvoices()}
+              isLoading={exportingInvoices}
+            >
+              {t('finance:actions.exportInvoices')}
+            </Button>
+            {canWrite && (
+              <>
+                <input
+                  ref={xmlInput}
+                  type="file"
+                  accept=".xml,text/xml,application/xml"
+                  className="sr-only"
+                  onChange={handleXmlChosen}
+                  aria-label={t('finance:actions.importXml')}
+                />
+                <Button
+                  variant="outline"
+                  leftIcon={<FileCode2 className="h-4 w-4" />}
+                  onClick={() => xmlInput.current?.click()}
+                  isLoading={previewXml.isPending}
+                >
+                  {t('finance:actions.importXml')}
+                </Button>
+              </>
+            )}
             {canWrite && (
               <Button
                 variant="primary"
@@ -401,6 +508,7 @@ export function FinancePage() {
         open={formOpen}
         onOpenChange={setFormOpen}
         payable={editing}
+        initialValues={prefill}
         onSubmit={handleSubmit}
         isSubmitting={createPayable.isPending || updatePayable.isPending}
       />
@@ -418,6 +526,7 @@ export function FinancePage() {
       <InvoiceDialog
         payable={invoicing}
         onOpenChange={(open) => !open && setInvoicing(null)}
+        canAttach={canWrite}
         isSubmitting={registerInvoice.isPending}
         onSubmit={(input) =>
           invoicing &&

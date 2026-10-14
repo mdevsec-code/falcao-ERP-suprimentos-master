@@ -11,7 +11,9 @@
     "invoice": "Informar nota fiscal",
     "invoiceEdit": "Alterar nota fiscal",
     "cancel": "Cancelar conta",
-    "cancelReimbursementBlocked": "Contas de reembolso aprovado não podem ser canceladas"
+    "cancelReimbursementBlocked": "Contas de reembolso aprovado não podem ser canceladas",
+    "exportInvoices": "Notas fiscais (Excel)",
+    "importXml": "Importar XML da NF-e"
   },
   "kpi": {
     "title": "Indicadores financeiros",
@@ -72,7 +74,9 @@
     "paidAmount": "Pago: {{value}}",
     "overdue": "Vencida",
     "noInvoice": "Sem NF",
-    "openReimbursement": "Ver reembolso"
+    "openReimbursement": "Ver reembolso",
+    "hasPdf": "PDF anexado",
+    "hasXml": "XML anexado"
   },
   "empty": {
     "title": "Nenhuma conta lançada",
@@ -123,7 +127,13 @@
   },
   "invoiceDialog": {
     "title": "Nota fiscal",
-    "description": "Vincule a nota fiscal à conta \"{{name}}\" para concluir a conciliação."
+    "description": "Vincule a nota fiscal à conta \"{{name}}\" para concluir a conciliação.",
+    "files": "Arquivos da nota",
+    "attach": "Anexar PDF ou XML",
+    "filesHint": "PDF do DANFE e/ou XML da NF-e, até {{max}}. O XML preenche número, emissão e chave e é conferido com a conta.",
+    "noFiles": "Nenhum arquivo anexado.",
+    "removeFile": "Remover {{name}}",
+    "key": "Chave de acesso: {{key}}"
   },
   "confirm": {
     "cancelTitle": "Cancelar conta a pagar?",
@@ -147,6 +157,37 @@
     "updated": "Conta atualizada.",
     "paid": "Pagamento registrado.",
     "invoiced": "Nota fiscal registrada.",
-    "cancelled": "Conta cancelada."
+    "cancelled": "Conta cancelada.",
+    "attachError": "Não foi possível anexar o arquivo.",
+    "fileRemoved": "Arquivo removido.",
+    "pdfAttached": "PDF da nota anexado.",
+    "xmlAttached": "XML da NF {{numero}} lido e anexado.",
+    "xmlReadError": "Não foi possível ler o XML.",
+    "xmlWarnings_one": "{{count}} ponto da nota não confere com a conta. Veja os avisos.",
+    "xmlWarnings_other": "{{count}} pontos da nota não conferem com a conta. Veja os avisos."
+  },
+  "importXml": {
+    "description": "NF {{numero}} — {{emitente}}"
+  },
+  "invoiceExport": {
+    "sheet": "Notas fiscais",
+    "number": "Nº NF",
+    "issuedAt": "Emissão",
+    "supplier": "Fornecedor",
+    "description": "Descrição",
+    "costCenter": "Centro de custo",
+    "amount": "Valor",
+    "due": "Vencimento",
+    "status": "Situação",
+    "paidOn": "Pago em",
+    "paidAmount": "Valor pago",
+    "method": "Forma",
+    "key": "Chave de acesso",
+    "pdf": "PDF",
+    "xml": "XML",
+    "open": "Abrir",
+    "total": "Total",
+    "empty": "Nenhuma conta com nota fiscal neste filtro.",
+    "error": "Não foi possível gerar a planilha."
   }
 }

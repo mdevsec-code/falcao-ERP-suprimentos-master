@@ -9,25 +9,45 @@
     "backToList": "View products",
     "deactivate": "Deactivate",
     "reactivate": "Reactivate",
-    "addPrice": "Record price"
+    "addPrice": "Record price",
+    "disciplines": "Disciplines"
   },
   "kpi": {
     "title": "Product indicators",
     "total": "Registered",
     "active": "Active",
     "inactive": "Inactive",
-    "categories": "Categories"
+    "categories": "Categories",
+    "disciplines": "Disciplines in use"
   },
   "filters": {
     "title": "Filters",
     "search": {
       "label": "Search",
-      "placeholder": "Code, name or brand…"
+      "placeholder": "Code, name, brand or reference…"
     },
-    "category": { "label": "Category" },
+    "category": {
+      "label": "Category"
+    },
     "allCategories": "All categories",
     "chipCategory": "Category: {{value}}",
-    "chipSearch": "Search: {{value}}"
+    "chipSearch": "Search: {{value}}",
+    "discipline": {
+      "label": "Discipline"
+    },
+    "allDisciplines": "All",
+    "noDiscipline": "No discipline",
+    "brand": {
+      "label": "Brand",
+      "placeholder": "E.g.: WEG"
+    },
+    "supplier": {
+      "label": "Supplier"
+    },
+    "allSuppliers": "All suppliers",
+    "chipDiscipline": "Discipline: {{value}}",
+    "chipBrand": "Brand: {{value}}",
+    "chipSupplier": "Supplier: {{value}}"
   },
   "table": {
     "product": "Product",
@@ -35,7 +55,10 @@
     "unit": "Unit",
     "primarySupplier": "Primary supplier",
     "lastPrice": "Last price",
-    "status": "Status"
+    "status": "Status",
+    "discipline": "Discipline",
+    "lastPriceDetail": "{{quantity}} {{unit}} on {{date}}",
+    "ref": "Ref. {{value}}"
   },
   "empty": {
     "title": "No products registered",
@@ -74,15 +97,19 @@
       "date": "Date",
       "supplier": "Supplier",
       "price": "Price",
-      "variation": "Change"
+      "variation": "Change",
+      "brandRef": "Brand / reference",
+      "quantity": "Qty."
     },
     "dialog": {
       "title": "Record price",
       "description": "Add a new point to this product's price history.",
       "price": "Price (R$)",
       "supplier": "Supplier",
-      "submit": "Record"
-    }
+      "submit": "Record",
+      "quantity": "Quantity"
+    },
+    "fromQuotation": "Quotation #{{numero}}"
   },
   "form": {
     "createTitle": "New product",
@@ -108,16 +135,20 @@
       "initialPrice": "Initial price (R$)",
       "observacoes": "Notes",
       "primarySupplier": "Primary supplier",
-      "alternativeSuppliers": "Alternative suppliers"
+      "alternativeSuppliers": "Alternative suppliers",
+      "disciplina": "Discipline",
+      "referencia": "Reference"
     },
     "hints": {
       "leadTimeDays": "Average delivery time",
-      "initialPrice": "Starts the price history"
+      "initialPrice": "Starts the price history",
+      "referencia": "Manufacturer code (part number)"
     },
     "placeholders": {
       "category": "Select a category",
       "unit": "Select a unit"
-    }
+    },
+    "noDiscipline": "No discipline"
   },
   "confirm": {
     "deactivateTitle": "Deactivate product",
@@ -133,6 +164,23 @@
     "deactivated": "Product deactivated.",
     "reactivated": "Product reactivated.",
     "priceAdded": "Price recorded.",
-    "priceError": "Could not record the price."
+    "priceError": "Could not record the price.",
+    "catalogFromItem": "Item added to the catalog and linked to the request."
+  },
+  "disciplines": {
+    "title": "Disciplines",
+    "description": "Group the catalog by project discipline (Civil, Electrical…). Deactivated disciplines disappear from filters, but products stay linked to them.",
+    "newLabel": "New discipline",
+    "newPlaceholder": "E.g.: Telecom",
+    "add": "Add",
+    "renameAria": "Rename {{name}}",
+    "activeAria": "Activate or deactivate {{name}}",
+    "productCount_one": "{{count}} product",
+    "productCount_other": "{{count}} products",
+    "inactiveHint": "Deactivating deletes nothing: the discipline just stops showing up in filters and forms.",
+    "toast": {
+      "created": "Discipline created.",
+      "updated": "Discipline updated."
+    }
   }
 }

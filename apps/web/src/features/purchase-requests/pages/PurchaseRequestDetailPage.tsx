@@ -1,7 +1,17 @@
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
-import { ArrowLeft, CalendarClock, Landmark, Package, Paperclip, Upload, User } from 'lucide-react';
+import {
+  ArrowLeft,
+  BookPlus,
+  CalendarClock,
+  Landmark,
+  Package,
+  Paperclip,
+  Upload,
+  User,
+} from 'lucide-react';
+import type { PurchaseRequestItemDto } from '@falcao-erp/shared-types';
 
 import { PageHeader } from '@/components/layout/PageHeader';
 import { InfoTile } from '@/components/data-display/InfoTile';
@@ -37,6 +47,8 @@ import { StatusActions } from '../components/StatusActions';
 import { Timeline } from '../components/Timeline';
 import { CommentsPanel } from '../components/CommentsPanel';
 import { UploadAttachmentDialog } from '../components/UploadAttachmentDialog';
+import { AddToCatalogDialog } from '../components/AddToCatalogDialog';
+import { RequestQuotations } from '../components/RequestQuotations';
 
 export function PurchaseRequestDetailPage() {
   const { id = '' } = useParams();
@@ -49,6 +61,7 @@ export function PurchaseRequestDetailPage() {
   const removeAttachment = useRemovePurchaseRequestAttachment(id);
   const [uploadOpen, setUploadOpen] = useState(false);
   const [attachmentToRemove, setAttachmentToRemove] = useState<FileListItem | null>(null);
+  const [itemToCatalog, setItemToCatalog] = useState<PurchaseRequestItemDto | null>(null);
 
   if (isLoading) return <PageSkeleton tiles={3} />;
 
@@ -185,6 +198,11 @@ export function PurchaseRequestDetailPage() {
                       <TableRow key={item.id}>
                         <TableCell>
                           <p className="font-medium text-ink">{item.description}</p>
+                          {(item.marca || item.referencia) && (
+                            <p className="text-xs text-ink-soft">
+                              {[item.marca, item.referencia].filter(Boolean).join(' · ')}
+                            </p>
+                          )}
                           {item.productId && item.productName && (
                             <Link
                               to={routeTo.product(item.productId)}
@@ -192,6 +210,17 @@ export function PurchaseRequestDetailPage() {
                             >
                               {t('purchaseRequests:detail.catalogItem', { name: item.productName })}
                             </Link>
+                          )}
+                          {!item.productId && can(PERMISSIONS.PRODUCT_WRITE) && (
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="mt-1 h-7 px-2 text-xs"
+                              leftIcon={<BookPlus className="h-3.5 w-3.5" />}
+                              onClick={() => setItemToCatalog(item)}
+                            >
+                              {t('purchaseRequests:detail.addToCatalog')}
+                            </Button>
                           )}
                         </TableCell>
                         <TableCell className="text-right tabular-nums">
@@ -220,6 +249,8 @@ export function PurchaseRequestDetailPage() {
                 </div>
               </div>
             )}
+
+            <RequestQuotations request={request} />
           </TabsContent>
 
           <TabsContent value="timeline">
@@ -270,6 +301,13 @@ export function PurchaseRequestDetailPage() {
         onSubmit={(file) =>
           uploadAttachment.mutate(file, { onSuccess: () => setUploadOpen(false) })
         }
+      />
+
+      <AddToCatalogDialog
+        item={itemToCatalog}
+        onOpenChange={(open) => {
+          if (!open) setItemToCatalog(null);
+        }}
       />
 
       <ConfirmDialog

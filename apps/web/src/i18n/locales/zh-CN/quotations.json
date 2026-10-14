@@ -1,0 +1,261 @@
+{
+  "page": {
+    "eyebrow": "采购",
+    "title": "询价",
+    "description": "询价比价表：供应商并排比较、价格反馈，并按物料选定中标方。",
+    "fromRequests": "待询价的申请"
+  },
+  "kpi": {
+    "title": "询价指标",
+    "open": "进行中",
+    "waiting": "等待回复",
+    "waitingHint": "仍有供应商未回复",
+    "dueSoon": "2 天内截止",
+    "dueSoonHint": "即将截止的进行中询价",
+    "closedThisMonth": "本月已结束"
+  },
+  "filters": {
+    "search": "搜索",
+    "searchPlaceholder": "编号、标题或申请……",
+    "status": "状态",
+    "all": "全部"
+  },
+  "table": {
+    "number": "编号",
+    "title": "询价",
+    "status": "状态",
+    "deadline": "截止",
+    "answers": "回复",
+    "items": "物料",
+    "request": "申请：{{title}}",
+    "overdue": "已过截止日期"
+  },
+  "empty": {
+    "title": "暂无询价",
+    "description": "询价从已批准的申请（采购中或询价中）发起。"
+  },
+  "error": {
+    "title": "无法加载询价",
+    "description": "请检查网络连接后重试。"
+  },
+  "create": {
+    "title": "发起询价",
+    "description": "选择物料和供应商。每个供应商都会收到专属链接，无需登录即可回复。",
+    "fields": {
+      "title": "标题",
+      "deadline": "回复截止日期",
+      "notes": "给供应商的备注",
+      "items_other": "询价物料（{{count}}）",
+      "suppliers_other": "供应商（{{count}}，最多 {{max}}）"
+    },
+    "hints": {
+      "deadline": "此日期之后链接将不再接受回复。",
+      "notes": "交货地点、期望交期、技术要求……"
+    },
+    "supplierSearch": "搜索供应商或类别……",
+    "noSuppliers": "未找到供应商。",
+    "errors": {
+      "deadline": "请选择今天或之后的日期。",
+      "tooManySuppliers": "最多邀请 {{max}} 个供应商。"
+    },
+    "submit": "发起询价"
+  },
+  "detail": {
+    "eyebrow": "询价单 {{numero}} 号",
+    "createdBy": "{{name}} 于 {{date}} 发起",
+    "back": "询价",
+    "export": "导出比价表（Excel）",
+    "pickCheapest": "选择最低价",
+    "close": "结束询价",
+    "cancel": "取消询价",
+    "status": "状态",
+    "deadline": "回复截止日期",
+    "request": "申请",
+    "requester": "申请人 · 成本中心",
+    "notes": "备注：",
+    "notFoundTitle": "未找到询价",
+    "notFoundDescription": "可能已被删除或地址有误。"
+  },
+  "feedback": {
+    "title": "价格反馈",
+    "answers": "回复",
+    "answersHint": "已报价的供应商",
+    "bestTotal": "最低价合计",
+    "bestTotalHint": "每项物料都向报价最低者采购",
+    "winnersTotal": "中标方合计",
+    "winnersHint_other": "{{total}} 项中有 {{count}} 项已选定供应商",
+    "savings": "较上次采购节省",
+    "savingsHint": "与目录物料上次采购价的差额",
+    "savingsNegative": "比上次采购更贵"
+  },
+  "map": {
+    "title": "询价比价表",
+    "legend": "绿色：该物料最低价 · 皇冠：选定的供应商",
+    "caption": "询价单 {{numero}} 号比价表",
+    "item": "物料",
+    "reference": "上次采购价",
+    "bestTotal": "完整报价者中合计最低",
+    "deliveryDays_other": "{{count}} 天交货",
+    "inCatalog": "目录：{{codigo}}",
+    "noHistory": "无历史",
+    "variationHint": "本次询价最低价与上次采购价的对比",
+    "noAnswer": "未回复",
+    "unavailable": "无货",
+    "bestPrice": "（最低价）",
+    "lineTotal": "合计 {{value}}",
+    "choose": "选择",
+    "chosen": "已选定",
+    "supplierTotal": "供应商合计",
+    "withFreight": "含运费",
+    "ranking": "合计第 {{position}} 低",
+    "partial": "报价 {{count}}/{{total}} 项",
+    "freight": "运费 {{value}}",
+    "cheapestItems_other": "{{count}} 项最低价"
+  },
+  "suppliers": {
+    "title_other": "受邀供应商（{{count}}）",
+    "add": "邀请供应商",
+    "answeredBy": "{{name}} 于 {{date}} 回复",
+    "waiting": "尚未回复",
+    "payment": "付款：{{value}}",
+    "copyLink": "复制链接",
+    "whatsapp": "WhatsApp",
+    "moreAria": "{{name}} 的更多操作",
+    "email": "通过电子邮件发送",
+    "copyMessage": "复制消息",
+    "openLink": "打开链接",
+    "enterPrices": "录入收到的报价",
+    "regenerate": "生成新链接",
+    "remove": "从询价中移除"
+  },
+  "share": {
+    "subject": "询价单 {{numero}} 号 — {{titulo}}",
+    "message": "{{contato}}，您好！\n\n请为以下物料报价（询价单 {{numero}} 号 — {{titulo}}）：\n\n{{itens}}\n\n请在 {{prazo}} 前通过链接回复，并注明每项物料的价格、品牌和型号：\n{{link}}\n\n谢谢！"
+  },
+  "confirm": {
+    "regenerateTitle": "生成新链接？",
+    "regenerateDescription": "发给 {{name}} 的链接将失效。已收到的回复仍然有效。",
+    "removeSupplierTitle": "移除供应商？",
+    "removeSupplierDescription": "{{name}} 将退出此询价，其报价将被删除。",
+    "closeTitle": "结束询价？",
+    "closeDescription_other": "{{total}} 项中有 {{count}} 项已选定供应商。选定的价格将写入目录价格历史，链接将不再接受回复。",
+    "cancelTitle": "取消询价？",
+    "cancelDescription": "链接将不再接受回复，且不会有价格写入目录。"
+  },
+  "addSupplier": {
+    "title": "邀请供应商",
+    "description": "对方将收到回复此询价的专属链接。",
+    "label": "供应商",
+    "placeholder": "请选择",
+    "none": "所有启用的供应商都已受邀。",
+    "submit": "邀请"
+  },
+  "manual": {
+    "title": "{{name}} 的报价",
+    "description": "录入通过电子邮件、电话或 PDF 收到的报价，视为供应商的回复。",
+    "submit": "保存报价"
+  },
+  "response": {
+    "itemsLegend": "询价物料",
+    "itemNumber": "第 {{index}} 项",
+    "requested": "要求：{{value}}",
+    "available": "有货",
+    "unavailable": "无货",
+    "unitPrice": "单价（R$/{{unit}}）",
+    "brand": "品牌",
+    "reference": "型号",
+    "itemNote": "物料备注",
+    "lineTotal": "物料合计：",
+    "conditions": "报价条件",
+    "deliveryDays": "交货期（天）",
+    "payment": "付款条件",
+    "paymentPlaceholder": "例如：28 天，银行票据",
+    "validity": "报价有效期至",
+    "freight": "运费（R$）",
+    "notes": "备注",
+    "name": "您的姓名",
+    "total": "报价合计：",
+    "errors": {
+      "price": "请填写价格或选择“无货”。",
+      "name": "请填写您的姓名。"
+    }
+  },
+  "public": {
+    "portal": "询价门户",
+    "eyebrow": "询价单 {{numero}} 号 · {{empresa}}",
+    "greeting": "{{fornecedor}}，您好！请在下方填写所需物料的报价。",
+    "deadline": "请于 {{date}} 前回复",
+    "itemCount_other": "{{count}} 项物料",
+    "answeredBanner": "已于 {{date}} 收到 {{name}} 的报价。",
+    "canEdit": "截止前可以修改。",
+    "refusedBanner": "您已于 {{date}} 表示不参与报价。",
+    "closed": {
+      "ENCERRADA": "此询价已结束，感谢您的参与！",
+      "CANCELADA": "此询价已取消。",
+      "PRAZO": "回复期限已过。"
+    },
+    "submit": "提交报价",
+    "update": "更新报价",
+    "sent": "报价已提交，谢谢！",
+    "sendError": "提交失败，请重试。",
+    "decline": "我们不报价",
+    "declineTitle": "不参与报价？",
+    "declineDescription": "告知采购方；如愿意，可说明原因。",
+    "declineReason": "原因（可选）",
+    "declineConfirm": "确认",
+    "declined": "已记录拒绝报价，感谢告知。",
+    "invalidTitle": "链接无效或已过期",
+    "invalidDescription": "请向发送询价的采购人员索取新链接。",
+    "privacy": "您的报价仅 {{empresa}} 的采购团队可见。"
+  },
+  "toast": {
+    "created": "询价单 {{numero}} 号已发起。",
+    "createError": "无法发起询价。",
+    "updated": "询价已更新。",
+    "supplierAdded": "已邀请供应商。",
+    "supplierRemoved": "已移除供应商。",
+    "linkRegenerated": "已生成新链接。",
+    "pricesSaved": "报价已保存。",
+    "cheapestPicked": "已为每项物料选择最低价。",
+    "closed": "询价已结束，价格已写入目录。",
+    "cancelled": "询价已取消。",
+    "linkCopied": "链接已复制。",
+    "messageCopied": "消息已复制。",
+    "copyFailed": "无法复制，请手动选择并复制。",
+    "exportError": "无法导出比价表。"
+  },
+  "export": {
+    "sheet": "询价比价表",
+    "title": "询价比价表 {{numero}} 号 — {{titulo}}",
+    "request": "申请：{{title}}",
+    "meta": "状态：{{status}} · 截止：{{prazo}} · 成本中心：{{centro}}",
+    "generatedAt": "生成于 {{date}}",
+    "col": {
+      "item": "序号",
+      "description": "说明",
+      "quantity": "数量",
+      "unit": "单位",
+      "requested": "要求的品牌/型号",
+      "lastPrice": "上次价格",
+      "unitPrice": "单价",
+      "total": "合计",
+      "best": "最低价",
+      "winner": "选定"
+    },
+    "unavailable": "无货",
+    "summary": {
+      "freight": "运费",
+      "total": "含运费合计",
+      "ranking": "排名",
+      "delivery": "交货期",
+      "payment": "付款",
+      "validity": "有效期",
+      "status": "状态",
+      "bestTotal": "最低价合计",
+      "winnersTotal": "中标方合计",
+      "savings": "较上次采购节省"
+    },
+    "days_other": "{{count}} 天",
+    "fileName": "询价比价表-{{numero}}"
+  }
+}

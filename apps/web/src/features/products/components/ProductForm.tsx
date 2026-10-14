@@ -25,6 +25,7 @@ import {
 import { FormSection } from '@/components/common/FormSection';
 import { PRODUCT_CATEGORY_LABELS, UNIT_LABELS } from '@/constants/enums';
 import { useActiveSupplierOptions } from '@/features/suppliers/hooks/useSuppliers';
+import { useDisciplines } from '@/features/disciplines/hooks/useDisciplines';
 import { productFormSchema, type ProductFormInput } from '../types';
 
 const NONE = '__none';
@@ -35,6 +36,8 @@ function emptyValues(): ProductFormInput {
     nome: '',
     categoria: undefined as unknown as ProductFormInput['categoria'],
     marca: '',
+    referencia: '',
+    disciplineId: '',
     unidade: undefined as unknown as ProductFormInput['unidade'],
     leadTimeDays: '',
     observacoes: '',
@@ -80,6 +83,8 @@ export function ProductForm({
   });
 
   const { data: suppliersPage, isLoading: suppliersLoading } = useActiveSupplierOptions();
+
+  const { data: disciplines = [] } = useDisciplines();
   const supplierOptions = useMemo(() => {
     const byId = new Map<string, string>();
     for (const s of suppliersPage?.data ?? []) byId.set(s.id, s.nomeFantasia);
@@ -142,11 +147,43 @@ export function ProductForm({
             />
             {errors.categoria && <p className="text-xs text-danger">{errors.categoria.message}</p>}
           </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="product-discipline">{t('products:form.fields.disciplina')}</Label>
+            <Controller
+              control={control}
+              name="disciplineId"
+              render={({ field }) => (
+                <Select
+                  value={field.value || NONE}
+                  onValueChange={(v) => field.onChange(v === NONE ? '' : v)}
+                >
+                  <SelectTrigger id="product-discipline" onBlur={field.onBlur}>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={NONE}>{t('products:form.noDiscipline')}</SelectItem>
+                    {disciplines.map((d) => (
+                      <SelectItem key={d.id} value={d.id}>
+                        {d.nome}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </div>
           <Input
             {...register('marca')}
             label={t('products:form.fields.marca')}
             hint={t('common:form.optional')}
             error={errors.marca?.message}
+          />
+          <Input
+            {...register('referencia')}
+            label={t('products:form.fields.referencia')}
+            hint={t('products:form.hints.referencia')}
+            inputClassName="font-mono"
+            error={errors.referencia?.message}
           />
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="product-unit" required>

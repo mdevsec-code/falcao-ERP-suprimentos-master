@@ -8,6 +8,7 @@ import {
   optionalText,
   requiredText,
 } from '@/validators/common';
+import { MAX_UPLOAD_BYTES as UPLOAD_LIMIT_BYTES } from '@/constants/uploads';
 
 export type { DocumentDto, DocumentStatsDto, DocumentValidity } from '@falcao-erp/shared-types';
 
@@ -30,7 +31,7 @@ export interface DocumentFilters {
 }
 
 /** Limite de upload da API (`addMaxSizeValidator` no `DocumentsController`). */
-export const MAX_DOCUMENT_BYTES = 20 * 1024 * 1024;
+export const MAX_DOCUMENT_BYTES = UPLOAD_LIMIT_BYTES;
 
 export const documentFormSchema = z.object({
   titulo: requiredText(2, 180),

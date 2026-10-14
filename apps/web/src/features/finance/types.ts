@@ -33,6 +33,8 @@ export interface PayableListParams {
   costCenter?: string;
   vencidas?: boolean;
   semNota?: boolean;
+  /** Só contas com nota fiscal (exportação de notas). */
+  comNota?: boolean;
   from?: string;
   to?: string;
 }

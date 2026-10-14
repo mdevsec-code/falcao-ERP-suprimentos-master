@@ -6,7 +6,12 @@ import type {
   ProductSummaryDto,
 } from '@falcao-erp/shared-types';
 import { httpClient } from '@/services/http/client';
-import type { ProductListParams, ProductPayload } from '../types';
+import type {
+  CatalogFromItemPayload,
+  PriceEntryPayload,
+  ProductListParams,
+  ProductPayload,
+} from '../types';
 
 export const productsApi = {
   async list(params: ProductListParams): Promise<PaginatedResult<ProductSummaryDto>> {
@@ -46,15 +51,17 @@ export const productsApi = {
     return data;
   },
 
-  async addPriceEntry(
-    id: string,
-    price: number,
-    supplierId?: string,
-  ): Promise<ProductPriceEntryDto> {
-    const { data } = await httpClient.post<ProductPriceEntryDto>(`/products/${id}/price-entries`, {
-      price,
-      supplierId,
-    });
+  async addPriceEntry(id: string, entry: PriceEntryPayload): Promise<ProductPriceEntryDto> {
+    const { data } = await httpClient.post<ProductPriceEntryDto>(
+      `/products/${id}/price-entries`,
+      entry,
+    );
+    return data;
+  },
+
+  /** Inclui no catálogo um item digitado à mão numa solicitação. */
+  async createFromRequestItem(input: CatalogFromItemPayload): Promise<ProductDetailDto> {
+    const { data } = await httpClient.post<ProductDetailDto>('/products/from-request-item', input);
     return data;
   },
 };

@@ -5,7 +5,7 @@ import i18n from '@/i18n';
 import { getErrorMessage } from '@/services/http/errors';
 import { productsApi } from '../services/products.api';
 import { productsKeys } from './useProducts';
-import type { ProductPayload } from '../types';
+import type { CatalogFromItemPayload, PriceEntryPayload, ProductPayload } from '../types';
 
 export function useCreateProduct() {
   const queryClient = useQueryClient();
@@ -53,8 +53,7 @@ export function useSetProductActive(id: string) {
 export function useAddPriceEntry(id: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ price, supplierId }: { price: number; supplierId?: string }) =>
-      productsApi.addPriceEntry(id, price, supplierId),
+    mutationFn: (entry: PriceEntryPayload) => productsApi.addPriceEntry(id, entry),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: productsKeys.detail(id) });
       void queryClient.invalidateQueries({ queryKey: productsKeys.lists() });
@@ -62,6 +61,22 @@ export function useAddPriceEntry(id: string) {
     },
     onError: (error: Error) => {
       toast.error(getErrorMessage(error, i18n.t('products:toast.priceError')));
+    },
+  });
+}
+
+/** Compras inclui no catálogo o item digitado à mão e já o liga ao produto novo. */
+export function useCreateProductFromRequestItem() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (input: CatalogFromItemPayload) => productsApi.createFromRequestItem(input),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: productsKeys.all });
+      void queryClient.invalidateQueries({ queryKey: ['purchase-requests'] });
+      toast.success(i18n.t('products:toast.catalogFromItem'));
+    },
+    onError: (error: Error) => {
+      toast.error(getErrorMessage(error, i18n.t('products:toast.createError')));
     },
   });
 }
