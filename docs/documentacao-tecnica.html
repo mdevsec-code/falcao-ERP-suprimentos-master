@@ -11,7 +11,7 @@
     --ink: #131c2e; --ink-soft: #55647d; --ink-faint: #75849c;
     --accent: #2454c7; --accent-soft: #e4ecfc; --warm: #a8571c; --warm-soft: #fbeadd; --good: #0f8a6b;
     --chip-ink: #ffffff;
-    --a1: #2454c7; --a2: #0f8a6b; --a3: #a8571c; --a4: #6b5bd6; --a5: #b4235a; --a6: #0f7a94; --a7: #5a6478; --a8: #7a5c00;
+    --a1: #2454c7; --a2: #0f8a6b; --a3: #a8571c; --a4: #6b5bd6; --a5: #b4235a; --a6: #0f7a94; --a7: #5a6478; --a8: #7a5c00; --a9: #3f7d20;
     --shadow: 0 1px 2px rgba(19,28,46,0.06), 0 8px 24px -12px rgba(19,28,46,0.18);
     --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
     --font-mono: "IBM Plex Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
@@ -22,7 +22,7 @@
       --ink: #e8ecf5; --ink-soft: #a7b2c8; --ink-faint: #7f8aa5;
       --accent: #6c93ff; --accent-soft: #1c2740; --warm: #e0965a; --warm-soft: #2c2113; --good: #4fd3a8;
       --chip-ink: #0d1220;
-      --a1: #6c93ff; --a2: #4fd3a8; --a3: #e0965a; --a4: #b0a1f5; --a5: #f07fa8; --a6: #5cc8e0; --a7: #a7b2c8; --a8: #d9b44a;
+      --a1: #6c93ff; --a2: #4fd3a8; --a3: #e0965a; --a4: #b0a1f5; --a5: #f07fa8; --a6: #5cc8e0; --a7: #a7b2c8; --a8: #d9b44a; --a9: #8fd16a;
       --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
       color-scheme: dark;
     }
@@ -32,7 +32,7 @@
     --ink: #e8ecf5; --ink-soft: #a7b2c8; --ink-faint: #7f8aa5;
     --accent: #6c93ff; --accent-soft: #1c2740; --warm: #e0965a; --warm-soft: #2c2113; --good: #4fd3a8;
     --chip-ink: #0d1220;
-    --a1: #6c93ff; --a2: #4fd3a8; --a3: #e0965a; --a4: #b0a1f5; --a5: #f07fa8; --a6: #5cc8e0; --a7: #a7b2c8; --a8: #d9b44a;
+    --a1: #6c93ff; --a2: #4fd3a8; --a3: #e0965a; --a4: #b0a1f5; --a5: #f07fa8; --a6: #5cc8e0; --a7: #a7b2c8; --a8: #d9b44a; --a9: #8fd16a;
     --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
     color-scheme: dark;
   }
@@ -139,11 +139,14 @@
       <a href="#s5"><span class="tag">05</span> Autenticação e autorização</a>
       <a href="#s6"><span class="tag">06</span> Isolamento por empresa</a>
       <a href="#s7"><span class="tag">07</span> Fluxo da solicitação de compra</a>
-      <a href="#s8"><span class="tag">08</span> Financeiro e integrações</a>
-      <a href="#s9"><span class="tag">09</span> Arquivos e uploads</a>
-      <a href="#s10"><span class="tag">10</span> Auditoria</a>
-      <a href="#s11"><span class="tag">11</span> Frontend</a>
-      <a href="#s12"><span class="tag">12</span> Qualidade, CI e ambiente</a>
+      <a href="#sc"><span class="tag">08</span> Catálogo vivo e disciplinas</a>
+      <a href="#sq"><span class="tag">09</span> Cotações e link do fornecedor</a>
+      <a href="#s8"><span class="tag">10</span> Financeiro e integrações</a>
+      <a href="#snf"><span class="tag">11</span> Nota fiscal eletrônica</a>
+      <a href="#s9"><span class="tag">12</span> Arquivos e uploads</a>
+      <a href="#s10"><span class="tag">13</span> Auditoria</a>
+      <a href="#s11"><span class="tag">14</span> Frontend</a>
+      <a href="#s12"><span class="tag">15</span> Qualidade, CI e ambiente</a>
     </nav>
     <div class="xlink">Ver também: <a href="casos-de-uso.html">Casos de uso →</a></div>
   </aside>
@@ -154,7 +157,7 @@
       <h1>Falcão ERP Suprimentos</h1>
     </div>
     <div class="doc-meta"><span><strong>NestJS 10 / Prisma 5</strong> API</span><span><strong>React 18 / Vite 5</strong> web</span><span><strong>PostgreSQL 16</strong> banco</span><span>Monorepo npm workspaces</span><span>Mesma stack do Saúde Ocupacional</span></div>
-    <section class="intro"><p>Este documento descreve como o ERP de Suprimentos da Falcão Construções e Engenharia é construído por dentro: arquitetura, modelo de dados, módulos, autenticação e as decisões técnicas que um desenvolvedor precisa conhecer para manter ou evoluir o sistema sem ter acompanhado sua construção.</p><p>O sistema cobre o ciclo de suprimentos de ponta a ponta: fornecedores, produtos com histórico de preços, <strong>solicitações de compra com aprovação em etapas</strong>, contratos com aditivos, contas a pagar, reembolsos, documentos e uma agenda que junta todos os prazos. Ele usa a mesma stack e o mesmo design system do <strong>Falcão Saúde Ocupacional</strong>, para que os dois sistemas possam ser reunidos num hub com login único.</p></section>
+    <section class="intro"><p>Este documento descreve como o ERP de Suprimentos da Falcão Construções e Engenharia é construído por dentro: arquitetura, modelo de dados, módulos, autenticação e as decisões técnicas que um desenvolvedor precisa conhecer para manter ou evoluir o sistema sem ter acompanhado sua construção.</p><p>O sistema cobre o ciclo de suprimentos de ponta a ponta: fornecedores, um <strong>catálogo vivo</strong> de produtos por disciplina com histórico de preços, <strong>solicitações de compra com aprovação em etapas</strong>, <strong>cotações com link para o fornecedor e mapa comparativo</strong>, contratos com aditivos, contas a pagar com <strong>nota fiscal eletrônica</strong> (PDF e XML), reembolsos, documentos e uma agenda que junta todos os prazos. Ele usa a mesma stack e o mesmo design system do <strong>Falcão Saúde Ocupacional</strong>, para que os dois sistemas possam ser reunidos num hub com login único.</p></section>
     <div class="sec" id="s1">
       <div class="sec-head"><span class="sec-num">01</span><h2>Arquitetura da solução</h2></div>
       <p>Três pacotes num monorepo com <code>npm workspaces</code>. A API concentra toda regra de negócio, autorização e acesso ao banco; o web é uma SPA que só fala com a API por HTTP/JSON; os tipos e regras compartilhadas vivem num pacote próprio, usado pelos dois lados.</p>
@@ -170,7 +173,7 @@ flowchart LR
   ST -.->|"tipos e regras"| API
           </pre>
         </div>
-        <figcaption>Topologia. O navegador nunca acessa o banco nem o disco: arquivos enviados passam pela API, que valida extensão e caminho antes de gravar, e são servidos de volta com cabeçalhos de segurança (seção 09).</figcaption>
+        <figcaption>Topologia. O navegador nunca acessa o banco nem o disco: arquivos enviados passam pela API, que valida extensão e caminho antes de gravar, e são servidos de volta com cabeçalhos de segurança (seção 12).</figcaption>
       </figure>
       <div class="table-wrap"><table>
         <thead><tr><th>Pacote</th><th>Papel</th></tr></thead>
@@ -195,6 +198,7 @@ flowchart LR
           <tr><td><strong>Rotas</strong></td><td class="mono">React Router 7</td><td><span class="same">● igual</span></td></tr>
           <tr><td><strong>Formulários</strong></td><td class="mono">react-hook-form · zod</td><td><span class="same">● igual</span></td></tr>
           <tr><td><strong>Animação e gráficos</strong></td><td class="mono">framer-motion · recharts · sonner</td><td><span class="same">● igual</span></td></tr>
+          <tr><td><strong>Planilhas</strong></td><td class="mono">exceljs 4.4 (carregada sob demanda)</td><td><span class="same">● igual</span></td></tr>
           <tr><td><strong>Idiomas</strong></td><td class="mono">i18next (pt-BR, en-US, zh-CN)</td><td><span class="same">● igual</span></td></tr>
           <tr><td><strong>API</strong></td><td class="mono">NestJS 10 · class-validator · passport-jwt</td><td><span class="same">● igual</span></td></tr>
           <tr><td><strong>ORM e banco</strong></td><td class="mono">Prisma 5.22 · PostgreSQL 16</td><td><span class="same">● igual</span></td></tr>
@@ -245,6 +249,7 @@ erDiagram
     decimal valor
     date vencimento
     enum status "ABERTO PAGO CANCELADO"
+    string notaFiscalChave "44 dígitos"
   }
   REIMBURSEMENT {
     enum status "ENVIADO APROVADO REJEITADO PAGO"
@@ -256,7 +261,7 @@ erDiagram
   }
           </pre>
         </div>
-        <figcaption>Núcleo do modelo (simplificado). Ficaram de fora do diagrama os contatos de fornecedor, o vínculo produto × fornecedor, comentários e anexos das solicitações, itens e anexos de reembolso e os refresh tokens.</figcaption>
+        <figcaption>Núcleo do modelo (simplificado). O catálogo e a cotação têm diagrama próprio na seção 09. Ficaram de fora os contatos de fornecedor, o vínculo produto × fornecedor, comentários e anexos das solicitações, itens e anexos de reembolso e os refresh tokens.</figcaption>
       </figure>
       <div class="callout"><span class="k">Decisão notável</span><p>Contas a pagar são uma tabela só, com <code>origem</code> e vínculos opcionais a fornecedor, contrato, solicitação de compra ou reembolso. Assim o fluxo de caixa, os indicadores e a agenda leem um único lugar, venha a conta de onde vier. <code>reimbursementId</code> é único: um reembolso aprovado gera no máximo uma conta.</p></div>
 
@@ -270,10 +275,13 @@ erDiagram
           <tr><td class="mono">auth</td><td>Login, renovação e encerramento de sessão</td><td>público (com limite)</td><td>—</td></tr>
           <tr><td class="mono">users</td><td>Meu perfil e senha; contas da equipe</td><td>própria conta · ADMIN</td><td><span class="pill warm">ADMIN</span></td></tr>
           <tr><td class="mono">suppliers</td><td>Fornecedores, contatos, avaliações e documentos</td><td>todos</td><td><span class="pill">ADMIN MANAGER BUYER</span></td></tr>
-          <tr><td class="mono">products</td><td>Catálogo e histórico de preços</td><td>todos</td><td><span class="pill">ADMIN MANAGER BUYER</span></td></tr>
+          <tr><td class="mono">products</td><td>Catálogo vivo: filtros por disciplina, marca e fornecedor, histórico de preços, inclusão de item da solicitação</td><td>todos</td><td><span class="pill">ADMIN MANAGER BUYER</span></td></tr>
+          <tr><td class="mono">disciplines</td><td>Lista editável de disciplinas (Civil, Elétrica, Mecânica…)</td><td>todos</td><td><span class="pill warm">ADMIN MANAGER</span></td></tr>
           <tr><td class="mono">purchase-requests</td><td>Solicitações, etapas, comentários e anexos</td><td>todos</td><td><span class="pill">todos, menos AUDITOR</span> · etapa por papel</td></tr>
+          <tr><td class="mono">quotations</td><td>Cotações, convites, propostas, mapa, vencedores e encerramento</td><td><span class="pill">ADMIN MANAGER BUYER FINANCE AUDITOR</span></td><td><span class="pill">ADMIN MANAGER BUYER</span></td></tr>
+          <tr><td class="mono">public/quotations</td><td>Página do fornecedor: ver, responder ou recusar pelo link</td><td>token assinado (30 req/min)</td><td>token assinado</td></tr>
           <tr><td class="mono">contracts</td><td>Contratos, situação e aditivos</td><td><span class="pill">ADMIN MANAGER BUYER FINANCE AUDITOR</span></td><td><span class="pill">ADMIN MANAGER BUYER</span></td></tr>
-          <tr><td class="mono">finance</td><td>Contas a pagar, baixa, nota fiscal, fluxo de caixa</td><td><span class="pill">ADMIN MANAGER FINANCE AUDITOR</span></td><td><span class="pill">ADMIN FINANCE</span></td></tr>
+          <tr><td class="mono">finance</td><td>Contas a pagar, baixa, nota fiscal (PDF/XML e leitura da NF-e), fluxo de caixa</td><td><span class="pill">ADMIN MANAGER FINANCE AUDITOR</span></td><td><span class="pill">ADMIN FINANCE</span></td></tr>
           <tr><td class="mono">reimbursements</td><td>Pedidos de reembolso e decisão</td><td>próprios · todos para ADMIN MANAGER FINANCE AUDITOR</td><td>pedido: todos, menos AUDITOR · decisão: <span class="pill warm">ADMIN MANAGER</span></td></tr>
           <tr><td class="mono">documents</td><td>Repositório com categoria, etiquetas e validade</td><td>todos</td><td><span class="pill">ADMIN MANAGER BUYER FINANCE WAREHOUSE</span></td></tr>
           <tr><td class="mono">agenda</td><td>Prazos de todos os módulos e eventos de obra</td><td>todos (filtrado por papel)</td><td>todos, menos AUDITOR</td></tr>
@@ -359,11 +367,102 @@ stateDiagram-v2
         </div>
         <figcaption>Máquina de estados da solicitação. Cada mudança grava um registro de aprovação com a ação (<code>APPROVE</code>, <code>REJECT</code> ou <code>REQUEST_CHANGES</code>), quem fez e o comentário, que formam a linha do tempo da solicitação.</figcaption>
       </figure>
+      <p>Abrir uma cotação (seção 09) para uma solicitação em <code>EM_COMPRAS</code> já a move para <code>EM_COTACAO</code>, com o registro de aprovação correspondente, sem passo manual.</p>
       <div class="callout"><span class="k">Regra de edição</span><p>Só o autor edita a solicitação, e só enquanto ela está em <code>AGUARDANDO_APROVACAO</code>. Depois da aprovação, mudanças acontecem por comentários e pela própria linha do tempo.</p></div>
 
     </div>
+    <div class="sec" id="sc">
+      <div class="sec-head"><span class="sec-num">08</span><h2>Catálogo vivo e disciplinas</h2></div>
+      <p>O banco de produtos é a referência comum entre quem pede e quem compra. Cada produto tem <strong>disciplina</strong>, <strong>marca</strong> e <strong>referência</strong> do fabricante, e cada ponto do histórico de preço guarda <strong>preço, quantidade, marca, referência, fornecedor e origem</strong> (<code>MANUAL</code> ou <code>COTACAO</code>).</p>
+      <ul class="plain">
+        <li><strong>Disciplinas</strong>: tabela por empresa (<code>Discipline</code>), criada com Civil, Elétrica, Mecânica, Eletromecânica, Hidráulica e Instrumentação. Administrador e Gestor criam, renomeiam e desativam; o nome é único sem diferenciar maiúsculas (409). Desativar tira a disciplina das listas sem apagar a classificação dos produtos.</li>
+        <li><strong>Filtros</strong> em <code>GET /products</code>: disciplina (ou <code>none</code> para os sem disciplina), categoria, marca, fornecedor (principal ou alternativo) e busca por nome, código ou referência. O resumo traz o último preço com quantidade, data e fornecedor.</li>
+        <li><strong>Do lado do solicitante</strong>: ao montar a solicitação, ele escolhe itens do catálogo com filtros e vê o último preço pago; marca e referência vêm preenchidas e podem ser ajustadas.</li>
+        <li><strong>Do lado de compras</strong>: um item que o solicitante descreveu à mão vira produto com <code>POST /products/from-request-item</code>. A criação e a ligação do item acontecem na mesma transação; item já ligado → 409.</li>
+        <li><strong>Retorno da cotação</strong>: ao encerrar uma cotação, o preço vencedor de cada item ligado ao catálogo entra no histórico com origem <code>COTACAO</code> e o número da cotação.</li>
+      </ul>
+
+    </div>
+    <div class="sec" id="sq">
+      <div class="sec-head"><span class="sec-num">09</span><h2>Cotações e link do fornecedor</h2></div>
+      <p>A cotação nasce de uma solicitação aprovada (<code>EM_COMPRAS</code> ou <code>EM_COTACAO</code>): o comprador escolhe os itens, até 20 fornecedores e o prazo de resposta. Cada fornecedor convidado recebe um link próprio, que abre uma página pública com a descrição dos materiais; ele responde preço unitário, marca, referência, disponibilidade, prazo de entrega, condição de pagamento, validade e frete, ou recusa o convite.</p>
+      <figure>
+        <div class="frame">
+          <pre class="mermaid">
+sequenceDiagram
+  participant C as Comprador
+  participant A as API
+  participant F as Fornecedor (sem login)
+  C->>A: POST /quotations (itens, fornecedores, prazo)
+  A-->>C: cotação ABERTA + link de cada fornecedor
+  C->>F: envia o link (WhatsApp, e-mail ou copiado)
+  F->>A: GET /public/quotations/:token
+  A->>A: confere a assinatura HMAC e o nonce
+  A-->>F: materiais, prazo e resposta anterior
+  F->>A: PUT /public/quotations/:token (preços e condições)
+  A-->>F: resposta registrada (pode corrigir até o prazo)
+  C->>A: GET /quotations/:id (mapa lado a lado)
+  C->>A: PATCH /items/:itemId/winner ou POST /pick-cheapest
+  C->>A: POST /quotations/:id/close
+  A->>A: grava os preços vencedores no histórico do catálogo
+          </pre>
+        </div>
+        <figcaption>Ciclo da cotação. O comprador também pode lançar a proposta de um fornecedor que respondeu por e-mail ou telefone (<code>PUT /quotations/:id/suppliers/:qsId/prices</code>).</figcaption>
+      </figure>
+      <figure>
+        <div class="frame">
+          <pre class="mermaid">
+erDiagram
+  DISCIPLINE ||--o{ PRODUCT : "classifica"
+  PRODUCT ||--o{ PRODUCT_PRICE_ENTRY : "histórico"
+  PURCHASE_REQUEST ||--o{ QUOTATION : "cotada em"
+  QUOTATION ||--o{ QUOTATION_ITEM : "materiais"
+  QUOTATION ||--o{ QUOTATION_SUPPLIER : "convida"
+  SUPPLIER ||--o{ QUOTATION_SUPPLIER : "responde"
+  QUOTATION_SUPPLIER ||--o{ QUOTATION_PRICE : "preço por item"
+  QUOTATION_ITEM ||--o{ QUOTATION_PRICE : "recebe"
+  PRODUCT |o--o{ QUOTATION_ITEM : "do catálogo"
+  QUOTATION_SUPPLIER |o--o{ QUOTATION_ITEM : "vencedor"
+  QUOTATION {
+    int numero UK
+    date prazoResposta
+    enum status "ABERTA ENCERRADA CANCELADA"
+  }
+  QUOTATION_SUPPLIER {
+    string linkNonce
+    enum status "CONVIDADO RESPONDIDO RECUSOU"
+    decimal frete
+  }
+  QUOTATION_PRICE {
+    decimal precoUnitario
+    string marca
+    string referencia
+    bool disponivel
+  }
+  PRODUCT_PRICE_ENTRY {
+    decimal price
+    decimal quantity
+    enum origem "MANUAL COTACAO"
+  }
+          </pre>
+        </div>
+        <figcaption>Tabelas do catálogo e da cotação. Cada item da cotação guarda a quantidade, a marca e a referência pedidas e aponta para o item da solicitação; o vencedor é o convite escolhido para aquele item.</figcaption>
+      </figure>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Aspecto</th><th>Como funciona</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Token do link</strong></td><td><code>&lt;id do convite&gt;.&lt;HMAC-SHA256&gt;</code>, assinado com <code>JWT_SECRET</code> sobre o id e um <code>linkNonce</code> aleatório. No banco fica só o nonce; a comparação usa <code>timingSafeEqual</code>.</td></tr>
+          <tr><td><strong>Revogar</strong></td><td>Gerar um novo link troca o nonce e invalida o anterior na hora. Trocar o <code>JWT_SECRET</code> invalida todos.</td></tr>
+          <tr><td><strong>Quando fecha</strong></td><td>O link continua abrindo, só para leitura, depois do prazo, do encerramento ou do cancelamento; a resposta é recusada com a mensagem do motivo.</td></tr>
+          <tr><td><strong>Proteções</strong></td><td>Rotas públicas com <code>@Public</code> e limite de 30 requisições por minuto; link adulterado ou inexistente → 404 genérico. A página não expõe dados de outros fornecedores.</td></tr>
+        </tbody>
+      </table></div>
+      <p><strong>Mapa de cotação</strong>: a análise (<code>analyzeQuotation</code> em <code>shared-types</code>, a mesma no web e nos testes) trabalha em centavos inteiros. Por item: menor, maior e média, o fornecedor mais barato e a variação contra o último preço pago no catálogo. Por fornecedor: total dos itens, frete e total geral; o ranking só compara quem cotou todos os itens. A economia é medida contra a última compra. O mapa exporta para Excel com o mesmo layout.</p>
+      <div class="callout"><span class="k">Corridas</span><p>Encerrar e cancelar usam <code>updateMany</code> condicionado a <code>ABERTA</code>: se duas pessoas clicarem juntas, só uma vale. A numeração da cotação é sequencial por empresa e repete a tentativa em caso de conflito (P2002).</p></div>
+
+    </div>
     <div class="sec" id="s8">
-      <div class="sec-head"><span class="sec-num">08</span><h2>Financeiro e integrações</h2></div>
+      <div class="sec-head"><span class="sec-num">10</span><h2>Financeiro e integrações</h2></div>
       <p>Os módulos se conectam por dados, sem filas nem jobs em segundo plano: tudo acontece na própria requisição.</p>
       <figure>
         <div class="frame">
@@ -376,6 +475,9 @@ flowchart LR
   CT -->|"fim de vigência"| AG
   DOC["Documento com validade"] -->|"vencimento"| AG
   EV["Evento de obra"] --> AG
+  PR -->|"itens"| QT["Cotação"]
+  QT -->|"prazo de resposta"| AG
+  QT -->|"preço vencedor"| CAT["Histórico do catálogo"]
           </pre>
         </div>
         <figcaption>Integrações entre módulos. A agenda não guarda cópia dos prazos: consulta as tabelas de origem a cada pedido, então nunca fica desatualizada.</figcaption>
@@ -384,15 +486,27 @@ flowchart LR
         <li><strong>Situações da conta</strong>: só contas <code>ABERTO</code> podem ser editadas, baixadas ou canceladas. A baixa não aceita data de pagamento no futuro; conta cancelada não recebe nota fiscal; conta de reembolso aprovado não pode ser cancelada nem ter o valor alterado.</li>
         <li><strong>Corridas</strong>: baixa, cancelamento e decisão de reembolso usam <code>updateMany</code> condicionado à situação atual. Se duas pessoas clicarem ao mesmo tempo, só uma operação vale e a outra recebe erro, sem pagamento duplicado.</li>
         <li><strong>Reembolso aprovado</strong> cria a conta a pagar na mesma operação, com o total dos itens e vencimento padrão de 7 dias. Ninguém decide o próprio reembolso, e rejeitar exige motivo.</li>
-        <li><strong>Agenda</strong>: junta vencimentos de contas, fim de contratos, validade de documentos e eventos criados pela equipe, num intervalo de até 92 dias por consulta. Cada usuário só vê prazos dos módulos que pode ler.</li>
+        <li><strong>Agenda</strong>: junta vencimentos de contas, fim de contratos, validade de documentos, prazos de resposta das cotações abertas e eventos criados pela equipe, num intervalo de até 92 dias por consulta. Cada usuário só vê prazos dos módulos que pode ler.</li>
         <li><strong>Contratos</strong>: <code>VIGENTE ↔ SUSPENSO</code>, e ambos podem ir para <code>ENCERRADO</code> ou <code>CANCELADO</code>, que são finais. Aditivos alteram valor e/ou data de término e são recusados se deixarem o valor negativo.</li>
       </ul>
 
     </div>
-    <div class="sec" id="s9">
-      <div class="sec-head"><span class="sec-num">09</span><h2>Arquivos e uploads</h2></div>
-      <p>Anexos de solicitações, reembolsos, fornecedores e o repositório de documentos passam pelo mesmo <code>StorageService</code>, que hoje grava em disco local (<code>UPLOADS_DIR</code>).</p>
+    <div class="sec" id="snf">
+      <div class="sec-head"><span class="sec-num">11</span><h2>Nota fiscal eletrônica</h2></div>
+      <p>Cada conta a pagar guarda número, emissão e chave de acesso da nota e até dois arquivos: o <strong>PDF (DANFE)</strong> e o <strong>XML da NF-e</strong>. Enviar um arquivo do mesmo tipo substitui o anterior; conta cancelada não recebe nota.</p>
       <ul class="plain">
+        <li><strong>Leitura do XML</strong> (<code>parseNfeXml</code> em <code>shared-types</code>): extrai por expressões nas tags conhecidas o número, a série, a emissão, a chave de 44 dígitos, o valor total, emitente, destinatário e as duplicatas (vencimentos). Não usa parser XML, então não há entidades externas (XXE). Arquivo que não é NF-e modelo 55 → 400.</li>
+        <li><strong>Conferência</strong>: tudo que não bate vira aviso, sem bloquear: emitente não cadastrado, fornecedor diferente do da conta, valor diferente, nota emitida para outro CNPJ, falta da chave e nota já lançada em outra conta.</li>
+        <li><strong>Importar XML</strong>: <code>POST /payables/invoice-xml/preview</code> lê o arquivo sem gravar nada; o web abre o formulário da conta já preenchido e, depois de salvar, anexa o XML.</li>
+        <li><strong>Planilha de notas</strong>: <code>GET /payables?comNota=true</code> alimenta a exportação Excel com fornecedor, número, chave, emissão, valor, situação e links dos arquivos.</li>
+      </ul>
+
+    </div>
+    <div class="sec" id="s9">
+      <div class="sec-head"><span class="sec-num">12</span><h2>Arquivos e uploads</h2></div>
+      <p>Anexos de solicitações, reembolsos, fornecedores, notas fiscais e o repositório de documentos passam pelo mesmo <code>StorageService</code>, que hoje grava em disco local (<code>UPLOADS_DIR</code>).</p>
+      <ul class="plain">
+        <li><strong>Tamanho</strong>: até <strong>50 MB</strong> por arquivo (<code>MAX_UPLOAD_BYTES</code>), igual na API e no web. Os envios têm tempo limite de 10 minutos para não cair em conexões lentas.</li>
         <li><strong>Lista de extensões permitidas</strong> (<code>upload-policy.ts</code>): PDF, imagens, textos, planilhas, documentos do Office/LibreOffice, DWG/DXF e ZIP. Ficam de fora HTML, SVG, JS e qualquer formato que o navegador executaria, que viraria XSS armazenado.</li>
         <li><strong>Caminho seguro</strong>: o provedor confere que o destino final continua dentro da pasta de uploads antes de gravar ou apagar (<code>insideRoot</code>).</li>
         <li><strong>Entrega</strong>: <code>/uploads</code> responde com <code>X-Content-Type-Options: nosniff</code>; PDF, imagens e texto abrem no navegador, o resto vai como download, sempre com CSP <code>sandbox</code>.</li>
@@ -402,13 +516,13 @@ flowchart LR
 
     </div>
     <div class="sec" id="s10">
-      <div class="sec-head"><span class="sec-num">10</span><h2>Auditoria</h2></div>
+      <div class="sec-head"><span class="sec-num">13</span><h2>Auditoria</h2></div>
       <p>Um interceptor transversal grava toda criação, alteração e exclusão feita por usuário autenticado: quem, quando, qual registro e um retrato dos dados. Campos sensíveis, como o hash de senha, são removidos antes de gravar. A consulta, com filtros por texto, período, ação, tipo de registro e pessoa, e os indicadores ficam restritos a <code>ADMIN</code> e <code>AUDITOR</code>.</p>
 
     </div>
     <div class="sec" id="s11">
-      <div class="sec-head"><span class="sec-num">11</span><h2>Frontend</h2></div>
-      <p>Organizado por funcionalidade em <code>apps/web/src/features/</code>: auth, dashboard, suppliers, products, purchase-requests, contracts, finance, reimbursements, documents, agenda, users, audit e profile. O visual segue a linguagem "planta técnica" do Saúde Ocupacional.</p>
+      <div class="sec-head"><span class="sec-num">14</span><h2>Frontend</h2></div>
+      <p>Organizado por funcionalidade em <code>apps/web/src/features/</code>: auth, dashboard, suppliers, products, disciplines, purchase-requests, quotations, contracts, finance, reimbursements, documents, agenda, users, audit e profile. O visual segue a linguagem "planta técnica" do Saúde Ocupacional.</p>
       <div class="table-wrap"><table>
         <thead><tr><th>Tipo de estado</th><th>Ferramenta</th></tr></thead>
         <tbody>
@@ -419,11 +533,12 @@ flowchart LR
           <tr><td>Textos</td><td>i18next com pt-BR, en-US e zh-CN, um arquivo por módulo</td></tr>
         </tbody>
       </table></div>
+      <p>A página do fornecedor (<code>/cotacao/:token</code>) é a única rota pública além do login: fica fora do <code>RequireAuth</code>, usa um cliente HTTP próprio sem token e funciona no celular. As exportações em Excel carregam o <code>exceljs</code> só quando o usuário clica, num pacote separado, para não pesar na abertura do sistema.</p>
       <p>O painel inicial reúne pendências por papel (aprovações, contas vencendo, reembolsos aguardando decisão) e os próximos itens da agenda.</p>
 
     </div>
     <div class="sec" id="s12">
-      <div class="sec-head"><span class="sec-num">12</span><h2>Qualidade, CI e ambiente</h2></div>
+      <div class="sec-head"><span class="sec-num">15</span><h2>Qualidade, CI e ambiente</h2></div>
       <ul class="plain">
         <li><strong>CI</strong> (GitHub Actions, Node 22): o job do web roda formatação, lint, typecheck, testes e build; o da API gera o client do Prisma e roda lint, typecheck e build.</li>
         <li><strong>Hooks de commit</strong>: <code>lint-staged</code> formata e corrige os arquivos alterados e o <code>commitlint</code> exige mensagens no padrão Conventional Commits, com a mesma configuração do Saúde.</li>

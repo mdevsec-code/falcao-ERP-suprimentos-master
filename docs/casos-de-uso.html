@@ -11,7 +11,7 @@
     --ink: #131c2e; --ink-soft: #55647d; --ink-faint: #75849c;
     --accent: #2454c7; --accent-soft: #e4ecfc; --warm: #a8571c; --warm-soft: #fbeadd; --good: #0f8a6b;
     --chip-ink: #ffffff;
-    --a1: #2454c7; --a2: #0f8a6b; --a3: #a8571c; --a4: #6b5bd6; --a5: #b4235a; --a6: #0f7a94; --a7: #5a6478; --a8: #7a5c00;
+    --a1: #2454c7; --a2: #0f8a6b; --a3: #a8571c; --a4: #6b5bd6; --a5: #b4235a; --a6: #0f7a94; --a7: #5a6478; --a8: #7a5c00; --a9: #3f7d20;
     --shadow: 0 1px 2px rgba(19,28,46,0.06), 0 8px 24px -12px rgba(19,28,46,0.18);
     --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
     --font-mono: "IBM Plex Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
@@ -22,7 +22,7 @@
       --ink: #e8ecf5; --ink-soft: #a7b2c8; --ink-faint: #7f8aa5;
       --accent: #6c93ff; --accent-soft: #1c2740; --warm: #e0965a; --warm-soft: #2c2113; --good: #4fd3a8;
       --chip-ink: #0d1220;
-      --a1: #6c93ff; --a2: #4fd3a8; --a3: #e0965a; --a4: #b0a1f5; --a5: #f07fa8; --a6: #5cc8e0; --a7: #a7b2c8; --a8: #d9b44a;
+      --a1: #6c93ff; --a2: #4fd3a8; --a3: #e0965a; --a4: #b0a1f5; --a5: #f07fa8; --a6: #5cc8e0; --a7: #a7b2c8; --a8: #d9b44a; --a9: #8fd16a;
       --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
       color-scheme: dark;
     }
@@ -32,7 +32,7 @@
     --ink: #e8ecf5; --ink-soft: #a7b2c8; --ink-faint: #7f8aa5;
     --accent: #6c93ff; --accent-soft: #1c2740; --warm: #e0965a; --warm-soft: #2c2113; --good: #4fd3a8;
     --chip-ink: #0d1220;
-    --a1: #6c93ff; --a2: #4fd3a8; --a3: #e0965a; --a4: #b0a1f5; --a5: #f07fa8; --a6: #5cc8e0; --a7: #a7b2c8; --a8: #d9b44a;
+    --a1: #6c93ff; --a2: #4fd3a8; --a3: #e0965a; --a4: #b0a1f5; --a5: #f07fa8; --a6: #5cc8e0; --a7: #a7b2c8; --a8: #d9b44a; --a9: #8fd16a;
     --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
     color-scheme: dark;
   }
@@ -135,16 +135,18 @@
       <a href="#diagrama"><span class="tag">—</span> Diagrama de contexto</a>
       <a href="#pkg-1"><span class="tag">01</span> Sessão e perfil</a>
       <a href="#pkg-2"><span class="tag">02</span> Fornecedores</a>
-      <a href="#pkg-3"><span class="tag">03</span> Produtos</a>
+      <a href="#pkg-3"><span class="tag">03</span> Catálogo de produtos</a>
       <a href="#pkg-4"><span class="tag">04</span> Solicitações de compra</a>
-      <a href="#pkg-5"><span class="tag">05</span> Contratos</a>
-      <a href="#pkg-6"><span class="tag">06</span> Financeiro</a>
-      <a href="#pkg-7"><span class="tag">07</span> Reembolsos</a>
-      <a href="#pkg-8"><span class="tag">08</span> Documentos</a>
-      <a href="#pkg-9"><span class="tag">09</span> Agenda</a>
-      <a href="#pkg-10"><span class="tag">10</span> Usuários</a>
-      <a href="#pkg-11"><span class="tag">11</span> Auditoria</a>
-      <a href="#pkg-12"><span class="tag">12</span> Processos automáticos</a>
+      <a href="#pkg-5"><span class="tag">05</span> Cotações</a>
+      <a href="#pkg-6"><span class="tag">06</span> Resposta do fornecedor</a>
+      <a href="#pkg-7"><span class="tag">07</span> Contratos</a>
+      <a href="#pkg-8"><span class="tag">08</span> Financeiro e nota fiscal</a>
+      <a href="#pkg-9"><span class="tag">09</span> Reembolsos</a>
+      <a href="#pkg-10"><span class="tag">10</span> Documentos</a>
+      <a href="#pkg-11"><span class="tag">11</span> Agenda</a>
+      <a href="#pkg-12"><span class="tag">12</span> Usuários</a>
+      <a href="#pkg-13"><span class="tag">13</span> Auditoria</a>
+      <a href="#pkg-14"><span class="tag">14</span> Processos automáticos</a>
     </nav>
     <div class="actors">
       <div class="actor-key"><span class="actor-dot" style="background:var(--a3)"></span> Administrador</div>
@@ -155,6 +157,7 @@
       <div class="actor-key"><span class="actor-dot" style="background:var(--a5)"></span> Solicitante</div>
       <div class="actor-key"><span class="actor-dot" style="background:var(--a7)"></span> Auditor</div>
       <div class="actor-key"><span class="actor-dot" style="background:var(--a8)"></span> Sistema</div>
+      <div class="actor-key"><span class="actor-dot" style="background:var(--a9)"></span> Fornecedor</div>
     </div>
     <div class="xlink">Ver também: <a href="documentacao-tecnica.html">Documentação técnica →</a></div>
   </aside>
@@ -164,8 +167,8 @@
       <div class="doc-kicker">Especificação de casos de uso</div>
       <h1>Falcão ERP Suprimentos</h1>
     </div>
-    <div class="doc-meta"><span><strong>57</strong> casos de uso</span><span><strong>8</strong> atores</span><span><strong>12</strong> pacotes</span><span>Base: rotas e regras implementadas em apps/api/src/modules</span></div>
-    <section class="intro"><p>Este documento especifica os casos de uso do ERP de Suprimentos da Falcão Construções e Engenharia. Cada caso reflete uma rota e uma regra de negócio que existem hoje no código; nada aqui descreve intenção futura.</p><p>Sete atores humanos correspondem aos papéis de acesso do sistema, e um oitavo, o <strong>Sistema</strong>, executa as ações automáticas: auditoria, histórico de aprovações, geração de contas a partir de reembolsos e isolamento por empresa. O <strong>Administrador</strong> tem todas as permissões e pode agir em qualquer etapa; por isso ele não é repetido em cada etapa do fluxo de compra.</p></section>
+    <div class="doc-meta"><span><strong>75</strong> casos de uso</span><span><strong>9</strong> atores</span><span><strong>14</strong> pacotes</span><span>Base: rotas e regras implementadas em apps/api/src/modules</span></div>
+    <section class="intro"><p>Este documento especifica os casos de uso do ERP de Suprimentos da Falcão Construções e Engenharia. Cada caso reflete uma rota e uma regra de negócio que existem hoje no código; nada aqui descreve intenção futura.</p><p>Sete atores humanos correspondem aos papéis de acesso do sistema. O <strong>Fornecedor</strong> é externo: não tem conta e atua só pelo link assinado da cotação. O <strong>Sistema</strong> executa as ações automáticas: auditoria, histórico de aprovações, contas geradas por reembolsos, preços vindos das cotações e isolamento por empresa. O <strong>Administrador</strong> tem todas as permissões e pode agir em qualquer etapa; por isso ele não é repetido em cada etapa do fluxo de compra.</p></section>
     <figure id="diagrama">
       <div class="frame">
         <pre class="mermaid">
@@ -173,6 +176,9 @@ flowchart LR
   SOL(("Solicitante")) --> COMPRAS["Compras<br/>solicitações · fornecedores · produtos"]
   COMP(("Comprador")) --> COMPRAS
   COMP --> CONTR["Contratos e aditivos"]
+  COMP --> COT["Cotações<br/>mapa lado a lado"]
+  FORN(("Fornecedor")) -->|"link sem login"| COT
+  SIS -.->|"preço vencedor"| COMPRAS
   GES(("Gestor")) -->|"aprova"| COMPRAS
   GES -->|"decide"| REEMB["Reembolsos"]
   ALM(("Almoxarifado")) -->|"recebe"| COMPRAS
@@ -187,7 +193,7 @@ flowchart LR
   TODOS(("Todos")) --> AGD["Agenda e documentos"]
         </pre>
       </div>
-      <figcaption>Fronteiras do sistema e quem atua em cada uma. Linhas tracejadas são acessos só de leitura ou ações automáticas do Sistema. O Administrador acumula todas as permissões dos demais papéis.</figcaption>
+      <figcaption>Fronteiras do sistema e quem atua em cada uma. O Fornecedor fica fora do login e só alcança a própria cotação. Linhas tracejadas são acessos só de leitura ou ações automáticas do Sistema. O Administrador acumula todas as permissões dos demais papéis.</figcaption>
     </figure>
     <div class="pkg" id="pkg-1">
       <div class="pkg-head"><span class="pkg-num">PACOTE 01</span><h2>Sessão e perfil</h2><div class="pkg-actors"><span class="actor-chip" style="background:var(--a3)">ADMIN</span><span class="actor-chip" style="background:var(--a4)">GESTOR</span><span class="actor-chip" style="background:var(--a1)">COMPRADOR</span><span class="actor-chip" style="background:var(--a2)">FINANCEIRO</span><span class="actor-chip" style="background:var(--a6)">ALMOXARIFADO</span><span class="actor-chip" style="background:var(--a5)">SOLICITANTE</span><span class="actor-chip" style="background:var(--a7)">AUDITOR</span></div></div>
@@ -242,15 +248,15 @@ flowchart LR
       </div>
     </div>
     <div class="pkg" id="pkg-3">
-      <div class="pkg-head"><span class="pkg-num">PACOTE 03</span><h2>Produtos</h2><div class="pkg-actors"><span class="actor-chip" style="background:var(--a3)">ADMIN</span><span class="actor-chip" style="background:var(--a4)">GESTOR</span><span class="actor-chip" style="background:var(--a1)">COMPRADOR</span></div></div>
-      <p class="pkg-note">Consulta para todos; cadastro e preços para Administrador, Gestor e Comprador.</p>
+      <div class="pkg-head"><span class="pkg-num">PACOTE 03</span><h2>Catálogo de produtos</h2><div class="pkg-actors"><span class="actor-chip" style="background:var(--a3)">ADMIN</span><span class="actor-chip" style="background:var(--a4)">GESTOR</span><span class="actor-chip" style="background:var(--a1)">COMPRADOR</span></div></div>
+      <p class="pkg-note">Consulta para todos; cadastro e preços para Administrador, Gestor e Comprador; disciplinas para Administrador e Gestor.</p>
       <div class="uc">
         <div class="uc-head"><span class="uc-id">UC12</span><h3>Consultar catálogo de produtos</h3><span class="uc-route">GET /products · /products/stats</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Usuário autenticado.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Lista com último preço e indicadores.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário busca por nome, código ou categoria.</li><li>Sistema devolve a página com o último preço registrado de cada produto.</li></ol></div></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Usuário autenticado.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Lista com disciplina, marca, referência, último preço (com quantidade e data) e indicadores por disciplina.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário busca por nome, código ou referência.</li><li>Filtra por disciplina (Civil, Elétrica, Mecânica, Eletromecânica…), categoria, marca ou fornecedor.</li><li>Sistema devolve a página com o último preço registrado de cada produto.</li></ol></div></div>
       </div>
       <div class="uc">
         <div class="uc-head"><span class="uc-id">UC13</span><h3>Cadastrar e editar produto</h3><span class="uc-route">POST · PATCH /products</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com escrita em produtos.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Produto disponível para as solicitações.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário informa nome, categoria, unidade de medida e fornecedores.</li><li>Sistema grava e audita.</li></ol></div></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com escrita em produtos.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Produto disponível para as solicitações.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário informa nome, disciplina, categoria, marca, referência, unidade de medida e fornecedores.</li><li>Sistema grava e audita.</li></ol></div></div>
       </div>
       <div class="uc">
         <div class="uc-head"><span class="uc-id">UC14</span><h3>Desativar e reativar produto</h3><span class="uc-route">DELETE · PATCH /products/:id/reactivate</span></div>
@@ -258,211 +264,291 @@ flowchart LR
       </div>
       <div class="uc">
         <div class="uc-head"><span class="uc-id">UC15</span><h3>Registrar preço</h3><span class="uc-route">POST /products/:id/price-entries</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com escrita em produtos.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Novo ponto no histórico de preços.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário informa preço, data e fornecedor.</li><li>Sistema acrescenta ao histórico; o mais recente vira o último preço.</li></ol></div></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com escrita em produtos.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Novo ponto no histórico de preços, com origem <code>MANUAL</code>.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário informa preço, quantidade, data, fornecedor, marca e referência.</li><li>Sistema acrescenta ao histórico; o mais recente vira o último preço.</li></ol></div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC16</span><h3>Gerenciar disciplinas</h3><span class="uc-route">GET · POST · PATCH /disciplines</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Administrador ou Gestor.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Lista de disciplinas atualizada para filtros e cadastro.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário abre "Disciplinas" no banco de produtos.</li><li>Cria, renomeia, desativa ou reativa uma disciplina.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Nome já usado, sem diferenciar maiúsculas → 409.</div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC17</span><h3>Incluir item da solicitação no catálogo</h3><span class="uc-route">POST /products/from-request-item</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com escrita em produtos; item digitado à mão, ainda sem produto.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Produto criado e item da solicitação ligado a ele.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Comprador abre a solicitação e clica em "Incluir no catálogo" num item.</li><li>Confere código, disciplina, categoria, marca e referência sugeridos a partir do item.</li><li>Sistema cria o produto e liga o item na mesma transação.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Item já ligado a um produto → 409.</div></div>
       </div>
     </div>
     <div class="pkg" id="pkg-4">
       <div class="pkg-head"><span class="pkg-num">PACOTE 04</span><h2>Solicitações de compra</h2><div class="pkg-actors"><span class="actor-chip" style="background:var(--a3)">ADMIN</span><span class="actor-chip" style="background:var(--a4)">GESTOR</span><span class="actor-chip" style="background:var(--a1)">COMPRADOR</span><span class="actor-chip" style="background:var(--a2)">FINANCEIRO</span><span class="actor-chip" style="background:var(--a6)">ALMOXARIFADO</span><span class="actor-chip" style="background:var(--a5)">SOLICITANTE</span></div></div>
       <p class="pkg-note">Abrir, comentar e anexar: todos os papéis, menos Auditor. Cada mudança de etapa é restrita ao papel daquela etapa (seção 07 da documentação técnica).</p>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC16</span><h3>Abrir solicitação de compra</h3><span class="uc-route">POST /purchase-requests</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel participante.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Solicitação em <code>AGUARDANDO_APROVACAO</code>.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Solicitante informa título, justificativa, centro de custo, prazo e itens.</li><li>Sistema grava com o autor e abre a linha do tempo.</li></ol></div></div>
+        <div class="uc-head"><span class="uc-id">UC18</span><h3>Abrir solicitação de compra</h3><span class="uc-route">POST /purchase-requests</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel participante.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Solicitação em <code>AGUARDANDO_APROVACAO</code>.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Solicitante informa título, justificativa, centro de custo e prazo.</li><li>Adiciona itens escolhendo no catálogo (com filtros e último preço pago) ou descrevendo à mão, com quantidade, marca e referência.</li><li>Sistema grava com o autor e abre a linha do tempo.</li></ol></div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC17</span><h3>Editar solicitação aguardando aprovação</h3><span class="uc-route">PATCH /purchase-requests/:id</span></div>
+        <div class="uc-head"><span class="uc-id">UC19</span><h3>Editar solicitação aguardando aprovação</h3><span class="uc-route">PATCH /purchase-requests/:id</span></div>
         <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Usuário é o autor e a solicitação está aguardando aprovação.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Dados e itens atualizados.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Autor altera a solicitação.</li><li>Sistema grava.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Solicitação já aprovada → 400. Outro usuário → 403.</div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC18</span><h3>Aprovar, rejeitar ou pedir ajuste</h3><span class="uc-route">PATCH /purchase-requests/:id/status</span></div>
+        <div class="uc-head"><span class="uc-id">UC20</span><h3>Aprovar, rejeitar ou pedir ajuste</h3><span class="uc-route">PATCH /purchase-requests/:id/status</span></div>
         <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Solicitação em <code>AGUARDANDO_APROVACAO</code>; usuário é Gestor.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Solicitação vai para <code>EM_COMPRAS</code>, <code>REJEITADO</code> ou volta ao autor.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Gestor analisa itens e justificativa.</li><li>Escolhe a decisão e comenta.</li><li>Sistema valida a transição e o papel e grava o registro de aprovação.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Transição fora da tabela → 400. Papel errado para a etapa → 403.</div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC19</span><h3>Conduzir a compra até o recebimento</h3><span class="uc-route">PATCH /purchase-requests/:id/status</span></div>
+        <div class="uc-head"><span class="uc-id">UC21</span><h3>Conduzir a compra até o recebimento</h3><span class="uc-route">PATCH /purchase-requests/:id/status</span></div>
         <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Solicitação aprovada.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Solicitação <code>FINALIZADO</code>.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Comprador move para <code>EM_COTACAO</code> e depois <code>PEDIDO_REALIZADO</code>.</li><li>Comprador ou Almoxarifado marca <code>AGUARDANDO_RECEBIMENTO</code>.</li><li>Almoxarifado confirma o recebimento e finaliza.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Qualquer etapa pode rejeitar a solicitação; <code>FINALIZADO</code> e <code>REJEITADO</code> são finais.</div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC20</span><h3>Comentar na solicitação</h3><span class="uc-route">POST /purchase-requests/:id/comments</span></div>
+        <div class="uc-head"><span class="uc-id">UC22</span><h3>Comentar na solicitação</h3><span class="uc-route">POST /purchase-requests/:id/comments</span></div>
         <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel participante.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Comentário na linha do tempo.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário escreve a mensagem.</li><li>Sistema grava com autor e horário.</li></ol></div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC21</span><h3>Anexar e remover arquivos</h3><span class="uc-route">POST · DELETE /purchase-requests/:id/attachments</span></div>
+        <div class="uc-head"><span class="uc-id">UC23</span><h3>Anexar e remover arquivos</h3><span class="uc-route">POST · DELETE /purchase-requests/:id/attachments</span></div>
         <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel participante.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Anexo disponível na solicitação.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário envia orçamento, foto ou nota.</li><li>Sistema confere se a solicitação existe na empresa antes de gravar o arquivo.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Extensão não permitida → 400.</div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC22</span><h3>Consultar solicitação e linha do tempo</h3><span class="uc-route">GET /purchase-requests/:id · /timeline</span></div>
+        <div class="uc-head"><span class="uc-id">UC24</span><h3>Consultar solicitação e linha do tempo</h3><span class="uc-route">GET /purchase-requests/:id · /timeline</span></div>
         <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Usuário autenticado.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Detalhe com itens, anexos e histórico de etapas.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário abre a solicitação.</li><li>Sistema devolve o detalhe e a linha do tempo com cada decisão.</li></ol></div></div>
       </div>
     </div>
     <div class="pkg" id="pkg-5">
-      <div class="pkg-head"><span class="pkg-num">PACOTE 05</span><h2>Contratos</h2><div class="pkg-actors"><span class="actor-chip" style="background:var(--a3)">ADMIN</span><span class="actor-chip" style="background:var(--a4)">GESTOR</span><span class="actor-chip" style="background:var(--a1)">COMPRADOR</span><span class="actor-chip" style="background:var(--a2)">FINANCEIRO</span><span class="actor-chip" style="background:var(--a7)">AUDITOR</span></div></div>
-      <p class="pkg-note">Consulta para Administrador, Gestor, Comprador, Financeiro e Auditor; cadastro e alterações para Administrador, Gestor e Comprador.</p>
+      <div class="pkg-head"><span class="pkg-num">PACOTE 05</span><h2>Cotações</h2><div class="pkg-actors"><span class="actor-chip" style="background:var(--a3)">ADMIN</span><span class="actor-chip" style="background:var(--a4)">GESTOR</span><span class="actor-chip" style="background:var(--a1)">COMPRADOR</span><span class="actor-chip" style="background:var(--a2)">FINANCEIRO</span><span class="actor-chip" style="background:var(--a7)">AUDITOR</span></div></div>
+      <p class="pkg-note">Consulta para Administrador, Gestor, Comprador, Financeiro e Auditor; abrir, conduzir e encerrar para Administrador, Gestor e Comprador.</p>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC23</span><h3>Consultar contratos e indicadores</h3><span class="uc-route">GET /contracts · /contracts/stats</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com leitura de contratos.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Lista com vigência, valor e alertas de vencimento.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário filtra por situação, fornecedor ou vencimento.</li><li>Sistema devolve a lista e os totais.</li></ol></div></div>
+        <div class="uc-head"><span class="uc-id">UC25</span><h3>Abrir cotação a partir da solicitação</h3><span class="uc-route">POST /quotations</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Solicitação em <code>EM_COMPRAS</code> ou <code>EM_COTACAO</code>.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Cotação <code>ABERTA</code> com um link por fornecedor; solicitação em <code>EM_COTACAO</code>.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Comprador abre a solicitação aprovada e clica em "Abrir cotação".</li><li>Escolhe os itens, até 20 fornecedores, o prazo de resposta e as observações.</li><li>Sistema numera a cotação, copia os itens com quantidade, marca e referência e gera os convites.</li><li>Se a solicitação estava em compras, o Sistema a move para em cotação (UC73).</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Solicitação em outra etapa → 400. Prazo no passado → 400.</div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC24</span><h3>Cadastrar contrato</h3><span class="uc-route">POST /contracts</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com escrita; fornecedor existe.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Contrato <code>VIGENTE</code>.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário informa número, objeto, fornecedor, valor, vigência e dias de alerta.</li><li>Sistema valida e grava.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Número repetido na empresa → 409. Término antes do início → 400.</div></div>
+        <div class="uc-head"><span class="uc-id">UC26</span><h3>Enviar o link ao fornecedor</h3><span class="uc-route">POST /quotations/:id/suppliers/:qsId/link</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Cotação aberta.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Fornecedor recebe a descrição dos materiais.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Comprador copia o link ou envia por WhatsApp ou e-mail com a mensagem pronta.</li><li>Se o link vazou, gera um novo, e o anterior para de funcionar.</li></ol></div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC25</span><h3>Editar contrato</h3><span class="uc-route">PATCH /contracts/:id</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Contrato vigente ou suspenso.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Dados atualizados.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário altera os dados.</li><li>Sistema grava e audita.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Contrato encerrado ou cancelado → 400.</div></div>
+        <div class="uc-head"><span class="uc-id">UC27</span><h3>Convidar ou retirar fornecedor</h3><span class="uc-route">POST · DELETE /quotations/:id/suppliers</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Cotação aberta.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Lista de convidados atualizada.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Comprador inclui um fornecedor ativo ou retira um convite.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Fornecedor já convidado → 409. Fornecedor inativo → 400.</div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC26</span><h3>Alterar situação do contrato</h3><span class="uc-route">PATCH /contracts/:id/status</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com escrita.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Contrato suspenso, reativado, encerrado ou cancelado.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário escolhe a nova situação.</li><li>Sistema confere a transição permitida.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Contrato encerrado ou cancelado não muda mais → 400.</div></div>
+        <div class="uc-head"><span class="uc-id">UC28</span><h3>Lançar proposta recebida por fora</h3><span class="uc-route">PUT /quotations/:id/suppliers/:qsId/prices</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Cotação aberta.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Proposta do fornecedor registrada como respondida.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Comprador abre o convite do fornecedor que respondeu por e-mail ou telefone.</li><li>Digita preços, marca, referência e condições.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Item que não pertence à cotação ou repetido → 400.</div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC27</span><h3>Registrar aditivo</h3><span class="uc-route">POST /contracts/:id/amendments</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Contrato vigente ou suspenso.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Valor e/ou término atualizados, com o aditivo no histórico.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário informa acréscimo ou supressão de valor e/ou nova data de término.</li><li>Sistema aplica ao contrato e guarda o aditivo.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Sem nenhuma alteração, supressão que deixaria valor negativo ou término antes do início → 400.</div></div>
+        <div class="uc-head"><span class="uc-id">UC29</span><h3>Comparar no mapa de cotação</h3><span class="uc-route">GET /quotations/:id</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com leitura de cotações.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Fornecedores lado a lado com destaque do menor preço.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário abre a cotação.</li><li>Vê, por item, o preço de cada fornecedor, menor, maior, média e a variação contra o último preço pago.</li><li>Vê totais com frete, ranking dos que cotaram tudo e a economia contra a última compra.</li><li>Exporta o mapa em Excel, se quiser.</li></ol></div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC30</span><h3>Escolher vencedores</h3><span class="uc-route">PATCH /quotations/:id/items/:itemId/winner · POST /pick-cheapest</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Cotação aberta com respostas.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Fornecedor vencedor definido por item.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Comprador escolhe o vencedor de cada item ou aplica "menor preço em tudo".</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Fornecedor que não cotou o item → 400.</div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC31</span><h3>Encerrar ou cancelar a cotação</h3><span class="uc-route">POST /quotations/:id/close · /cancel</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Cotação aberta.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Cotação <code>ENCERRADA</code> com preços no catálogo, ou <code>CANCELADA</code>.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Comprador encerra depois de escolher os vencedores.</li><li>O Sistema grava os preços vencedores no histórico do catálogo (UC74).</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Nenhum vencedor escolhido → 400. Outra pessoa encerrou antes → 409.</div></div>
       </div>
     </div>
     <div class="pkg" id="pkg-6">
-      <div class="pkg-head"><span class="pkg-num">PACOTE 06</span><h2>Financeiro</h2><div class="pkg-actors"><span class="actor-chip" style="background:var(--a3)">ADMIN</span><span class="actor-chip" style="background:var(--a2)">FINANCEIRO</span><span class="actor-chip" style="background:var(--a4)">GESTOR</span><span class="actor-chip" style="background:var(--a7)">AUDITOR</span></div></div>
-      <p class="pkg-note">Consulta para Administrador, Gestor, Financeiro e Auditor; lançamentos e baixas só para Administrador e Financeiro.</p>
+      <div class="pkg-head"><span class="pkg-num">PACOTE 06</span><h2>Resposta do fornecedor</h2><div class="pkg-actors"><span class="actor-chip" style="background:var(--a9)">FORNECEDOR</span></div></div>
+      <p class="pkg-note">Ator externo, sem conta no sistema. Acessa só a própria cotação, pelo link assinado; limite de 30 requisições por minuto.</p>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC28</span><h3>Consultar contas a pagar</h3><span class="uc-route">GET /payables · /payables/stats</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com leitura financeira.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Lista com situação, vencidas destacadas e totais.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário filtra por situação, origem, centro de custo, fornecedor, contrato, período, só vencidas ou só sem nota fiscal.</li><li>Sistema marca como vencidas as contas abertas com vencimento passado.</li></ol></div></div>
+        <div class="uc-head"><span class="uc-id">UC32</span><h3>Ver os materiais pedidos</h3><span class="uc-route">GET /public/quotations/:token</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Link válido.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Página com empresa, prazo, itens (descrição, quantidade, unidade, marca e referência sugeridas) e a resposta anterior.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Fornecedor abre o link no computador ou no celular.</li><li>Sistema confere a assinatura do link e mostra a cotação.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Link adulterado, trocado ou inexistente → página de link inválido.</div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC29</span><h3>Lançar conta a pagar</h3><span class="uc-route">POST /payables</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com escrita financeira.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Conta <code>ABERTO</code>.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário informa descrição, valor, vencimento, centro de custo e, se houver, fornecedor, contrato ou solicitação.</li><li>Sistema valida os vínculos e grava.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Contrato cancelado ou solicitação rejeitada como vínculo → 400.</div></div>
+        <div class="uc-head"><span class="uc-id">UC33</span><h3>Responder ou corrigir preços</h3><span class="uc-route">PUT /public/quotations/:token</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Cotação aberta e dentro do prazo.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Convite <code>RESPONDIDO</code>, com nome de quem respondeu e horário.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Fornecedor informa, por item, preço unitário, marca, referência, disponibilidade e observação.</li><li>Informa prazo de entrega, condição de pagamento, validade e frete, e o próprio nome.</li><li>Pode voltar ao link e corrigir até o prazo.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Prazo vencido, cotação encerrada ou cancelada → 400 e a página fica só para leitura.</div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC30</span><h3>Editar conta em aberto</h3><span class="uc-route">PATCH /payables/:id</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Conta <code>ABERTO</code>.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Dados atualizados.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário altera a conta.</li><li>Sistema grava.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Conta paga ou cancelada → 400. Valor ou vínculos de conta de reembolso → 400.</div></div>
-      </div>
-      <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC31</span><h3>Dar baixa (pagar)</h3><span class="uc-route">PATCH /payables/:id/pay</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Conta <code>ABERTO</code>.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Conta <code>PAGO</code> com data, valor pago e forma de pagamento.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário informa data, valor e forma (boleto, PIX, transferência, cartão ou dinheiro).</li><li>Sistema grava a baixa só se a conta ainda estiver aberta.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Data futura → 400. Outra pessoa baixou antes → erro, sem baixa dupla.</div></div>
-      </div>
-      <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC32</span><h3>Registrar nota fiscal</h3><span class="uc-route">PATCH /payables/:id/invoice</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Conta não cancelada.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Número e emissão da nota vinculados à conta.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário informa número e data de emissão.</li><li>Sistema grava.</li></ol></div></div>
-      </div>
-      <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC33</span><h3>Cancelar conta</h3><span class="uc-route">PATCH /payables/:id/cancel</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Conta <code>ABERTO</code> e não originada de reembolso.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Conta <code>CANCELADO</code>.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário cancela.</li><li>Sistema confere a situação e grava.</li></ol></div></div>
-      </div>
-      <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC34</span><h3>Acompanhar fluxo de caixa e centros de custo</h3><span class="uc-route">GET /payables/cash-flow · /by-cost-center</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com leitura financeira.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Totais mensais por vencimento e totais por centro de custo.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário escolhe quantos meses para trás e para frente e, se quiser, um centro de custo.</li><li>Sistema agrega os valores por mês e por centro de custo.</li></ol></div></div>
+        <div class="uc-head"><span class="uc-id">UC34</span><h3>Recusar o convite</h3><span class="uc-route">POST /public/quotations/:token/decline</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Cotação aberta.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Convite <code>RECUSOU</code>, com motivo opcional.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Fornecedor clica em "Não vou cotar", informa o nome e, se quiser, o motivo.</li></ol></div></div>
       </div>
     </div>
     <div class="pkg" id="pkg-7">
-      <div class="pkg-head"><span class="pkg-num">PACOTE 07</span><h2>Reembolsos</h2><div class="pkg-actors"><span class="actor-chip" style="background:var(--a3)">ADMIN</span><span class="actor-chip" style="background:var(--a4)">GESTOR</span><span class="actor-chip" style="background:var(--a1)">COMPRADOR</span><span class="actor-chip" style="background:var(--a2)">FINANCEIRO</span><span class="actor-chip" style="background:var(--a6)">ALMOXARIFADO</span><span class="actor-chip" style="background:var(--a5)">SOLICITANTE</span><span class="actor-chip" style="background:var(--a7)">AUDITOR</span></div></div>
-      <p class="pkg-note">Todos pedem reembolso, menos o Auditor. Administrador, Gestor, Financeiro e Auditor veem os pedidos de todos; os demais, só os próprios. Decidir é exclusivo de Administrador e Gestor.</p>
+      <div class="pkg-head"><span class="pkg-num">PACOTE 07</span><h2>Contratos</h2><div class="pkg-actors"><span class="actor-chip" style="background:var(--a3)">ADMIN</span><span class="actor-chip" style="background:var(--a4)">GESTOR</span><span class="actor-chip" style="background:var(--a1)">COMPRADOR</span><span class="actor-chip" style="background:var(--a2)">FINANCEIRO</span><span class="actor-chip" style="background:var(--a7)">AUDITOR</span></div></div>
+      <p class="pkg-note">Consulta para Administrador, Gestor, Comprador, Financeiro e Auditor; cadastro e alterações para Administrador, Gestor e Comprador.</p>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC35</span><h3>Pedir reembolso</h3><span class="uc-route">POST /reimbursements</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel que pode pedir reembolso.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Pedido <code>ENVIADO</code>.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário informa título, centro de custo e despesas (categoria, data e valor).</li><li>Sistema soma os itens e grava.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Despesa com data futura → 400.</div></div>
+        <div class="uc-head"><span class="uc-id">UC35</span><h3>Consultar contratos e indicadores</h3><span class="uc-route">GET /contracts · /contracts/stats</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com leitura de contratos.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Lista com vigência, valor e alertas de vencimento.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário filtra por situação, fornecedor ou vencimento.</li><li>Sistema devolve a lista e os totais.</li></ol></div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC36</span><h3>Anexar comprovantes</h3><span class="uc-route">POST · DELETE /reimbursements/:id/attachments</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Usuário é quem pediu e o pedido não foi decidido.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Comprovantes no pedido.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário envia fotos ou PDFs dos recibos.</li><li>Sistema valida a extensão e grava.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Outro usuário → 403. Pedido já decidido → 400.</div></div>
+        <div class="uc-head"><span class="uc-id">UC36</span><h3>Cadastrar contrato</h3><span class="uc-route">POST /contracts</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com escrita; fornecedor existe.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Contrato <code>VIGENTE</code>.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário informa número, objeto, fornecedor, valor, vigência e dias de alerta.</li><li>Sistema valida e grava.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Número repetido na empresa → 409. Término antes do início → 400.</div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC37</span><h3>Excluir pedido</h3><span class="uc-route">DELETE /reimbursements/:id</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Usuário é quem pediu e o pedido não foi decidido.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Pedido removido.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário exclui o próprio pedido.</li></ol></div></div>
+        <div class="uc-head"><span class="uc-id">UC37</span><h3>Editar contrato</h3><span class="uc-route">PATCH /contracts/:id</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Contrato vigente ou suspenso.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Dados atualizados.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário altera os dados.</li><li>Sistema grava e audita.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Contrato encerrado ou cancelado → 400.</div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC38</span><h3>Decidir reembolso</h3><span class="uc-route">PATCH /reimbursements/:id/decision</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Pedido <code>ENVIADO</code>; usuário é Gestor ou Administrador e não é quem pediu.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Pedido <code>APROVADO</code> com conta a pagar gerada, ou <code>REJEITADO</code> com motivo.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Decisor analisa itens e comprovantes.</li><li>Aprova (opcionalmente define o vencimento) ou rejeita com motivo.</li><li>Na aprovação, o Sistema cria a conta a pagar (UC55).</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Decidir o próprio pedido → 403. Rejeitar sem motivo → 400. Já decidido → 400.</div></div>
+        <div class="uc-head"><span class="uc-id">UC38</span><h3>Alterar situação do contrato</h3><span class="uc-route">PATCH /contracts/:id/status</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com escrita.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Contrato suspenso, reativado, encerrado ou cancelado.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário escolhe a nova situação.</li><li>Sistema confere a transição permitida.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Contrato encerrado ou cancelado não muda mais → 400.</div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC39</span><h3>Consultar reembolsos</h3><span class="uc-route">GET /reimbursements · /stats</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Usuário autenticado.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Lista conforme a visibilidade do papel.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário filtra por situação e período.</li><li>Sistema aplica a regra de visibilidade.</li></ol></div></div>
+        <div class="uc-head"><span class="uc-id">UC39</span><h3>Registrar aditivo</h3><span class="uc-route">POST /contracts/:id/amendments</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Contrato vigente ou suspenso.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Valor e/ou término atualizados, com o aditivo no histórico.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário informa acréscimo ou supressão de valor e/ou nova data de término.</li><li>Sistema aplica ao contrato e guarda o aditivo.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Sem nenhuma alteração, supressão que deixaria valor negativo ou término antes do início → 400.</div></div>
       </div>
     </div>
     <div class="pkg" id="pkg-8">
-      <div class="pkg-head"><span class="pkg-num">PACOTE 08</span><h2>Documentos</h2><div class="pkg-actors"><span class="actor-chip" style="background:var(--a3)">ADMIN</span><span class="actor-chip" style="background:var(--a4)">GESTOR</span><span class="actor-chip" style="background:var(--a1)">COMPRADOR</span><span class="actor-chip" style="background:var(--a2)">FINANCEIRO</span><span class="actor-chip" style="background:var(--a6)">ALMOXARIFADO</span></div></div>
-      <p class="pkg-note">Consulta para todos. Envio e edição para Administrador, Gestor, Comprador, Financeiro e Almoxarifado. Remover documento enviado por outra pessoa: só Administrador e Gestor.</p>
+      <div class="pkg-head"><span class="pkg-num">PACOTE 08</span><h2>Financeiro e nota fiscal</h2><div class="pkg-actors"><span class="actor-chip" style="background:var(--a3)">ADMIN</span><span class="actor-chip" style="background:var(--a2)">FINANCEIRO</span><span class="actor-chip" style="background:var(--a4)">GESTOR</span><span class="actor-chip" style="background:var(--a7)">AUDITOR</span></div></div>
+      <p class="pkg-note">Consulta para Administrador, Gestor, Financeiro e Auditor; lançamentos e baixas só para Administrador e Financeiro.</p>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC40</span><h3>Enviar documento</h3><span class="uc-route">POST /documents</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com escrita em documentos.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Documento pesquisável no repositório.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário envia o arquivo com título, categoria, etiquetas, validade e vínculo opcional a fornecedor ou contrato.</li><li>Sistema grava e, em arquivos de texto, extrai o conteúdo para a busca.</li></ol></div></div>
+        <div class="uc-head"><span class="uc-id">UC40</span><h3>Consultar contas a pagar</h3><span class="uc-route">GET /payables · /payables/stats</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com leitura financeira.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Lista com situação, vencidas destacadas e totais.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário filtra por situação, origem, centro de custo, fornecedor, contrato, período, só vencidas, só sem nota ou só com nota fiscal.</li><li>Sistema marca como vencidas as contas abertas com vencimento passado.</li></ol></div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC41</span><h3>Buscar documentos</h3><span class="uc-route">GET /documents · /tags · /stats</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Usuário autenticado.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Lista filtrada por texto, categoria, etiqueta ou validade.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário digita termos ou escolhe filtros.</li><li>Sistema busca no título, na descrição, no nome do arquivo, nas etiquetas e no conteúdo extraído.</li></ol></div></div>
+        <div class="uc-head"><span class="uc-id">UC41</span><h3>Lançar conta a pagar</h3><span class="uc-route">POST /payables</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com escrita financeira.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Conta <code>ABERTO</code>.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário informa descrição, valor, vencimento, centro de custo e, se houver, fornecedor, contrato ou solicitação.</li><li>Sistema valida os vínculos e grava.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Contrato cancelado ou solicitação rejeitada como vínculo → 400.</div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC42</span><h3>Editar dados do documento</h3><span class="uc-route">PATCH /documents/:id</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com escrita.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Metadados atualizados.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário altera título, categoria, etiquetas ou validade.</li></ol></div></div>
+        <div class="uc-head"><span class="uc-id">UC42</span><h3>Editar conta em aberto</h3><span class="uc-route">PATCH /payables/:id</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Conta <code>ABERTO</code>.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Dados atualizados.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário altera a conta.</li><li>Sistema grava.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Conta paga ou cancelada → 400. Valor ou vínculos de conta de reembolso → 400.</div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC43</span><h3>Remover documento</h3><span class="uc-route">DELETE /documents/:id</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Usuário enviou o documento, ou é Gestor/Administrador.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Registro e arquivo removidos.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário remove o documento.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Documento de outra pessoa sem papel de gestão → 403.</div></div>
+        <div class="uc-head"><span class="uc-id">UC43</span><h3>Dar baixa (pagar)</h3><span class="uc-route">PATCH /payables/:id/pay</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Conta <code>ABERTO</code>.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Conta <code>PAGO</code> com data, valor pago e forma de pagamento.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário informa data, valor e forma (boleto, PIX, transferência, cartão ou dinheiro).</li><li>Sistema grava a baixa só se a conta ainda estiver aberta.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Data futura → 400. Outra pessoa baixou antes → erro, sem baixa dupla.</div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC44</span><h3>Registrar nota fiscal</h3><span class="uc-route">PATCH /payables/:id/invoice</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Conta não cancelada.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Número e emissão da nota vinculados à conta.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário informa número e data de emissão.</li><li>Sistema grava.</li></ol></div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC45</span><h3>Anexar PDF e XML da nota</h3><span class="uc-route">POST · DELETE /payables/:id/invoice-file</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Conta não cancelada; papel com escrita financeira.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Arquivos disponíveis para baixar; o XML preenche número, emissão e chave.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário anexa o DANFE em PDF e/ou o XML da NF-e (até 50 MB).</li><li>No XML, o Sistema lê a nota e mostra os avisos de conferência.</li><li>Os arquivos ficam disponíveis para download na conta e na lista.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Arquivo que não é PDF nem XML → 400. XML que não é NF-e modelo 55 → 400.</div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC46</span><h3>Lançar conta a partir do XML</h3><span class="uc-route">POST /payables/invoice-xml/preview · POST /payables</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com escrita financeira.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Conta criada com os dados da nota e o XML anexado.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário clica em "Importar XML da NF-e" e escolhe o arquivo.</li><li>Sistema lê a nota sem gravar e devolve os dados e os avisos.</li><li>O formulário abre preenchido com fornecedor, valor, vencimento e nota; o usuário confere e salva.</li><li>Web anexa o XML à conta recém-criada.</li></ol></div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC47</span><h3>Exportar planilha de notas fiscais</h3><span class="uc-route">GET /payables?comNota=true</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com leitura financeira.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Arquivo Excel com as notas do filtro.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário clica em "Notas fiscais (Excel)".</li><li>Web gera a planilha com fornecedor, número, chave, emissão, valor, situação e links dos arquivos.</li></ol></div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC48</span><h3>Cancelar conta</h3><span class="uc-route">PATCH /payables/:id/cancel</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Conta <code>ABERTO</code> e não originada de reembolso.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Conta <code>CANCELADO</code>.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário cancela.</li><li>Sistema confere a situação e grava.</li></ol></div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC49</span><h3>Acompanhar fluxo de caixa e centros de custo</h3><span class="uc-route">GET /payables/cash-flow · /by-cost-center</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com leitura financeira.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Totais mensais por vencimento e totais por centro de custo.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário escolhe quantos meses para trás e para frente e, se quiser, um centro de custo.</li><li>Sistema agrega os valores por mês e por centro de custo.</li></ol></div></div>
       </div>
     </div>
     <div class="pkg" id="pkg-9">
-      <div class="pkg-head"><span class="pkg-num">PACOTE 09</span><h2>Agenda</h2><div class="pkg-actors"><span class="actor-chip" style="background:var(--a3)">ADMIN</span><span class="actor-chip" style="background:var(--a4)">GESTOR</span><span class="actor-chip" style="background:var(--a1)">COMPRADOR</span><span class="actor-chip" style="background:var(--a2)">FINANCEIRO</span><span class="actor-chip" style="background:var(--a6)">ALMOXARIFADO</span><span class="actor-chip" style="background:var(--a5)">SOLICITANTE</span><span class="actor-chip" style="background:var(--a7)">AUDITOR</span></div></div>
-      <p class="pkg-note">Todos consultam; o que aparece depende do papel. Criar eventos: todos, menos Auditor. Editar ou remover evento de outra pessoa: só Administrador e Gestor.</p>
+      <div class="pkg-head"><span class="pkg-num">PACOTE 09</span><h2>Reembolsos</h2><div class="pkg-actors"><span class="actor-chip" style="background:var(--a3)">ADMIN</span><span class="actor-chip" style="background:var(--a4)">GESTOR</span><span class="actor-chip" style="background:var(--a1)">COMPRADOR</span><span class="actor-chip" style="background:var(--a2)">FINANCEIRO</span><span class="actor-chip" style="background:var(--a6)">ALMOXARIFADO</span><span class="actor-chip" style="background:var(--a5)">SOLICITANTE</span><span class="actor-chip" style="background:var(--a7)">AUDITOR</span></div></div>
+      <p class="pkg-note">Todos pedem reembolso, menos o Auditor. Administrador, Gestor, Financeiro e Auditor veem os pedidos de todos; os demais, só os próprios. Decidir é exclusivo de Administrador e Gestor.</p>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC44</span><h3>Consultar a agenda consolidada</h3><span class="uc-route">GET /agenda</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Usuário autenticado.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Prazos e eventos do período.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário escolhe o período (até 92 dias).</li><li>Sistema junta vencimentos de contas, fim de contratos e validade de documentos dos módulos que o usuário pode ler, mais os eventos da equipe.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Período maior que 92 dias → 400.</div></div>
+        <div class="uc-head"><span class="uc-id">UC50</span><h3>Pedir reembolso</h3><span class="uc-route">POST /reimbursements</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel que pode pedir reembolso.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Pedido <code>ENVIADO</code>.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário informa título, centro de custo e despesas (categoria, data e valor).</li><li>Sistema soma os itens e grava.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Despesa com data futura → 400.</div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC45</span><h3>Criar evento</h3><span class="uc-route">POST /agenda/events</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com escrita na agenda.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Evento visível para a equipe.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário informa título, tipo (entrega, recebimento, visita, reunião, lembrete ou outro), início e fim ou dia inteiro, obra, local e, se quiser, o fornecedor ou a solicitação relacionada.</li><li>Sistema grava com o autor.</li></ol></div></div>
+        <div class="uc-head"><span class="uc-id">UC51</span><h3>Anexar comprovantes</h3><span class="uc-route">POST · DELETE /reimbursements/:id/attachments</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Usuário é quem pediu e o pedido não foi decidido.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Comprovantes no pedido.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário envia fotos ou PDFs dos recibos.</li><li>Sistema valida a extensão e grava.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Outro usuário → 403. Pedido já decidido → 400.</div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC46</span><h3>Editar ou remover evento</h3><span class="uc-route">PATCH · DELETE /agenda/events/:id</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Usuário criou o evento, ou é Gestor/Administrador.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Evento atualizado ou removido.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário altera ou remove o evento.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Evento de outra pessoa sem papel de gestão → 403.</div></div>
+        <div class="uc-head"><span class="uc-id">UC52</span><h3>Excluir pedido</h3><span class="uc-route">DELETE /reimbursements/:id</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Usuário é quem pediu e o pedido não foi decidido.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Pedido removido.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário exclui o próprio pedido.</li></ol></div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC53</span><h3>Decidir reembolso</h3><span class="uc-route">PATCH /reimbursements/:id/decision</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Pedido <code>ENVIADO</code>; usuário é Gestor ou Administrador e não é quem pediu.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Pedido <code>APROVADO</code> com conta a pagar gerada, ou <code>REJEITADO</code> com motivo.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Decisor analisa itens e comprovantes.</li><li>Aprova (opcionalmente define o vencimento) ou rejeita com motivo.</li><li>Na aprovação, o Sistema cria a conta a pagar (UC70).</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Decidir o próprio pedido → 403. Rejeitar sem motivo → 400. Já decidido → 400.</div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC54</span><h3>Consultar reembolsos</h3><span class="uc-route">GET /reimbursements · /stats</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Usuário autenticado.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Lista conforme a visibilidade do papel.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário filtra por situação e período.</li><li>Sistema aplica a regra de visibilidade.</li></ol></div></div>
       </div>
     </div>
     <div class="pkg" id="pkg-10">
-      <div class="pkg-head"><span class="pkg-num">PACOTE 10</span><h2>Usuários</h2><div class="pkg-actors"><span class="actor-chip" style="background:var(--a3)">ADMIN</span></div></div>
-      <p class="pkg-note">Exclusivo do Administrador.</p>
+      <div class="pkg-head"><span class="pkg-num">PACOTE 10</span><h2>Documentos</h2><div class="pkg-actors"><span class="actor-chip" style="background:var(--a3)">ADMIN</span><span class="actor-chip" style="background:var(--a4)">GESTOR</span><span class="actor-chip" style="background:var(--a1)">COMPRADOR</span><span class="actor-chip" style="background:var(--a2)">FINANCEIRO</span><span class="actor-chip" style="background:var(--a6)">ALMOXARIFADO</span></div></div>
+      <p class="pkg-note">Consulta para todos. Envio e edição para Administrador, Gestor, Comprador, Financeiro e Almoxarifado. Remover documento enviado por outra pessoa: só Administrador e Gestor.</p>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC47</span><h3>Consultar usuários</h3><span class="uc-route">GET /users · /users/stats</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Administrador.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Lista com papel, situação e totais.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Administrador busca por nome ou e-mail e filtra por papel ou situação.</li></ol></div></div>
+        <div class="uc-head"><span class="uc-id">UC55</span><h3>Enviar documento</h3><span class="uc-route">POST /documents</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com escrita em documentos.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Documento pesquisável no repositório.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário envia o arquivo com título, categoria, etiquetas, validade e vínculo opcional a fornecedor ou contrato.</li><li>Sistema grava e, em arquivos de texto, extrai o conteúdo para a busca.</li></ol></div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC48</span><h3>Criar usuário</h3><span class="uc-route">POST /users</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Administrador.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Conta ativa na empresa.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Administrador informa nome, e-mail, papel e senha inicial.</li><li>Sistema grava a senha com hash.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">E-mail já usado → 409.</div></div>
+        <div class="uc-head"><span class="uc-id">UC56</span><h3>Buscar documentos</h3><span class="uc-route">GET /documents · /tags · /stats</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Usuário autenticado.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Lista filtrada por texto, categoria, etiqueta ou validade.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário digita termos ou escolhe filtros.</li><li>Sistema busca no título, na descrição, no nome do arquivo, nas etiquetas e no conteúdo extraído.</li></ol></div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC49</span><h3>Editar, ativar ou desativar usuário</h3><span class="uc-route">PATCH /users/:id</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Administrador.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Papel ou situação alterados.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Administrador altera os dados ou desativa a conta.</li></ol></div></div>
+        <div class="uc-head"><span class="uc-id">UC57</span><h3>Editar dados do documento</h3><span class="uc-route">PATCH /documents/:id</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com escrita.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Metadados atualizados.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário altera título, categoria, etiquetas ou validade.</li></ol></div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC50</span><h3>Redefinir senha de usuário</h3><span class="uc-route">PATCH /users/:id/password</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Administrador.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Nova senha gravada.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Administrador define a nova senha e a repassa ao usuário.</li></ol></div></div>
+        <div class="uc-head"><span class="uc-id">UC58</span><h3>Remover documento</h3><span class="uc-route">DELETE /documents/:id</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Usuário enviou o documento, ou é Gestor/Administrador.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Registro e arquivo removidos.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário remove o documento.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Documento de outra pessoa sem papel de gestão → 403.</div></div>
       </div>
     </div>
     <div class="pkg" id="pkg-11">
-      <div class="pkg-head"><span class="pkg-num">PACOTE 11</span><h2>Auditoria</h2><div class="pkg-actors"><span class="actor-chip" style="background:var(--a3)">ADMIN</span><span class="actor-chip" style="background:var(--a7)">AUDITOR</span></div></div>
-      <p class="pkg-note">Somente leitura, para Administrador e Auditor.</p>
+      <div class="pkg-head"><span class="pkg-num">PACOTE 11</span><h2>Agenda</h2><div class="pkg-actors"><span class="actor-chip" style="background:var(--a3)">ADMIN</span><span class="actor-chip" style="background:var(--a4)">GESTOR</span><span class="actor-chip" style="background:var(--a1)">COMPRADOR</span><span class="actor-chip" style="background:var(--a2)">FINANCEIRO</span><span class="actor-chip" style="background:var(--a6)">ALMOXARIFADO</span><span class="actor-chip" style="background:var(--a5)">SOLICITANTE</span><span class="actor-chip" style="background:var(--a7)">AUDITOR</span></div></div>
+      <p class="pkg-note">Todos consultam; o que aparece depende do papel. Criar eventos: todos, menos Auditor. Editar ou remover evento de outra pessoa: só Administrador e Gestor.</p>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC51</span><h3>Consultar histórico de alterações</h3><span class="uc-route">GET /audit-logs</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Administrador ou Auditor.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Lista com quem fez, o quê, quando e o retrato dos dados.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário filtra por texto, período, ação, tipo de registro ou pessoa.</li><li>Sistema devolve os registros sem campos sensíveis.</li></ol></div></div>
+        <div class="uc-head"><span class="uc-id">UC59</span><h3>Consultar a agenda consolidada</h3><span class="uc-route">GET /agenda</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Usuário autenticado.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Prazos e eventos do período.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário escolhe o período (até 92 dias).</li><li>Sistema junta vencimentos de contas, fim de contratos, validade de documentos e prazos de resposta das cotações abertas, dos módulos que o usuário pode ler, mais os eventos da equipe.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Período maior que 92 dias → 400.</div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC52</span><h3>Ver indicadores de auditoria</h3><span class="uc-route">GET /audit-logs/stats</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Administrador ou Auditor.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Totais por ação e por módulo.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário abre a visão de indicadores.</li></ol></div></div>
+        <div class="uc-head"><span class="uc-id">UC60</span><h3>Criar evento</h3><span class="uc-route">POST /agenda/events</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com escrita na agenda.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Evento visível para a equipe.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário informa título, tipo (entrega, recebimento, visita, reunião, lembrete ou outro), início e fim ou dia inteiro, obra, local e, se quiser, o fornecedor ou a solicitação relacionada.</li><li>Sistema grava com o autor.</li></ol></div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC61</span><h3>Editar ou remover evento</h3><span class="uc-route">PATCH · DELETE /agenda/events/:id</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Usuário criou o evento, ou é Gestor/Administrador.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Evento atualizado ou removido.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário altera ou remove o evento.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Evento de outra pessoa sem papel de gestão → 403.</div></div>
       </div>
     </div>
     <div class="pkg" id="pkg-12">
-      <div class="pkg-head"><span class="pkg-num">PACOTE 12</span><h2>Processos automáticos</h2><div class="pkg-actors"><span class="actor-chip" style="background:var(--a8)">SISTEMA</span></div></div>
+      <div class="pkg-head"><span class="pkg-num">PACOTE 12</span><h2>Usuários</h2><div class="pkg-actors"><span class="actor-chip" style="background:var(--a3)">ADMIN</span></div></div>
+      <p class="pkg-note">Exclusivo do Administrador.</p>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC62</span><h3>Consultar usuários</h3><span class="uc-route">GET /users · /users/stats</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Administrador.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Lista com papel, situação e totais.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Administrador busca por nome ou e-mail e filtra por papel ou situação.</li></ol></div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC63</span><h3>Criar usuário</h3><span class="uc-route">POST /users</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Administrador.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Conta ativa na empresa.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Administrador informa nome, e-mail, papel e senha inicial.</li><li>Sistema grava a senha com hash.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">E-mail já usado → 409.</div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC64</span><h3>Editar, ativar ou desativar usuário</h3><span class="uc-route">PATCH /users/:id</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Administrador.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Papel ou situação alterados.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Administrador altera os dados ou desativa a conta.</li></ol></div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC65</span><h3>Redefinir senha de usuário</h3><span class="uc-route">PATCH /users/:id/password</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Administrador.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Nova senha gravada.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Administrador define a nova senha e a repassa ao usuário.</li></ol></div></div>
+      </div>
+    </div>
+    <div class="pkg" id="pkg-13">
+      <div class="pkg-head"><span class="pkg-num">PACOTE 13</span><h2>Auditoria</h2><div class="pkg-actors"><span class="actor-chip" style="background:var(--a3)">ADMIN</span><span class="actor-chip" style="background:var(--a7)">AUDITOR</span></div></div>
+      <p class="pkg-note">Somente leitura, para Administrador e Auditor.</p>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC66</span><h3>Consultar histórico de alterações</h3><span class="uc-route">GET /audit-logs</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Administrador ou Auditor.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Lista com quem fez, o quê, quando e o retrato dos dados.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário filtra por texto, período, ação, tipo de registro ou pessoa.</li><li>Sistema devolve os registros sem campos sensíveis.</li></ol></div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC67</span><h3>Ver indicadores de auditoria</h3><span class="uc-route">GET /audit-logs/stats</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Administrador ou Auditor.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Totais por ação e por módulo.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário abre a visão de indicadores.</li></ol></div></div>
+      </div>
+    </div>
+    <div class="pkg" id="pkg-14">
+      <div class="pkg-head"><span class="pkg-num">PACOTE 14</span><h2>Processos automáticos</h2><div class="pkg-actors"><span class="actor-chip" style="background:var(--a8)">SISTEMA</span></div></div>
       <p class="pkg-note">Executados pelo próprio sistema durante as requisições, sem intervenção humana direta.</p>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC53</span><h3>Registrar auditoria de escrita</h3><span class="uc-route">interceptor global</span></div>
+        <div class="uc-head"><span class="uc-id">UC68</span><h3>Registrar auditoria de escrita</h3><span class="uc-route">interceptor global</span></div>
         <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Requisição autenticada de criação, alteração ou exclusão.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Registro em <code>AuditLog</code>.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>A operação termina com sucesso.</li><li>Sistema grava autor, ação, entidade e o retrato dos dados sem campos sensíveis.</li></ol></div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC54</span><h3>Registrar histórico de aprovação</h3><span class="uc-route">PATCH /purchase-requests/:id/status</span></div>
+        <div class="uc-head"><span class="uc-id">UC69</span><h3>Registrar histórico de aprovação</h3><span class="uc-route">PATCH /purchase-requests/:id/status</span></div>
         <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Mudança de etapa válida.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Registro de aprovação na linha do tempo.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Sistema classifica a mudança em aprovação, rejeição ou pedido de ajuste.</li><li>Grava o registro na mesma operação da mudança de etapa.</li></ol></div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC55</span><h3>Gerar conta a pagar de reembolso aprovado</h3><span class="uc-route">PATCH /reimbursements/:id/decision</span></div>
+        <div class="uc-head"><span class="uc-id">UC70</span><h3>Gerar conta a pagar de reembolso aprovado</h3><span class="uc-route">PATCH /reimbursements/:id/decision</span></div>
         <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Reembolso aprovado.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Conta <code>ABERTO</code> com origem <code>REEMBOLSO</code>.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Sistema soma os itens do pedido.</li><li>Cria a conta com vencimento informado ou, sem ele, em 7 dias, com o centro de custo do pedido.</li></ol></div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC56</span><h3>Isolar dados por empresa</h3><span class="uc-route">PrismaService.forCompany</span></div>
+        <div class="uc-head"><span class="uc-id">UC71</span><h3>Isolar dados por empresa</h3><span class="uc-route">PrismaService.forCompany</span></div>
         <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Qualquer consulta de negócio.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Só dados da empresa do usuário.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Sistema injeta o <code>companyId</code> do token em toda leitura e escrita dos modelos de negócio.</li></ol></div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC57</span><h3>Calcular prazos da agenda</h3><span class="uc-route">GET /agenda</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Consulta à agenda.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Prazos sempre atualizados, sem cópia.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Sistema lê vencimentos, fins de contrato e validades direto das tabelas de origem a cada consulta.</li></ol></div></div>
+        <div class="uc-head"><span class="uc-id">UC72</span><h3>Calcular prazos da agenda</h3><span class="uc-route">GET /agenda</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Consulta à agenda.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Prazos sempre atualizados, sem cópia.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Sistema lê vencimentos, fins de contrato, validades e prazos de cotação direto das tabelas de origem a cada consulta.</li></ol></div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC73</span><h3>Mover a solicitação para em cotação</h3><span class="uc-route">POST /quotations</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Cotação aberta para solicitação em <code>EM_COMPRAS</code>.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Solicitação em <code>EM_COTACAO</code> com registro na linha do tempo.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Sistema muda a etapa na mesma operação que cria a cotação e grava o registro de aprovação.</li></ol></div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC74</span><h3>Alimentar o histórico de preços</h3><span class="uc-route">POST /quotations/:id/close</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Cotação encerrada com vencedores.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Novos preços no catálogo com origem <code>COTACAO</code>.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Para cada item vencedor ligado a um produto, o Sistema grava preço, quantidade, marca, referência, fornecedor e o número da cotação.</li><li>O último preço do produto passa a ser o da cotação.</li></ol></div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC75</span><h3>Validar o link do fornecedor</h3><span class="uc-route">/public/quotations/:token</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Qualquer acesso ao link.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Só o convite certo é lido ou alterado.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Sistema separa o id do convite e a assinatura.</li><li>Recalcula o HMAC com o nonce guardado e compara em tempo constante.</li></ol></div></div>
       </div>
     </div>
 
