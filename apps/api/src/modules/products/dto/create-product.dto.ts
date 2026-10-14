@@ -30,6 +30,16 @@ export class CreateProductDto {
   @Length(1, 80)
   marca?: string;
 
+  @IsOptional()
+  @IsString()
+  @Length(1, 80)
+  referencia?: string;
+
+  /** `null` tira o produto da disciplina. */
+  @IsOptional()
+  @IsUUID()
+  disciplineId?: string | null;
+
   @IsEnum(UnitOfMeasure)
   unidade: UnitOfMeasure;
 

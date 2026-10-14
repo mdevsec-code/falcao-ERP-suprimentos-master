@@ -1,7 +1,7 @@
 import type { AgendaEventType } from "./enums";
 
 /** De onde veio o item: evento criado na agenda ou prazo de outro módulo. */
-export type AgendaItemKind = "EVENT" | "PAYABLE_DUE" | "CONTRACT_END" | "DOCUMENT_EXPIRY";
+export type AgendaItemKind = "EVENT" | "PAYABLE_DUE" | "CONTRACT_END" | "DOCUMENT_EXPIRY" | "QUOTATION_DUE";
 
 export interface AgendaItemDto {
   /** Único no resultado (prefixado pelo tipo). */

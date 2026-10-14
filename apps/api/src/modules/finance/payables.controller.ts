@@ -1,4 +1,20 @@
-import { Body, Controller, Get, Param, Patch, Post, Query } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseEnumPipe,
+  ParseFilePipeBuilder,
+  Patch,
+  Post,
+  Query,
+  UploadedFile,
+  UseInterceptors,
+} from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
 import { AuditLog } from "../../common/decorators/audit-log.decorator";
 import { CurrentUser } from "../../common/decorators/current-user.decorator";
 import { Roles } from "../../common/decorators/roles.decorator";
@@ -10,12 +26,17 @@ import { InvoiceDto } from "./dto/invoice.dto";
 import { PayPayableDto } from "./dto/pay-payable.dto";
 import { QueryPayablesDto } from "./dto/query-payables.dto";
 import { UpdatePayableDto } from "./dto/update-payable.dto";
+import { MAX_UPLOAD_BYTES } from "../storage/upload-policy";
+import { InvoiceFilesService } from "./invoice-files.service";
 import { PayablesService } from "./payables.service";
 
 @Roles(...FINANCE_READ_ROLES)
 @Controller("payables")
 export class PayablesController {
-  constructor(private readonly payablesService: PayablesService) {}
+  constructor(
+    private readonly payablesService: PayablesService,
+    private readonly invoiceFiles: InvoiceFilesService,
+  ) {}
 
   @Get()
   list(@CurrentUser() user: AuthenticatedUser, @Query() query: QueryPayablesDto) {
@@ -25,6 +46,18 @@ export class PayablesController {
   @Get("stats")
   stats(@CurrentUser() user: AuthenticatedUser) {
     return this.payablesService.stats(user.companyId);
+  }
+
+  /** Lê o XML de uma NF-e sem gravar — para abrir uma conta já preenchida. */
+  @Roles(...FINANCE_WRITE_ROLES)
+  @Post("invoice-xml/preview")
+  @UseInterceptors(FileInterceptor("file"))
+  previewInvoiceXml(
+    @CurrentUser() user: AuthenticatedUser,
+    @UploadedFile(new ParseFilePipeBuilder().addMaxSizeValidator({ maxSize: MAX_UPLOAD_BYTES }).build({ fileIsRequired: true }))
+    file: Express.Multer.File,
+  ) {
+    return this.invoiceFiles.preview(user.companyId, file);
   }
 
   @Get("cash-flow")
@@ -80,5 +113,30 @@ export class PayablesController {
   @Patch(":id/cancel")
   cancel(@CurrentUser() user: AuthenticatedUser, @Param("id") id: string) {
     return this.payablesService.cancel(user.companyId, id);
+  }
+
+  @Roles(...FINANCE_WRITE_ROLES)
+  @AuditLog("Payable", "UPDATE")
+  @Post(":id/invoice-file")
+  @UseInterceptors(FileInterceptor("file"))
+  uploadInvoiceFile(
+    @CurrentUser() user: AuthenticatedUser,
+    @Param("id") id: string,
+    @UploadedFile(new ParseFilePipeBuilder().addMaxSizeValidator({ maxSize: MAX_UPLOAD_BYTES }).build({ fileIsRequired: true }))
+    file: Express.Multer.File,
+  ) {
+    return this.invoiceFiles.upload(user.companyId, id, file);
+  }
+
+  @Roles(...FINANCE_WRITE_ROLES)
+  @AuditLog("Payable", "UPDATE")
+  @HttpCode(HttpStatus.OK)
+  @Delete(":id/invoice-file/:kind")
+  removeInvoiceFile(
+    @CurrentUser() user: AuthenticatedUser,
+    @Param("id") id: string,
+    @Param("kind", new ParseEnumPipe(["pdf", "xml"])) kind: "pdf" | "xml",
+  ) {
+    return this.invoiceFiles.remove(user.companyId, id, kind);
   }
 }

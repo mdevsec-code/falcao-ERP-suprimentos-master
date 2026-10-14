@@ -34,6 +34,16 @@ export class PurchaseRequestItemInputDto {
   @IsNumber({ maxDecimalPlaces: 2 })
   @Min(0)
   estimatedPrice?: number;
+
+  @IsOptional()
+  @IsString()
+  @Length(1, 80)
+  marca?: string;
+
+  @IsOptional()
+  @IsString()
+  @Length(1, 80)
+  referencia?: string;
 }
 
 export class CreatePurchaseRequestDto {

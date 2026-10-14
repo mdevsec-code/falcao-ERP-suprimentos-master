@@ -38,6 +38,11 @@ export class QueryPayablesDto extends PaginationQueryDto {
   @IsBooleanString()
   semNota?: string;
 
+  /** Só com nota fiscal informada (exportação de notas). */
+  @IsOptional()
+  @IsBooleanString()
+  comNota?: string;
+
   @IsOptional()
   @Matches(DATE_ONLY_PATTERN)
   from?: string;

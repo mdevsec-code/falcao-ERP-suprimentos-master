@@ -8,6 +8,8 @@ export interface PurchaseRequestItemDto {
   quantity: string;
   unit: string;
   estimatedPrice: string | null;
+  marca: string | null;
+  referencia: string | null;
 }
 
 export interface PurchaseRequestApprovalDto {

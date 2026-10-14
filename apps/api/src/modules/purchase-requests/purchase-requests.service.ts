@@ -241,6 +241,8 @@ export class PurchaseRequestsService {
         quantity: item.quantity.toString(),
         unit: item.unit,
         estimatedPrice: item.estimatedPrice?.toString() ?? null,
+        marca: item.marca,
+        referencia: item.referencia,
       })),
       approvals: request.approvals.map((approval) => ({
         id: approval.id,

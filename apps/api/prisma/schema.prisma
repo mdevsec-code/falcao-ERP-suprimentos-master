@@ -34,6 +34,8 @@ model Company {
   reimbursements   Reimbursement[]
   documents        Document[]
   agendaEvents     AgendaEvent[]
+  disciplines      Discipline[]
+  quotations       Quotation[]
 
   @@map("companies")
 }
@@ -78,6 +80,7 @@ model User {
   reimbursementAttachments ReimbursementAttachment[]
   uploadedCentralDocuments Document[]
   agendaEvents             AgendaEvent[]
+  createdQuotations        Quotation[]               @relation("QuotationCreatedBy")
 
   @@index([companyId])
   @@map("users")
@@ -141,6 +144,7 @@ model Supplier {
   payables         Payable[]
   centralDocuments Document[]
   agendaEvents     AgendaEvent[]
+  quotations       QuotationSupplier[]
 
   @@unique([companyId, cnpj])
   @@index([companyId])
@@ -243,6 +247,8 @@ model Product {
   nome         String
   categoria    ProductCategory
   marca        String?
+  /// Referência / part number do fabricante.
+  referencia   String?
   unidade      UnitOfMeasure
   leadTimeDays Int?            @map("lead_time_days")
   observacoes  String?
@@ -253,14 +259,19 @@ model Product {
   primarySupplierId String?   @map("primary_supplier_id")
   primarySupplier   Supplier? @relation("PrimarySupplierProducts", fields: [primarySupplierId], references: [id])
 
+  disciplineId String?     @map("discipline_id")
+  discipline   Discipline? @relation(fields: [disciplineId], references: [id])
+
   company              Company               @relation(fields: [companyId], references: [id], onDelete: Cascade)
   alternativeSuppliers ProductSupplier[]
   priceHistory         ProductPriceEntry[]
   purchaseRequestItems PurchaseRequestItem[]
+  quotationItems       QuotationItem[]
 
   @@unique([companyId, codigo])
   @@index([companyId])
   @@index([companyId, categoria])
+  @@index([companyId, disciplineId])
   @@map("products")
 }
 
@@ -278,14 +289,20 @@ model ProductSupplier {
 }
 
 model ProductPriceEntry {
-  id         String   @id @default(uuid())
-  productId  String   @map("product_id")
-  supplierId String?  @map("supplier_id")
-  price      Decimal  @db.Decimal(12, 2)
-  recordedAt DateTime @default(now()) @map("recorded_at")
+  id          String           @id @default(uuid())
+  productId   String           @map("product_id")
+  supplierId  String?          @map("supplier_id")
+  price       Decimal          @db.Decimal(12, 2)
+  quantity    Decimal?         @db.Decimal(12, 2)
+  marca       String?
+  referencia  String?
+  origem      PriceEntrySource @default(MANUAL)
+  quotationId String?          @map("quotation_id")
+  recordedAt  DateTime         @default(now()) @map("recorded_at")
 
-  product  Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
-  supplier Supplier? @relation(fields: [supplierId], references: [id])
+  product   Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+  supplier  Supplier?  @relation(fields: [supplierId], references: [id])
+  quotation Quotation? @relation(fields: [quotationId], references: [id], onDelete: SetNull)
 
   @@index([productId])
   @@map("product_price_entries")
@@ -332,6 +349,7 @@ model PurchaseRequest {
 
   payables     Payable[]
   agendaEvents AgendaEvent[]
+  quotations   Quotation[]
 
   @@index([companyId])
   @@index([companyId, status])
@@ -347,9 +365,12 @@ model PurchaseRequestItem {
   quantity          Decimal  @db.Decimal(12, 2)
   unit              String
   estimatedPrice    Decimal? @map("estimated_price") @db.Decimal(12, 2)
+  marca             String?
+  referencia        String?
 
   purchaseRequest PurchaseRequest @relation(fields: [purchaseRequestId], references: [id], onDelete: Cascade)
   product         Product?        @relation(fields: [productId], references: [id])
+  quotationItems  QuotationItem[]
 
   @@index([purchaseRequestId])
   @@map("purchase_request_items")
@@ -505,6 +526,12 @@ model Payable {
   status            PayableStatus  @default(ABERTO)
   notaFiscal        String?        @map("nota_fiscal")
   notaFiscalEmissao DateTime?      @map("nota_fiscal_emissao") @db.Date
+  /// Chave de acesso da NF-e (44 dígitos), lida do XML.
+  notaFiscalChave   String?        @map("nota_fiscal_chave")
+  notaFiscalPdfPath String?        @map("nota_fiscal_pdf_path")
+  notaFiscalPdfName String?        @map("nota_fiscal_pdf_name")
+  notaFiscalXmlPath String?        @map("nota_fiscal_xml_path")
+  notaFiscalXmlName String?        @map("nota_fiscal_xml_name")
   pagoEm            DateTime?      @map("pago_em") @db.Date
   valorPago         Decimal?       @map("valor_pago") @db.Decimal(14, 2)
   formaPagamento    PaymentMethod? @map("forma_pagamento")
@@ -719,4 +746,143 @@ model AuditLog {
   @@index([companyId])
   @@index([entityType, entityId])
   @@map("audit_logs")
+}
+
+// ─────────────────────────────────────────────────────────────
+// Disciplinas (Civil, Elétrica, Eletromecânica…) — lista editável por empresa
+// ─────────────────────────────────────────────────────────────
+
+model Discipline {
+  id        String   @id @default(uuid())
+  companyId String   @map("company_id")
+  nome      String
+  ordem     Int      @default(0)
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  company  Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  products Product[]
+
+  @@unique([companyId, nome])
+  @@index([companyId])
+  @@map("disciplines")
+}
+
+enum PriceEntrySource {
+  MANUAL
+  COTACAO
+}
+
+// ─────────────────────────────────────────────────────────────
+// Cotações — mapa de preços de vários fornecedores para uma solicitação
+// ─────────────────────────────────────────────────────────────
+
+enum QuotationStatus {
+  ABERTA
+  ENCERRADA
+  CANCELADA
+}
+
+enum QuotationSupplierStatus {
+  CONVIDADO
+  RESPONDIDO
+  RECUSOU
+}
+
+model Quotation {
+  id                String          @id @default(uuid())
+  companyId         String          @map("company_id")
+  purchaseRequestId String          @map("purchase_request_id")
+  numero            Int
+  titulo            String
+  status            QuotationStatus @default(ABERTA)
+  prazoResposta     DateTime        @map("prazo_resposta") @db.Date
+  observacoes       String?
+  createdById       String          @map("created_by_id")
+  encerradaEm       DateTime?       @map("encerrada_em")
+  createdAt         DateTime        @default(now()) @map("created_at")
+  updatedAt         DateTime        @updatedAt @map("updated_at")
+
+  company         Company             @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  purchaseRequest PurchaseRequest     @relation(fields: [purchaseRequestId], references: [id], onDelete: Cascade)
+  createdBy       User                @relation("QuotationCreatedBy", fields: [createdById], references: [id])
+  items           QuotationItem[]
+  suppliers       QuotationSupplier[]
+  priceEntries    ProductPriceEntry[]
+
+  @@unique([companyId, numero])
+  @@index([companyId])
+  @@index([companyId, status])
+  @@index([purchaseRequestId])
+  @@map("quotations")
+}
+
+model QuotationItem {
+  id                    String  @id @default(uuid())
+  quotationId           String  @map("quotation_id")
+  purchaseRequestItemId String? @map("purchase_request_item_id")
+  productId             String? @map("product_id")
+  ordem                 Int     @default(0)
+  descricao             String
+  quantidade            Decimal @db.Decimal(12, 2)
+  unidade               String
+  marca                 String?
+  referencia            String?
+  /// Fornecedor escolhido para este item (null = ainda não decidido).
+  vencedorId            String? @map("vencedor_id")
+
+  quotation           Quotation            @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  purchaseRequestItem PurchaseRequestItem? @relation(fields: [purchaseRequestItemId], references: [id], onDelete: SetNull)
+  product             Product?             @relation(fields: [productId], references: [id])
+  vencedor            QuotationSupplier?   @relation("QuotationItemWinner", fields: [vencedorId], references: [id], onDelete: SetNull)
+  prices              QuotationPrice[]
+
+  @@index([quotationId])
+  @@map("quotation_items")
+}
+
+model QuotationSupplier {
+  id                String                  @id @default(uuid())
+  quotationId       String                  @map("quotation_id")
+  supplierId        String                  @map("supplier_id")
+  status            QuotationSupplierStatus @default(CONVIDADO)
+  /// Trocar o nonce invalida o link enviado ao fornecedor (o link é um HMAC dele).
+  linkNonce         String                  @map("link_nonce")
+  respondidoEm      DateTime?               @map("respondido_em")
+  respondidoPor     String?                 @map("respondido_por")
+  prazoEntregaDias  Int?                    @map("prazo_entrega_dias")
+  condicaoPagamento String?                 @map("condicao_pagamento")
+  validadeProposta  DateTime?               @map("validade_proposta") @db.Date
+  frete             Decimal?                @db.Decimal(12, 2)
+  observacoes       String?
+  createdAt         DateTime                @default(now()) @map("created_at")
+
+  quotation Quotation        @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  supplier  Supplier         @relation(fields: [supplierId], references: [id])
+  prices    QuotationPrice[]
+  wonItems  QuotationItem[]  @relation("QuotationItemWinner")
+
+  @@unique([quotationId, supplierId])
+  @@index([quotationId])
+  @@map("quotation_suppliers")
+}
+
+model QuotationPrice {
+  id                  String   @id @default(uuid())
+  quotationSupplierId String   @map("quotation_supplier_id")
+  quotationItemId     String   @map("quotation_item_id")
+  precoUnitario       Decimal? @map("preco_unitario") @db.Decimal(12, 2)
+  marca               String?
+  referencia          String?
+  disponivel          Boolean  @default(true)
+  observacao          String?
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  quotationSupplier QuotationSupplier @relation(fields: [quotationSupplierId], references: [id], onDelete: Cascade)
+  quotationItem     QuotationItem     @relation(fields: [quotationItemId], references: [id], onDelete: Cascade)
+
+  @@unique([quotationSupplierId, quotationItemId])
+  @@index([quotationItemId])
+  @@map("quotation_prices")
 }

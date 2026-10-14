@@ -239,3 +239,24 @@ export const AgendaEventType = {
   OUTRO: "OUTRO",
 } as const;
 export type AgendaEventType = (typeof AgendaEventType)[keyof typeof AgendaEventType];
+
+export const PriceEntrySource = {
+  MANUAL: "MANUAL",
+  COTACAO: "COTACAO",
+} as const;
+export type PriceEntrySource = (typeof PriceEntrySource)[keyof typeof PriceEntrySource];
+
+export const QuotationStatus = {
+  ABERTA: "ABERTA",
+  ENCERRADA: "ENCERRADA",
+  CANCELADA: "CANCELADA",
+} as const;
+export type QuotationStatus = (typeof QuotationStatus)[keyof typeof QuotationStatus];
+
+export const QuotationSupplierStatus = {
+  CONVIDADO: "CONVIDADO",
+  RESPONDIDO: "RESPONDIDO",
+  RECUSOU: "RECUSOU",
+} as const;
+export type QuotationSupplierStatus =
+  (typeof QuotationSupplierStatus)[keyof typeof QuotationSupplierStatus];

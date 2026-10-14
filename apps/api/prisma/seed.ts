@@ -128,10 +128,76 @@ async function main() {
     });
   }
 
+  await seedCatalog(company.id);
   await seedOperations(company.id, admin.id, passwordHash);
 
   // eslint-disable-next-line no-console
   console.log("Seed concluído. Login: admin@falcaoengenharia.com.br / senha: Falcao@123");
+}
+
+const DISCIPLINES = ["Civil", "Elétrica", "Mecânica", "Eletromecânica", "Hidráulica", "Instrumentação"];
+
+/**
+ * Disciplinas e um catálogo inicial de materiais (com marca, referência e
+ * histórico de preços). As disciplinas sempre existem; os produtos só entram
+ * numa base sem produtos.
+ */
+async function seedCatalog(companyId: string) {
+  for (const [index, nome] of DISCIPLINES.entries()) {
+    await prisma.discipline.upsert({
+      where: { companyId_nome: { companyId, nome } },
+      update: {},
+      create: { companyId, nome, ordem: index + 1 },
+    });
+  }
+  if ((await prisma.product.count({ where: { companyId } })) > 0) return;
+
+  const disciplines = new Map(
+    (await prisma.discipline.findMany({ where: { companyId } })).map((d) => [d.nome, d.id]),
+  );
+  const suppliers = new Map(
+    (await prisma.supplier.findMany({ where: { companyId } })).map((s) => [s.nomeFantasia, s.id]),
+  );
+
+  const products = [
+    { codigo: "CIV-001", nome: "Cimento CP II-E-32 saco 50 kg", categoria: "MATERIAIS_CONSTRUCAO", disciplina: "Civil", marca: "Votoran", referencia: "CPII-E-32", unidade: "SC", fornecedor: "Aço Forte", precos: [[38.9, 200, 60], [41.5, 150, 15]] },
+    { codigo: "CIV-002", nome: "Vergalhão CA-50 10 mm barra 12 m", categoria: "MATERIAIS_CONSTRUCAO", disciplina: "Civil", marca: "Gerdau", referencia: "CA50-10", unidade: "PC", fornecedor: "Aço Forte", precos: [[52.0, 300, 45]] },
+    { codigo: "CIV-003", nome: "Areia média lavada", categoria: "MATERIAIS_CONSTRUCAO", disciplina: "Civil", marca: null, referencia: null, unidade: "M3", fornecedor: "Aço Forte", precos: [[135.0, 40, 30]] },
+    { codigo: "ELE-001", nome: "Cabo flexível 2,5 mm² 750 V rolo 100 m", categoria: "ELETRICA", disciplina: "Elétrica", marca: "Prysmian", referencia: "SUPERASTIC-2.5", unidade: "UN", fornecedor: null, precos: [[289.9, 20, 40]] },
+    { codigo: "ELE-002", nome: "Disjuntor DIN tripolar 32 A curva C", categoria: "ELETRICA", disciplina: "Elétrica", marca: "Schneider", referencia: "A9F74332", unidade: "UN", fornecedor: null, precos: [[118.0, 12, 20]] },
+    { codigo: "MEC-001", nome: "Rolamento rígido de esferas 6205-2RS", categoria: "EQUIPAMENTOS", disciplina: "Mecânica", marca: "SKF", referencia: "6205-2RSH", unidade: "UN", fornecedor: "TerraMáquinas", precos: [[42.3, 30, 25]] },
+    { codigo: "EMC-001", nome: "Motor elétrico trifásico 5 cv 4 polos", categoria: "EQUIPAMENTOS", disciplina: "Eletromecânica", marca: "WEG", referencia: "W22-IR3-5CV-4P", unidade: "UN", fornecedor: "TerraMáquinas", precos: [[3250.0, 2, 50]] },
+    { codigo: "HID-001", nome: "Tubo PVC soldável 50 mm barra 6 m", categoria: "HIDRAULICA", disciplina: "Hidráulica", marca: "Tigre", referencia: "PVC-SOLD-50", unidade: "PC", fornecedor: null, precos: [[64.9, 40, 35]] },
+    { codigo: "HID-002", nome: "Registro de gaveta bruto 1\"", categoria: "HIDRAULICA", disciplina: "Hidráulica", marca: "Docol", referencia: "00152506", unidade: "UN", fornecedor: null, precos: [[71.4, 15, 28]] },
+    { codigo: "INS-001", nome: "Manômetro glicerina 0–10 bar 63 mm", categoria: "EQUIPAMENTOS", disciplina: "Instrumentação", marca: "Wika", referencia: "213.53-63-10BAR", unidade: "UN", fornecedor: null, precos: [[96.0, 6, 18]] },
+  ] as const;
+
+  for (const product of products) {
+    const supplierId = product.fornecedor ? suppliers.get(product.fornecedor) : undefined;
+    await prisma.product.create({
+      data: {
+        companyId,
+        codigo: product.codigo,
+        nome: product.nome,
+        categoria: product.categoria,
+        unidade: product.unidade,
+        marca: product.marca,
+        referencia: product.referencia,
+        disciplineId: disciplines.get(product.disciplina),
+        primarySupplierId: supplierId,
+        priceHistory: {
+          create: product.precos.map(([price, quantity, daysAgo]) => ({
+            price,
+            quantity,
+            supplierId,
+            marca: product.marca,
+            referencia: product.referencia,
+            recordedAt: day(-daysAgo),
+          })),
+        },
+      },
+    });
+  }
 }
 
 /** `YYYY-MM-DD` de hoje + `offset` dias, como `Date` de coluna `@db.Date`. */

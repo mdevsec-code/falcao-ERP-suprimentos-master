@@ -24,6 +24,9 @@ export {
   ExpenseCategory,
   DocumentCategory,
   AgendaEventType,
+  PriceEntrySource,
+  QuotationStatus,
+  QuotationSupplierStatus,
 } from "./enums";
 export type { BrazilianState } from "./enums";
 
@@ -39,6 +42,7 @@ export type {
 } from "./supplier";
 
 export type {
+  ProductDisciplineRefDto,
   ProductSupplierRefDto,
   ProductPriceEntryDto,
   ProductSummaryDto,
@@ -80,7 +84,14 @@ export type {
   ContractStatsDto,
 } from "./contract";
 
-export type { PayableDto, PayableStatsDto, CashFlowPointDto, CostCenterTotalDto } from "./finance";
+export type {
+  PayableDto,
+  PayableStatsDto,
+  CashFlowPointDto,
+  CostCenterTotalDto,
+  InvoiceXmlCheckDto,
+  PayableWithInvoiceCheckDto,
+} from "./finance";
 
 export type {
   ReimbursementItemDto,
@@ -94,3 +105,24 @@ export { DOCUMENT_ALERT_DAYS } from "./document";
 export type { DocumentDto, DocumentStatsDto, DocumentValidity } from "./document";
 
 export type { AgendaItemDto, AgendaItemKind } from "./agenda";
+
+export { DEFAULT_DISCIPLINES } from "./discipline";
+export type { DisciplineDto } from "./discipline";
+
+export { analyzeQuotation } from "./quotation";
+export type {
+  AnalyzeQuotationInput,
+  QuotationItemDto,
+  QuotationSupplierDto,
+  QuotationPriceDto,
+  QuotationItemAnalysisDto,
+  QuotationSupplierAnalysisDto,
+  QuotationAnalysisDto,
+  QuotationSummaryDto,
+  QuotationDetailDto,
+  QuotationStatsDto,
+  PublicQuotationDto,
+} from "./quotation";
+
+export { parseNfeXml } from "./nfe";
+export type { NfeData, NfeDuplicata } from "./nfe";

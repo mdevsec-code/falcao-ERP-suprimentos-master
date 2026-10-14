@@ -38,3 +38,11 @@ export const AGENDA_WRITE_ROLES: readonly Role[] = [
 ];
 /** Editam/removem eventos criados por outras pessoas. */
 export const AGENDA_MANAGE_ROLES: readonly Role[] = ["ADMIN", "MANAGER"];
+
+export const QUOTATION_READ_ROLES: readonly Role[] = ["ADMIN", "MANAGER", "BUYER", "FINANCE", "AUDITOR"];
+export const QUOTATION_WRITE_ROLES: readonly Role[] = ["ADMIN", "MANAGER", "BUYER"];
+
+/** Mantêm a lista de disciplinas (Civil, Elétrica…). */
+export const DISCIPLINE_WRITE_ROLES: readonly Role[] = ["ADMIN", "MANAGER"];
+/** Incluem no catálogo um item digitado à mão numa solicitação. */
+export const CATALOG_WRITE_ROLES: readonly Role[] = ["ADMIN", "MANAGER", "BUYER"];

@@ -15,11 +15,13 @@ import { AuditModule } from "./modules/audit/audit.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { CompaniesModule } from "./modules/companies/companies.module";
 import { ContractsModule } from "./modules/contracts/contracts.module";
+import { DisciplinesModule } from "./modules/disciplines/disciplines.module";
 import { DocumentsModule } from "./modules/documents/documents.module";
 import { FinanceModule } from "./modules/finance/finance.module";
 import { HealthModule } from "./modules/health/health.module";
 import { ProductsModule } from "./modules/products/products.module";
 import { PurchaseRequestsModule } from "./modules/purchase-requests/purchase-requests.module";
+import { QuotationsModule } from "./modules/quotations/quotations.module";
 import { ReimbursementsModule } from "./modules/reimbursements/reimbursements.module";
 import { StorageModule } from "./modules/storage/storage.module";
 import { SuppliersModule } from "./modules/suppliers/suppliers.module";
@@ -59,8 +61,10 @@ import { UsersModule } from "./modules/users/users.module";
     CompaniesModule,
     StorageModule,
     SuppliersModule,
+    DisciplinesModule,
     ProductsModule,
     PurchaseRequestsModule,
+    QuotationsModule,
     ContractsModule,
     FinanceModule,
     ReimbursementsModule,

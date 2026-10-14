@@ -5,6 +5,7 @@ import {
   AGENDA_MANAGE_ROLES,
   CONTRACT_READ_ROLES,
   FINANCE_READ_ROLES,
+  QUOTATION_READ_ROLES,
 } from "../../common/constants/module-roles";
 import type { AuthenticatedUser } from "../../common/types/auth-request";
 import { fromDateOnly, money, toDateOnlyString } from "../../common/utils/date-only";
@@ -32,10 +33,11 @@ export class AgendaService {
     const obra = query.obra?.trim() || undefined;
     const canFinance = FINANCE_READ_ROLES.includes(user.role);
     const canContracts = CONTRACT_READ_ROLES.includes(user.role);
+    const canQuotations = QUOTATION_READ_ROLES.includes(user.role);
 
     // Eventos com hora: a janela ganha um dia de cada lado para cobrir qualquer
     // fuso; o Web posiciona cada evento pela data local de quem está vendo.
-    const [events, payables, contracts, documents] = await Promise.all([
+    const [events, payables, contracts, documents, quotations] = await Promise.all([
       this.repository.events(
         user.companyId,
         fromDateOnly(addDays(query.from, -1)),
@@ -45,6 +47,7 @@ export class AgendaService {
       canFinance ? this.repository.payablesDue(user.companyId, query.from, query.to, obra) : [],
       canContracts ? this.repository.contractsEnding(user.companyId, query.from, query.to, obra) : [],
       obra ? [] : this.repository.documentsExpiring(user.companyId, query.from, query.to),
+      canQuotations && !obra ? this.repository.quotationsDue(user.companyId, query.from, query.to) : [],
     ]);
 
     const base = {
@@ -96,6 +99,16 @@ export class AgendaService {
         obra: null,
         supplierId: document.supplierId,
         supplierName: document.supplier?.nomeFantasia ?? null,
+      })),
+      ...quotations.map((quotation) => ({
+        ...base,
+        key: `quotation-${quotation.id}`,
+        kind: "QUOTATION_DUE" as const,
+        sourceId: quotation.id,
+        titulo: `Cotação nº ${quotation.numero} · ${quotation.titulo}`,
+        inicio: toDateOnlyString(quotation.prazoResposta),
+        obra: quotation.purchaseRequest.costCenter,
+        purchaseRequestId: quotation.purchaseRequest.id,
       })),
     ];
 

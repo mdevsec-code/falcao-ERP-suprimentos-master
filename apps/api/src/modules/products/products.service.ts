@@ -1,11 +1,18 @@
 import { Injectable } from "@nestjs/common";
-import type { PaginatedResult, ProductDetailDto, ProductSummaryDto } from "@falcao-erp/shared-types";
+import type {
+  PaginatedResult,
+  ProductDetailDto,
+  ProductPriceEntryDto,
+  ProductSummaryDto,
+} from "@falcao-erp/shared-types";
 import { AddPriceEntryDto } from "./dto/add-price-entry.dto";
+import { CreateFromRequestItemDto } from "./dto/create-from-request-item.dto";
 import { CreateProductDto } from "./dto/create-product.dto";
 import { QueryProductsDto } from "./dto/query-products.dto";
 import { UpdateProductDto } from "./dto/update-product.dto";
 import {
   ProductsRepository,
+  type PriceEntryPayload,
   type ProductDetailPayload,
   type ProductListItemPayload,
 } from "./products.repository";
@@ -18,7 +25,11 @@ export class ProductsService {
     const { data, total } = await this.repository.findMany(companyId, {
       search: query.search,
       categoria: query.categoria,
+      disciplineId: query.disciplineId === "none" ? null : query.disciplineId,
+      marca: query.marca,
       primarySupplierId: query.primarySupplierId,
+      supplierId: query.supplierId,
+      sort: query.sort,
       isActive: query.isActive === undefined ? undefined : query.isActive === "true",
       page: query.page,
       pageSize: query.pageSize,
@@ -41,11 +52,13 @@ export class ProductsService {
   }
 
   async create(companyId: string, dto: CreateProductDto): Promise<ProductDetailDto> {
+    await this.repository.assertDiscipline(companyId, dto.disciplineId);
     const product = await this.repository.create(companyId, dto);
     return this.toDetailDto(product);
   }
 
   async update(companyId: string, id: string, dto: UpdateProductDto): Promise<ProductDetailDto> {
+    await this.repository.assertDiscipline(companyId, dto.disciplineId);
     const product = await this.repository.update(companyId, id, dto);
     return this.toDetailDto(product);
   }
@@ -60,15 +73,15 @@ export class ProductsService {
     return this.toDetailDto(product);
   }
 
-  async addPriceEntry(companyId: string, productId: string, dto: AddPriceEntryDto) {
+  async addPriceEntry(companyId: string, productId: string, dto: AddPriceEntryDto): Promise<ProductPriceEntryDto> {
     const entry = await this.repository.addPriceEntry(companyId, productId, dto);
-    return {
-      id: entry.id,
-      price: entry.price.toString(),
-      supplierId: entry.supplierId,
-      supplierName: entry.supplier?.nomeFantasia ?? null,
-      recordedAt: entry.recordedAt.toISOString(),
-    };
+    return this.toPriceEntryDto(entry);
+  }
+
+  async createFromRequestItem(companyId: string, dto: CreateFromRequestItemDto): Promise<ProductDetailDto> {
+    await this.repository.assertDiscipline(companyId, dto.disciplineId);
+    const product = await this.repository.createFromRequestItem(companyId, dto);
+    return this.toDetailDto(product);
   }
 
   async stats(companyId: string) {
@@ -82,13 +95,15 @@ export class ProductsService {
       nome: product.nome,
       categoria: product.categoria,
       marca: product.marca,
+      referencia: product.referencia,
+      discipline: product.discipline ? { id: product.discipline.id, nome: product.discipline.nome } : null,
       unidade: product.unidade,
       leadTimeDays: product.leadTimeDays,
       isActive: product.isActive,
       primarySupplier: product.primarySupplier
         ? { id: product.primarySupplier.id, nomeFantasia: product.primarySupplier.nomeFantasia }
         : null,
-      lastPrice: product.priceHistory[0]?.price.toString() ?? null,
+      ...this.lastPriceFields(product.priceHistory[0]),
       createdAt: product.createdAt.toISOString(),
     };
   }
@@ -100,6 +115,8 @@ export class ProductsService {
       nome: product.nome,
       categoria: product.categoria,
       marca: product.marca,
+      referencia: product.referencia,
+      discipline: product.discipline ? { id: product.discipline.id, nome: product.discipline.nome } : null,
       unidade: product.unidade,
       leadTimeDays: product.leadTimeDays,
       observacoes: product.observacoes,
@@ -107,20 +124,39 @@ export class ProductsService {
       primarySupplier: product.primarySupplier
         ? { id: product.primarySupplier.id, nomeFantasia: product.primarySupplier.nomeFantasia }
         : null,
-      lastPrice: product.priceHistory[0]?.price.toString() ?? null,
+      ...this.lastPriceFields(product.priceHistory[0]),
       createdAt: product.createdAt.toISOString(),
       updatedAt: product.updatedAt.toISOString(),
       alternativeSuppliers: product.alternativeSuppliers.map((entry) => ({
         id: entry.supplier.id,
         nomeFantasia: entry.supplier.nomeFantasia,
       })),
-      priceHistory: product.priceHistory.map((entry) => ({
-        id: entry.id,
-        price: entry.price.toString(),
-        supplierId: entry.supplierId,
-        supplierName: entry.supplier?.nomeFantasia ?? null,
-        recordedAt: entry.recordedAt.toISOString(),
-      })),
+      priceHistory: product.priceHistory.map((entry) => this.toPriceEntryDto(entry)),
+    };
+  }
+
+  private lastPriceFields(entry: PriceEntryPayload | undefined) {
+    return {
+      lastPrice: entry?.price.toString() ?? null,
+      lastQuantity: entry?.quantity?.toString() ?? null,
+      lastPriceAt: entry?.recordedAt.toISOString() ?? null,
+      lastSupplierName: entry?.supplier?.nomeFantasia ?? null,
+    };
+  }
+
+  private toPriceEntryDto(entry: PriceEntryPayload): ProductPriceEntryDto {
+    return {
+      id: entry.id,
+      price: entry.price.toString(),
+      supplierId: entry.supplierId,
+      supplierName: entry.supplier?.nomeFantasia ?? null,
+      quantity: entry.quantity?.toString() ?? null,
+      marca: entry.marca,
+      referencia: entry.referencia,
+      origem: entry.origem,
+      quotationId: entry.quotationId,
+      quotationNumero: entry.quotation?.numero ?? null,
+      recordedAt: entry.recordedAt.toISOString(),
     };
   }
 }

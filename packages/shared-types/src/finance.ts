@@ -19,6 +19,12 @@ export interface PayableDto {
   vencida: boolean;
   notaFiscal: string | null;
   notaFiscalEmissao: string | null;
+  notaFiscalChave: string | null;
+  /** URLs (`/uploads/...`) dos arquivos da nota, quando anexados. */
+  notaFiscalPdfUrl: string | null;
+  notaFiscalPdfName: string | null;
+  notaFiscalXmlUrl: string | null;
+  notaFiscalXmlName: string | null;
   pagoEm: string | null;
   valorPago: string | null;
   formaPagamento: PaymentMethod | null;
@@ -51,4 +57,24 @@ export interface CostCenterTotalDto {
   costCenter: string;
   aberto: string;
   pago: string;
+}
+
+/** Resultado da leitura do XML, com o que bate (ou não) com a conta. */
+export interface InvoiceXmlCheckDto {
+  numero: string;
+  chave: string | null;
+  emissao: string | null;
+  valor: string | null;
+  emitenteCnpj: string | null;
+  emitenteNome: string | null;
+  /** Fornecedor cadastrado com o CNPJ do emitente. */
+  supplierId: string | null;
+  supplierName: string | null;
+  primeiroVencimento: string | null;
+  avisos: string[];
+}
+
+export interface PayableWithInvoiceCheckDto {
+  payable: PayableDto;
+  xml: InvoiceXmlCheckDto | null;
 }

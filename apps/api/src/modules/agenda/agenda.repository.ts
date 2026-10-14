@@ -61,6 +61,15 @@ export class AgendaRepository {
     });
   }
 
+  /** Prazo de resposta das cotações abertas. */
+  async quotationsDue(companyId: string, from: string, to: string) {
+    return this.prisma.forCompany(companyId).quotation.findMany({
+      where: { status: "ABERTA", prazoResposta: { gte: fromDateOnly(from), lte: fromDateOnly(to) } },
+      include: { purchaseRequest: { select: { id: true, costCenter: true } } },
+      orderBy: { prazoResposta: "asc" },
+    });
+  }
+
   async documentsExpiring(companyId: string, from: string, to: string) {
     return this.prisma.forCompany(companyId).document.findMany({
       where: { validoAte: { gte: fromDateOnly(from), lte: fromDateOnly(to) } },

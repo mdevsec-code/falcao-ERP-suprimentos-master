@@ -12,6 +12,7 @@ export interface PayableFilters {
   contractId?: string;
   vencidas?: boolean;
   semNota?: boolean;
+  comNota?: boolean;
   from?: string;
   to?: string;
   today: string;
@@ -40,6 +41,11 @@ export interface PayableWriteData {
   costCenter?: string | null;
   notaFiscal?: string | null;
   notaFiscalEmissao?: Date | null;
+  notaFiscalChave?: string | null;
+  notaFiscalPdfPath?: string | null;
+  notaFiscalPdfName?: string | null;
+  notaFiscalXmlPath?: string | null;
+  notaFiscalXmlName?: string | null;
   observacoes?: string | null;
 }
 
@@ -65,11 +71,13 @@ export class PayablesRepository {
       contractId: filters.contractId,
       ...(Object.keys(vencimento).length > 0 ? { vencimento } : {}),
       ...(filters.semNota ? { notaFiscal: null } : {}),
+      ...(filters.comNota ? { notaFiscal: { not: null } } : {}),
       ...(filters.search
         ? {
             OR: [
               { descricao: { contains: filters.search, mode: "insensitive" } },
               { notaFiscal: { contains: filters.search, mode: "insensitive" } },
+              { notaFiscalChave: { contains: filters.search } },
               { supplier: { nomeFantasia: { contains: filters.search, mode: "insensitive" } } },
             ],
           }
@@ -107,6 +115,26 @@ export class PayablesRepository {
   async update(companyId: string, id: string, data: PayableWriteData) {
     const payable = await this.prisma.forCompany(companyId).payable.update({ where: { id }, data, include });
     return payable as unknown as PayablePayload;
+  }
+
+  /** Outra conta (não cancelada) com a mesma chave de NF-e — sinal de lançamento em dobro. */
+  async findByInvoiceKey(companyId: string, chave: string, ignoreId?: string) {
+    return this.prisma.forCompany(companyId).payable.findFirst({
+      where: { notaFiscalChave: chave, status: { not: "CANCELADO" }, ...(ignoreId ? { NOT: { id: ignoreId } } : {}) },
+      select: { id: true, descricao: true },
+    });
+  }
+
+  async findSupplierByCnpj(companyId: string, cnpjDigits: string) {
+    const suppliers = await this.prisma.forCompany(companyId).supplier.findMany({
+      select: { id: true, nomeFantasia: true, cnpj: true },
+    });
+    return suppliers.find((s) => s.cnpj.replace(/\D/g, "") === cnpjDigits) ?? null;
+  }
+
+  async companyCnpj(companyId: string): Promise<string | null> {
+    const company = await this.prisma.company.findUnique({ where: { id: companyId }, select: { cnpj: true } });
+    return company ? company.cnpj.replace(/\D/g, "") : null;
   }
 
   async cancel(companyId: string, id: string) {

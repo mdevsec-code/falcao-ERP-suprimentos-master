@@ -1,3 +1,4 @@
+import { MAX_UPLOAD_BYTES } from "../storage/upload-policy";
 import {
   Body,
   Controller,
@@ -76,7 +77,7 @@ export class ReimbursementsController {
     @Param("id") id: string,
     @UploadedFile(
       new ParseFilePipeBuilder()
-        .addMaxSizeValidator({ maxSize: 10 * 1024 * 1024 })
+        .addMaxSizeValidator({ maxSize: MAX_UPLOAD_BYTES })
         .build({ fileIsRequired: true }),
     )
     file: Express.Multer.File,

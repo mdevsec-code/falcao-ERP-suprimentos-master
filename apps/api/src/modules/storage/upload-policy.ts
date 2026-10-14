@@ -42,3 +42,6 @@ export function uploadExtension(fileName: string): string {
 export function isAllowedUpload(fileName: string): boolean {
   return ALLOWED_UPLOAD_EXTENSIONS.has(uploadExtension(fileName));
 }
+
+/** Limite de qualquer upload (anexos, documentos, notas fiscais). */
+export const MAX_UPLOAD_BYTES = 50 * 1024 * 1024;
