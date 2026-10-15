@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-# Preparação única do VPS da Hostinger (Ubuntu 24.04) para o Falcão ERP:
+# Preparação única do VPS da Hostinger (Ubuntu 24.04 ou 26.04) para o Falcão ERP:
 # PostgreSQL 16 (só local), Node 22, Nginx, Certbot, PM2, firewall e pastas.
+# O PostgreSQL vem do repositório oficial (apt.postgresql.org) para ser o mesmo 16
+# do desenvolvimento, seja qual for o padrão da versão do Ubuntu (o 26.04 traz o 18).
 #
 #   sudo DB_PASSWORD='senha-forte-do-banco' bash deploy/setup-vps.sh
 #
@@ -12,6 +14,7 @@ APP_DIR="${APP_DIR:-/var/www/falcao-erp}"
 DATA_DIR="${DATA_DIR:-/var/lib/falcao-erp}"
 DB_NAME="${DB_NAME:-falcao_erp}"
 DB_USER="${DB_USER:-falcao}"
+PG_VERSION="${PG_VERSION:-16}"
 : "${DB_PASSWORD:?Defina DB_PASSWORD (senha do usuário do banco).}"
 
 if [[ $EUID -ne 0 ]]; then
@@ -21,8 +24,16 @@ fi
 
 echo "==> Pacotes do sistema"
 apt-get update -y
-apt-get install -y ca-certificates curl gnupg git ufw nginx certbot python3-certbot-nginx \
-  postgresql postgresql-contrib
+apt-get install -y ca-certificates curl gnupg git ufw nginx certbot python3-certbot-nginx
+
+echo "==> PostgreSQL ${PG_VERSION} (repositório oficial)"
+install -d /usr/share/postgresql-common/pgdg
+curl -fsSL -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc \
+  https://www.postgresql.org/media/keys/ACCC4CF8.asc
+echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(. /etc/os-release && echo "$VERSION_CODENAME")-pgdg main" \
+  > /etc/apt/sources.list.d/pgdg.list
+apt-get update -y
+apt-get install -y "postgresql-${PG_VERSION}" "postgresql-client-${PG_VERSION}"
 
 echo "==> Node.js 22 (NodeSource) e PM2"
 if ! command -v node >/dev/null || [[ "$(node -v)" != v22* ]]; then
