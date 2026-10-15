@@ -1,16 +1,21 @@
 import { BadRequestException, ForbiddenException, Inject, Injectable } from "@nestjs/common";
 import {
   ALLOWED_TRANSITIONS,
+  APPROVAL_STEPS,
   resolveApprovalAction,
   ROLES_BY_CURRENT_STATUS,
 } from "@falcao-erp/shared-types";
 import type {
+  ApprovalStep,
+  ApprovalStepConfigDto,
   PaginatedResult,
   PurchaseRequestDetailDto,
   PurchaseRequestSummaryDto,
   PurchaseRequestTimelineEntryDto,
   Role,
 } from "@falcao-erp/shared-types";
+import type { AuthenticatedUser } from "../../common/types/auth-request";
+import { toDateOnlyOrNull } from "../../common/utils/date-only";
 import { decodeUploadName } from "../../common/utils/file-name";
 import { STORAGE_PROVIDER, type IStorageProvider } from "../storage/storage-provider.interface";
 import { AddCommentDto } from "./dto/add-comment.dto";
@@ -18,29 +23,32 @@ import { ChangeStatusDto } from "./dto/change-status.dto";
 import { CreatePurchaseRequestDto } from "./dto/create-purchase-request.dto";
 import { QueryPurchaseRequestsDto } from "./dto/query-purchase-requests.dto";
 import { UpdatePurchaseRequestDto } from "./dto/update-purchase-request.dto";
+import { PurchaseRequestApprovalsService } from "./purchase-request-approvals.service";
 import {
   PurchaseRequestsRepository,
   type PurchaseRequestDetailPayload,
   type PurchaseRequestListItemPayload,
 } from "./purchase-requests.repository";
 
+/** Fotos de item: só imagens que o navegador e o PDF mostram. */
+const PHOTO_TYPES: Record<string, string> = { "image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp" };
+export const MAX_PHOTO_BYTES = 8 * 1024 * 1024;
+
 @Injectable()
 export class PurchaseRequestsService {
   constructor(
     private readonly repository: PurchaseRequestsRepository,
+    private readonly approvals: PurchaseRequestApprovalsService,
     @Inject(STORAGE_PROVIDER) private readonly storage: IStorageProvider,
   ) {}
 
-  async list(
-    companyId: string,
-    userId: string,
-    userRole: Role,
-    query: QueryPurchaseRequestsDto,
-  ): Promise<PaginatedResult<PurchaseRequestSummaryDto>> {
-    const { data, total } = await this.repository.findMany(companyId, {
+  async list(user: AuthenticatedUser, query: QueryPurchaseRequestsDto): Promise<PaginatedResult<PurchaseRequestSummaryDto>> {
+    const pendingMine = query.pendingMySignature === "true";
+    const { data, total } = await this.repository.findMany(user.companyId, {
       search: query.search,
-      status: query.status,
-      requesterId: userRole === "REQUESTER" ? userId : undefined,
+      status: pendingMine ? "AGUARDANDO_APROVACAO" : query.status,
+      requesterId: user.role === "REQUESTER" && !pendingMine ? user.userId : undefined,
+      currentSteps: pendingMine ? await this.approvals.signableSteps(user) : undefined,
       page: query.page,
       pageSize: query.pageSize,
     });
@@ -56,9 +64,9 @@ export class PurchaseRequestsService {
     };
   }
 
-  async getById(companyId: string, id: string): Promise<PurchaseRequestDetailDto> {
-    const request = await this.repository.findByIdOrThrow(companyId, id);
-    return this.toDetailDto(request);
+  async getById(user: AuthenticatedUser, id: string): Promise<PurchaseRequestDetailDto> {
+    const request = await this.repository.findByIdOrThrow(user.companyId, id);
+    return this.toDetailDto(request, user);
   }
 
   async getTimeline(companyId: string, id: string): Promise<PurchaseRequestTimelineEntryDto[]> {
@@ -92,54 +100,75 @@ export class PurchaseRequestsService {
     return entries.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
   }
 
-  async create(companyId: string, requesterId: string, dto: CreatePurchaseRequestDto) {
-    const request = await this.repository.create(companyId, requesterId, dto);
-    return this.toDetailDto(request);
+  async create(user: AuthenticatedUser, dto: CreatePurchaseRequestDto): Promise<PurchaseRequestDetailDto> {
+    this.assertOwnPhotos(user.companyId, dto.items);
+    const request = await this.repository.create(user.companyId, user.userId, dto);
+    // Começa a corrida de assinaturas: e-mail para quem assina a primeira etapa.
+    void this.approvals.notifyStep(request, "TECNICO");
+    return this.toDetailDto(request, user);
   }
 
-  async update(companyId: string, id: string, userId: string, userRole: Role, dto: UpdatePurchaseRequestDto) {
-    const existing = await this.repository.findByIdOrThrow(companyId, id);
-    const isOwner = existing.requesterId === userId;
+  async update(user: AuthenticatedUser, id: string, dto: UpdatePurchaseRequestDto): Promise<PurchaseRequestDetailDto> {
+    const existing = await this.repository.findByIdOrThrow(user.companyId, id);
+    const isOwner = existing.requesterId === user.userId;
     if (existing.status !== "AGUARDANDO_APROVACAO") {
       throw new BadRequestException("Só é possível editar solicitações aguardando aprovação.");
     }
-    if (!isOwner && userRole !== "ADMIN") {
+    if (existing.signatures.length > 0) {
+      throw new BadRequestException("A solicitação já foi assinada por uma etapa e não pode mais ser alterada.");
+    }
+    if (!isOwner && user.role !== "ADMIN") {
       throw new ForbiddenException("Você só pode editar suas próprias solicitações.");
     }
+    if (dto.items) this.assertOwnPhotos(user.companyId, dto.items);
 
-    const request = await this.repository.update(companyId, id, dto);
-    return this.toDetailDto(request);
+    const request = await this.repository.update(user.companyId, id, dto);
+    return this.toDetailDto(request, user);
   }
 
   async transition(
-    companyId: string,
+    user: AuthenticatedUser,
     id: string,
-    approverId: string,
-    userRole: Role,
     dto: ChangeStatusDto,
   ): Promise<PurchaseRequestDetailDto> {
-    const existing = await this.repository.findByIdOrThrow(companyId, id);
+    const existing = await this.repository.findByIdOrThrow(user.companyId, id);
     const from = existing.status;
 
     const allowedTargets = ALLOWED_TRANSITIONS[from];
     if (!allowedTargets.includes(dto.status)) {
       throw new BadRequestException(
-        `Não é possível mover de "${from}" para "${dto.status}".`,
+        from === "AGUARDANDO_APROVACAO"
+          ? "A aprovação é feita pelas assinaturas de cada etapa."
+          : `Não é possível mover de "${from}" para "${dto.status}".`,
       );
     }
 
     const allowedRoles = ROLES_BY_CURRENT_STATUS[from];
-    if (userRole !== "ADMIN" && !allowedRoles.includes(userRole)) {
+    if (user.role !== "ADMIN" && !allowedRoles.includes(user.role as Role)) {
       throw new ForbiddenException("Você não tem permissão para alterar o status nesta etapa.");
     }
 
     const action = resolveApprovalAction(from, dto.status);
-    const request = await this.repository.transition(companyId, id, approverId, {
+    const request = await this.repository.transition(user.companyId, id, user.userId, {
       ...dto,
       fromStatus: from,
       action,
     });
-    return this.toDetailDto(request);
+    return this.toDetailDto(request, user);
+  }
+
+  /** Foto do item, enviada antes de salvar a solicitação; o item guarda só o caminho. */
+  async uploadItemPhoto(
+    companyId: string,
+    file: { originalname: string; mimetype: string; buffer: Buffer; size: number },
+  ): Promise<{ path: string; url: string }> {
+    const extension = PHOTO_TYPES[file.mimetype];
+    if (!extension) throw new BadRequestException("Envie a foto em JPG, PNG ou WebP.");
+    const stored = await this.storage.save(file.buffer, {
+      folder: `item-photos/${companyId}`,
+      fileName: `foto${extension}`,
+    });
+    return { path: stored.path, url: stored.url };
   }
 
   async addComment(companyId: string, purchaseRequestId: string, authorId: string, dto: AddCommentDto) {
@@ -193,8 +222,17 @@ export class PurchaseRequestsService {
     await this.storage.delete(attachment.filePath);
   }
 
-  async stats(companyId: string, userId: string, userRole: Role) {
-    return this.repository.stats(companyId, userId, userRole);
+  async stats(user: AuthenticatedUser) {
+    return this.repository.stats(user.companyId, user.role, await this.approvals.signableSteps(user));
+  }
+
+  /** Foto de item de outra empresa não entra: o caminho tem o id da empresa. */
+  private assertOwnPhotos(companyId: string, items: Array<{ photoPath?: string }>): void {
+    for (const item of items) {
+      if (item.photoPath && !item.photoPath.startsWith(`item-photos/${companyId}/`)) {
+        throw new BadRequestException("Foto do item inválida — envie a foto novamente.");
+      }
+    }
   }
 
   private itemsEstimatedTotal(items: Array<{ quantity: unknown; estimatedPrice: unknown }>): string | null {
@@ -206,11 +244,13 @@ export class PurchaseRequestsService {
     return items.some((item) => item.estimatedPrice) ? total.toFixed(2) : null;
   }
 
-  private toSummaryDto(request: PurchaseRequestListItemPayload): PurchaseRequestSummaryDto {
+  private toSummaryDto(request: PurchaseRequestListItemPayload | PurchaseRequestDetailPayload): PurchaseRequestSummaryDto {
     return {
       id: request.id,
+      numero: request.numero,
       title: request.title,
       status: request.status,
+      currentStep: request.currentStep,
       costCenter: request.costCenter,
       requesterId: request.requesterId,
       requesterName: request.requester.name,
@@ -220,19 +260,40 @@ export class PurchaseRequestsService {
     };
   }
 
-  private toDetailDto(request: PurchaseRequestDetailPayload): PurchaseRequestDetailDto {
+  private async toDetailDto(request: PurchaseRequestDetailPayload, user: AuthenticatedUser): Promise<PurchaseRequestDetailDto> {
+    const [config, signable] = await Promise.all([
+      this.approvals.stepsConfig(user.companyId),
+      this.approvals.signableSteps(user),
+    ]);
+    const approversOf = (step: ApprovalStep) =>
+      (config.find((row: ApprovalStepConfigDto) => row.step === step)?.approvers ?? []).map(({ id, name }) => ({ id, name }));
+
     return {
-      id: request.id,
-      title: request.title,
-      status: request.status,
-      costCenter: request.costCenter,
-      requesterId: request.requesterId,
-      requesterName: request.requester.name,
-      itemCount: request.items.length,
-      estimatedTotal: this.itemsEstimatedTotal(request.items),
+      ...this.toSummaryDto(request),
       justification: request.justification,
-      createdAt: request.createdAt.toISOString(),
+      requesterContact: request.requesterContact,
       updatedAt: request.updatedAt.toISOString(),
+      canSign:
+        request.status === "AGUARDANDO_APROVACAO" && !!request.currentStep && signable.includes(request.currentStep),
+      approvalSteps: APPROVAL_STEPS.map((step) => {
+        const signature = request.signatures.find((row) => row.step === step);
+        return {
+          step,
+          approvers: approversOf(step),
+          current: request.status === "AGUARDANDO_APROVACAO" && request.currentStep === step,
+          signature: signature
+            ? {
+                step,
+                decision: signature.decision,
+                signerId: signature.userId,
+                signerName: signature.signerName,
+                signatureData: signature.signatureData,
+                comment: signature.comment,
+                signedAt: signature.signedAt.toISOString(),
+              }
+            : null,
+        };
+      }),
       items: request.items.map((item) => ({
         id: item.id,
         productId: item.productId,
@@ -243,6 +304,17 @@ export class PurchaseRequestsService {
         estimatedPrice: item.estimatedPrice?.toString() ?? null,
         marca: item.marca,
         referencia: item.referencia,
+        especificacao: item.especificacao,
+        pesoTotal: item.pesoTotal?.toString() ?? null,
+        localUso: item.localUso,
+        setorSolicitante: item.setorSolicitante,
+        dataNecessaria: toDateOnlyOrNull(item.dataNecessaria),
+        photoPath: item.photoPath,
+        photoUrl: item.photoPath
+          ? `/uploads/${item.photoPath}`
+          : item.product?.photoPath
+            ? `/uploads/${item.product.photoPath}`
+            : null,
       })),
       approvals: request.approvals.map((approval) => ({
         id: approval.id,

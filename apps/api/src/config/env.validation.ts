@@ -15,6 +15,20 @@ export const envSchema = z.object({
    * Sem isso o limite por IP dos links públicos enxerga só o IP do proxy. 0 = acesso direto.
    */
   TRUST_PROXY: z.coerce.number().int().min(0).max(5).default(0),
+  /** Endereço público do sistema — usado nos links dos e-mails (ex.: https://suprimentos.empresa.com.br). */
+  APP_URL: z.string().url().optional(),
+  /** SMTP para os e-mails de aprovação. Sem SMTP_HOST, nada é enviado (só fica no log). */
+  SMTP_HOST: z.string().optional(),
+  SMTP_PORT: z.coerce.number().int().default(465),
+  /** `true` na porta 465 (SSL); `false` na 587 (STARTTLS). */
+  SMTP_SECURE: z
+    .enum(["true", "false"])
+    .default("true")
+    .transform((value) => value === "true"),
+  SMTP_USER: z.string().optional(),
+  SMTP_PASS: z.string().optional(),
+  /** Remetente, ex.: "Falcão Suprimentos <suprimentos@empresa.com.br>". */
+  MAIL_FROM: z.string().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;

@@ -19,6 +19,7 @@ import { DisciplinesModule } from "./modules/disciplines/disciplines.module";
 import { DocumentsModule } from "./modules/documents/documents.module";
 import { FinanceModule } from "./modules/finance/finance.module";
 import { HealthModule } from "./modules/health/health.module";
+import { MailModule } from "./modules/mail/mail.module";
 import { ProductsModule } from "./modules/products/products.module";
 import { PurchaseRequestsModule } from "./modules/purchase-requests/purchase-requests.module";
 import { QuotationsModule } from "./modules/quotations/quotations.module";
@@ -60,6 +61,7 @@ import { UsersModule } from "./modules/users/users.module";
     // Limite geral generoso; rotas sensíveis (login) usam @Throttle mais restrito.
     ThrottlerModule.forRoot([{ name: "default", ttl: 60_000, limit: 600 }]),
     PrismaModule,
+    MailModule,
     AuthModule,
     UsersModule,
     CompaniesModule,

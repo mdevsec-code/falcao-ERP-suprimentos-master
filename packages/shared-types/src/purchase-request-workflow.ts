@@ -1,4 +1,4 @@
-import type { ApprovalAction, PurchaseRequestStatus, Role } from "./enums";
+import { APPROVAL_STEPS, type ApprovalAction, type ApprovalStep, type PurchaseRequestStatus, type Role } from "./enums";
 
 /**
  * Single source of truth for the Solicitações de Compras pipeline (see spec:
@@ -7,7 +7,8 @@ import type { ApprovalAction, PurchaseRequestStatus, Role } from "./enums";
  * frontend (deciding which action buttons to render).
  */
 export const ALLOWED_TRANSITIONS: Record<PurchaseRequestStatus, PurchaseRequestStatus[]> = {
-  AGUARDANDO_APROVACAO: ["EM_COMPRAS", "REJEITADO", "AGUARDANDO_APROVACAO"],
+  // Sai daqui só pelas assinaturas (técnico → compras → custos → gerente geral).
+  AGUARDANDO_APROVACAO: [],
   EM_COMPRAS: ["EM_COTACAO", "REJEITADO"],
   EM_COTACAO: ["PEDIDO_REALIZADO", "REJEITADO"],
   PEDIDO_REALIZADO: ["AGUARDANDO_RECEBIMENTO", "REJEITADO"],
@@ -18,7 +19,7 @@ export const ALLOWED_TRANSITIONS: Record<PurchaseRequestStatus, PurchaseRequestS
 
 /** Who may act on a request currently sitting at a given status. */
 export const ROLES_BY_CURRENT_STATUS: Record<PurchaseRequestStatus, Role[]> = {
-  AGUARDANDO_APROVACAO: ["MANAGER", "ADMIN"],
+  AGUARDANDO_APROVACAO: [],
   EM_COMPRAS: ["BUYER", "ADMIN"],
   EM_COTACAO: ["BUYER", "ADMIN"],
   PEDIDO_REALIZADO: ["BUYER", "WAREHOUSE", "ADMIN"],
@@ -34,4 +35,10 @@ export function resolveApprovalAction(
   if (to === "REJEITADO") return "REJECT";
   if (to === from) return "REQUEST_CHANGES";
   return "APPROVE";
+}
+
+/** Etapa seguinte de assinatura; `null` depois da última (o pedido vai para compras). */
+export function nextApprovalStep(step: ApprovalStep): ApprovalStep | null {
+  const index = APPROVAL_STEPS.indexOf(step);
+  return APPROVAL_STEPS[index + 1] ?? null;
 }

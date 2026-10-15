@@ -290,3 +290,27 @@ export const SupplierCatalogItemStatus = {
 } as const;
 export type SupplierCatalogItemStatus =
   (typeof SupplierCatalogItemStatus)[keyof typeof SupplierCatalogItemStatus];
+
+/** Etapas de assinatura do plano de aquisição, na ordem em que acontecem. */
+export const ApprovalStep = {
+  TECNICO: "TECNICO",
+  COMPRAS: "COMPRAS",
+  CUSTOS: "CUSTOS",
+  GERENTE_GERAL: "GERENTE_GERAL",
+} as const;
+export type ApprovalStep = (typeof ApprovalStep)[keyof typeof ApprovalStep];
+
+export const APPROVAL_STEPS: readonly ApprovalStep[] = ["TECNICO", "COMPRAS", "CUSTOS", "GERENTE_GERAL"];
+
+export const APPROVAL_STEP_LABELS: Record<ApprovalStep, string> = {
+  TECNICO: "Responsável técnico",
+  COMPRAS: "Compras",
+  CUSTOS: "Custos",
+  GERENTE_GERAL: "Gerente geral",
+};
+
+export const SignatureDecision = {
+  APROVADO: "APROVADO",
+  RECUSADO: "RECUSADO",
+} as const;
+export type SignatureDecision = (typeof SignatureDecision)[keyof typeof SignatureDecision];

@@ -1,4 +1,4 @@
-import { IsEnum, IsOptional, IsString } from "class-validator";
+import { IsBooleanString, IsEnum, IsOptional, IsString } from "class-validator";
 import { PurchaseRequestStatus } from "@falcao-erp/shared-types";
 import { PaginationQueryDto } from "../../../common/dto/pagination-query.dto";
 
@@ -10,4 +10,9 @@ export class QueryPurchaseRequestsDto extends PaginationQueryDto {
   @IsOptional()
   @IsEnum(PurchaseRequestStatus)
   status?: PurchaseRequestStatus;
+
+  /** `true` = só as que aguardam a assinatura de quem consulta. */
+  @IsOptional()
+  @IsBooleanString()
+  pendingMySignature?: string;
 }

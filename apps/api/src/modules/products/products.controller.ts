@@ -1,4 +1,20 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseFilePipeBuilder,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+  Query,
+  UploadedFile,
+  UseInterceptors,
+} from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
 import { AuditLog } from "../../common/decorators/audit-log.decorator";
 import { CurrentUser } from "../../common/decorators/current-user.decorator";
 import { Roles } from "../../common/decorators/roles.decorator";
@@ -9,7 +25,7 @@ import { CreateFromRequestItemDto } from "./dto/create-from-request-item.dto";
 import { CreateProductDto } from "./dto/create-product.dto";
 import { QueryProductsDto } from "./dto/query-products.dto";
 import { UpdateProductDto } from "./dto/update-product.dto";
-import { ProductsService } from "./products.service";
+import { MAX_PRODUCT_PHOTO_BYTES, ProductsService } from "./products.service";
 
 const WRITE_ROLES = ["ADMIN", "MANAGER", "BUYER"] as const;
 
@@ -66,6 +82,27 @@ export class ProductsController {
   @Patch(":id/reactivate")
   reactivate(@CurrentUser() user: AuthenticatedUser, @Param("id") id: string) {
     return this.productsService.reactivate(user.companyId, id);
+  }
+
+  /** Foto do produto (JPG, PNG ou WebP; substitui a anterior). */
+  @Roles(...WRITE_ROLES)
+  @AuditLog("Product", "UPDATE")
+  @Post(":id/photo")
+  @UseInterceptors(FileInterceptor("file", { limits: { fileSize: MAX_PRODUCT_PHOTO_BYTES } }))
+  setPhoto(
+    @CurrentUser() user: AuthenticatedUser,
+    @Param("id", ParseUUIDPipe) id: string,
+    @UploadedFile(new ParseFilePipeBuilder().addMaxSizeValidator({ maxSize: MAX_PRODUCT_PHOTO_BYTES }).build({ fileIsRequired: true }))
+    file: Express.Multer.File,
+  ) {
+    return this.productsService.setPhoto(user.companyId, id, file);
+  }
+
+  @Roles(...WRITE_ROLES)
+  @AuditLog("Product", "UPDATE")
+  @Delete(":id/photo")
+  removePhoto(@CurrentUser() user: AuthenticatedUser, @Param("id", ParseUUIDPipe) id: string) {
+    return this.productsService.removePhoto(user.companyId, id);
   }
 
   @Roles(...WRITE_ROLES)

@@ -28,6 +28,10 @@ export {
   QuotationStatus,
   QuotationSupplierStatus,
   QuotationSupplierOrigin,
+  ApprovalStep,
+  APPROVAL_STEPS,
+  APPROVAL_STEP_LABELS,
+  SignatureDecision,
   RequisitionPlanStatus,
   SupplierCatalogStatus,
   SupplierCatalogItemStatus,
@@ -63,6 +67,9 @@ export type {
   PurchaseRequestDetailDto,
   PurchaseRequestStatsDto,
   PurchaseRequestTimelineEntryDto,
+  PurchaseRequestSignatureDto,
+  PurchaseRequestApprovalStepDto,
+  ApprovalStepConfigDto,
   TimelineEntryType,
 } from "./purchase-request";
 
@@ -70,6 +77,7 @@ export {
   ALLOWED_TRANSITIONS,
   ROLES_BY_CURRENT_STATUS,
   resolveApprovalAction,
+  nextApprovalStep,
 } from "./purchase-request-workflow";
 
 export type { AuthUserDto, LoginResponseDto, AuditLogEntryDto } from "./auth";

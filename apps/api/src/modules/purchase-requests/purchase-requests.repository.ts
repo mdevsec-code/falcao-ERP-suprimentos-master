@@ -1,14 +1,17 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import type { Prisma, PurchaseRequestStatus } from "@prisma/client";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
+import { Prisma, type ApprovalStep, type PurchaseRequestStatus } from "@prisma/client";
+import { fromDateOnly } from "../../common/utils/date-only";
 import { PrismaService } from "../../database/prisma.service";
 import { ChangeStatusDto } from "./dto/change-status.dto";
-import { CreatePurchaseRequestDto } from "./dto/create-purchase-request.dto";
+import { CreatePurchaseRequestDto, PurchaseRequestItemInputDto } from "./dto/create-purchase-request.dto";
 import { UpdatePurchaseRequestDto } from "./dto/update-purchase-request.dto";
 
 export interface PurchaseRequestFilters {
   search?: string;
   status?: PurchaseRequestStatus;
   requesterId?: string;
+  /** Só as que estão numa destas etapas de assinatura (fila "aguardando minha assinatura"). */
+  currentSteps?: ApprovalStep[];
   page: number;
   pageSize: number;
 }
@@ -19,6 +22,7 @@ const detailInclude = {
   approvals: { include: { approver: true }, orderBy: { createdAt: "desc" as const } },
   comments: { include: { author: true }, orderBy: { createdAt: "asc" as const } },
   attachments: { include: { uploadedBy: true }, orderBy: { uploadedAt: "desc" as const } },
+  signatures: { orderBy: { signedAt: "asc" as const } },
 } satisfies Prisma.PurchaseRequestInclude;
 
 const listInclude = {
@@ -33,16 +37,43 @@ export type PurchaseRequestListItemPayload = Prisma.PurchaseRequestGetPayload<{
   include: typeof listInclude;
 }>;
 
+/** Campos do item como vão para o banco (create e update usam o mesmo). */
+function itemData(item: PurchaseRequestItemInputDto) {
+  return {
+    productId: item.productId,
+    description: item.description,
+    quantity: item.quantity,
+    unit: item.unit,
+    estimatedPrice: item.estimatedPrice,
+    marca: item.marca,
+    referencia: item.referencia,
+    especificacao: item.especificacao?.trim() || null,
+    pesoTotal: item.pesoTotal ?? null,
+    localUso: item.localUso?.trim() || null,
+    setorSolicitante: item.setorSolicitante?.trim() || null,
+    dataNecessaria: item.dataNecessaria ? fromDateOnly(item.dataNecessaria) : null,
+    photoPath: item.photoPath ?? null,
+  };
+}
+
 @Injectable()
 export class PurchaseRequestsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async findMany(companyId: string, filters: PurchaseRequestFilters) {
+    const search = filters.search?.trim();
+    const numero = search && /^\d+$/.test(search) ? Number(search) : undefined;
     const where: Prisma.PurchaseRequestWhereInput = {
       status: filters.status,
       requesterId: filters.requesterId,
-      ...(filters.search
-        ? { title: { contains: filters.search, mode: "insensitive" } }
+      ...(filters.currentSteps ? { currentStep: { in: filters.currentSteps } } : {}),
+      ...(search
+        ? {
+            OR: [
+              { title: { contains: search, mode: "insensitive" } },
+              ...(numero !== undefined ? [{ numero }] : []),
+            ],
+          }
         : {}),
     };
 
@@ -72,35 +103,40 @@ export class PurchaseRequestsRepository {
     return request as unknown as PurchaseRequestDetailPayload;
   }
 
+  /** Nº sequencial por empresa; a constraint única resolve a corrida de dois envios juntos. */
   async create(
     companyId: string,
     requesterId: string,
     dto: CreatePurchaseRequestDto,
   ): Promise<PurchaseRequestDetailPayload> {
-    const request = await this.prisma.forCompany(companyId).purchaseRequest.create({
-      data: {
-        companyId,
-        requesterId,
-        title: dto.title,
-        justification: dto.justification,
-        costCenter: dto.costCenter,
-        items: {
-          createMany: {
-            data: dto.items.map((item) => ({
-              productId: item.productId,
-              description: item.description,
-              quantity: item.quantity,
-              unit: item.unit,
-              estimatedPrice: item.estimatedPrice,
-              marca: item.marca,
-              referencia: item.referencia,
-            })),
-          },
-        },
-      },
-      include: detailInclude,
-    });
-    return request as unknown as PurchaseRequestDetailPayload;
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      try {
+        const id = await this.prisma.$transaction(async (tx) => {
+          const last = await tx.purchaseRequest.aggregate({ where: { companyId }, _max: { numero: true } });
+          const created = await tx.purchaseRequest.create({
+            data: {
+              companyId,
+              numero: (last._max.numero ?? 0) + 1,
+              requesterId,
+              title: dto.title,
+              justification: dto.justification,
+              costCenter: dto.costCenter,
+              requesterContact: dto.requesterContact?.trim() || null,
+              currentStep: "TECNICO",
+              items: { createMany: { data: dto.items.map(itemData) } },
+            },
+            select: { id: true },
+          });
+          return created.id;
+        });
+        return this.findByIdOrThrow(companyId, id);
+      } catch (error) {
+        const isNumberClash =
+          error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002" && attempt < 2;
+        if (!isNumberClash) throw error;
+      }
+    }
+    throw new ConflictException("Não foi possível numerar a solicitação. Tente de novo.");
   }
 
   async update(
@@ -116,23 +152,9 @@ export class PurchaseRequestsRepository {
         title: dto.title,
         justification: dto.justification,
         costCenter: dto.costCenter,
+        requesterContact: dto.requesterContact === undefined ? undefined : dto.requesterContact.trim() || null,
         ...(dto.items
-          ? {
-              items: {
-                deleteMany: {},
-                createMany: {
-                  data: dto.items.map((item) => ({
-                    productId: item.productId,
-                    description: item.description,
-                    quantity: item.quantity,
-                    unit: item.unit,
-                    estimatedPrice: item.estimatedPrice,
-                    marca: item.marca,
-                    referencia: item.referencia,
-                  })),
-                },
-              },
-            }
+          ? { items: { deleteMany: {}, createMany: { data: dto.items.map(itemData) } } }
           : {}),
       },
       include: detailInclude,
@@ -200,7 +222,7 @@ export class PurchaseRequestsRepository {
     return this.prisma.purchaseRequestAttachment.delete({ where: { id: attachmentId } });
   }
 
-  async stats(companyId: string, userId: string, userRole: string) {
+  async stats(companyId: string, userRole: string, signableSteps: ApprovalStep[]) {
     const client = this.prisma.forCompany(companyId);
     const [total, byStatus, pendingMyApproval] = await Promise.all([
       client.purchaseRequest.count({}),
@@ -209,7 +231,7 @@ export class PurchaseRequestsRepository {
         where: { companyId },
         _count: { _all: true },
       }),
-      this.countPendingForRole(companyId, userRole),
+      this.countPendingForUser(companyId, userRole, signableSteps),
     ]);
 
     return {
@@ -219,21 +241,20 @@ export class PurchaseRequestsRepository {
     };
   }
 
-  private async countPendingForRole(companyId: string, userRole: string) {
+  /** Assinaturas que esperam por mim + as etapas operacionais do meu papel (cotar, receber…). */
+  private async countPendingForUser(companyId: string, userRole: string, signableSteps: ApprovalStep[]) {
     const statusByRole: Record<string, PurchaseRequestStatus[]> = {
-      MANAGER: ["AGUARDANDO_APROVACAO"],
       BUYER: ["EM_COMPRAS", "EM_COTACAO"],
       WAREHOUSE: ["PEDIDO_REALIZADO", "AGUARDANDO_RECEBIMENTO"],
-      ADMIN: [
-        "AGUARDANDO_APROVACAO",
-        "EM_COMPRAS",
-        "EM_COTACAO",
-        "PEDIDO_REALIZADO",
-        "AGUARDANDO_RECEBIMENTO",
-      ],
+      ADMIN: ["EM_COMPRAS", "EM_COTACAO", "PEDIDO_REALIZADO", "AGUARDANDO_RECEBIMENTO"],
     };
-    const statuses = statusByRole[userRole];
-    if (!statuses || statuses.length === 0) return 0;
-    return this.prisma.purchaseRequest.count({ where: { companyId, status: { in: statuses } } });
+    const statuses = statusByRole[userRole] ?? [];
+    const or: Prisma.PurchaseRequestWhereInput[] = [];
+    if (statuses.length > 0) or.push({ status: { in: statuses } });
+    if (signableSteps.length > 0) {
+      or.push({ status: "AGUARDANDO_APROVACAO", currentStep: { in: signableSteps } });
+    }
+    if (or.length === 0) return 0;
+    return this.prisma.purchaseRequest.count({ where: { companyId, OR: or } });
   }
 }

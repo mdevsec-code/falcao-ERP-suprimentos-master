@@ -35,6 +35,8 @@ export interface ProductSummaryDto {
   unidade: UnitOfMeasure;
   leadTimeDays: number | null;
   isActive: boolean;
+  /** Foto do produto (`/uploads/…`). */
+  photoUrl: string | null;
   primarySupplier: ProductSupplierRefDto | null;
   lastPrice: string | null;
   /** Quantidade, data e fornecedor do último preço registrado. */

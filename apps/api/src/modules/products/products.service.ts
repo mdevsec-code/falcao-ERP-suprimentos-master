@@ -1,10 +1,11 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Inject, Injectable } from "@nestjs/common";
 import type {
   PaginatedResult,
   ProductDetailDto,
   ProductPriceEntryDto,
   ProductSummaryDto,
 } from "@falcao-erp/shared-types";
+import { STORAGE_PROVIDER, type IStorageProvider } from "../storage/storage-provider.interface";
 import { AddPriceEntryDto } from "./dto/add-price-entry.dto";
 import { CreateFromRequestItemDto } from "./dto/create-from-request-item.dto";
 import { CreateProductDto } from "./dto/create-product.dto";
@@ -17,9 +18,38 @@ import {
   type ProductListItemPayload,
 } from "./products.repository";
 
+/** Fotos de produto: só imagens que o navegador e o PDF mostram. */
+const PHOTO_TYPES: Record<string, string> = { "image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp" };
+export const MAX_PRODUCT_PHOTO_BYTES = 8 * 1024 * 1024;
+
 @Injectable()
 export class ProductsService {
-  constructor(private readonly repository: ProductsRepository) {}
+  constructor(
+    private readonly repository: ProductsRepository,
+    @Inject(STORAGE_PROVIDER) private readonly storage: IStorageProvider,
+  ) {}
+
+  /** Troca a foto do produto (a anterior é apagada do disco). */
+  async setPhoto(
+    companyId: string,
+    id: string,
+    file: { mimetype: string; buffer: Buffer },
+  ): Promise<ProductDetailDto> {
+    const extension = PHOTO_TYPES[file.mimetype];
+    if (!extension) throw new BadRequestException("Envie a foto em JPG, PNG ou WebP.");
+    const current = await this.repository.findByIdOrThrow(companyId, id);
+    const stored = await this.storage.save(file.buffer, { folder: `product-photos/${companyId}`, fileName: `foto${extension}` });
+    await this.repository.setPhotoPath(companyId, id, stored.path);
+    if (current.photoPath) await this.storage.delete(current.photoPath);
+    return this.getById(companyId, id);
+  }
+
+  async removePhoto(companyId: string, id: string): Promise<ProductDetailDto> {
+    const current = await this.repository.findByIdOrThrow(companyId, id);
+    await this.repository.setPhotoPath(companyId, id, null);
+    if (current.photoPath) await this.storage.delete(current.photoPath);
+    return this.getById(companyId, id);
+  }
 
   async list(companyId: string, query: QueryProductsDto): Promise<PaginatedResult<ProductSummaryDto>> {
     const { data, total } = await this.repository.findMany(companyId, {
@@ -100,6 +130,7 @@ export class ProductsService {
       unidade: product.unidade,
       leadTimeDays: product.leadTimeDays,
       isActive: product.isActive,
+      photoUrl: product.photoPath ? `/uploads/${product.photoPath}` : null,
       primarySupplier: product.primarySupplier
         ? { id: product.primarySupplier.id, nomeFantasia: product.primarySupplier.nomeFantasia }
         : null,
@@ -121,6 +152,7 @@ export class ProductsService {
       leadTimeDays: product.leadTimeDays,
       observacoes: product.observacoes,
       isActive: product.isActive,
+      photoUrl: product.photoPath ? `/uploads/${product.photoPath}` : null,
       primarySupplier: product.primarySupplier
         ? { id: product.primarySupplier.id, nomeFantasia: product.primarySupplier.nomeFantasia }
         : null,

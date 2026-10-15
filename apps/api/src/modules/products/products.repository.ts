@@ -104,6 +104,10 @@ export class ProductsRepository {
     return { data: data as unknown as ProductListItemPayload[], total };
   }
 
+  async setPhotoPath(companyId: string, id: string, photoPath: string | null): Promise<void> {
+    await this.prisma.forCompany(companyId).product.update({ where: { id }, data: { photoPath } });
+  }
+
   async findByIdOrThrow(companyId: string, id: string): Promise<ProductDetailPayload> {
     const product = await this.prisma.forCompany(companyId).product.findUnique({
       where: { id },
