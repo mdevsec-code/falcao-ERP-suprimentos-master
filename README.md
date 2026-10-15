@@ -43,6 +43,7 @@
 - [🛠️ Stack](#️-stack)
 - [🏗️ Arquitetura](#️-arquitetura)
 - [🚀 Começando](#-começando)
+- [☁️ Hospedagem](#️-hospedagem-banco-na-aws-aplicação-na-hostinger)
 - [🔐 Perfis e permissões](#-perfis-e-permissões)
 - [🔌 API](#-api)
 - [🛡️ Segurança](#️-segurança)
@@ -82,7 +83,10 @@
 - **Banco de produtos** — catálogo por empresa com **disciplina** (Civil, Elétrica, Mecânica, Eletromecânica, Hidráulica, Instrumentação — lista editável), marca e **referência** do fabricante; filtros por disciplina, categoria, marca e fornecedor; histórico de preços com **quantidade, marca, referência e origem** (manual ou cotação).
 - **Catálogo vivo** — o solicitante escolhe os itens do catálogo (com marca, referência e último preço pago) ao montar o pedido; o que ele descrever à mão, compras inclui no catálogo com um clique, e o item já fica ligado ao produto.
 - **Solicitações de compra** — fluxo `aguardando aprovação → em compras → em cotação → pedido realizado → aguardando recebimento → finalizado` (ou rejeição), com itens, comentários, anexos, trilha de aprovações e fila "Aprovações" por papel.
-- **Cotações (mapa de cotação)** — abertas a partir da solicitação aprovada; cada fornecedor recebe um **link próprio, sem login**, com a descrição dos materiais, e responde preço, marca, referência, prazo, pagamento e frete (ou recusa). O comprador pode lançar propostas recebidas por e-mail. O mapa coloca os **fornecedores lado a lado**, destaca o menor preço, mostra a **variação contra o último preço pago**, totais com frete, ranking e economia; o vencedor é escolhido por item e, ao encerrar, os preços entram no histórico do catálogo. Exporta o mapa em Excel e compartilha o link por WhatsApp ou e-mail.
+- **Cotações (mapa de cotação)** — abertas a partir da solicitação aprovada; cada fornecedor recebe um **link próprio, sem login**, com a descrição dos materiais, e responde preço, marca, referência, prazo, pagamento e frete (ou recusa). O comprador pode lançar propostas recebidas por e-mail. O mapa coloca os **fornecedores lado a lado**, destaca o menor preço, mostra a **variação contra o último preço pago**, totais com frete, ranking e economia; o vencedor é escolhido por item e, ao encerrar, os preços entram no histórico do catálogo. Exporta o mapa em PDF e Excel e compartilha o link por WhatsApp ou e-mail.
+- **Plano de requisição** — junta as solicitações aprovadas de uma obra numa lista só: itens iguais (mesmo produto, unidade, marca e referência) são **somados numa linha**, guardando de qual solicitação veio cada parte. Ao **lançar**, o plano abre a cotação com a lista consolidada, liga o **link aberto** e passa as solicitações para "em cotação". Gera o **pedido de cotação em PDF** para enviar aos fornecedores.
+- **Link aberto para fornecedores** — um endereço só para divulgar (WhatsApp, e-mail, grupo): qualquer fornecedor vê a lista, informa o **CNPJ** (dígitos verificadores conferidos) e segue para o próprio link de resposta, cotando em cima dos itens. CNPJ novo vira **cadastro pendente**, que compras aprova ou recusa; fornecedor pendente não pode ser escolhido como vencedor. Quem já participa não recebe outro link por ali — ninguém consegue ver ou alterar a proposta de um concorrente sabendo o CNPJ dele.
+- **Catálogo do fornecedor** — link da empresa para o fornecedor enviar o **catálogo** (PDF, planilha, imagens) e/ou a **planilha modelo** com itens e preços, lida no navegador com prévia e linhas inválidas marcadas. Em "Catálogos recebidos", compras revisa item a item — o sistema **sugere o produto** do catálogo vivo (mesma referência ou nome); vincular, criar produto novo ou ignorar — e só então o preço entra no histórico (origem "catálogo do fornecedor").
 
 **Contratos & Financeiro**
 - **Contratos** — vigência com janela de alerta e régua visual do prazo, aditivos que alteram valor e/ou término, status (vigente, suspenso, encerrado, cancelado), anexos e execução financeira (lançado × pago × saldo).
@@ -93,6 +97,10 @@
 **Organização**
 - **Documentos** — repositório central com categorias, etiquetas, controle de validade, vínculo com fornecedor/contrato e busca por conteúdo em arquivos de texto.
 - **Agenda** — calendário mensal e lista dos próximos dias com entregas, recebimentos, visitas, reuniões e lembretes, mais os prazos dos outros módulos (contas, contratos, documentos), com visão por obra.
+
+**Exportação padronizada**
+- Todo arquivo gerado segue o mesmo padrão: **PDF** com logo, título, filete dourado, tabela com cabeçalho na cor da marca, linhas alternadas, total em destaque e rodapé com empresa, "gerado em … por …" e "Página x de y"; **Excel** com o mesmo timbre, cabeçalho congelado e filtrável, valores em R$ e datas formatadas, pronto para imprimir; **CSV** com `;`, vírgula decimal, datas dd/mm/aaaa e BOM (abre direto no Excel). Nome do arquivo: `falcao-<assunto>-<data>`.
+- Botão **Exportar** (PDF, Excel, CSV) em Fornecedores, Produtos, Solicitações, Cotações, Planos, Contratos, Contas a pagar e Notas fiscais — sempre o filtro atual inteiro, com os filtros no topo. Documentos em PDF: pedido de cotação do plano, mapa de cotação e ficha da solicitação.
 
 **Plataforma**
 - **Dashboard** — KPIs de suprimentos, atalhos, pendências (contratos vencendo, contas vencidas, reembolsos a decidir) e os próximos 7 dias da agenda — tudo filtrado pelo papel de quem vê.
@@ -209,7 +217,8 @@ O seed cria fornecedores, contratos (um vencendo, um vencido), contas pagas e em
 | `JWT_SECRET` / `JWT_ACCESS_EXPIRES_IN` | Segredo e expiração do access token |
 | `JWT_REFRESH_SECRET` / `JWT_REFRESH_EXPIRES_IN` | Segredo e expiração do refresh token |
 | `UPLOADS_DIR` | Diretório dos arquivos enviados |
-| `CORS_ORIGIN` | Origem permitida no CORS (URL do Web) |
+| `CORS_ORIGIN` | Origem(ns) permitida(s) no CORS — URL do Web; várias separadas por vírgula |
+| `TRUST_PROXY` | Quantos proxies reversos ficam na frente da API (Nginx da Hostinger, ALB da AWS); `0` = acesso direto. Necessário para o limite por IP dos links públicos |
 | `VITE_API_URL` | URL base da API consumida pelo Web |
 
 > Nunca versione o `.env`. Gere segredos fortes para `JWT_SECRET` e `JWT_REFRESH_SECRET` antes de qualquer deploy.
@@ -232,6 +241,21 @@ npm run db:migrate     # aplica as migrations do Prisma
 npm run db:seed        # popula o banco com dados de demonstração
 npm run db:studio      # abre o Prisma Studio
 ```
+
+---
+
+## ☁️ Hospedagem (banco na AWS, aplicação na Hostinger)
+
+Arquitetura recomendada: **PostgreSQL no Amazon RDS** e **API + Web num VPS da Hostinger** (Ubuntu, Node 22, Nginx com HTTPS).
+
+1. **Banco (AWS RDS for PostgreSQL)** — crie a instância (PostgreSQL 16), libere no *security group* a porta 5432 **só para o IP do VPS** e use a URL com SSL:
+   `DATABASE_URL="postgresql://usuario:senha@xxxx.rds.amazonaws.com:5432/falcao_erp?schema=public&sslmode=require"`.
+   Aplique as migrations a partir do VPS com `npm run prisma:deploy -w apps/api` (nunca `migrate dev` em produção).
+2. **API (VPS Hostinger)** — `npm ci && npm run build`, depois `node apps/api/dist/main.js` mantido por **PM2** ou **systemd**. Variáveis: `JWT_SECRET`/`JWT_REFRESH_SECRET` fortes (32+ caracteres), `CORS_ORIGIN` com o domínio do Web, `TRUST_PROXY=1` (atrás do Nginx) e `UPLOADS_DIR` numa pasta fora do código, incluída no backup.
+3. **Web** — gere com `VITE_API_URL=https://api.seudominio.com.br/api/v1 npm run build -w apps/web` e sirva `apps/web/dist` pelo Nginx, com *fallback* para `index.html` (as rotas `/cotar/…` e `/enviar-catalogo/…` que os fornecedores abrem são do próprio Web).
+4. **Nginx** — `server_name` do Web servindo os estáticos e `api.` fazendo `proxy_pass` para a porta da API, `client_max_body_size 60m` (uploads de 50 MB) e HTTPS com Let's Encrypt (`certbot --nginx`).
+5. **Links públicos** — os links de cotação, link aberto e catálogo são montados com o domínio em que o comprador está usando o sistema; use sempre o domínio oficial (com HTTPS) ao gerar e enviar links. Trocar o `JWT_SECRET` invalida todos os links já enviados.
+6. **Arquivos** — ficam no disco do VPS (`UPLOADS_DIR`). Para guardar no **Amazon S3**, basta implementar `IStorageProvider` (o restante do código não muda).
 
 ---
 
@@ -263,6 +287,10 @@ Prefixo `/api/v1` · autenticação `Authorization: Bearer <accessToken>` (de `P
 | Nota fiscal | `POST /payables/:id/invoice-file` (PDF ou XML, multipart), `DELETE /payables/:id/invoice-file/:kind` (`pdf`/`xml`), `POST /payables/invoice-xml/preview` |
 | Cotações | `GET/POST /quotations`, `GET /quotations/stats`, `GET/PATCH /quotations/:id`, `POST /quotations/:id/suppliers`, `DELETE /quotations/:id/suppliers/:qsId`, `POST /quotations/:id/suppliers/:qsId/link`, `PUT /quotations/:id/suppliers/:qsId/prices`, `PATCH /quotations/:id/items/:itemId/winner`, `POST /quotations/:id/pick-cheapest`, `POST /quotations/:id/close`, `POST /quotations/:id/cancel` |
 | Link do fornecedor | `GET/PUT /public/quotations/:token`, `POST /public/quotations/:token/decline` (público, autorizado pelo token assinado; 30 req/min) |
+| Link aberto da cotação | `POST/DELETE /quotations/:id/open-link` (ligar/trocar e desligar); público: `GET /public/open-quotations/:token`, `POST /public/open-quotations/:token/join` (CNPJ + cadastro se novo; 10 req/min) |
+| Planos de requisição | `GET/POST /requisition-plans`, `GET /requisition-plans/stats`, `GET /requisition-plans/candidates`, `GET/PATCH /requisition-plans/:id`, `POST /requisition-plans/:id/launch`, `POST /requisition-plans/:id/cancel` |
+| Catálogos de fornecedor | `GET /supplier-catalogs`, `GET /supplier-catalogs/stats`, `GET/POST/DELETE /supplier-catalogs/link`, `GET /supplier-catalogs/:id`, `POST /supplier-catalogs/:id/review`, `POST /supplier-catalogs/:id/items/:itemId/product`, `POST /supplier-catalogs/:id/reject`; público: `GET/POST /public/catalogs/:token` (multipart `dados` + `file`; 5 req/min) |
+| Cadastro do fornecedor | `POST /suppliers/:id/registration/approve`, `POST /suppliers/:id/registration/reject` |
 | Disciplinas | `GET /disciplines`, `POST /disciplines`, `PATCH /disciplines/:id` |
 | Catálogo vivo | `POST /products/from-request-item` (inclui no catálogo um item digitado na solicitação) |
 | Reembolsos | `GET/POST /reimbursements`, `GET /reimbursements/stats`, `GET/DELETE /reimbursements/:id`, `PATCH /reimbursements/:id/decision`, `POST /reimbursements/:id/attachments`, `DELETE /reimbursements/:id/attachments/:attachmentId` |
@@ -304,8 +332,8 @@ Mesmo design system e convenções do [Falcão Saúde Ocupacional](https://githu
 
 | Documento | Conteúdo |
 | --- | --- |
-| [docs/documentacao-tecnica.html](docs/documentacao-tecnica.html) | Arquitetura, stack comparada com o Saúde Ocupacional, modelo de dados, módulos, autenticação, isolamento por empresa, fluxo de compra, integrações financeiras, uploads e auditoria |
-| [docs/casos-de-uso.html](docs/casos-de-uso.html) | 57 casos de uso em 12 pacotes, com atores, rotas, pré e pós-condições, fluxos e exceções |
+| [docs/documentacao-tecnica.html](docs/documentacao-tecnica.html) | Arquitetura, stack comparada com o Saúde Ocupacional, modelo de dados, módulos, autenticação, isolamento por empresa, fluxo de compra, cotações, plano de requisição, link aberto, catálogo do fornecedor, padrão de exportação, integrações financeiras, uploads e auditoria |
+| [docs/casos-de-uso.html](docs/casos-de-uso.html) | 85 casos de uso em 16 pacotes, com atores, rotas, pré e pós-condições, fluxos e exceções |
 
 Os arquivos são páginas HTML: baixe e abra no navegador (os diagramas usam Mermaid, carregado da CDN).
 
@@ -325,6 +353,7 @@ Os arquivos são páginas HTML: baixe e abra no navegador (os diagramas usam Mer
 10. **Dashboard operacional** — pendências e agenda dos próximos dias no lugar do antigo card "próximos módulos"; remoção das telas "em breve"; CI em Node 22 LTS.
 11. **Stack igual à do Saúde Ocupacional** — Prisma 7 → 5 no mesmo formato da plataforma irmã, React Router 7, helmet 7 e os mesmos hooks de commit (husky, lint-staged, commitlint), pré-requisito do hub com login único.
 12. **Cotações, catálogo vivo e nota fiscal** — mapa de cotação com link do fornecedor (HMAC), disciplinas editáveis, catálogo com marca/referência/quantidade, inclusão de itens digitados no catálogo, NF-e (PDF/XML com leitura e conferência), planilhas Excel (`exceljs`, a mesma do Saúde) e uploads de 50 MB.
+13. **Plano de requisição, portal do fornecedor e exportação padronizada** — plano que consolida solicitações e vira cotação, link aberto com identificação por CNPJ e cadastro pendente, envio de catálogo com planilha modelo e revisão item a item, links públicos assinados por escopo, padrão único de PDF/Excel/CSV (`jspdf` + `jspdf-autotable`) em todas as listas e preparação para hospedagem (proxy, CORS com vários domínios, RDS com SSL).
 
 ---
 
@@ -334,7 +363,7 @@ Funcional para desenvolvimento local; ainda **não pronto para produção**.
 
 **Infraestrutura**
 - Sem Dockerfile de produção para API/Web — o `docker-compose.yml` sobe apenas o PostgreSQL de desenvolvimento.
-- Sem CD nem ambiente de deploy (hospedagem, variáveis de produção, HTTPS).
+- Sem CD: o deploy segue o roteiro manual de [Hospedagem](#️-hospedagem-banco-na-aws-aplicação-na-hostinger).
 - Armazenamento de arquivos apenas em disco local; a interface `IStorageProvider` permite plugar S3/Azure Blob.
 
 **Qualidade**
@@ -348,6 +377,8 @@ Funcional para desenvolvimento local; ainda **não pronto para produção**.
 - Exigir segredos JWT de 32+ caracteres na validação de ambiente de produção.
 
 **Produto**
+- PDFs usam a fonte padrão (Helvetica): com o sistema em chinês (zh-CN), textos em ideogramas saem ilegíveis no PDF — Excel e CSV não têm essa limitação. Embutir uma fonte CJK resolve.
+- Avisar o comprador por e-mail quando um fornecedor responde ou envia catálogo.
 - Tela de dados da empresa (`companies` ainda é só serviço interno).
 - Recuperação de senha por e-mail.
 - Busca por conteúdo em PDFs e documentos Office.

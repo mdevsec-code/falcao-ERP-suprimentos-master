@@ -141,12 +141,15 @@
       <a href="#s7"><span class="tag">07</span> Fluxo da solicitação de compra</a>
       <a href="#sc"><span class="tag">08</span> Catálogo vivo e disciplinas</a>
       <a href="#sq"><span class="tag">09</span> Cotações e link do fornecedor</a>
-      <a href="#s8"><span class="tag">10</span> Financeiro e integrações</a>
-      <a href="#snf"><span class="tag">11</span> Nota fiscal eletrônica</a>
-      <a href="#s9"><span class="tag">12</span> Arquivos e uploads</a>
-      <a href="#s10"><span class="tag">13</span> Auditoria</a>
-      <a href="#s11"><span class="tag">14</span> Frontend</a>
-      <a href="#s12"><span class="tag">15</span> Qualidade, CI e ambiente</a>
+      <a href="#spl"><span class="tag">10</span> Plano de requisição, link aberto e catálogo</a>
+      <a href="#sex"><span class="tag">11</span> Padrão de exportação (PDF, Excel, CSV)</a>
+      <a href="#s8"><span class="tag">12</span> Financeiro e integrações</a>
+      <a href="#snf"><span class="tag">13</span> Nota fiscal eletrônica</a>
+      <a href="#s9"><span class="tag">14</span> Arquivos e uploads</a>
+      <a href="#s10"><span class="tag">15</span> Auditoria</a>
+      <a href="#s11"><span class="tag">16</span> Frontend</a>
+      <a href="#s12"><span class="tag">17</span> Qualidade, CI e ambiente</a>
+      <a href="#shost"><span class="tag">18</span> Hospedagem (AWS + Hostinger)</a>
     </nav>
     <div class="xlink">Ver também: <a href="casos-de-uso.html">Casos de uso →</a></div>
   </aside>
@@ -461,8 +464,96 @@ erDiagram
       <div class="callout"><span class="k">Corridas</span><p>Encerrar e cancelar usam <code>updateMany</code> condicionado a <code>ABERTA</code>: se duas pessoas clicarem juntas, só uma vale. A numeração da cotação é sequencial por empresa e repete a tentativa em caso de conflito (P2002).</p></div>
 
     </div>
+    <div class="sec" id="spl">
+      <div class="sec-head"><span class="sec-num">10</span><h2>Plano de requisição, link aberto e catálogo do fornecedor</h2></div>
+      <p>O <strong>plano de requisição</strong> reúne solicitações aprovadas (normalmente de uma obra) numa lista só. Enquanto é rascunho, compras escolhe as solicitações e confere a <strong>lista consolidada</strong>: itens com o mesmo produto do catálogo (ou a mesma descrição, quando digitada) e a mesma unidade, marca e referência viram uma linha, com a soma das quantidades. A regra é uma função só (<code>consolidatePlanItems</code> em <code>shared-types</code>), usada na prévia da tela e no lançamento pela API. Ao <strong>lançar</strong>, nasce uma cotação ligada ao plano (<code>Quotation.planId</code>), com os itens consolidados e a origem de cada parte (<code>QuotationItemOrigin</code>); o link aberto já vem ligado e as solicitações passam para <code>EM_COTACAO</code>.</p>
+      <figure>
+        <div class="frame">
+          <pre class="mermaid">
+sequenceDiagram
+  participant C as Compras
+  participant A as API
+  participant F as Fornecedor (sem login)
+  C->>A: POST /requisition-plans (solicitações, obra, prazo)
+  C->>A: POST /requisition-plans/:id/launch (convites opcionais)
+  A-->>C: cotação ABERTA com itens somados + link aberto
+  C->>F: divulga o link aberto (WhatsApp, e-mail, PDF do pedido)
+  F->>A: GET /public/open-quotations/:token (lista de itens)
+  F->>A: POST /public/open-quotations/:token/join (CNPJ)
+  alt CNPJ novo
+    A-->>F: 422 — pede o cadastro mínimo
+    F->>A: join com o cadastro → fornecedor PENDENTE (inativo)
+  end
+  A-->>F: link próprio de resposta (/cotacao/:token)
+  F->>A: PUT /public/quotations/:token (preços)
+  C->>A: aprova o cadastro pendente e escolhe os vencedores
+          </pre>
+        </div>
+        <figcaption>Do plano à proposta do fornecedor. Quem entra pelo link aberto vira um convite com origem <code>LINK_ABERTO</code> e responde pela mesma página dos convidados.</figcaption>
+      </figure>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Aspecto</th><th>Como funciona</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Links assinados por escopo</strong></td><td>Os três links públicos usam o mesmo esquema <code>&lt;id&gt;.&lt;HMAC&gt;</code> (<code>common/utils/signed-link.ts</code>), com escopos diferentes: <code>quotation-link</code> (convite), <code>quotation-open</code> (link aberto, id da cotação) e <code>catalog-link</code> (id da empresa). O token de um tipo não é aceito em outro; os convites já enviados continuam válidos.</td></tr>
+          <tr><td><strong>Identificação por CNPJ</strong></td><td>Dígitos verificadores conferidos no front e na API (<code>isValidCnpj</code>, <code>@IsCnpj</code>). CNPJ conhecido usa o cadastro existente (fornecedor desativado por compras é recusado); CNPJ novo exige o cadastro mínimo e cria o fornecedor com <code>cadastroPendente</code> e inativo.</td></tr>
+          <tr><td><strong>Proposta de concorrente</strong></td><td>Quem já participa da cotação não recebe outro link pelo link aberto (409): saber o CNPJ de um concorrente não dá acesso à proposta dele.</td></tr>
+          <tr><td><strong>Cadastro pendente</strong></td><td>Pode cotar, mas não pode ser escolhido como vencedor nem ter preço levado ao catálogo antes da aprovação (<code>POST /suppliers/:id/registration/approve</code>). "Escolher menor preço" pula os pendentes.</td></tr>
+          <tr><td><strong>Limites</strong></td><td>Ver o link aberto: 30 req/min; entrar (pode criar cadastro): 10 req/min; enviar catálogo: 5 req/min — por IP (atrás de proxy, configurar <code>TRUST_PROXY</code>).</td></tr>
+        </tbody>
+      </table></div>
+      <p><strong>Catálogo do fornecedor</strong>: a empresa liga um link (<code>Company.catalogLinkNonce</code>) e o fornecedor envia, num multipart, o arquivo do catálogo e/ou os itens da planilha modelo (lida no navegador com ExcelJS; a leitura acha o cabeçalho pelas palavras-chave e aceita "1.234,56"). Tudo vira um <code>SupplierCatalog</code> pendente com seus <code>SupplierCatalogItem</code>. Na revisão, a API sugere o produto do catálogo vivo (mesma referência ou mesmo nome normalizado); cada linha é <strong>importada</strong> (preço no histórico com origem <code>CATALOGO</code> e fornecedor ligado ao produto), vira <strong>produto novo</strong> ou é <strong>ignorada</strong>. Quando não sobra linha pendente, o catálogo fica revisado.</p>
+      <figure>
+        <div class="frame">
+          <pre class="mermaid">
+erDiagram
+  REQUISITION_PLAN ||--o{ REQUISITION_PLAN_REQUEST : "inclui"
+  PURCHASE_REQUEST ||--o{ REQUISITION_PLAN_REQUEST : "entra em"
+  REQUISITION_PLAN |o--o| QUOTATION : "lançado como"
+  QUOTATION_ITEM ||--o{ QUOTATION_ITEM_ORIGIN : "somado de"
+  PURCHASE_REQUEST_ITEM ||--o{ QUOTATION_ITEM_ORIGIN : "parte"
+  SUPPLIER ||--o{ SUPPLIER_CATALOG : "envia"
+  SUPPLIER_CATALOG ||--o{ SUPPLIER_CATALOG_ITEM : "linhas"
+  PRODUCT |o--o{ SUPPLIER_CATALOG_ITEM : "vinculado"
+  SUPPLIER_CATALOG |o--o{ PRODUCT_PRICE_ENTRY : "origem CATALOGO"
+  REQUISITION_PLAN {
+    int numero UK
+    string obra
+    enum status "RASCUNHO LANCADO CANCELADO"
+  }
+  QUOTATION {
+    string planId UK
+    string linkAbertoNonce
+  }
+  SUPPLIER {
+    bool cadastroPendente
+  }
+  SUPPLIER_CATALOG {
+    enum status "PENDENTE REVISADO REJEITADO"
+    string filePath
+  }
+          </pre>
+        </div>
+        <figcaption>Tabelas novas e campos acrescentados (migration <code>20261015120000_plano_requisicao_link_aberto_catalogos</code>). A cotação de plano tem <code>purchaseRequestId</code> nulo.</figcaption>
+      </figure>
+      <div class="callout"><span class="k">Solicitação disponível</span><p>Entra em plano a solicitação aprovada (em compras ou em cotação), sem cotação própria aberta e fora de outro plano ativo (rascunho, ou lançado com a cotação não cancelada). Cancelar a cotação do plano libera as solicitações.</p></div>
+    </div>
+    <div class="sec" id="sex">
+      <div class="sec-head"><span class="sec-num">11</span><h2>Padrão de exportação (PDF, Excel, CSV)</h2></div>
+      <p>Tudo o que o sistema gera sai de <code>apps/web/src/utils/export</code>: identidade (<code>brand.ts</code> — cores da logo, logo reduzida, "gerado em/por", nome do arquivo <code>falcao-&lt;assunto&gt;-&lt;data&gt;</code>), Excel (<code>xlsx.ts</code> — timbre com logo, cabeçalho preto, linhas alternadas, total em dourado, cabeçalho congelado e repetido na impressão, rodapé com "Página x de y") e PDF (<code>pdf.ts</code> — cabeçalho com logo e filete dourado em toda página, seções, fichas de campos, tabelas que quebram página e rodapé com empresa, data/autor e paginação). As bibliotecas (<code>exceljs</code>, <code>jspdf</code>, <code>jspdf-autotable</code>) só carregam quando alguém exporta.</p>
+      <p>As listas descrevem o relatório uma vez (<code>ReportDefinition</code>: título, filtros, colunas com tipo <code>money</code>/<code>date</code>/<code>number</code>…, total) e <code>exportReport</code> gera o CSV, o Excel ou o PDF; <code>fetchAllPages</code> busca todas as páginas do filtro atual. O botão <code>ExportMenu</code> é o mesmo em todas as telas.</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Arquivo</th><th>Formatos</th></tr></thead>
+        <tbody>
+          <tr><td>Listas: fornecedores, produtos, solicitações, cotações, planos, contratos, contas a pagar, notas fiscais</td><td>PDF, Excel, CSV</td></tr>
+          <tr><td>Mapa de cotação (menor preço em verde, escolhido em dourado, resumo por fornecedor)</td><td>PDF, Excel</td></tr>
+          <tr><td>Pedido de cotação do plano (para o fornecedor, com o link aberto) · ficha da solicitação</td><td>PDF</td></tr>
+          <tr><td>Planilha modelo de catálogo (com aba "Como preencher")</td><td>Excel</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout"><span class="k">Segurança e limites</span><p>O CSV neutraliza texto que o Excel executaria como fórmula; no Excel, texto do usuário entra sempre como valor. O PDF usa a fonte padrão (Helvetica): textos em chinês ficam ilegíveis — Excel e CSV não têm essa limitação.</p></div>
+    </div>
     <div class="sec" id="s8">
-      <div class="sec-head"><span class="sec-num">10</span><h2>Financeiro e integrações</h2></div>
+      <div class="sec-head"><span class="sec-num">12</span><h2>Financeiro e integrações</h2></div>
       <p>Os módulos se conectam por dados, sem filas nem jobs em segundo plano: tudo acontece na própria requisição.</p>
       <figure>
         <div class="frame">
@@ -492,7 +583,7 @@ flowchart LR
 
     </div>
     <div class="sec" id="snf">
-      <div class="sec-head"><span class="sec-num">11</span><h2>Nota fiscal eletrônica</h2></div>
+      <div class="sec-head"><span class="sec-num">13</span><h2>Nota fiscal eletrônica</h2></div>
       <p>Cada conta a pagar guarda número, emissão e chave de acesso da nota e até dois arquivos: o <strong>PDF (DANFE)</strong> e o <strong>XML da NF-e</strong>. Enviar um arquivo do mesmo tipo substitui o anterior; conta cancelada não recebe nota.</p>
       <ul class="plain">
         <li><strong>Leitura do XML</strong> (<code>parseNfeXml</code> em <code>shared-types</code>): extrai por expressões nas tags conhecidas o número, a série, a emissão, a chave de 44 dígitos, o valor total, emitente, destinatário e as duplicatas (vencimentos). Não usa parser XML, então não há entidades externas (XXE). Arquivo que não é NF-e modelo 55 → 400.</li>
@@ -503,7 +594,7 @@ flowchart LR
 
     </div>
     <div class="sec" id="s9">
-      <div class="sec-head"><span class="sec-num">12</span><h2>Arquivos e uploads</h2></div>
+      <div class="sec-head"><span class="sec-num">14</span><h2>Arquivos e uploads</h2></div>
       <p>Anexos de solicitações, reembolsos, fornecedores, notas fiscais e o repositório de documentos passam pelo mesmo <code>StorageService</code>, que hoje grava em disco local (<code>UPLOADS_DIR</code>).</p>
       <ul class="plain">
         <li><strong>Tamanho</strong>: até <strong>50 MB</strong> por arquivo (<code>MAX_UPLOAD_BYTES</code>), igual na API e no web. Os envios têm tempo limite de 10 minutos para não cair em conexões lentas.</li>
@@ -516,12 +607,12 @@ flowchart LR
 
     </div>
     <div class="sec" id="s10">
-      <div class="sec-head"><span class="sec-num">13</span><h2>Auditoria</h2></div>
+      <div class="sec-head"><span class="sec-num">15</span><h2>Auditoria</h2></div>
       <p>Um interceptor transversal grava toda criação, alteração e exclusão feita por usuário autenticado: quem, quando, qual registro e um retrato dos dados. Campos sensíveis, como o hash de senha, são removidos antes de gravar. A consulta, com filtros por texto, período, ação, tipo de registro e pessoa, e os indicadores ficam restritos a <code>ADMIN</code> e <code>AUDITOR</code>.</p>
 
     </div>
     <div class="sec" id="s11">
-      <div class="sec-head"><span class="sec-num">14</span><h2>Frontend</h2></div>
+      <div class="sec-head"><span class="sec-num">16</span><h2>Frontend</h2></div>
       <p>Organizado por funcionalidade em <code>apps/web/src/features/</code>: auth, dashboard, suppliers, products, disciplines, purchase-requests, quotations, contracts, finance, reimbursements, documents, agenda, users, audit e profile. O visual segue a linguagem "planta técnica" do Saúde Ocupacional.</p>
       <div class="table-wrap"><table>
         <thead><tr><th>Tipo de estado</th><th>Ferramenta</th></tr></thead>
@@ -538,7 +629,7 @@ flowchart LR
 
     </div>
     <div class="sec" id="s12">
-      <div class="sec-head"><span class="sec-num">15</span><h2>Qualidade, CI e ambiente</h2></div>
+      <div class="sec-head"><span class="sec-num">17</span><h2>Qualidade, CI e ambiente</h2></div>
       <ul class="plain">
         <li><strong>CI</strong> (GitHub Actions, Node 22): o job do web roda formatação, lint, typecheck, testes e build; o da API gera o client do Prisma e roda lint, typecheck e build.</li>
         <li><strong>Hooks de commit</strong>: <code>lint-staged</code> formata e corrige os arquivos alterados e o <code>commitlint</code> exige mensagens no padrão Conventional Commits, com a mesma configuração do Saúde.</li>
@@ -546,6 +637,20 @@ flowchart LR
         <li><strong>Variáveis</strong>: o <code>.env</code> fica na raiz do monorepo (<code>.env.example</code> como modelo). A API e os comandos do Prisma leem esse arquivo.</li>
       </ul>
 
+    </div>
+    <div class="sec" id="shost">
+      <div class="sec-head"><span class="sec-num">18</span><h2>Hospedagem (AWS + Hostinger)</h2></div>
+      <p>Arquitetura alvo: <strong>PostgreSQL no Amazon RDS</strong> e <strong>API + Web num VPS da Hostinger</strong> atrás do Nginx com HTTPS.</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Peça</th><th>Configuração</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Banco</strong></td><td>RDS PostgreSQL 16; porta 5432 liberada só para o IP do VPS; <code>DATABASE_URL</code> com <code>sslmode=require</code>; migrations com <code>prisma migrate deploy</code>.</td></tr>
+          <tr><td><strong>API</strong></td><td><code>node apps/api/dist/main.js</code> sob PM2/systemd; <code>TRUST_PROXY=1</code> atrás do Nginx (limite por IP dos links públicos); <code>CORS_ORIGIN</code> com os domínios do Web separados por vírgula; segredos JWT de 32+ caracteres; <code>UPLOADS_DIR</code> fora do código e no backup.</td></tr>
+          <tr><td><strong>Web</strong></td><td>Build com <code>VITE_API_URL</code> apontando para a API; Nginx servindo <code>apps/web/dist</code> com fallback para <code>index.html</code> (inclui <code>/cotar</code>, <code>/cotacao</code> e <code>/enviar-catalogo</code>).</td></tr>
+          <tr><td><strong>Nginx</strong></td><td><code>client_max_body_size 60m</code> (uploads de 50 MB), <code>proxy_set_header X-Forwarded-For</code>, certificado Let's Encrypt.</td></tr>
+          <tr><td><strong>Arquivos</strong></td><td>Disco do VPS por padrão; para S3, implementar <code>IStorageProvider</code>.</td></tr>
+        </tbody>
+      </table></div>
     </div>
 
   </main>

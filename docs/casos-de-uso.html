@@ -167,8 +167,8 @@
       <div class="doc-kicker">Especificação de casos de uso</div>
       <h1>Falcão ERP Suprimentos</h1>
     </div>
-    <div class="doc-meta"><span><strong>75</strong> casos de uso</span><span><strong>9</strong> atores</span><span><strong>14</strong> pacotes</span><span>Base: rotas e regras implementadas em apps/api/src/modules</span></div>
-    <section class="intro"><p>Este documento especifica os casos de uso do ERP de Suprimentos da Falcão Construções e Engenharia. Cada caso reflete uma rota e uma regra de negócio que existem hoje no código; nada aqui descreve intenção futura.</p><p>Sete atores humanos correspondem aos papéis de acesso do sistema. O <strong>Fornecedor</strong> é externo: não tem conta e atua só pelo link assinado da cotação. O <strong>Sistema</strong> executa as ações automáticas: auditoria, histórico de aprovações, contas geradas por reembolsos, preços vindos das cotações e isolamento por empresa. O <strong>Administrador</strong> tem todas as permissões e pode agir em qualquer etapa; por isso ele não é repetido em cada etapa do fluxo de compra.</p></section>
+    <div class="doc-meta"><span><strong>85</strong> casos de uso</span><span><strong>9</strong> atores</span><span><strong>16</strong> pacotes</span><span>Base: rotas e regras implementadas em apps/api/src/modules</span></div>
+    <section class="intro"><p>Este documento especifica os casos de uso do ERP de Suprimentos da Falcão Construções e Engenharia. Cada caso reflete uma rota e uma regra de negócio que existem hoje no código; nada aqui descreve intenção futura.</p><p>Sete atores humanos correspondem aos papéis de acesso do sistema. O <strong>Fornecedor</strong> é externo: não tem conta e atua pelos links públicos: o convite assinado da cotação, o link aberto (identificado pelo CNPJ) e o link de envio de catálogo. O <strong>Sistema</strong> executa as ações automáticas: auditoria, histórico de aprovações, contas geradas por reembolsos, preços vindos das cotações e isolamento por empresa. O <strong>Administrador</strong> tem todas as permissões e pode agir em qualquer etapa; por isso ele não é repetido em cada etapa do fluxo de compra.</p></section>
     <figure id="diagrama">
       <div class="frame">
         <pre class="mermaid">
@@ -551,7 +551,54 @@ flowchart LR
         <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Qualquer acesso ao link.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Só o convite certo é lido ou alterado.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Sistema separa o id do convite e a assinatura.</li><li>Recalcula o HMAC com o nonce guardado e compara em tempo constante.</li></ol></div></div>
       </div>
     </div>
-
+    <div class="pkg" id="pkg-15">
+      <div class="pkg-head"><span class="pkg-num">PACOTE 15</span><h2>Planos de requisição e catálogos recebidos</h2><div class="pkg-actors"><span class="actor-chip" style="background:var(--a3)">ADMIN</span><span class="actor-chip" style="background:var(--a4)">GESTOR</span><span class="actor-chip" style="background:var(--a1)">COMPRADOR</span><span class="actor-chip" style="background:var(--a2)">FINANCEIRO</span><span class="actor-chip" style="background:var(--a7)">AUDITOR</span></div></div>
+      <p class="pkg-note">Consulta com os mesmos papéis das cotações; montar, lançar, revisar catálogos e aprovar cadastros para Administrador, Gestor e Comprador.</p>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC76</span><h3>Montar plano de requisição</h3><span class="uc-route">POST /requisition-plans</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Solicitações aprovadas (em compras ou em cotação), sem cotação própria aberta e fora de outro plano ativo.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Plano <code>RASCUNHO</code> numerado, com as solicitações escolhidas.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Comprador informa título, obra, prazo de resposta e observações para os fornecedores.</li><li>Escolhe as solicitações (pode marcar todas de uma obra de uma vez).</li><li>Confere a lista consolidada: itens iguais somados numa linha só.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Solicitação já em outro plano, com cotação aberta ou não aprovada → 400. Prazo no passado → 400.</div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC77</span><h3>Lançar o plano</h3><span class="uc-route">POST /requisition-plans/:id/launch</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Plano em rascunho, dentro do prazo, com solicitações ainda aprovadas.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Plano <code>LANCADO</code>; cotação aberta com os itens consolidados e o link aberto ligado; solicitações em <code>EM_COTACAO</code>.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Comprador escolhe, se quiser, fornecedores para convidar direto.</li><li>Sistema cria a cotação guardando de qual solicitação veio cada parte de cada item.</li><li>Comprador divulga o link aberto e/ou o PDF do pedido de cotação.</li></ol></div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC78</span><h3>Ligar, trocar ou desligar o link aberto</h3><span class="uc-route">POST/DELETE /quotations/:id/open-link</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Cotação aberta.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Novo link (o anterior deixa de funcionar) ou link desligado; quem já entrou mantém o próprio link de resposta.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Comprador copia o link ou compartilha por WhatsApp/e-mail com a lista de itens.</li></ol></div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC79</span><h3>Aprovar ou recusar cadastro feito pelo fornecedor</h3><span class="uc-route">POST /suppliers/:id/registration/approve | reject</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Fornecedor com cadastro pendente (criado pelo link aberto ou de catálogo).</div><div class="uc-label">Pós-condição</div><div class="uc-value">Aprovado: ativo, pode vencer itens e ter preços no catálogo. Recusado: inativo.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Comprador vê o aviso na lista de fornecedores, na cotação ou no catálogo recebido.</li><li>Confere os dados e decide.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Escolher como vencedor um fornecedor pendente → 400 com a orientação de aprovar o cadastro.</div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC80</span><h3>Revisar catálogo recebido</h3><span class="uc-route">POST /supplier-catalogs/:id/review</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Catálogo pendente de fornecedor com cadastro aprovado.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Itens importados viram preço no histórico do produto (origem <code>CATALOGO</code>) e ligam o fornecedor ao produto; sem pendências, o catálogo fica revisado.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Comprador abre o catálogo e o arquivo enviado.</li><li>Para cada linha, aceita o produto sugerido, escolhe outro, cria um produto novo ou ignora.</li><li>Aplica as decisões.</li></ol></div><div class="uc-label">Alternativo</div><div class="uc-value alt">Recusar o catálogo inteiro, com motivo (<code>POST /supplier-catalogs/:id/reject</code>).</div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC81</span><h3>Exportar relatórios e documentos</h3><span class="uc-route">no navegador</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Permissão de consulta da lista.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Arquivo <code>falcao-&lt;assunto&gt;-&lt;data&gt;</code> no padrão visual do sistema.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário filtra a lista e escolhe PDF, Excel ou CSV em "Exportar".</li><li>Sistema busca todas as páginas do filtro e gera o arquivo com os filtros no topo.</li></ol></div></div>
+      </div>
+    </div>
+    <div class="pkg" id="pkg-16">
+      <div class="pkg-head"><span class="pkg-num">PACOTE 16</span><h2>Portal do fornecedor</h2><div class="pkg-actors"><span class="actor-chip" style="background:var(--a9)">FORNECEDOR</span></div></div>
+      <p class="pkg-note">Ator externo, sem conta no sistema, identificado pelo CNPJ nos links públicos. Limites: 30 req/min para ver, 10 req/min para entrar na cotação, 5 req/min para enviar catálogo.</p>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC82</span><h3>Ver a lista pelo link aberto</h3><span class="uc-route">GET /public/open-quotations/:token</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Link aberto ligado.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Página com empresa, plano/obra, prazo, observações e os itens, sem preços.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Fornecedor abre o link recebido (WhatsApp, e-mail ou PDF).</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Link desligado, trocado ou adulterado → página de link inválido.</div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC83</span><h3>Entrar na cotação com o CNPJ</h3><span class="uc-route">POST /public/open-quotations/:token/join</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Cotação aberta e dentro do prazo.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Convite com origem <code>LINK_ABERTO</code> e o fornecedor levado ao próprio link de resposta (UC33), com aviso para guardá-lo.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Fornecedor informa CNPJ e nome.</li><li>CNPJ conhecido: segue direto. CNPJ novo: preenche razão social, nome fantasia, cidade/UF, e-mail e telefone; o cadastro fica pendente.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">CNPJ inválido → 400. Empresa já participa → 409 (usa o link recebido). Fornecedor desativado por compras → 403.</div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC84</span><h3>Baixar a planilha modelo de catálogo</h3><span class="uc-route">/enviar-catalogo/:token</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Link de catálogo ligado.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Planilha com as colunas, um exemplo e a aba "Como preencher".</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Fornecedor clica em "Baixar planilha modelo".</li></ol></div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC85</span><h3>Enviar o catálogo de produtos</h3><span class="uc-route">POST /public/catalogs/:token</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Link de catálogo ligado; arquivo e/ou planilha com itens.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Catálogo pendente de revisão (UC80) com o arquivo e as linhas da planilha.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Fornecedor se identifica pelo CNPJ (cadastro mínimo se for novo).</li><li>Anexa o catálogo (até 50 MB) e/ou envia a planilha preenchida; confere a prévia, com as linhas inválidas marcadas.</li><li>Envia e recebe a confirmação.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Nada para enviar → 400. Tipo de arquivo não permitido → 400.</div></div>
+      </div>
+    </div>
   </main>
 </div>
 <script type="module">
