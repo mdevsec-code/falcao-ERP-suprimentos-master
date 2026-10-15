@@ -23,7 +23,9 @@ import { ProductsModule } from "./modules/products/products.module";
 import { PurchaseRequestsModule } from "./modules/purchase-requests/purchase-requests.module";
 import { QuotationsModule } from "./modules/quotations/quotations.module";
 import { ReimbursementsModule } from "./modules/reimbursements/reimbursements.module";
+import { RequisitionPlansModule } from "./modules/requisition-plans/requisition-plans.module";
 import { StorageModule } from "./modules/storage/storage.module";
+import { SupplierCatalogsModule } from "./modules/supplier-catalogs/supplier-catalogs.module";
 import { SuppliersModule } from "./modules/suppliers/suppliers.module";
 import { INLINE_UPLOAD_EXTENSIONS, uploadExtension } from "./modules/storage/upload-policy";
 import { UsersModule } from "./modules/users/users.module";
@@ -65,6 +67,8 @@ import { UsersModule } from "./modules/users/users.module";
     ProductsModule,
     PurchaseRequestsModule,
     QuotationsModule,
+    RequisitionPlansModule,
+    SupplierCatalogsModule,
     ContractsModule,
     FinanceModule,
     ReimbursementsModule,

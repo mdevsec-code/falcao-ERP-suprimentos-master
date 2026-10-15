@@ -79,6 +79,20 @@ export class SuppliersController {
     return this.suppliersService.reactivate(user.companyId, id);
   }
 
+  @Roles(...WRITE_ROLES)
+  @AuditLog("Supplier", "UPDATE")
+  @Post(":id/registration/approve")
+  approveRegistration(@CurrentUser() user: AuthenticatedUser, @Param("id") id: string) {
+    return this.suppliersService.decideRegistration(user.companyId, id, true);
+  }
+
+  @Roles(...WRITE_ROLES)
+  @AuditLog("Supplier", "UPDATE")
+  @Post(":id/registration/reject")
+  rejectRegistration(@CurrentUser() user: AuthenticatedUser, @Param("id") id: string) {
+    return this.suppliersService.decideRegistration(user.companyId, id, false);
+  }
+
   @Post(":id/evaluations")
   addEvaluation(
     @CurrentUser() user: AuthenticatedUser,

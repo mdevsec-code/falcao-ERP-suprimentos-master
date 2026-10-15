@@ -27,6 +27,10 @@ export {
   PriceEntrySource,
   QuotationStatus,
   QuotationSupplierStatus,
+  QuotationSupplierOrigin,
+  RequisitionPlanStatus,
+  SupplierCatalogStatus,
+  SupplierCatalogItemStatus,
 } from "./enums";
 export type { BrazilianState } from "./enums";
 
@@ -122,7 +126,35 @@ export type {
   QuotationDetailDto,
   QuotationStatsDto,
   PublicQuotationDto,
+  PublicOpenQuotationDto,
+  PublicOpenQuotationJoinDto,
+  QuotationItemOriginDto,
 } from "./quotation";
 
 export { parseNfeXml } from "./nfe";
 export type { NfeData, NfeDuplicata } from "./nfe";
+
+export { cnpjDigits, formatCnpjMask, isValidCnpj } from "./cnpj";
+
+export { consolidatePlanItems } from "./requisition-plan";
+export type {
+  ConsolidationInput,
+  PlanCandidateRequestDto,
+  PlanItemDto,
+  PlanItemOriginDto,
+  RequisitionPlanDetailDto,
+  RequisitionPlanQuotationRefDto,
+  RequisitionPlanRequestDto,
+  RequisitionPlanStatsDto,
+  RequisitionPlanSummaryDto,
+} from "./requisition-plan";
+
+export { CATALOG_TEMPLATE_COLUMNS, MAX_CATALOG_ITEMS } from "./supplier-catalog";
+export type {
+  CatalogTemplateColumn,
+  PublicCatalogLinkDto,
+  PublicCatalogSubmitResultDto,
+  SupplierCatalogDetailDto,
+  SupplierCatalogItemDto,
+  SupplierCatalogSummaryDto,
+} from "./supplier-catalog";

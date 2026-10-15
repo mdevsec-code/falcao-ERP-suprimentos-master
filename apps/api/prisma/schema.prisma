@@ -36,6 +36,11 @@ model Company {
   agendaEvents     AgendaEvent[]
   disciplines      Discipline[]
   quotations       Quotation[]
+  requisitionPlans RequisitionPlan[]
+  supplierCatalogs SupplierCatalog[]
+
+  /// Link público para fornecedores enviarem catálogo (HMAC do nonce; null = desligado).
+  catalogLinkNonce String? @map("catalog_link_nonce")
 
   @@map("companies")
 }
@@ -81,6 +86,8 @@ model User {
   uploadedCentralDocuments Document[]
   agendaEvents             AgendaEvent[]
   createdQuotations        Quotation[]               @relation("QuotationCreatedBy")
+  createdRequisitionPlans  RequisitionPlan[]         @relation("RequisitionPlanCreatedBy")
+  reviewedCatalogs         SupplierCatalog[]         @relation("SupplierCatalogReviewedBy")
 
   @@index([companyId])
   @@map("users")
@@ -128,6 +135,8 @@ model Supplier {
   estado            String           @db.VarChar(2)
   responsavel       String
   isActive          Boolean          @default(true) @map("is_active")
+  /// Cadastrado pelo próprio fornecedor (link aberto de cotação ou de catálogo) e ainda não revisado.
+  cadastroPendente  Boolean          @default(false) @map("cadastro_pendente")
   createdAt         DateTime         @default(now()) @map("created_at")
   updatedAt         DateTime         @updatedAt @map("updated_at")
 
@@ -145,6 +154,7 @@ model Supplier {
   centralDocuments Document[]
   agendaEvents     AgendaEvent[]
   quotations       QuotationSupplier[]
+  catalogs         SupplierCatalog[]
 
   @@unique([companyId, cnpj])
   @@index([companyId])
@@ -267,6 +277,7 @@ model Product {
   priceHistory         ProductPriceEntry[]
   purchaseRequestItems PurchaseRequestItem[]
   quotationItems       QuotationItem[]
+  catalogItems         SupplierCatalogItem[]
 
   @@unique([companyId, codigo])
   @@index([companyId])
@@ -298,11 +309,13 @@ model ProductPriceEntry {
   referencia  String?
   origem      PriceEntrySource @default(MANUAL)
   quotationId String?          @map("quotation_id")
+  catalogId   String?          @map("catalog_id")
   recordedAt  DateTime         @default(now()) @map("recorded_at")
 
-  product   Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
-  supplier  Supplier?  @relation(fields: [supplierId], references: [id])
-  quotation Quotation? @relation(fields: [quotationId], references: [id], onDelete: SetNull)
+  product   Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
+  supplier  Supplier?        @relation(fields: [supplierId], references: [id])
+  quotation Quotation?       @relation(fields: [quotationId], references: [id], onDelete: SetNull)
+  catalog   SupplierCatalog? @relation(fields: [catalogId], references: [id], onDelete: SetNull)
 
   @@index([productId])
   @@map("product_price_entries")
@@ -350,6 +363,7 @@ model PurchaseRequest {
   payables     Payable[]
   agendaEvents AgendaEvent[]
   quotations   Quotation[]
+  planEntries  RequisitionPlanRequest[]
 
   @@index([companyId])
   @@index([companyId, status])
@@ -368,9 +382,10 @@ model PurchaseRequestItem {
   marca             String?
   referencia        String?
 
-  purchaseRequest PurchaseRequest @relation(fields: [purchaseRequestId], references: [id], onDelete: Cascade)
-  product         Product?        @relation(fields: [productId], references: [id])
+  purchaseRequest PurchaseRequest       @relation(fields: [purchaseRequestId], references: [id], onDelete: Cascade)
+  product         Product?              @relation(fields: [productId], references: [id])
   quotationItems  QuotationItem[]
+  planOrigins     QuotationItemOrigin[]
 
   @@index([purchaseRequestId])
   @@map("purchase_request_items")
@@ -772,6 +787,7 @@ model Discipline {
 enum PriceEntrySource {
   MANUAL
   COTACAO
+  CATALOGO
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -790,10 +806,18 @@ enum QuotationSupplierStatus {
   RECUSOU
 }
 
+/// Como o fornecedor entrou na cotação: convidado por compras ou pelo link aberto.
+enum QuotationSupplierOrigin {
+  CONVITE
+  LINK_ABERTO
+}
+
 model Quotation {
   id                String          @id @default(uuid())
   companyId         String          @map("company_id")
-  purchaseRequestId String          @map("purchase_request_id")
+  /// Cotação de uma solicitação; a cotação de um plano usa `planId` e deixa isto vazio.
+  purchaseRequestId String?         @map("purchase_request_id")
+  planId            String?         @unique @map("plan_id")
   numero            Int
   titulo            String
   status            QuotationStatus @default(ABERTA)
@@ -801,11 +825,14 @@ model Quotation {
   observacoes       String?
   createdById       String          @map("created_by_id")
   encerradaEm       DateTime?       @map("encerrada_em")
+  /// Link aberto: qualquer fornecedor entra informando o CNPJ (HMAC do nonce; null = desligado).
+  linkAbertoNonce   String?         @map("link_aberto_nonce")
   createdAt         DateTime        @default(now()) @map("created_at")
   updatedAt         DateTime        @updatedAt @map("updated_at")
 
   company         Company             @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  purchaseRequest PurchaseRequest     @relation(fields: [purchaseRequestId], references: [id], onDelete: Cascade)
+  purchaseRequest PurchaseRequest?    @relation(fields: [purchaseRequestId], references: [id], onDelete: Cascade)
+  plan            RequisitionPlan?    @relation(fields: [planId], references: [id], onDelete: Cascade)
   createdBy       User                @relation("QuotationCreatedBy", fields: [createdById], references: [id])
   items           QuotationItem[]
   suppliers       QuotationSupplier[]
@@ -832,11 +859,13 @@ model QuotationItem {
   /// Fornecedor escolhido para este item (null = ainda não decidido).
   vencedorId            String? @map("vencedor_id")
 
-  quotation           Quotation            @relation(fields: [quotationId], references: [id], onDelete: Cascade)
-  purchaseRequestItem PurchaseRequestItem? @relation(fields: [purchaseRequestItemId], references: [id], onDelete: SetNull)
-  product             Product?             @relation(fields: [productId], references: [id])
-  vencedor            QuotationSupplier?   @relation("QuotationItemWinner", fields: [vencedorId], references: [id], onDelete: SetNull)
+  quotation           Quotation             @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  purchaseRequestItem PurchaseRequestItem?  @relation(fields: [purchaseRequestItemId], references: [id], onDelete: SetNull)
+  product             Product?              @relation(fields: [productId], references: [id])
+  vencedor            QuotationSupplier?    @relation("QuotationItemWinner", fields: [vencedorId], references: [id], onDelete: SetNull)
   prices              QuotationPrice[]
+  /// Itens de solicitações somados neste item (cotação de plano).
+  origens             QuotationItemOrigin[]
 
   @@index([quotationId])
   @@map("quotation_items")
@@ -847,6 +876,7 @@ model QuotationSupplier {
   quotationId       String                  @map("quotation_id")
   supplierId        String                  @map("supplier_id")
   status            QuotationSupplierStatus @default(CONVIDADO)
+  origem            QuotationSupplierOrigin @default(CONVITE)
   /// Trocar o nonce invalida o link enviado ao fornecedor (o link é um HMAC dele).
   linkNonce         String                  @map("link_nonce")
   respondidoEm      DateTime?               @map("respondido_em")
@@ -885,4 +915,134 @@ model QuotationPrice {
   @@unique([quotationSupplierId, quotationItemId])
   @@index([quotationItemId])
   @@map("quotation_prices")
+}
+
+/// Item de solicitação somado num item consolidado da cotação de um plano.
+model QuotationItemOrigin {
+  id                    String  @id @default(uuid())
+  quotationItemId       String  @map("quotation_item_id")
+  purchaseRequestItemId String  @map("purchase_request_item_id")
+  quantidade            Decimal @db.Decimal(12, 2)
+
+  quotationItem       QuotationItem       @relation(fields: [quotationItemId], references: [id], onDelete: Cascade)
+  purchaseRequestItem PurchaseRequestItem @relation(fields: [purchaseRequestItemId], references: [id], onDelete: Cascade)
+
+  @@unique([quotationItemId, purchaseRequestItemId])
+  @@index([purchaseRequestItemId])
+  @@map("quotation_item_origins")
+}
+
+// ─────────────────────────────────────────────────────────────
+// Plano de requisição — junta solicitações aprovadas numa lista só para cotação
+// ─────────────────────────────────────────────────────────────
+
+enum RequisitionPlanStatus {
+  RASCUNHO
+  LANCADO
+  CANCELADO
+}
+
+model RequisitionPlan {
+  id            String                @id @default(uuid())
+  companyId     String                @map("company_id")
+  numero        Int
+  titulo        String
+  /// Obra / centro de custo do plano.
+  obra          String?
+  prazoResposta DateTime              @map("prazo_resposta") @db.Date
+  observacoes   String?
+  status        RequisitionPlanStatus @default(RASCUNHO)
+  createdById   String                @map("created_by_id")
+  lancadoEm     DateTime?             @map("lancado_em")
+  createdAt     DateTime              @default(now()) @map("created_at")
+  updatedAt     DateTime              @updatedAt @map("updated_at")
+
+  company   Company                  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  createdBy User                     @relation("RequisitionPlanCreatedBy", fields: [createdById], references: [id])
+  requests  RequisitionPlanRequest[]
+  quotation Quotation?
+
+  @@unique([companyId, numero])
+  @@index([companyId])
+  @@index([companyId, status])
+  @@map("requisition_plans")
+}
+
+model RequisitionPlanRequest {
+  planId            String @map("plan_id")
+  purchaseRequestId String @map("purchase_request_id")
+
+  plan            RequisitionPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  purchaseRequest PurchaseRequest @relation(fields: [purchaseRequestId], references: [id], onDelete: Cascade)
+
+  @@id([planId, purchaseRequestId])
+  @@index([purchaseRequestId])
+  @@map("requisition_plan_requests")
+}
+
+// ─────────────────────────────────────────────────────────────
+// Catálogos enviados por fornecedores — só entram no catálogo vivo após revisão
+// ─────────────────────────────────────────────────────────────
+
+enum SupplierCatalogStatus {
+  PENDENTE
+  REVISADO
+  REJEITADO
+}
+
+enum SupplierCatalogItemStatus {
+  PENDENTE
+  IMPORTADO
+  IGNORADO
+}
+
+model SupplierCatalog {
+  id            String                @id @default(uuid())
+  companyId     String                @map("company_id")
+  supplierId    String                @map("supplier_id")
+  status        SupplierCatalogStatus @default(PENDENTE)
+  enviadoPor    String                @map("enviado_por")
+  observacoes   String?
+  /// Arquivo do catálogo (PDF, planilha…) — opcional quando só vieram os itens da planilha modelo.
+  fileName      String?               @map("file_name")
+  filePath      String?               @map("file_path")
+  mimeType      String?               @map("mime_type")
+  size          Int?
+  revisadoPorId String?               @map("revisado_por_id")
+  revisadoEm    DateTime?             @map("revisado_em")
+  motivoRecusa  String?               @map("motivo_recusa")
+  createdAt     DateTime              @default(now()) @map("created_at")
+
+  company      Company               @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  supplier     Supplier              @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  revisadoPor  User?                 @relation("SupplierCatalogReviewedBy", fields: [revisadoPorId], references: [id])
+  items        SupplierCatalogItem[]
+  priceEntries ProductPriceEntry[]
+
+  @@index([companyId])
+  @@index([companyId, status])
+  @@index([supplierId])
+  @@map("supplier_catalogs")
+}
+
+model SupplierCatalogItem {
+  id               String                    @id @default(uuid())
+  catalogId        String                    @map("catalog_id")
+  ordem            Int                       @default(0)
+  codigoFornecedor String?                   @map("codigo_fornecedor")
+  descricao        String
+  unidade          String
+  marca            String?
+  referencia       String?
+  preco            Decimal?                  @db.Decimal(12, 2)
+  observacao       String?
+  status           SupplierCatalogItemStatus @default(PENDENTE)
+  /// Produto do catálogo vivo ao qual o item foi vinculado na revisão.
+  productId        String?                   @map("product_id")
+
+  catalog SupplierCatalog @relation(fields: [catalogId], references: [id], onDelete: Cascade)
+  product Product?        @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([catalogId])
+  @@map("supplier_catalog_items")
 }

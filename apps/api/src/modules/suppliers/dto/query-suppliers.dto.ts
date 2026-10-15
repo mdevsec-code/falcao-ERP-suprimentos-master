@@ -22,4 +22,9 @@ export class QuerySuppliersDto extends PaginationQueryDto {
   @IsOptional()
   @IsBooleanString()
   isActive?: string;
+
+  /** `true` = só cadastros feitos pelo próprio fornecedor aguardando revisão. */
+  @IsOptional()
+  @IsBooleanString()
+  cadastroPendente?: string;
 }

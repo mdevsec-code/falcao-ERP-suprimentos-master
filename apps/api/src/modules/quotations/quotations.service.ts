@@ -4,8 +4,11 @@ import { Prisma } from "@prisma/client";
 import {
   addDays,
   analyzeQuotation,
+  consolidatePlanItems,
   toDateOnly,
   type PaginatedResult,
+  type PublicOpenQuotationDto,
+  type PublicOpenQuotationJoinDto,
   type PublicQuotationDto,
   type QuotationDetailDto,
   type QuotationItemDto,
@@ -18,7 +21,10 @@ import {
 import { QUOTATION_WRITE_ROLES } from "../../common/constants/module-roles";
 import type { AuthenticatedUser } from "../../common/types/auth-request";
 import { fromDateOnly, money, toDateOnlyOrNull, toDateOnlyString } from "../../common/utils/date-only";
+import { buildLinkToken, isValidLinkSignature, newLinkNonce, parseLinkToken } from "../../common/utils/signed-link";
 import { PrismaService } from "../../database/prisma.service";
+import { PublicSupplierIdentityDto } from "../suppliers/dto/public-supplier-identity.dto";
+import { SupplierSelfServiceService } from "../suppliers/supplier-self-service.service";
 import {
   AddQuotationSupplierDto,
   CreateQuotationDto,
@@ -29,12 +35,24 @@ import {
   SubmitQuotationPricesDto,
   UpdateQuotationDto,
 } from "./dto/quotation.dto";
-import { buildLinkToken, isValidLinkSignature, newLinkNonce, parseLinkToken } from "./quotation-link";
+
+const planRefSelect = { select: { id: true, numero: true, titulo: true, obra: true } } as const;
 
 const detailInclude = {
   createdBy: { select: { name: true } },
   purchaseRequest: { include: { requester: { select: { name: true } } } },
-  items: { include: { product: { select: { codigo: true } } }, orderBy: { ordem: "asc" as const } },
+  plan: planRefSelect,
+  items: {
+    include: {
+      product: { select: { codigo: true } },
+      origens: {
+        include: {
+          purchaseRequestItem: { select: { purchaseRequestId: true, purchaseRequest: { select: { title: true } } } },
+        },
+      },
+    },
+    orderBy: { ordem: "asc" as const },
+  },
   suppliers: {
     include: { supplier: { include: { contacts: true } } },
     orderBy: { createdAt: "asc" as const },
@@ -46,6 +64,7 @@ type QuotationDetailPayload = Prisma.QuotationGetPayload<{ include: typeof detai
 const listInclude = {
   createdBy: { select: { name: true } },
   purchaseRequest: { select: { title: true } },
+  plan: planRefSelect,
   suppliers: { select: { status: true } },
   _count: { select: { items: true } },
 } satisfies Prisma.QuotationInclude;
@@ -61,6 +80,7 @@ export class QuotationsService {
 
   constructor(
     private readonly prisma: PrismaService,
+    private readonly supplierSelfService: SupplierSelfServiceService,
     config: ConfigService,
   ) {
     this.linkSecret = config.getOrThrow<string>("JWT_SECRET");
@@ -71,19 +91,27 @@ export class QuotationsService {
   async list(companyId: string, query: QueryQuotationsDto): Promise<PaginatedResult<QuotationSummaryDto>> {
     const search = query.search?.trim();
     const numero = search && /^\d+$/.test(search) ? Number(search) : undefined;
-    const where: Prisma.QuotationWhereInput = {
-      status: query.status,
-      purchaseRequestId: query.purchaseRequestId,
-      ...(search
-        ? {
-            OR: [
-              { titulo: { contains: search, mode: "insensitive" } },
-              { purchaseRequest: { title: { contains: search, mode: "insensitive" } } },
-              ...(numero !== undefined ? [{ numero }] : []),
-            ],
-          }
-        : {}),
-    };
+    const and: Prisma.QuotationWhereInput[] = [];
+    if (query.purchaseRequestId) {
+      // A solicitação aparece tanto na cotação própria quanto na do plano que a inclui.
+      and.push({
+        OR: [
+          { purchaseRequestId: query.purchaseRequestId },
+          { plan: { requests: { some: { purchaseRequestId: query.purchaseRequestId } } } },
+        ],
+      });
+    }
+    if (search) {
+      and.push({
+        OR: [
+          { titulo: { contains: search, mode: "insensitive" } },
+          { purchaseRequest: { title: { contains: search, mode: "insensitive" } } },
+          { plan: { titulo: { contains: search, mode: "insensitive" } } },
+          ...(numero !== undefined ? [{ numero }] : []),
+        ],
+      });
+    }
+    const where: Prisma.QuotationWhereInput = { status: query.status, AND: and };
     const client = this.prisma.forCompany(companyId);
     const [rows, total] = await Promise.all([
       client.quotation.findMany({
@@ -262,7 +290,8 @@ export class QuotationsService {
     const quotation = await this.findOpenOrThrow(user.companyId, id);
     if (!quotation.items.some((item) => item.id === itemId)) throw new NotFoundException("Item não encontrado nesta cotação.");
     if (dto.quotationSupplierId) {
-      this.invitationOrThrow(quotation, dto.quotationSupplierId);
+      const invitation = this.invitationOrThrow(quotation, dto.quotationSupplierId);
+      this.assertApprovedSupplier(invitation);
       const price = await this.prisma.quotationPrice.findUnique({
         where: { quotationSupplierId_quotationItemId: { quotationSupplierId: dto.quotationSupplierId, quotationItemId: itemId } },
       });
@@ -274,15 +303,16 @@ export class QuotationsService {
     return this.getById(user, id);
   }
 
-  /** Marca, em cada item, o fornecedor de menor preço. */
+  /** Marca, em cada item, o fornecedor de menor preço (entre os de cadastro aprovado). */
   async pickCheapest(user: AuthenticatedUser, id: string): Promise<QuotationDetailDto> {
     const quotation = await this.findOpenOrThrow(user.companyId, id);
     const detail = this.toDetail(quotation, false, await this.loadPrices(quotation));
+    const pending = new Set(quotation.suppliers.filter((s) => s.supplier.cadastroPendente).map((s) => s.id));
     await this.prisma.$transaction(
       detail.analysis.items.map((item) =>
         this.prisma.quotationItem.update({
           where: { id: item.itemId },
-          data: { vencedorId: item.melhorFornecedorIds[0] ?? null },
+          data: { vencedorId: item.melhorFornecedorIds.find((supplierId) => !pending.has(supplierId)) ?? null },
         }),
       ),
     );
@@ -295,6 +325,10 @@ export class QuotationsService {
     const winners = quotation.items.filter((item) => item.vencedorId);
     if (winners.length === 0) {
       throw new BadRequestException("Escolha o fornecedor de pelo menos um item antes de encerrar.");
+    }
+    for (const item of winners) {
+      const invitation = quotation.suppliers.find((s) => s.id === item.vencedorId);
+      if (invitation) this.assertApprovedSupplier(invitation);
     }
     const prices = await this.loadPrices(quotation);
 
@@ -335,6 +369,194 @@ export class QuotationsService {
     });
     if (count === 0) throw new ConflictException("Esta cotação já foi encerrada ou cancelada.");
     return this.getById(user, id);
+  }
+
+  /** Liga (ou troca) o link aberto; o link anterior deixa de funcionar. */
+  async enableOpenLink(user: AuthenticatedUser, id: string): Promise<QuotationDetailDto> {
+    await this.findOpenOrThrow(user.companyId, id);
+    await this.prisma.forCompany(user.companyId).quotation.update({
+      where: { id },
+      data: { linkAbertoNonce: newLinkNonce() },
+    });
+    return this.getById(user, id);
+  }
+
+  async disableOpenLink(user: AuthenticatedUser, id: string): Promise<QuotationDetailDto> {
+    await this.findOpenOrThrow(user.companyId, id);
+    await this.prisma.forCompany(user.companyId).quotation.update({ where: { id }, data: { linkAbertoNonce: null } });
+    return this.getById(user, id);
+  }
+
+  // ── Plano de requisição ───────────────────────────────────────────────────
+
+  /**
+   * Lança o plano: soma os itens iguais das solicitações numa cotação só, já
+   * com o link aberto ligado, convida os fornecedores escolhidos (opcional) e
+   * passa as solicitações para "em cotação". Devolve o id da cotação criada.
+   */
+  async launchPlan(user: AuthenticatedUser, planId: string, supplierIds: string[]): Promise<string> {
+    const companyId = user.companyId;
+    const plan = await this.prisma.forCompany(companyId).requisitionPlan.findFirst({
+      where: { id: planId },
+      include: {
+        requests: {
+          include: {
+            purchaseRequest: { include: { items: { include: { product: { select: { codigo: true } } } } } },
+          },
+        },
+      },
+    });
+    if (!plan) throw new NotFoundException("Plano de requisição não encontrado.");
+    if (plan.status !== "RASCUNHO") throw new BadRequestException("Este plano já foi lançado ou cancelado.");
+    if (toDateOnlyString(plan.prazoResposta) < toDateOnly()) {
+      throw new BadRequestException("O prazo de resposta do plano já passou. Ajuste a data antes de lançar.");
+    }
+    const requests = plan.requests.map((entry) => entry.purchaseRequest);
+    if (requests.length === 0) throw new BadRequestException("Inclua ao menos uma solicitação no plano.");
+    const blocked = requests.find((request) => !(QUOTABLE_STATUSES as readonly string[]).includes(request.status));
+    if (blocked) {
+      throw new BadRequestException(`A solicitação "${blocked.title}" não está mais aprovada para cotação.`);
+    }
+    if (supplierIds.length > 0) await this.assertActiveSuppliers(companyId, supplierIds);
+
+    const items = consolidatePlanItems(
+      requests.map((request) => ({
+        purchaseRequestId: request.id,
+        purchaseRequestTitle: request.title,
+        items: request.items.map((item) => ({
+          id: item.id,
+          productId: item.productId,
+          productCodigo: item.product?.codigo ?? null,
+          description: item.description,
+          quantity: item.quantity.toString(),
+          unit: item.unit,
+          marca: item.marca,
+          referencia: item.referencia,
+        })),
+      })),
+    );
+    if (items.length === 0) throw new BadRequestException("As solicitações do plano não têm itens.");
+
+    return this.withNextNumber(
+      companyId,
+      (numero, tx) =>
+        tx.quotation.create({
+          data: {
+            companyId,
+            planId: plan.id,
+            numero,
+            titulo: plan.titulo,
+            prazoResposta: plan.prazoResposta,
+            observacoes: plan.observacoes,
+            createdById: user.userId,
+            linkAbertoNonce: newLinkNonce(),
+            items: {
+              create: items.map((item, index) => ({
+                purchaseRequestItemId: item.origens.length === 1 ? item.origens[0].purchaseRequestItemId : null,
+                productId: item.productId,
+                ordem: index + 1,
+                descricao: item.descricao,
+                quantidade: item.quantidade,
+                unidade: item.unidade,
+                marca: item.marca,
+                referencia: item.referencia,
+                origens: {
+                  create: item.origens.map((origin) => ({
+                    purchaseRequestItemId: origin.purchaseRequestItemId,
+                    quantidade: origin.quantidade,
+                  })),
+                },
+              })),
+            },
+            suppliers: { create: supplierIds.map((supplierId) => ({ supplierId, linkNonce: newLinkNonce() })) },
+          },
+          select: { id: true, numero: true },
+        }),
+      async (created, tx) => {
+        const { count } = await tx.requisitionPlan.updateMany({
+          where: { id: plan.id, companyId, status: "RASCUNHO" },
+          data: { status: "LANCADO", lancadoEm: new Date() },
+        });
+        if (count === 0) throw new ConflictException("Este plano já foi lançado.");
+        for (const request of requests.filter((r) => r.status === "EM_COMPRAS")) {
+          await tx.purchaseRequest.update({
+            where: { id: request.id },
+            data: {
+              status: "EM_COTACAO",
+              approvals: {
+                create: {
+                  approverId: user.userId,
+                  action: "APPROVE",
+                  fromStatus: "EM_COMPRAS",
+                  toStatus: "EM_COTACAO",
+                  comment: `Plano de requisição nº ${plan.numero} lançado (cotação nº ${created.numero}).`,
+                },
+              },
+            },
+          });
+        }
+      },
+    );
+  }
+
+  /** Token do link aberto, para a tela do plano (só quem gerencia, cotação aberta). */
+  openLinkToken(quotation: { id: string; status: string; linkAbertoNonce: string | null }): string | null {
+    return quotation.status === "ABERTA" && quotation.linkAbertoNonce
+      ? buildLinkToken(this.linkSecret, "quotation-open", quotation.id, quotation.linkAbertoNonce)
+      : null;
+  }
+
+  // ── Link aberto (qualquer fornecedor, identificado pelo CNPJ) ─────────────
+
+  async publicOpenView(token: string): Promise<PublicOpenQuotationDto> {
+    const quotation = await this.quotationByOpenToken(token);
+    const closedReason = this.closedReason(quotation.status, toDateOnlyString(quotation.prazoResposta));
+    return {
+      empresa: quotation.company.name,
+      numero: quotation.numero,
+      titulo: quotation.titulo,
+      prazoResposta: toDateOnlyString(quotation.prazoResposta),
+      observacoes: quotation.observacoes,
+      aberta: closedReason === null,
+      motivoFechada: closedReason,
+      obra: quotation.plan?.obra ?? quotation.purchaseRequest?.costCenter ?? null,
+      plano: quotation.plan ? { numero: quotation.plan.numero } : null,
+      itens: quotation.items.map((item) => ({
+        id: item.id,
+        descricao: item.descricao,
+        quantidade: item.quantidade.toString(),
+        unidade: item.unidade,
+        marca: item.marca,
+        referencia: item.referencia,
+      })),
+    };
+  }
+
+  /**
+   * O fornecedor informa o CNPJ (e o cadastro, se for novo) e recebe o próprio
+   * link de resposta. Quem já participa não recebe outro link por aqui — senão
+   * qualquer um que soubesse o CNPJ de um concorrente veria e alteraria a proposta dele.
+   */
+  async publicOpenJoin(token: string, dto: PublicSupplierIdentityDto): Promise<PublicOpenQuotationJoinDto> {
+    const quotation = await this.quotationByOpenToken(token);
+    this.assertAcceptingAnswers(quotation);
+    const { supplier } = await this.supplierSelfService.resolveOrRegister(quotation.companyId, dto);
+    const existing = await this.prisma.quotationSupplier.findUnique({
+      where: { quotationId_supplierId: { quotationId: quotation.id, supplierId: supplier.id } },
+    });
+    if (existing) {
+      throw new ConflictException(
+        "Esta empresa já participa desta cotação. Use o link que vocês receberam ou peça um novo ao setor de compras.",
+      );
+    }
+    const invitation = await this.prisma.quotationSupplier.create({
+      data: { quotationId: quotation.id, supplierId: supplier.id, origem: "LINK_ABERTO", linkNonce: newLinkNonce() },
+    });
+    return {
+      linkToken: buildLinkToken(this.linkSecret, "quotation-link", invitation.id, invitation.linkNonce),
+      fornecedor: supplier.nomeFantasia,
+      cadastroPendente: supplier.cadastroPendente,
+    };
   }
 
   // ── Link público do fornecedor ────────────────────────────────────────────
@@ -529,17 +751,51 @@ export class QuotationsService {
     const notFound = new NotFoundException("Link de cotação inválido ou expirado.");
     if (!parsed) throw notFound;
     const invitation = await this.prisma.quotationSupplier.findUnique({
-      where: { id: parsed.quotationSupplierId },
+      where: { id: parsed.id },
       include: {
         supplier: true,
         prices: true,
         quotation: { include: { company: true, items: { orderBy: { ordem: "asc" } } } },
       },
     });
-    if (!invitation || !isValidLinkSignature(this.linkSecret, invitation.id, invitation.linkNonce, parsed.signature)) {
+    if (
+      !invitation ||
+      !isValidLinkSignature(this.linkSecret, "quotation-link", invitation.id, invitation.linkNonce, parsed.signature)
+    ) {
       throw notFound;
     }
     return invitation;
+  }
+
+  private async quotationByOpenToken(token: string) {
+    const parsed = parseLinkToken(token);
+    const notFound = new NotFoundException("Link de cotação inválido ou desativado.");
+    if (!parsed) throw notFound;
+    const quotation = await this.prisma.quotation.findUnique({
+      where: { id: parsed.id },
+      include: {
+        company: true,
+        plan: { select: { numero: true, obra: true } },
+        purchaseRequest: { select: { costCenter: true } },
+        items: { orderBy: { ordem: "asc" } },
+      },
+    });
+    if (
+      !quotation?.linkAbertoNonce ||
+      !isValidLinkSignature(this.linkSecret, "quotation-open", quotation.id, quotation.linkAbertoNonce, parsed.signature)
+    ) {
+      throw notFound;
+    }
+    return quotation;
+  }
+
+  /** Fornecedor que se cadastrou pelo link só pode vencer depois que compras aprovar o cadastro. */
+  private assertApprovedSupplier(invitation: QuotationDetailPayload["suppliers"][number]): void {
+    if (invitation.supplier.cadastroPendente) {
+      throw new BadRequestException(
+        `Aprove o cadastro de ${invitation.supplier.nomeFantasia} (em Fornecedores) antes de escolhê-lo.`,
+      );
+    }
   }
 
   private closedReason(status: string, prazo: string): PublicQuotationDto["motivoFechada"] {
@@ -569,7 +825,8 @@ export class QuotationsService {
       status: row.status,
       prazoResposta: toDateOnlyString(row.prazoResposta),
       purchaseRequestId: row.purchaseRequestId,
-      purchaseRequestTitle: row.purchaseRequest.title,
+      purchaseRequestTitle: row.purchaseRequest?.title ?? null,
+      plan: row.plan,
       itens: row._count.items,
       convidados: row.suppliers.length,
       respondidos: row.suppliers.filter((s) => s.status === "RESPONDIDO").length,
@@ -641,6 +898,11 @@ export class QuotationsService {
         ultimoPreco: previous?.price ?? null,
         ultimoPrecoEm: previous?.at ?? null,
         ultimoFornecedor: previous?.supplier ?? null,
+        origens: item.origens.map((origin) => ({
+          purchaseRequestId: origin.purchaseRequestItem.purchaseRequestId,
+          purchaseRequestTitle: origin.purchaseRequestItem.purchaseRequest.title,
+          quantidade: origin.quantidade.toString(),
+        })),
       };
     });
     const suppliers: QuotationSupplierDto[] = quotation.suppliers.map((s) => {
@@ -655,6 +917,8 @@ export class QuotationsService {
         contatoEmail: email?.value ?? null,
         contatoTelefone: phone?.value ?? null,
         status: s.status,
+        origem: s.origem,
+        cadastroPendente: s.supplier.cadastroPendente,
         respondidoEm: s.respondidoEm?.toISOString() ?? null,
         respondidoPor: s.respondidoPor,
         prazoEntregaDias: s.prazoEntregaDias,
@@ -662,7 +926,10 @@ export class QuotationsService {
         validadeProposta: toDateOnlyOrNull(s.validadeProposta),
         frete: s.frete ? money(s.frete) : null,
         observacoes: s.observacoes,
-        linkToken: canManage && quotation.status === "ABERTA" ? buildLinkToken(this.linkSecret, s.id, s.linkNonce) : null,
+        linkToken:
+          canManage && quotation.status === "ABERTA"
+            ? buildLinkToken(this.linkSecret, "quotation-link", s.id, s.linkNonce)
+            : null,
       };
     });
     const prices: QuotationPriceDto[] = rawPrices.map((p) => ({
@@ -682,7 +949,8 @@ export class QuotationsService {
       status: quotation.status,
       prazoResposta: toDateOnlyString(quotation.prazoResposta),
       purchaseRequestId: quotation.purchaseRequestId,
-      purchaseRequestTitle: quotation.purchaseRequest.title,
+      purchaseRequestTitle: quotation.purchaseRequest?.title ?? null,
+      plan: quotation.plan,
       itens: items.length,
       convidados: suppliers.length,
       respondidos: suppliers.filter((s) => s.status === "RESPONDIDO").length,
@@ -690,13 +958,16 @@ export class QuotationsService {
       createdAt: quotation.createdAt.toISOString(),
       observacoes: quotation.observacoes,
       encerradaEm: quotation.encerradaEm?.toISOString() ?? null,
-      purchaseRequest: {
-        id: quotation.purchaseRequest.id,
-        title: quotation.purchaseRequest.title,
-        status: quotation.purchaseRequest.status,
-        costCenter: quotation.purchaseRequest.costCenter,
-        requesterName: quotation.purchaseRequest.requester.name,
-      },
+      purchaseRequest: quotation.purchaseRequest
+        ? {
+            id: quotation.purchaseRequest.id,
+            title: quotation.purchaseRequest.title,
+            status: quotation.purchaseRequest.status,
+            costCenter: quotation.purchaseRequest.costCenter,
+            requesterName: quotation.purchaseRequest.requester.name,
+          }
+        : null,
+      linkAbertoToken: canManage ? this.openLinkToken(quotation) : null,
       items,
       suppliers,
       prices,

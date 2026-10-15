@@ -107,8 +107,9 @@ export class AgendaService {
         sourceId: quotation.id,
         titulo: `Cotação nº ${quotation.numero} · ${quotation.titulo}`,
         inicio: toDateOnlyString(quotation.prazoResposta),
-        obra: quotation.purchaseRequest.costCenter,
-        purchaseRequestId: quotation.purchaseRequest.id,
+        // Cotação de plano não tem solicitação própria: a obra vem do plano.
+        obra: quotation.purchaseRequest?.costCenter ?? quotation.plan?.obra ?? null,
+        purchaseRequestId: quotation.purchaseRequest?.id ?? null,
       })),
     ];
 

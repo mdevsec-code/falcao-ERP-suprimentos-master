@@ -1,8 +1,16 @@
 import type {
   PurchaseRequestStatus,
   QuotationStatus,
+  QuotationSupplierOrigin,
   QuotationSupplierStatus,
 } from "./enums";
+
+/** Solicitação que contribuiu para um item consolidado (cotação de plano). */
+export interface QuotationItemOriginDto {
+  purchaseRequestId: string;
+  purchaseRequestTitle: string;
+  quantidade: string;
+}
 
 export interface QuotationItemDto {
   id: string;
@@ -20,6 +28,8 @@ export interface QuotationItemDto {
   ultimoPreco: string | null;
   ultimoPrecoEm: string | null;
   ultimoFornecedor: string | null;
+  /** Vazio na cotação de uma solicitação só. */
+  origens: QuotationItemOriginDto[];
 }
 
 export interface QuotationSupplierDto {
@@ -31,6 +41,10 @@ export interface QuotationSupplierDto {
   contatoEmail: string | null;
   contatoTelefone: string | null;
   status: QuotationSupplierStatus;
+  /** Convidado por compras ou entrou sozinho pelo link aberto. */
+  origem: QuotationSupplierOrigin;
+  /** Fornecedor se cadastrou pelo link e compras ainda não aprovou o cadastro. */
+  cadastroPendente: boolean;
   respondidoEm: string | null;
   respondidoPor: string | null;
   prazoEntregaDias: number | null;
@@ -93,8 +107,11 @@ export interface QuotationSummaryDto {
   titulo: string;
   status: QuotationStatus;
   prazoResposta: string;
-  purchaseRequestId: string;
-  purchaseRequestTitle: string;
+  /** Cotação de uma solicitação; `null` na cotação de um plano. */
+  purchaseRequestId: string | null;
+  purchaseRequestTitle: string | null;
+  /** Plano de requisição que originou a cotação. */
+  plan: { id: string; numero: number; titulo: string; obra: string | null } | null;
   itens: number;
   convidados: number;
   respondidos: number;
@@ -111,7 +128,9 @@ export interface QuotationDetailDto extends QuotationSummaryDto {
     status: PurchaseRequestStatus;
     costCenter: string | null;
     requesterName: string;
-  };
+  } | null;
+  /** Token do link aberto (qualquer fornecedor entra com o CNPJ) — só para quem gerencia; `null` = desligado. */
+  linkAbertoToken: string | null;
   items: QuotationItemDto[];
   suppliers: QuotationSupplierDto[];
   prices: QuotationPriceDto[];
@@ -162,6 +181,28 @@ export interface PublicQuotationDto {
       observacao: string | null;
     }>;
   };
+}
+
+/** Link aberto da cotação (do plano): o que qualquer fornecedor vê antes de se identificar. */
+export interface PublicOpenQuotationDto {
+  empresa: string;
+  numero: number;
+  titulo: string;
+  prazoResposta: string;
+  observacoes: string | null;
+  aberta: boolean;
+  motivoFechada: PublicQuotationDto["motivoFechada"];
+  obra: string | null;
+  plano: { numero: number } | null;
+  itens: PublicQuotationDto["itens"];
+}
+
+/** Fornecedor identificado pelo CNPJ no link aberto: recebe o próprio link de resposta. */
+export interface PublicOpenQuotationJoinDto {
+  linkToken: string;
+  fornecedor: string;
+  /** Cadastro feito agora pelo fornecedor, aguardando aprovação de compras. */
+  cadastroPendente: boolean;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

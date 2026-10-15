@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { BadRequestException, Inject, Injectable } from "@nestjs/common";
 import type { PaginatedResult, SupplierDetailDto, SupplierSummaryDto } from "@falcao-erp/shared-types";
 import { decodeUploadName } from "../../common/utils/file-name";
 import { STORAGE_PROVIDER, type IStorageProvider } from "../storage/storage-provider.interface";
@@ -28,6 +28,7 @@ export class SuppliersService {
       estado: query.estado,
       cidade: query.cidade,
       isActive: query.isActive === undefined ? undefined : query.isActive === "true",
+      cadastroPendente: query.cadastroPendente === undefined ? undefined : query.cadastroPendente === "true",
       page: query.page,
       pageSize: query.pageSize,
     });
@@ -65,6 +66,16 @@ export class SuppliersService {
 
   async reactivate(companyId: string, id: string): Promise<SupplierDetailDto> {
     const supplier = await this.repository.setActive(companyId, id, true);
+    return this.toDetailDto(supplier);
+  }
+
+  /** Aprova ou recusa o cadastro que o fornecedor fez pelo link aberto. */
+  async decideRegistration(companyId: string, id: string, approve: boolean): Promise<SupplierDetailDto> {
+    const current = await this.repository.findByIdOrThrow(companyId, id);
+    if (!current.cadastroPendente) {
+      throw new BadRequestException("Este cadastro já foi revisado.");
+    }
+    const supplier = await this.repository.decideRegistration(companyId, id, approve);
     return this.toDetailDto(supplier);
   }
 
@@ -146,6 +157,7 @@ export class SuppliersService {
       cidade: supplier.cidade,
       estado: supplier.estado as SupplierSummaryDto["estado"],
       isActive: supplier.isActive,
+      cadastroPendente: supplier.cadastroPendente,
       averageScore,
       createdAt: supplier.createdAt.toISOString(),
     };
@@ -168,6 +180,7 @@ export class SuppliersService {
       estado: supplier.estado as SupplierDetailDto["estado"],
       responsavel: supplier.responsavel,
       isActive: supplier.isActive,
+      cadastroPendente: supplier.cadastroPendente,
       averageScore,
       createdAt: supplier.createdAt.toISOString(),
       updatedAt: supplier.updatedAt.toISOString(),

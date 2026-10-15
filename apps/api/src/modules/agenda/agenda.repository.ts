@@ -65,7 +65,10 @@ export class AgendaRepository {
   async quotationsDue(companyId: string, from: string, to: string) {
     return this.prisma.forCompany(companyId).quotation.findMany({
       where: { status: "ABERTA", prazoResposta: { gte: fromDateOnly(from), lte: fromDateOnly(to) } },
-      include: { purchaseRequest: { select: { id: true, costCenter: true } } },
+      include: {
+        purchaseRequest: { select: { id: true, costCenter: true } },
+        plan: { select: { obra: true } },
+      },
       orderBy: { prazoResposta: "asc" },
     });
   }

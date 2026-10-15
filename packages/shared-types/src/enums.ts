@@ -243,6 +243,7 @@ export type AgendaEventType = (typeof AgendaEventType)[keyof typeof AgendaEventT
 export const PriceEntrySource = {
   MANUAL: "MANUAL",
   COTACAO: "COTACAO",
+  CATALOGO: "CATALOGO",
 } as const;
 export type PriceEntrySource = (typeof PriceEntrySource)[keyof typeof PriceEntrySource];
 
@@ -260,3 +261,32 @@ export const QuotationSupplierStatus = {
 } as const;
 export type QuotationSupplierStatus =
   (typeof QuotationSupplierStatus)[keyof typeof QuotationSupplierStatus];
+
+export const QuotationSupplierOrigin = {
+  CONVITE: "CONVITE",
+  LINK_ABERTO: "LINK_ABERTO",
+} as const;
+export type QuotationSupplierOrigin =
+  (typeof QuotationSupplierOrigin)[keyof typeof QuotationSupplierOrigin];
+
+export const RequisitionPlanStatus = {
+  RASCUNHO: "RASCUNHO",
+  LANCADO: "LANCADO",
+  CANCELADO: "CANCELADO",
+} as const;
+export type RequisitionPlanStatus = (typeof RequisitionPlanStatus)[keyof typeof RequisitionPlanStatus];
+
+export const SupplierCatalogStatus = {
+  PENDENTE: "PENDENTE",
+  REVISADO: "REVISADO",
+  REJEITADO: "REJEITADO",
+} as const;
+export type SupplierCatalogStatus = (typeof SupplierCatalogStatus)[keyof typeof SupplierCatalogStatus];
+
+export const SupplierCatalogItemStatus = {
+  PENDENTE: "PENDENTE",
+  IMPORTADO: "IMPORTADO",
+  IGNORADO: "IGNORADO",
+} as const;
+export type SupplierCatalogItemStatus =
+  (typeof SupplierCatalogItemStatus)[keyof typeof SupplierCatalogItemStatus];

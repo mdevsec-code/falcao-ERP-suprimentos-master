@@ -1,10 +1,13 @@
 import { Module } from "@nestjs/common";
-import { PublicQuotationsController } from "./public-quotations.controller";
+import { SuppliersModule } from "../suppliers/suppliers.module";
+import { PublicOpenQuotationsController, PublicQuotationsController } from "./public-quotations.controller";
 import { QuotationsController } from "./quotations.controller";
 import { QuotationsService } from "./quotations.service";
 
 @Module({
-  controllers: [QuotationsController, PublicQuotationsController],
+  imports: [SuppliersModule],
+  controllers: [QuotationsController, PublicQuotationsController, PublicOpenQuotationsController],
   providers: [QuotationsService],
+  exports: [QuotationsService],
 })
 export class QuotationsModule {}

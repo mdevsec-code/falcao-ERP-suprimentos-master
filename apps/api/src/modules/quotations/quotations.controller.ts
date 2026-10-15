@@ -83,6 +83,20 @@ export class QuotationsController {
 
   @Roles(...QUOTATION_WRITE_ROLES)
   @AuditLog("Quotation", "UPDATE")
+  @Post(":id/open-link")
+  enableOpenLink(@CurrentUser() user: AuthenticatedUser, @Param("id", ParseUUIDPipe) id: string) {
+    return this.quotationsService.enableOpenLink(user, id);
+  }
+
+  @Roles(...QUOTATION_WRITE_ROLES)
+  @AuditLog("Quotation", "UPDATE")
+  @Delete(":id/open-link")
+  disableOpenLink(@CurrentUser() user: AuthenticatedUser, @Param("id", ParseUUIDPipe) id: string) {
+    return this.quotationsService.disableOpenLink(user, id);
+  }
+
+  @Roles(...QUOTATION_WRITE_ROLES)
+  @AuditLog("Quotation", "UPDATE")
   @Put(":id/suppliers/:quotationSupplierId/prices")
   submitPrices(
     @CurrentUser() user: AuthenticatedUser,

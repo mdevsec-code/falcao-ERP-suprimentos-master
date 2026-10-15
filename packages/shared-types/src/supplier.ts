@@ -37,6 +37,8 @@ export interface SupplierSummaryDto {
   cidade: string;
   estado: BrazilianState;
   isActive: boolean;
+  /** Cadastrado pelo próprio fornecedor (link aberto) e ainda não aprovado por compras. */
+  cadastroPendente: boolean;
   averageScore: number | null;
   createdAt: string;
 }
@@ -53,6 +55,8 @@ export interface SupplierDetailDto extends SupplierSummaryDto {
 export interface SupplierStatsDto {
   total: number;
   active: number;
+  /** Cadastros feitos pelo próprio fornecedor aguardando revisão. */
+  pendentes: number;
   byCategory: Array<{ categoria: SupplierCategory; count: number }>;
   byState: Array<{ estado: BrazilianState; count: number }>;
 }

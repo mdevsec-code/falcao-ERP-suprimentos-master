@@ -10,6 +10,7 @@ export interface SupplierFilters {
   estado?: string;
   cidade?: string;
   isActive?: boolean;
+  cadastroPendente?: boolean;
   page: number;
   pageSize: number;
 }
@@ -44,6 +45,7 @@ export class SuppliersRepository {
       estado: filters.estado,
       cidade: filters.cidade ? { contains: filters.cidade, mode: "insensitive" } : undefined,
       isActive: filters.isActive,
+      cadastroPendente: filters.cadastroPendente,
       ...(filters.search
         ? {
             OR: [
@@ -134,6 +136,17 @@ export class SuppliersRepository {
     return supplier as unknown as SupplierDetailPayload;
   }
 
+  /** Revisão do cadastro feito pelo próprio fornecedor: aprovado ativa, recusado fica inativo. */
+  async decideRegistration(companyId: string, id: string, approve: boolean): Promise<SupplierDetailPayload> {
+    await this.findByIdOrThrow(companyId, id);
+    const supplier = await this.prisma.forCompany(companyId).supplier.update({
+      where: { id },
+      data: { cadastroPendente: false, isActive: approve },
+      include: detailInclude,
+    });
+    return supplier as unknown as SupplierDetailPayload;
+  }
+
   async addEvaluation(companyId: string, supplierId: string, authorId: string, score: number, comment?: string) {
     await this.findByIdOrThrow(companyId, supplierId);
     return this.prisma.supplierEvaluation.create({
@@ -178,9 +191,10 @@ export class SuppliersRepository {
 
   async stats(companyId: string) {
     const client = this.prisma.forCompany(companyId);
-    const [total, active, byCategory, byState] = await Promise.all([
+    const [total, active, pendentes, byCategory, byState] = await Promise.all([
       client.supplier.count({}),
       client.supplier.count({ where: { isActive: true } }),
+      client.supplier.count({ where: { cadastroPendente: true } }),
       this.prisma.supplier.groupBy({
         by: ["categoria"],
         where: { companyId },
@@ -196,6 +210,7 @@ export class SuppliersRepository {
     return {
       total,
       active,
+      pendentes,
       byCategory: byCategory.map((row) => ({ categoria: row.categoria, count: row._count._all })),
       byState: byState.map((row) => ({ estado: row.estado, count: row._count._all })),
     };

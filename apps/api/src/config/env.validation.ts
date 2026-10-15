@@ -8,7 +8,13 @@ export const envSchema = z.object({
   JWT_REFRESH_SECRET: z.string().min(10, "JWT_REFRESH_SECRET é obrigatório"),
   JWT_REFRESH_EXPIRES_IN: z.string().default("7d"),
   UPLOADS_DIR: z.string().default("./uploads"),
+  /** Uma ou mais origens do Web, separadas por vírgula (ex.: domínio da Hostinger + www). */
   CORS_ORIGIN: z.string().default("http://localhost:5173"),
+  /**
+   * Quantos proxies reversos ficam na frente da API (Nginx da Hostinger, ALB da AWS…).
+   * Sem isso o limite por IP dos links públicos enxerga só o IP do proxy. 0 = acesso direto.
+   */
+  TRUST_PROXY: z.coerce.number().int().min(0).max(5).default(0),
 });
 
 export type Env = z.infer<typeof envSchema>;
