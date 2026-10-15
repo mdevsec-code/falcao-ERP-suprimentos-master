@@ -159,7 +159,7 @@
       <div class="actor-key"><span class="actor-dot" style="background:var(--a8)"></span> Sistema</div>
       <div class="actor-key"><span class="actor-dot" style="background:var(--a9)"></span> Fornecedor</div>
     </div>
-    <div class="xlink">Ver também: <a href="documentacao-tecnica.html">Documentação técnica →</a></div>
+    <div class="xlink">Ver também: <a href="documentacao-tecnica.html">Documentação técnica →</a> · <a href="manual-do-usuario.html">Manual do usuário →</a></div>
   </aside>
 
   <main>
@@ -167,7 +167,7 @@
       <div class="doc-kicker">Especificação de casos de uso</div>
       <h1>Falcão ERP Suprimentos</h1>
     </div>
-    <div class="doc-meta"><span><strong>85</strong> casos de uso</span><span><strong>9</strong> atores</span><span><strong>16</strong> pacotes</span><span>Base: rotas e regras implementadas em apps/api/src/modules</span></div>
+    <div class="doc-meta"><span><strong>89</strong> casos de uso</span><span><strong>9</strong> atores</span><span><strong>16</strong> pacotes</span><span>Base: rotas e regras implementadas em apps/api/src/modules</span></div>
     <section class="intro"><p>Este documento especifica os casos de uso do ERP de Suprimentos da Falcão Construções e Engenharia. Cada caso reflete uma rota e uma regra de negócio que existem hoje no código; nada aqui descreve intenção futura.</p><p>Sete atores humanos correspondem aos papéis de acesso do sistema. O <strong>Fornecedor</strong> é externo: não tem conta e atua pelos links públicos: o convite assinado da cotação, o link aberto (identificado pelo CNPJ) e o link de envio de catálogo. O <strong>Sistema</strong> executa as ações automáticas: auditoria, histórico de aprovações, contas geradas por reembolsos, preços vindos das cotações e isolamento por empresa. O <strong>Administrador</strong> tem todas as permissões e pode agir em qualquer etapa; por isso ele não é repetido em cada etapa do fluxo de compra.</p></section>
     <figure id="diagrama">
       <div class="frame">
@@ -218,6 +218,10 @@ flowchart LR
         <div class="uc-head"><span class="uc-id">UC05</span><h3>Trocar a própria senha</h3><span class="uc-route">PATCH /users/me/password</span></div>
         <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Usuário autenticado e conhece a senha atual.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Nova senha gravada com hash.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário informa a senha atual e a nova.</li><li>Sistema confere a atual e grava a nova.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Senha atual incorreta → 400 com a mensagem “A senha atual está incorreta.”; nada é alterado.</div></div>
       </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC86</span><h3>Receber avisos no WeChat</h3><span class="uc-route">GET · PUT · DELETE /users/me/wechat</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Usuário autenticado, com conta no WeChat seguindo o PushPlus.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Avisos de aprovação passam a chegar também no WeChat do usuário.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário abre <em>Meu perfil</em> e copia o token do PushPlus pelo WeChat.</li><li>Cola o token e conecta.</li><li>Sistema envia uma mensagem de teste e, se o PushPlus aceitar, grava o token.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Token recusado pelo PushPlus → 400 com o motivo; nada é gravado. Desconectar apaga o token.</div></div>
+      </div>
     </div>
     <div class="pkg" id="pkg-2">
       <div class="pkg-head"><span class="pkg-num">PACOTE 02</span><h2>Fornecedores</h2><div class="pkg-actors"><span class="actor-chip" style="background:var(--a3)">ADMIN</span><span class="actor-chip" style="background:var(--a4)">GESTOR</span><span class="actor-chip" style="background:var(--a1)">COMPRADOR</span></div></div>
@@ -259,6 +263,10 @@ flowchart LR
         <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel com escrita em produtos.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Produto disponível para as solicitações.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário informa nome, disciplina, categoria, marca, referência, unidade de medida e fornecedores.</li><li>Sistema grava e audita.</li></ol></div></div>
       </div>
       <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC87</span><h3>Adicionar foto ao produto</h3><span class="uc-route">POST · DELETE /products/:id/photo</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Permissão de editar produtos.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Foto aparece no catálogo e nos itens de solicitação ligados ao produto que não têm foto própria.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário abre o produto e escolhe a foto (no celular, pode tirar na hora).</li><li>Navegador reduz a imagem e envia.</li><li>Sistema substitui a foto anterior.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Formato diferente de JPEG, PNG ou WEBP, ou acima de 8 MB → 400.</div></div>
+      </div>
+      <div class="uc">
         <div class="uc-head"><span class="uc-id">UC14</span><h3>Desativar e reativar produto</h3><span class="uc-route">DELETE · PATCH /products/:id/reactivate</span></div>
         <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Produto existe.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Produto fora ou de volta às listas de seleção.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário desativa ou reativa o produto.</li></ol></div></div>
       </div>
@@ -280,15 +288,23 @@ flowchart LR
       <p class="pkg-note">Abrir, comentar e anexar: todos os papéis, menos Auditor. Cada mudança de etapa é restrita ao papel daquela etapa (seção 07 da documentação técnica).</p>
       <div class="uc">
         <div class="uc-head"><span class="uc-id">UC18</span><h3>Abrir solicitação de compra</h3><span class="uc-route">POST /purchase-requests</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel participante.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Solicitação em <code>AGUARDANDO_APROVACAO</code>.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Solicitante informa título, justificativa, centro de custo e prazo.</li><li>Adiciona itens escolhendo no catálogo (com filtros e último preço pago) ou descrevendo à mão, com quantidade, marca e referência.</li><li>Sistema grava com o autor e abre a linha do tempo.</li></ol></div></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Papel participante.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Solicitação em <code>AGUARDANDO_APROVACAO</code>.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Solicitante informa título, justificativa, projeto (centro de custo), contato e prazo.</li><li>Adiciona itens escolhendo no catálogo (com filtros e último preço pago) ou descrevendo à mão, com quantidade, marca, referência, especificação, foto, peso total, local de uso, setor solicitante e data de entrada.</li><li>Sistema grava com o autor, dá o número do plano, coloca na etapa Técnico e avisa os aprovadores por e-mail e WeChat.</li></ol></div></div>
       </div>
       <div class="uc">
         <div class="uc-head"><span class="uc-id">UC19</span><h3>Editar solicitação aguardando aprovação</h3><span class="uc-route">PATCH /purchase-requests/:id</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Usuário é o autor e a solicitação está aguardando aprovação.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Dados e itens atualizados.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Autor altera a solicitação.</li><li>Sistema grava.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Solicitação já aprovada → 400. Outro usuário → 403.</div></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Usuário é o autor e a solicitação está aguardando aprovação.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Dados e itens atualizados.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Autor altera a solicitação.</li><li>Sistema grava.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Solicitação já aprovada ou com alguma assinatura → 400. Outro usuário → 403.</div></div>
       </div>
       <div class="uc">
-        <div class="uc-head"><span class="uc-id">UC20</span><h3>Aprovar, rejeitar ou pedir ajuste</h3><span class="uc-route">PATCH /purchase-requests/:id/status</span></div>
-        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Solicitação em <code>AGUARDANDO_APROVACAO</code>; usuário é Gestor.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Solicitação vai para <code>EM_COMPRAS</code>, <code>REJEITADO</code> ou volta ao autor.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Gestor analisa itens e justificativa.</li><li>Escolhe a decisão e comenta.</li><li>Sistema valida a transição e o papel e grava o registro de aprovação.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Transição fora da tabela → 400. Papel errado para a etapa → 403.</div></div>
+        <div class="uc-head"><span class="uc-id">UC20</span><h3>Assinar a etapa do plano de aquisição</h3><span class="uc-route">POST /purchase-requests/:id/sign</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Solicitação em <code>AGUARDANDO_APROVACAO</code>; usuário está entre os aprovadores da etapa atual (ou é administrador).</div><div class="uc-label">Pós-condição</div><div class="uc-value">Etapa assinada; o pedido passa à próxima etapa, a <code>EM_COMPRAS</code> (última etapa) ou a <code>REJEITADO</code>.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Aprovador recebe o aviso (e-mail ou WeChat) e abre o pedido.</li><li>Confere os itens e clica em Aprovar ou Recusar.</li><li>Desenha a assinatura ou usa a salva; na recusa, informa o motivo.</li><li>Sistema grava a assinatura com nome, data, hora e IP, registra na linha do tempo e avisa os próximos.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Fora da lista de aprovadores da etapa → 403. Outra pessoa assinou a etapa ao mesmo tempo → 409. Recusa sem motivo → 400.</div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC88</span><h3>Configurar aprovadores das etapas</h3><span class="uc-route">GET /purchase-requests/approval-steps · PUT /purchase-requests/approval-steps/:step</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Usuário é Administrador.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Quem assina cada etapa (técnico, compras, custos, gerente geral) fica definido.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Administrador abre <em>Aprovadores</em>.</li><li>Marca os usuários de cada etapa e salva.</li><li>Os marcados passam a receber os avisos e a poder assinar a etapa.</li></ol></div><div class="uc-label">Exceção</div><div class="uc-value alt">Etapa sem ninguém marcado: os administradores recebem os avisos e assinam.</div></div>
+      </div>
+      <div class="uc">
+        <div class="uc-head"><span class="uc-id">UC89</span><h3>Copiar o pedido para o grupo do WeChat</h3><span class="uc-route">página do pedido (sem rota de API)</span></div>
+        <div class="uc-body"><div class="uc-label">Pré-condição</div><div class="uc-value">Usuário vê o pedido.</div><div class="uc-label">Pós-condição</div><div class="uc-value">Mensagem bilíngue (português e chinês) na área de transferência.</div><div class="uc-label">Fluxo principal</div><div class="uc-value"><ol><li>Usuário clica em <em>Copiar para o WeChat</em>.</li><li>Sistema monta a mensagem com número, título, situação ou etapa, solicitante, projeto, quantidade de itens e o link.</li><li>Usuário cola no grupo do WeChat.</li></ol></div></div>
       </div>
       <div class="uc">
         <div class="uc-head"><span class="uc-id">UC21</span><h3>Conduzir a compra até o recebimento</h3><span class="uc-route">PATCH /purchase-requests/:id/status</span></div>

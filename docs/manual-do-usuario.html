@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Manual Falcão ERP</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600&display=swap">
+<style>
+  /* Layout: folha de projeto — selo de título no topo, índice lateral fixo, capítulos numerados em coluna de leitura. */
+  :root {
+    --bg: #fafaf9;
+    --paper: #ffffff;
+    --ink: #14140f;
+    --ink-soft: #4a4a45;
+    --muted: #8a8a82;
+    --line: #e7e7e3;
+    --gold: #ac7e06;
+    --gold-strong: #8a6304;
+    --gold-soft: #fff8e6;
+    --gold-line: #fdbf2a;
+    --grid: rgba(172, 126, 6, 0.07);
+    --ok: #2f7d5a;
+    --bad: #b23a32;
+    --font-display: 'Fraunces', 'Noto Serif SC', 'Times New Roman', serif;
+    --font-body: 'Inter', 'Noto Sans SC', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0e0e0b; --paper: #181813; --ink: #f4f4f0; --ink-soft: #a8a89e; --muted: #7a7a72;
+      --line: #2a2a23; --gold: #e0ac3e; --gold-strong: #f7c554; --gold-soft: #2a2312; --gold-line: #b9861f;
+      --grid: rgba(224, 172, 62, 0.06); --ok: #5fb38a; --bad: #e07a70; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0e0e0b; --paper: #181813; --ink: #f4f4f0; --ink-soft: #a8a89e; --muted: #7a7a72;
+    --line: #2a2a23; --gold: #e0ac3e; --gold-strong: #f7c554; --gold-soft: #2a2312; --gold-line: #b9861f;
+    --grid: rgba(224, 172, 62, 0.06); --ok: #5fb38a; --bad: #e07a70; color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: var(--font-body); font-size: 16px; line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  [lang="zh-CN"] { line-height: 1.8; }
+  a { color: var(--gold-strong); text-underline-offset: 3px; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 4px; }
+  h1, h2, h3 { text-wrap: balance; font-family: var(--font-display); font-weight: 600; margin: 0; }
+  code, .mono { font-family: var(--font-mono); font-size: 0.86em; }
+
+  /* ── Selo de título ── */
+  .masthead {
+    border-bottom: 1px solid var(--line);
+    background-color: var(--paper);
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .masthead-inner {
+    max-width: 1120px; margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 28px 24px;
+    display: grid; gap: 20px;
+  }
+  .topline { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); }
+  .brand-mark { width: 26px; height: 26px; border-radius: 6px; background: var(--ink); display: grid; place-items: center; }
+  .brand-mark span { width: 10px; height: 10px; background: var(--gold-line); transform: rotate(45deg); }
+  .lang {
+    display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; background: var(--paper);
+  }
+  .lang button {
+    font: 500 14px/1 var(--font-body); color: var(--ink-soft); background: none; border: 0; cursor: pointer;
+    padding: 8px 16px; border-radius: 999px;
+  }
+  .lang button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+  .title-block { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px 32px; align-items: end; }
+  .eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin: 0 0 6px; }
+  h1 { font-size: clamp(30px, 5vw, 46px); line-height: 1.1; }
+  .lede { margin: 10px 0 0; color: var(--ink-soft); max-width: 62ch; }
+  .stamp {
+    border: 1.5px solid var(--ink); font-family: var(--font-mono); font-size: 12px; min-width: 0;
+    display: grid; grid-template-columns: auto auto;
+  }
+  .stamp div { padding: 6px 10px; border-bottom: 1px solid var(--ink); }
+  .stamp div:nth-child(odd) { border-right: 1px solid var(--ink); color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .stamp div:nth-last-child(-n+2) { border-bottom: 0; }
+  .stamp .url { user-select: all; word-break: break-all; }
+
+  /* ── Corpo ── */
+  .wrap {
+    max-width: 1120px; margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 32px 64px;
+    display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 48px;
+  }
+  nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 20px); align-self: start; }
+  .toc p { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+  .toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; counter-reset: toc; }
+  .toc li { counter-increment: toc; }
+  .toc a {
+    display: grid; grid-template-columns: 28px 1fr; padding: 6px 8px; border-radius: 6px;
+    color: var(--ink-soft); text-decoration: none; font-size: 14px; line-height: 1.35;
+  }
+  .toc a::before { content: counter(toc, decimal-leading-zero); font-family: var(--font-mono); font-size: 11px; color: var(--gold); padding-top: 2px; }
+  .toc a:hover { background: var(--gold-soft); color: var(--ink); }
+
+  article { min-width: 0; max-width: 72ch; display: grid; gap: 56px; }
+  section.ch { display: grid; gap: 16px; scroll-margin-top: 16px; }
+  .ch-head { display: flex; align-items: baseline; gap: 14px; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
+  .ch-num { font-family: var(--font-mono); font-size: 13px; color: var(--gold); }
+  h2 { font-size: 26px; line-height: 1.2; }
+  h3 { font-size: 18px; margin-top: 8px; }
+  p { margin: 0; }
+  ul, ol { margin: 0; padding-left: 22px; display: grid; gap: 6px; }
+
+  .steps { list-style: none; padding: 0; counter-reset: st; gap: 12px; }
+  .steps > li { counter-increment: st; display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 12px; }
+  .steps > li::before {
+    content: counter(st); width: 30px; height: 30px; border-radius: 50%;
+    border: 1.5px solid var(--gold); color: var(--gold-strong); display: grid; place-items: center;
+    font: 600 13px/1 var(--font-mono);
+  }
+  .ui { font-weight: 600; color: var(--ink); background: var(--gold-soft); padding: 1px 6px; border-radius: 4px; white-space: nowrap; }
+
+  .note { border-left: 3px solid var(--gold-line); background: var(--gold-soft); padding: 12px 16px; border-radius: 0 8px 8px 0; display: grid; gap: 6px; }
+  .note strong:first-child { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-strong); font-weight: 500; }
+  .note.warn { border-left-color: var(--bad); }
+  .note.warn strong:first-child { color: var(--bad); }
+
+  .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); }
+  table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-family: var(--font-mono); font-weight: 500; font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); background: var(--bg); }
+  tr:last-child td { border-bottom: 0; }
+  td.zh { font-family: 'Noto Sans SC', var(--font-body); white-space: nowrap; }
+
+  /* Fluxo das assinaturas */
+  .flow { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
+  .flow li {
+    background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; display: grid; gap: 2px; position: relative;
+  }
+  .flow li .k { font-family: var(--font-mono); font-size: 11px; color: var(--gold); }
+  .flow li b { font-size: 14px; line-height: 1.3; }
+  .flow li small { color: var(--muted); font-size: 12.5px; line-height: 1.35; }
+  .flow li.end { background: var(--ink); border-color: var(--ink); }
+  .flow li.end b, .flow li.end .k { color: var(--bg); }
+  .flow li.end small { color: var(--line); }
+
+  .status { display: grid; gap: 8px; list-style: none; padding: 0; }
+  .status li { display: grid; grid-template-columns: minmax(150px, 210px) minmax(0, 1fr); gap: 12px; align-items: baseline; }
+  .pill { font-size: 13px; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: var(--gold-soft); color: var(--gold-strong); justify-self: start; }
+  .pill.ok { background: color-mix(in srgb, var(--ok) 14%, transparent); color: var(--ok); }
+  .pill.bad { background: color-mix(in srgb, var(--bad) 14%, transparent); color: var(--bad); }
+
+  .msg {
+    font-family: var(--font-mono); font-size: 13px; line-height: 1.6; white-space: pre-wrap; word-break: break-word;
+    background: var(--paper); border: 1px dashed var(--gold); border-radius: 8px; padding: 14px 16px; margin: 0;
+  }
+  details { border-bottom: 1px solid var(--line); padding-block: 10px; }
+  details summary { cursor: pointer; font-weight: 600; list-style-position: outside; }
+  details p { margin-top: 8px; color: var(--ink-soft); }
+
+  footer { color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 16px; }
+
+  @media (max-width: 860px) {
+    .wrap { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+    nav.toc { position: static; border: 1px solid var(--line); border-radius: 8px; padding: 14px; background: var(--paper); }
+    .toc ol { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+    .title-block { grid-template-columns: minmax(0, 1fr); }
+    .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .status li { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="topline">
+      <div class="brand"><span class="brand-mark" aria-hidden="true"><span></span></span>Falcão Engenharia · ERP Suprimentos</div>
+      <div class="lang" role="group" aria-label="Idioma / 语言">
+        <button type="button" id="btn-pt" data-lang="pt" aria-pressed="true">Português</button>
+        <button type="button" id="btn-zh" data-lang="zh" aria-pressed="false">中文</button>
+      </div>
+    </div>
+    <div class="title-block">
+      <div data-l="pt" lang="pt-BR">
+        <p class="eyebrow">Manual do colaborador</p>
+        <h1>Como usar o Falcão ERP</h1>
+        <p class="lede">Do primeiro acesso à assinatura do plano de aquisição: como abrir um pedido, quem assina cada etapa, como acompanhar a compra e como receber os avisos no WeChat.</p>
+      </div>
+      <div data-l="zh" lang="zh-CN" hidden>
+        <p class="eyebrow">员工使用手册</p>
+        <h1>Falcão ERP 使用指南</h1>
+        <p class="lede">从第一次登录到采购计划签字：如何提交申请、每个环节由谁签字、如何跟踪采购进度，以及如何在微信上接收通知。</p>
+      </div>
+      <div class="stamp" aria-label="Endereço do sistema">
+        <div>Site</div><div class="url">suprimentos.falcaoengenhariasz.com</div>
+        <div>Rev.</div><div>10/2026</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════ PORTUGUÊS ═══════════════════════════ -->
+<div class="wrap" data-l="pt" lang="pt-BR">
+  <nav class="toc" aria-label="Sumário">
+    <p>Sumário</p>
+    <ol>
+      <li><a href="#pt-acesso">Primeiro acesso</a></li>
+      <li><a href="#pt-papeis">Quem faz o quê</a></li>
+      <li><a href="#pt-pedido">Abrir um pedido</a></li>
+      <li><a href="#pt-assinar">Assinar um pedido</a></li>
+      <li><a href="#pt-acompanhar">Acompanhar o pedido</a></li>
+      <li><a href="#pt-wechat">WeChat</a></li>
+      <li><a href="#pt-catalogo">Catálogo e fotos</a></li>
+      <li><a href="#pt-compras">Para o setor de compras</a></li>
+      <li><a href="#pt-admin">Para administradores</a></li>
+      <li><a href="#pt-duvidas">Dúvidas comuns</a></li>
+    </ol>
+  </nav>
+
+  <article>
+    <section class="ch" id="pt-acesso">
+      <div class="ch-head"><span class="ch-num">01</span><h2>Primeiro acesso</h2></div>
+      <ol class="steps">
+        <li><p>No computador ou no celular, abra <a href="https://suprimentos.falcaoengenhariasz.com" target="_blank" rel="noopener">suprimentos.falcaoengenhariasz.com</a>.</p></li>
+        <li><p>Entre com o seu <strong>e-mail</strong> e a <strong>senha provisória</strong> que o administrador passou.</p></li>
+        <li><p>Clique no seu nome, no alto da tela, e abra <span class="ui">Meu perfil</span>. Troque a senha provisória por uma sua.</p></li>
+        <li><p>Escolha o idioma no seletor do alto da tela ou em <span class="ui">Meu perfil</span>: Português, English ou 中文. O sistema inteiro muda de idioma.</p></li>
+      </ol>
+      <div class="note"><strong>Dica</strong><p>No celular, use a opção “Adicionar à tela inicial” do navegador para abrir o sistema como um aplicativo.</p></div>
+    </section>
+
+    <section class="ch" id="pt-papeis">
+      <div class="ch-head"><span class="ch-num">02</span><h2>Quem faz o quê</h2></div>
+      <p>Cada usuário tem um <strong>papel</strong>, que define as telas que ele vê. As <strong>assinaturas</strong> do plano de aquisição são outra coisa: o administrador escolhe quem assina cada etapa, qualquer que seja o papel.</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Papel</th><th>O que faz no sistema</th></tr></thead>
+        <tbody>
+          <tr><td>Solicitante</td><td>Abre pedidos, acompanha, comenta e anexa arquivos.</td></tr>
+          <tr><td>Comprador</td><td>Cotações, planos de requisição, fornecedores, catálogo de produtos e contratos.</td></tr>
+          <tr><td>Gestor</td><td>Acompanha os pedidos e decide os reembolsos.</td></tr>
+          <tr><td>Almoxarifado</td><td>Confirma o recebimento dos materiais.</td></tr>
+          <tr><td>Financeiro</td><td>Contas a pagar, notas fiscais e fluxo de caixa.</td></tr>
+          <tr><td>Auditor</td><td>Só consulta: vê tudo, não altera nada.</td></tr>
+          <tr><td>Administrador</td><td>Tudo acima, mais usuários, aprovadores e auditoria. Pode assinar qualquer etapa.</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ch" id="pt-pedido">
+      <div class="ch-head"><span class="ch-num">03</span><h2>Abrir um pedido (plano de aquisição)</h2></div>
+      <p>O pedido no sistema substitui o formulário em papel <strong>采购计划单 · Plano de Aquisições</strong>. Os mesmos campos estão lá.</p>
+      <ol class="steps">
+        <li><p>No menu, abra <span class="ui">Solicitações de Compra</span> e clique em <span class="ui">Nova solicitação</span>.</p></li>
+        <li><p>Em <strong>Dados gerais</strong>, preencha o título, o <strong>centro de custo</strong> (nome do projeto ou obra), o seu <strong>contato</strong> (telefone ou ramal) e a justificativa.</p></li>
+        <li><p>Em <strong>Itens</strong>, escolha os materiais no catálogo (unidade, marca e último preço vêm preenchidos) ou descreva um item à mão.</p></li>
+        <li><p>Para cada item, informe quantidade, especificação, local de uso, setor solicitante, data de entrada e peso total, se souber.</p></li>
+        <li><p>Adicione a <strong>foto do item</strong>. No celular, dá para tirar a foto na hora. Se o produto do catálogo já tiver foto, ela aparece sozinha.</p></li>
+        <li><p>Salve. O pedido recebe um <strong>número</strong> e vai para a primeira assinatura, a do <strong>Técnico</strong>. Os aprovadores recebem o aviso.</p></li>
+      </ol>
+      <h3>Do papel para o sistema</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>No formulário em papel</th><th>No sistema</th></tr></thead>
+        <tbody>
+          <tr><td class="zh">申请人 · Solicitante</td><td>Preenchido com o seu nome</td></tr>
+          <tr><td class="zh">联系方式 · Contato</td><td>Contato do solicitante</td></tr>
+          <tr><td class="zh">项目名称 · Projeto</td><td>Centro de custo</td></tr>
+          <tr><td class="zh">材料名称 · Material</td><td>Descrição do item (ou produto do catálogo)</td></tr>
+          <tr><td class="zh">规格 · Especificação</td><td>Especificação</td></tr>
+          <tr><td class="zh">图片 · Imagem</td><td>Foto do item</td></tr>
+          <tr><td class="zh">单位 · Unidade</td><td>Unidade</td></tr>
+          <tr><td class="zh">总重量 · Peso total</td><td>Peso total (kg)</td></tr>
+          <tr><td class="zh">使用地点 · Local de uso</td><td>Local de uso</td></tr>
+          <tr><td class="zh">数量 · Quantidade</td><td>Quantidade</td></tr>
+          <tr><td class="zh">申请部门 · Setor</td><td>Setor solicitante</td></tr>
+          <tr><td class="zh">进场日期 · Data de entrada</td><td>Data de entrada</td></tr>
+          <tr><td class="zh">签字 · Assinaturas</td><td>Quadro de assinaturas digitais (capítulo 04)</td></tr>
+        </tbody>
+      </table></div>
+      <div class="note warn"><strong>Atenção</strong><p>Confira tudo antes de salvar. Você pode editar o pedido só até a <strong>primeira assinatura</strong>. Depois disso, use os comentários do pedido para avisar sobre mudanças.</p></div>
+    </section>
+
+    <section class="ch" id="pt-assinar">
+      <div class="ch-head"><span class="ch-num">04</span><h2>Assinar um pedido</h2></div>
+      <p>Todo pedido passa por quatro assinaturas, nesta ordem. Cada etapa só abre depois que a anterior assinou.</p>
+      <ol class="flow" aria-label="Ordem das assinaturas">
+        <li><span class="k">0</span><b>Solicitante</b><small>abre o pedido</small></li>
+        <li><span class="k">1</span><b>Técnico</b><small>confere a parte técnica</small></li>
+        <li><span class="k">2</span><b>Compras</b><small>analisa o pedido</small></li>
+        <li><span class="k">3</span><b>Custos</b><small>confere orçamento</small></li>
+        <li><span class="k">4</span><b>Gerente geral</b><small>aprovação final</small></li>
+        <li class="end"><span class="k">→</span><b>Cotação</b><small>compras cota</small></li>
+      </ol>
+      <ol class="steps">
+        <li><p>Quando um pedido chega na sua etapa, você recebe um aviso por e-mail e, se tiver conectado, no WeChat.</p></li>
+        <li><p>Abra <span class="ui">Aprovações</span>. No alto aparece <strong>Aguardando sua assinatura</strong>, com os pedidos da sua vez.</p></li>
+        <li><p>Abra o pedido e confira os itens, as fotos e a justificativa.</p></li>
+        <li><p>No quadro <strong>Assinaturas</strong>, clique em <span class="ui">Aprovar e assinar</span> ou em <span class="ui">Recusar</span>.</p></li>
+        <li><p>Desenhe a assinatura com o dedo, a caneta ou o mouse. Se já tiver uma salva, pode usá-la. Marque <strong>Salvar esta assinatura para as próximas vezes</strong> para não precisar desenhar de novo.</p></li>
+        <li><p>Confirme. O sistema registra o seu nome, a data, a hora e o endereço IP, e avisa a próxima etapa.</p></li>
+      </ol>
+      <div class="note"><strong>Recusa</strong><p>Para recusar é obrigatório escrever o motivo. O pedido recusado é encerrado e o solicitante recebe o aviso com o motivo. Se for o caso, ele abre um pedido novo já corrigido.</p></div>
+      <p>Só assina quem o administrador marcou para aquela etapa. Se o botão de assinar não aparece e você acha que deveria, fale com o administrador.</p>
+    </section>
+
+    <section class="ch" id="pt-acompanhar">
+      <div class="ch-head"><span class="ch-num">05</span><h2>Acompanhar o pedido</h2></div>
+      <p>Em <span class="ui">Solicitações de Compra</span>, a lista mostra o número, a situação e, enquanto falta assinatura, a etapa atual. A situação segue esta ordem:</p>
+      <ul class="status">
+        <li><span class="pill">Aguardando Aprovação</span><span>Nas quatro assinaturas.</span></li>
+        <li><span class="pill">Em Compras</span><span>Aprovado; compras vai cotar.</span></li>
+        <li><span class="pill">Em Cotação</span><span>Fornecedores enviando preços.</span></li>
+        <li><span class="pill">Pedido Realizado</span><span>Compra fechada com o fornecedor.</span></li>
+        <li><span class="pill">Aguardando Recebimento</span><span>Material a caminho.</span></li>
+        <li><span class="pill ok">Finalizado</span><span>Almoxarifado recebeu.</span></li>
+        <li><span class="pill bad">Rejeitado</span><span>Recusado em alguma etapa, com o motivo.</span></li>
+      </ul>
+      <p>Na página do pedido você vê a <strong>Timeline</strong> com tudo o que aconteceu, os <strong>Comentários</strong> e os <strong>Arquivos</strong>. O botão <span class="ui">Ficha em PDF</span> gera o plano de aquisição em PDF, com fotos e assinaturas, pronto para imprimir ou enviar.</p>
+    </section>
+
+    <section class="ch" id="pt-wechat">
+      <div class="ch-head"><span class="ch-num">06</span><h2>WeChat</h2></div>
+      <h3>Mandar o pedido para o grupo</h3>
+      <p>Na página do pedido, clique em <span class="ui">Copiar para o WeChat</span> e cole no grupo. A mensagem sai em português e chinês, com o link:</p>
+      <pre class="msg">【Falcão ERP】Plano de aquisição nº 12 · 第12号采购计划
+Materiais para a laje do bloco B
+Aguardando assinatura: Custos
+等待签字：成本
+Solicitante / 申请人: Ana
+Projeto / 项目: Residencial Falcão
+Itens / 物料: 2
+https://suprimentos.falcaoengenhariasz.com/solicitacoes/…</pre>
+      <h3>Receber os avisos no seu WeChat</h3>
+      <p>Os mesmos avisos do e-mail podem chegar no seu WeChat pessoal pela conta oficial <strong>pushplus 推送加</strong>. Faça isto uma vez:</p>
+      <ol class="steps">
+        <li><p>No celular, abra <a href="https://www.pushplus.plus/" target="_blank" rel="noopener">pushplus.plus</a>, entre com o WeChat (escaneie o QR code) e siga a conta oficial.</p></li>
+        <li><p>No menu <strong>一对一推送</strong> (envio individual), copie o seu <strong>token</strong>.</p></li>
+        <li><p>No sistema, abra <span class="ui">Meu perfil</span>, cole o token no cartão <strong>Avisos no WeChat</strong> e clique em <span class="ui">Conectar</span>.</p></li>
+        <li><p>Chega uma mensagem de teste no seu WeChat. Pronto.</p></li>
+      </ol>
+      <div class="note"><strong>Bom saber</strong><p>Se o PushPlus pedir verificação de identidade (实名认证), faça no próprio PushPlus e tente de novo. As mensagens levam só o número, o título, a etapa e o link do pedido, sem valores. Para parar de receber, clique em <span class="ui">Desconectar</span>.</p></div>
+    </section>
+
+    <section class="ch" id="pt-catalogo">
+      <div class="ch-head"><span class="ch-num">07</span><h2>Catálogo de produtos e fotos</h2></div>
+      <p>Em <span class="ui">Banco de Produtos</span> ficam os materiais já comprados, com disciplina, marca, referência e histórico de preços. Escolher um item do catálogo no pedido economiza digitação e ajuda compras a cotar.</p>
+      <p>Quem pode editar produtos adiciona a <strong>foto</strong> na página do produto: <span class="ui">Adicionar foto</span>. A foto aparece na lista, na janela de escolha do catálogo e em todo pedido daquele produto que não tenha foto própria.</p>
+    </section>
+
+    <section class="ch" id="pt-compras">
+      <div class="ch-head"><span class="ch-num">08</span><h2>Para o setor de compras</h2></div>
+      <p>Depois da assinatura do gerente geral, o pedido fica <strong>Em Compras</strong> e você recebe o aviso.</p>
+      <ul>
+        <li><strong>Cotações:</strong> abra a cotação a partir do pedido, convide fornecedores e mande o link de cada um. O fornecedor responde sem precisar de login. O mapa de cotação compara os preços lado a lado e destaca o menor.</li>
+        <li><strong>Planos de Requisição:</strong> juntam vários pedidos aprovados da mesma obra numa lista só, somando itens iguais, e viram uma cotação.</li>
+        <li><strong>Link aberto:</strong> um endereço único para divulgar a fornecedores. Cada um entra com o CNPJ; fornecedor novo fica pendente até você aprovar.</li>
+        <li><strong>Catálogos Recebidos:</strong> fornecedores enviam catálogo e planilha de preços; você revisa item a item antes de os preços entrarem no histórico.</li>
+      </ul>
+    </section>
+
+    <section class="ch" id="pt-admin">
+      <div class="ch-head"><span class="ch-num">09</span><h2>Para administradores</h2></div>
+      <ul>
+        <li><strong>Usuários:</strong> crie o acesso de cada colaborador com nome, e-mail, papel e senha provisória. Também é aqui que se redefine uma senha esquecida e se desativa quem saiu.</li>
+        <li><strong>Aprovadores:</strong> marque quem assina cada uma das quatro etapas e salve. Todos os marcados recebem o aviso; basta um deles assinar. Etapa sem ninguém marcado é assinada pelos administradores.</li>
+        <li><strong>Auditoria:</strong> registro de quem alterou o quê e quando.</li>
+      </ul>
+    </section>
+
+    <section class="ch" id="pt-duvidas">
+      <div class="ch-head"><span class="ch-num">10</span><h2>Dúvidas comuns</h2></div>
+      <div>
+        <details><summary>Esqueci a senha.</summary><p>Peça ao administrador para redefinir em Usuários. Depois troque em Meu perfil.</p></details>
+        <details><summary>Apareceu “Algo deu errado” depois de uma atualização.</summary><p>Recarregue a página (Ctrl+F5 no computador, ou feche e abra de novo no celular). O sistema costuma fazer isso sozinho.</p></details>
+        <details><summary>Não recebi o e-mail de aprovação.</summary><p>Confira a caixa de spam. Mesmo sem o e-mail, os pedidos da sua vez aparecem em Aprovações, em “Aguardando sua assinatura”.</p></details>
+        <details><summary>Preciso mudar um pedido que já foi assinado.</summary><p>Depois da primeira assinatura o pedido não pode ser editado. Escreva nos comentários ou peça a recusa e abra um pedido novo.</p></details>
+        <details><summary>O PDF em chinês saiu com caracteres estranhos.</summary><p>Gere o PDF com o sistema em português. As planilhas Excel e CSV não têm esse problema.</p></details>
+      </div>
+    </section>
+
+    <footer>Falcão Engenharia e Soluções · Manual do Falcão ERP Suprimentos · revisão de outubro de 2026</footer>
+  </article>
+</div>
+
+<!-- ═══════════════════════════ 中文 ═══════════════════════════ -->
+<div class="wrap" data-l="zh" lang="zh-CN" hidden>
+  <nav class="toc" aria-label="目录">
+    <p>目录</p>
+    <ol>
+      <li><a href="#zh-acesso">首次登录</a></li>
+      <li><a href="#zh-papeis">角色与职责</a></li>
+      <li><a href="#zh-pedido">提交采购申请</a></li>
+      <li><a href="#zh-assinar">审批签字</a></li>
+      <li><a href="#zh-acompanhar">跟踪申请</a></li>
+      <li><a href="#zh-wechat">微信</a></li>
+      <li><a href="#zh-catalogo">产品目录与图片</a></li>
+      <li><a href="#zh-compras">采购部门</a></li>
+      <li><a href="#zh-admin">管理员</a></li>
+      <li><a href="#zh-duvidas">常见问题</a></li>
+    </ol>
+  </nav>
+
+  <article>
+    <section class="ch" id="zh-acesso">
+      <div class="ch-head"><span class="ch-num">01</span><h2>首次登录</h2></div>
+      <ol class="steps">
+        <li><p>在电脑或手机上打开 <a href="https://suprimentos.falcaoengenhariasz.com" target="_blank" rel="noopener">suprimentos.falcaoengenhariasz.com</a>。</p></li>
+        <li><p>使用管理员提供的<strong>邮箱</strong>和<strong>临时密码</strong>登录。</p></li>
+        <li><p>点击页面上方您的名字，打开 <span class="ui">个人资料</span>，把临时密码改成您自己的密码。</p></li>
+        <li><p>在页面上方的语言选择器或 <span class="ui">个人资料</span> 中选择语言：Português、English 或 中文。整个系统会切换语言。</p></li>
+      </ol>
+      <div class="note"><strong>提示</strong><p>在手机浏览器中选择“添加到主屏幕”，就可以像应用一样打开系统。</p></div>
+    </section>
+
+    <section class="ch" id="zh-papeis">
+      <div class="ch-head"><span class="ch-num">02</span><h2>角色与职责</h2></div>
+      <p>每个用户都有一个<strong>角色</strong>，决定能看到哪些页面。采购计划的<strong>签字</strong>是另一回事：由管理员指定每个环节的签字人，与角色无关。</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>角色</th><th>在系统中的工作</th></tr></thead>
+        <tbody>
+          <tr><td>申请人</td><td>提交申请、跟踪进度、发表评论、上传文件。</td></tr>
+          <tr><td>采购员</td><td>询价、采购计划、供应商、产品目录和合同。</td></tr>
+          <tr><td>经理</td><td>跟踪申请，审批报销。</td></tr>
+          <tr><td>仓库</td><td>确认材料到货。</td></tr>
+          <tr><td>财务</td><td>应付账款、发票和现金流。</td></tr>
+          <tr><td>审计员</td><td>只读：可以查看全部内容，不能修改。</td></tr>
+          <tr><td>管理员</td><td>以上全部，另加用户、审批人和审计日志。可以签署任何环节。</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ch" id="zh-pedido">
+      <div class="ch-head"><span class="ch-num">03</span><h2>提交采购申请（采购计划单）</h2></div>
+      <p>系统中的申请取代纸质的<strong>采购计划单</strong>，字段与纸质表格一致。</p>
+      <ol class="steps">
+        <li><p>在菜单中打开 <span class="ui">采购申请</span>，点击 <span class="ui">新建申请</span>。</p></li>
+        <li><p>在<strong>基本信息</strong>中填写标题、<strong>成本中心</strong>（项目或工地名称）、您的<strong>联系方式</strong>（电话或分机）和理由。</p></li>
+        <li><p>在<strong>项目</strong>中，从目录选择物料（单位、品牌和上次价格会自动填入），或手动描述物料。</p></li>
+        <li><p>为每个物料填写数量、规格、使用地点、申请部门、进场日期，如果知道的话再填写总重量。</p></li>
+        <li><p>添加<strong>物料图片</strong>。在手机上可以直接拍照。如果目录中的产品已有图片，会自动显示。</p></li>
+        <li><p>保存。申请会得到一个<strong>编号</strong>，进入第一个签字环节：<strong>技术负责人</strong>。审批人会收到通知。</p></li>
+      </ol>
+      <h3>纸质表格与系统对照</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>纸质表格</th><th>系统中</th></tr></thead>
+        <tbody>
+          <tr><td class="zh">申请人</td><td>自动填入您的姓名</td></tr>
+          <tr><td class="zh">联系方式</td><td>申请人联系方式</td></tr>
+          <tr><td class="zh">项目名称</td><td>成本中心</td></tr>
+          <tr><td class="zh">材料名称</td><td>物料描述（或目录产品）</td></tr>
+          <tr><td class="zh">规格</td><td>规格</td></tr>
+          <tr><td class="zh">图片</td><td>物料图片</td></tr>
+          <tr><td class="zh">单位</td><td>单位</td></tr>
+          <tr><td class="zh">总重量</td><td>总重量（kg）</td></tr>
+          <tr><td class="zh">使用地点</td><td>使用地点</td></tr>
+          <tr><td class="zh">数量</td><td>数量</td></tr>
+          <tr><td class="zh">申请部门</td><td>申请部门</td></tr>
+          <tr><td class="zh">进场日期</td><td>进场日期</td></tr>
+          <tr><td class="zh">签字</td><td>电子签字栏（第 04 章）</td></tr>
+        </tbody>
+      </table></div>
+      <div class="note warn"><strong>注意</strong><p>保存前请仔细检查。只有在<strong>第一个人签字之前</strong>才能修改申请。之后如有变动，请在申请的评论中说明。</p></div>
+    </section>
+
+    <section class="ch" id="zh-assinar">
+      <div class="ch-head"><span class="ch-num">04</span><h2>审批签字</h2></div>
+      <p>每份申请都要按以下顺序经过四次签字。上一个环节签字后，下一个环节才会开始。</p>
+      <ol class="flow" aria-label="签字顺序">
+        <li><span class="k">0</span><b>申请人</b><small>提交申请</small></li>
+        <li><span class="k">1</span><b>技术负责人</b><small>技术审核</small></li>
+        <li><span class="k">2</span><b>采购</b><small>审核申请</small></li>
+        <li><span class="k">3</span><b>成本</b><small>核对预算</small></li>
+        <li><span class="k">4</span><b>总经理</b><small>最终批准</small></li>
+        <li class="end"><span class="k">→</span><b>询价</b><small>采购部询价</small></li>
+      </ol>
+      <ol class="steps">
+        <li><p>申请到达您的环节时，您会收到邮件通知；如果已连接微信，也会在微信上收到。</p></li>
+        <li><p>打开 <span class="ui">审批</span>。页面上方会显示<strong>等待您签字</strong>的申请。</p></li>
+        <li><p>打开申请，核对物料、图片和理由。</p></li>
+        <li><p>在<strong>签名</strong>栏中点击 <span class="ui">批准并签名</span> 或 <span class="ui">拒绝</span>。</p></li>
+        <li><p>用手指、触控笔或鼠标签名。如果已保存过签名，可以直接使用。勾选<strong>保存此签名以便下次使用</strong>，以后就不用再签。</p></li>
+        <li><p>确认。系统会记录您的姓名、日期、时间和 IP 地址，并通知下一个环节。</p></li>
+      </ol>
+      <div class="note"><strong>拒绝</strong><p>拒绝时必须填写原因。被拒绝的申请即告结束，申请人会收到附有原因的通知。如有需要，申请人修改后重新提交新的申请。</p></div>
+      <p>只有管理员为该环节指定的人员才能签字。如果您认为应该能签字却看不到签字按钮，请联系管理员。</p>
+    </section>
+
+    <section class="ch" id="zh-acompanhar">
+      <div class="ch-head"><span class="ch-num">05</span><h2>跟踪申请</h2></div>
+      <p>在 <span class="ui">采购申请</span> 列表中可以看到编号、状态，以及尚未签完时的当前环节。状态顺序如下：</p>
+      <ul class="status">
+        <li><span class="pill">待审批</span><span>正在进行四次签字。</span></li>
+        <li><span class="pill">采购中</span><span>已批准，采购部准备询价。</span></li>
+        <li><span class="pill">询价中</span><span>供应商正在报价。</span></li>
+        <li><span class="pill">已下单</span><span>已与供应商确定采购。</span></li>
+        <li><span class="pill">待收货</span><span>材料运输中。</span></li>
+        <li><span class="pill ok">已完成</span><span>仓库已收货。</span></li>
+        <li><span class="pill bad">已驳回</span><span>在某个环节被拒绝，附有原因。</span></li>
+      </ul>
+      <p>在申请页面可以查看<strong>时间线</strong>（全部操作记录）、<strong>评论</strong>和<strong>文件</strong>。点击 <span class="ui">PDF 单据</span> 可生成带图片和签名的采购计划单 PDF，用于打印或发送。</p>
+    </section>
+
+    <section class="ch" id="zh-wechat">
+      <div class="ch-head"><span class="ch-num">06</span><h2>微信</h2></div>
+      <h3>把申请发到微信群</h3>
+      <p>在申请页面点击 <span class="ui">复制到微信</span>，然后粘贴到群里。消息为葡萄牙语和中文双语，并附有链接：</p>
+      <pre class="msg">【Falcão ERP】Plano de aquisição nº 12 · 第12号采购计划
+Materiais para a laje do bloco B
+Aguardando assinatura: Custos
+等待签字：成本
+Solicitante / 申请人: Ana
+Projeto / 项目: Residencial Falcão
+Itens / 物料: 2
+https://suprimentos.falcaoengenhariasz.com/solicitacoes/…</pre>
+      <h3>在个人微信上接收通知</h3>
+      <p>与邮件相同的通知可以通过公众号 <strong>pushplus 推送加</strong> 发送到您的个人微信。只需设置一次：</p>
+      <ol class="steps">
+        <li><p>在手机上打开 <a href="https://www.pushplus.plus/" target="_blank" rel="noopener">pushplus.plus</a>，用微信扫码登录并关注公众号。</p></li>
+        <li><p>在<strong>一对一推送</strong>菜单中复制您的 <strong>token</strong>。</p></li>
+        <li><p>在系统中打开 <span class="ui">个人资料</span>，把 token 粘贴到<strong>微信通知</strong>卡片中，点击 <span class="ui">连接</span>。</p></li>
+        <li><p>您的微信会收到一条测试消息，设置完成。</p></li>
+      </ol>
+      <div class="note"><strong>说明</strong><p>如果 PushPlus 要求实名认证，请在 PushPlus 中完成后再试。通知只包含申请编号、标题、环节和链接，不含金额。如需停止接收，点击 <span class="ui">断开连接</span>。</p></div>
+    </section>
+
+    <section class="ch" id="zh-catalogo">
+      <div class="ch-head"><span class="ch-num">07</span><h2>产品目录与图片</h2></div>
+      <p><span class="ui">产品目录</span> 中保存了已采购过的物料，包括专业、品牌、型号和价格历史。在申请中从目录选择物料，可以减少输入，也方便采购部询价。</p>
+      <p>有产品编辑权限的人可以在产品页面点击 <span class="ui">添加照片</span> 上传<strong>产品图片</strong>。图片会显示在列表、目录选择窗口，以及该产品所有没有单独图片的申请中。</p>
+    </section>
+
+    <section class="ch" id="zh-compras">
+      <div class="ch-head"><span class="ch-num">08</span><h2>采购部门</h2></div>
+      <p>总经理签字后，申请状态变为<strong>采购中</strong>，您会收到通知。</p>
+      <ul>
+        <li><strong>询价：</strong>从申请发起询价，邀请供应商并发送各自的链接。供应商无需登录即可报价。比价表并列比较价格，并突出最低价。</li>
+        <li><strong>采购计划：</strong>把同一工地的多份已批准申请合并成一个清单，相同物料自动汇总，然后发起询价。</li>
+        <li><strong>公开链接：</strong>一个统一的链接，可发给所有供应商。供应商用 CNPJ（巴西企业税号）进入；新供应商需等您审核通过。</li>
+        <li><strong>已收到的目录：</strong>供应商上传产品目录和价格表；您逐项审核后，价格才会进入历史记录。</li>
+      </ul>
+    </section>
+
+    <section class="ch" id="zh-admin">
+      <div class="ch-head"><span class="ch-num">09</span><h2>管理员</h2></div>
+      <ul>
+        <li><strong>用户：</strong>为每位员工创建账号，填写姓名、邮箱、角色和临时密码。在这里也可以重置忘记的密码、停用已离职人员。</li>
+        <li><strong>审批人：</strong>勾选四个环节各自的签字人并保存。所有被勾选的人都会收到通知，其中任何一人签字即可。未指定人员的环节由管理员签字。</li>
+        <li><strong>审计：</strong>记录谁在什么时间修改了什么。</li>
+      </ul>
+    </section>
+
+    <section class="ch" id="zh-duvidas">
+      <div class="ch-head"><span class="ch-num">10</span><h2>常见问题</h2></div>
+      <div>
+        <details><summary>忘记密码怎么办？</summary><p>请管理员在“用户”中重置，然后在“个人资料”中改成您自己的密码。</p></details>
+        <details><summary>系统更新后出现“出错了”页面。</summary><p>刷新页面（电脑上按 Ctrl+F5，手机上关闭后重新打开）。系统通常会自动刷新。</p></details>
+        <details><summary>没有收到审批邮件。</summary><p>请检查垃圾邮件箱。即使没有邮件，轮到您签字的申请也会显示在“审批”页面的“等待您签字”中。</p></details>
+        <details><summary>已签字的申请需要修改。</summary><p>第一个人签字后申请就不能再修改。请在评论中说明，或请审批人拒绝后重新提交新的申请。</p></details>
+        <details><summary>中文界面生成的 PDF 出现乱码。</summary><p>请把系统切换到葡萄牙语后再生成 PDF。Excel 和 CSV 表格没有这个问题。</p></details>
+      </div>
+    </section>
+
+    <footer>Falcão Engenharia e Soluções · Falcão ERP 采购系统使用手册 · 2026 年 10 月版</footer>
+  </article>
+</div>
+
+<script>
+  (function () {
+    var KEY = 'falcao-manual-lang';
+    var blocks = document.querySelectorAll('[data-l]');
+    var buttons = document.querySelectorAll('.lang button');
+
+    function apply(lang) {
+      blocks.forEach(function (el) { el.hidden = el.getAttribute('data-l') !== lang; });
+      buttons.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-lang') === lang)); });
+      document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'pt-BR';
+      try { localStorage.setItem(KEY, lang); } catch (e) {}
+    }
+
+    var hash = location.hash.replace('#', '');
+    var initial = hash.indexOf('zh') === 0 ? 'zh' : hash.indexOf('pt') === 0 ? 'pt' : null;
+    if (!initial) {
+      try { initial = localStorage.getItem(KEY); } catch (e) {}
+    }
+    if (initial !== 'pt' && initial !== 'zh') {
+      initial = (navigator.language || '').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'pt';
+    }
+    apply(initial);
+
+    buttons.forEach(function (b) {
+      b.addEventListener('click', function () {
+        apply(b.getAttribute('data-lang'));
+        window.scrollTo({ top: 0 });
+      });
+    });
+  })();
+</script>
+</body>
+</html>

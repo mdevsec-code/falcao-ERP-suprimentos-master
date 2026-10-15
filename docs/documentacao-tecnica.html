@@ -228,6 +228,9 @@ erDiagram
   USER ||--o{ PURCHASE_REQUEST : "solicita"
   PURCHASE_REQUEST ||--o{ PURCHASE_REQUEST_ITEM : "contém"
   PURCHASE_REQUEST ||--o{ PURCHASE_REQUEST_APPROVAL : "registra etapa"
+  PURCHASE_REQUEST ||--o{ PURCHASE_REQUEST_SIGNATURE : "assinatura por etapa"
+  COMPANY ||--o{ APPROVAL_STEP_APPROVER : "quem assina cada etapa"
+  USER ||--o{ APPROVAL_STEP_APPROVER : "aprovador"
   SUPPLIER ||--o{ CONTRACT : "firma"
   CONTRACT ||--o{ CONTRACT_AMENDMENT : "aditivo"
   CONTRACT ||--o{ PAYABLE : "gera"
@@ -353,8 +356,8 @@ sequenceDiagram
           <pre class="mermaid">
 stateDiagram-v2
   [*] --> AGUARDANDO_APROVACAO: solicitante abre
-  AGUARDANDO_APROVACAO --> AGUARDANDO_APROVACAO: gestor pede ajuste
-  AGUARDANDO_APROVACAO --> EM_COMPRAS: gestor aprova
+  AGUARDANDO_APROVACAO --> AGUARDANDO_APROVACAO: assinatura (técnico, compras, custos)
+  AGUARDANDO_APROVACAO --> EM_COMPRAS: assinatura do gerente geral
   EM_COMPRAS --> EM_COTACAO: comprador
   EM_COTACAO --> PEDIDO_REALIZADO: comprador
   PEDIDO_REALIZADO --> AGUARDANDO_RECEBIMENTO: comprador ou almoxarifado
@@ -371,7 +374,28 @@ stateDiagram-v2
         <figcaption>Máquina de estados da solicitação. Cada mudança grava um registro de aprovação com a ação (<code>APPROVE</code>, <code>REJECT</code> ou <code>REQUEST_CHANGES</code>), quem fez e o comentário, que formam a linha do tempo da solicitação.</figcaption>
       </figure>
       <p>Abrir uma cotação (seção 09) para uma solicitação em <code>EM_COMPRAS</code> já a move para <code>EM_COTACAO</code>, com o registro de aprovação correspondente, sem passo manual.</p>
-      <div class="callout"><span class="k">Regra de edição</span><p>Só o autor edita a solicitação, e só enquanto ela está em <code>AGUARDANDO_APROVACAO</code>. Depois da aprovação, mudanças acontecem por comentários e pela própria linha do tempo.</p></div>
+      <h3>Plano de aquisição e as quatro assinaturas</h3>
+      <p>Enquanto está em <code>AGUARDANDO_APROVACAO</code>, a solicitação percorre quatro etapas de assinatura, guardadas em <code>currentStep</code>: <code>TECNICO → COMPRAS → CUSTOS → GERENTE_GERAL</code> (<code>APPROVAL_STEPS</code> em <code>shared-types</code>). A tabela <code>ApprovalStepApprover</code> diz quem assina cada etapa, por empresa (tela <em>Aprovadores</em>, só ADMIN); etapa sem ninguém configurado é assinada pelos administradores, e ADMIN pode assinar qualquer etapa.</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Peça</th><th>Como funciona</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Assinar</strong></td><td><code>POST /purchase-requests/:id/sign</code> com a decisão (<code>APROVADO</code>/<code>RECUSADO</code>), a assinatura em PNG (data URL, até 400 kB) e o comentário — obrigatório na recusa. Numa transação: <code>updateMany</code> condicionado à etapa atual (duas pessoas assinando juntas: só uma vale, a outra recebe 409), a linha em <code>PurchaseRequestSignature</code> com nome, IP e navegador (<code>@@unique([purchaseRequestId, step])</code>) e um registro em <code>PurchaseRequestApproval</code>, que alimenta a linha do tempo.</td></tr>
+          <tr><td><strong>Resultado</strong></td><td>Aprovação avança para a próxima etapa (<code>nextApprovalStep</code>); a do gerente geral leva a <code>EM_COMPRAS</code>, para compras cotar. Recusa leva a <code>REJEITADO</code>.</td></tr>
+          <tr><td><strong>Assinatura salva</strong></td><td>Opcionalmente guardada em <code>User.signatureData</code> para reaproveitar (<code>GET/DELETE /purchase-requests/my-signature</code>).</td></tr>
+          <tr><td><strong>Número do plano</strong></td><td><code>numero</code> sequencial por empresa (<code>@@unique([companyId, numero])</code>), com nova tentativa em caso de colisão.</td></tr>
+          <tr><td><strong>Fotos</strong></td><td>A foto do item é enviada antes de salvar (<code>POST /purchase-requests/item-photos</code>, JPEG/PNG/WEBP até 8 MB, reduzida no navegador para 1600 px) e o item guarda só o caminho, conferido contra a pasta da empresa. Sem foto própria, o item mostra a do produto do catálogo (<code>POST /products/:id/photo</code>).</td></tr>
+          <tr><td><strong>PDF</strong></td><td>O PDF do plano (paisagem) traz cabeçalho, itens com miniatura da foto e o quadro de assinaturas: solicitante + as quatro etapas, com a imagem da assinatura, o nome e a data.</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Avisos por e-mail e WeChat</h3>
+      <p><code>MailService</code> (nodemailer, SMTP da Hostinger) e <code>WechatService</code> (<a href="https://www.pushplus.plus/">PushPlus</a>) ficam no <code>MailModule</code> global. Os dois disparam sem bloquear a requisição e só registram falhas no log — uma assinatura nunca é desfeita por falha de envio. Sem <code>SMTP_HOST</code>, nada é enviado.</p>
+      <ul>
+        <li><strong>Etapa nova:</strong> os aprovadores da etapa (ou os administradores) recebem o pedido de assinatura.</li>
+        <li><strong>Aprovação final:</strong> solicitante e aprovadores de compras.</li>
+        <li><strong>Recusa:</strong> solicitante, com o motivo.</li>
+      </ul>
+      <p>O WeChat pessoal não tem API oficial; cada usuário segue a conta do PushPlus e cola o próprio token em <em>Meu perfil</em> (<code>PUT /users/me/wechat</code> envia uma mensagem de teste antes de gravar; o token nunca volta para a tela). As mensagens saem em português e chinês e levam só número, título, etapa e link. Para grupos do WeChat, a página do pedido tem <em>Copiar para o WeChat</em>, que gera o texto bilíngue para colar.</p>
+      <div class="callout"><span class="k">Regra de edição</span><p>Só o autor edita a solicitação, e só enquanto ela está em <code>AGUARDANDO_APROVACAO</code> <strong>e ninguém assinou ainda</strong>. Depois da primeira assinatura, mudanças acontecem por comentários e pela própria linha do tempo.</p></div>
 
     </div>
     <div class="sec" id="sc">
@@ -640,13 +664,13 @@ flowchart LR
     </div>
     <div class="sec" id="shost">
       <div class="sec-head"><span class="sec-num">18</span><h2>Hospedagem (VPS da Hostinger)</h2></div>
-      <p>Banco e site no mesmo <strong>VPS da Hostinger</strong> (Ubuntu 24.04): PostgreSQL 16 acessível só de dentro do servidor, API no Node 22 sob PM2 e o site servido pelo Nginx com HTTPS, num domínio só. A hospedagem compartilhada da Hostinger não oferece PostgreSQL — por isso o VPS. Os scripts ficam em <code>deploy/</code>.</p>
+      <p>Banco e site no mesmo <strong>VPS da Hostinger</strong> (Ubuntu 26.04): PostgreSQL 16 acessível só de dentro do servidor, API no Node 22 sob PM2 e o site servido pelo Nginx com HTTPS, num domínio só. A hospedagem compartilhada da Hostinger não oferece PostgreSQL — por isso o VPS. Os scripts ficam em <code>deploy/</code>.</p>
       <figure>
         <div class="frame">
           <pre class="mermaid">
 flowchart LR
   U[Usuários e fornecedores] -->|HTTPS 443| N[Nginx]
-  subgraph VPS[VPS Hostinger · Ubuntu 24.04]
+  subgraph VPS[VPS Hostinger · Ubuntu 26.04]
     N -->|/ estáticos| W[apps/web/dist]
     N -->|/api e /uploads| A[API NestJS · PM2 · 127.0.0.1:3333]
     A --> P[(PostgreSQL 16 · localhost:5432)]
@@ -664,7 +688,9 @@ flowchart LR
           <tr><td><strong>Banco</strong></td><td>PostgreSQL 16 do Ubuntu, <code>listen_addresses = 'localhost'</code>, usuário e banco próprios (<code>setup-vps.sh</code>); migrations com <code>prisma migrate deploy</code> a cada publicação.</td></tr>
           <tr><td><strong>API</strong></td><td><code>apps/api/dist/main.js</code> sob PM2 (<code>ecosystem.config.cjs</code>); <code>TRUST_PROXY=1</code> (limite por IP dos links públicos atrás do Nginx); segredos JWT gerados com <code>openssl rand</code>; <code>UPLOADS_DIR=/var/lib/falcao-erp/uploads</code>, fora do código.</td></tr>
           <tr><td><strong>Web</strong></td><td>Build com <code>VITE_API_URL=https://domínio/api/v1</code>; Nginx com fallback para <code>index.html</code> (inclui <code>/cotar</code>, <code>/cotacao</code> e <code>/enviar-catalogo</code>).</td></tr>
-          <tr><td><strong>Nginx</strong></td><td><code>client_max_body_size 60m</code>, proxy de <code>/api</code> e <code>/uploads</code> com <code>X-Forwarded-For</code>, timeouts de 10 min para envio de arquivos, cache longo de <code>/assets</code>, certificado Let's Encrypt.</td></tr>
+          <tr><td><strong>Nginx</strong></td><td><code>client_max_body_size 60m</code>, proxy de <code>/api</code> e <code>/uploads</code> com <code>X-Forwarded-For</code>, timeouts de 10 min para envio de arquivos, cache longo de <code>/assets</code> e <code>index.html</code> sem cache (<code>Cache-Control: no-cache</code>), certificado Let's Encrypt.</td></tr>
+          <tr><td><strong>Versão nova</strong></td><td>Quem estava com o site aberto durante um deploy pede arquivos que o build novo apagou; o web detecta o erro de carregamento (<code>utils/staleChunk.ts</code>, evento <code>vite:preloadError</code> e o <code>RootBoundary</code>) e recarrega a página uma vez.</td></tr>
+          <tr><td><strong>E-mail</strong></td><td><code>APP_URL</code> (links) e <code>SMTP_HOST</code>, <code>SMTP_PORT</code>, <code>SMTP_SECURE</code>, <code>SMTP_USER</code>, <code>SMTP_PASS</code>, <code>MAIL_FROM</code> no <code>.env</code> da raiz.</td></tr>
           <tr><td><strong>Primeira carga</strong></td><td><code>npm run prisma:bootstrap -w apps/api</code> cria a empresa, as disciplinas iniciais e o primeiro administrador (o seed é só para desenvolvimento).</td></tr>
           <tr><td><strong>Backup</strong></td><td><code>backup.sh</code>: <code>pg_dump</code> e arquivos enviados, 14 dias; copiar para fora do VPS periodicamente.</td></tr>
         </tbody>

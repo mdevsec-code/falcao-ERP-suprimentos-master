@@ -80,9 +80,11 @@
 
 **Suprimentos**
 - **Fornecedores** — cadastro completo (razão social, CNPJ, categoria, localização), contatos, avaliações de desempenho e upload de documentos.
-- **Banco de produtos** — catálogo por empresa com **disciplina** (Civil, Elétrica, Mecânica, Eletromecânica, Hidráulica, Instrumentação — lista editável), marca e **referência** do fabricante; filtros por disciplina, categoria, marca e fornecedor; histórico de preços com **quantidade, marca, referência e origem** (manual ou cotação).
+- **Banco de produtos** — catálogo por empresa com **disciplina** (Civil, Elétrica, Mecânica, Eletromecânica, Hidráulica, Instrumentação — lista editável), marca e **referência** do fabricante; filtros por disciplina, categoria, marca e fornecedor; histórico de preços com **quantidade, marca, referência e origem** (manual ou cotação) e **foto do produto**, que aparece na lista, na escolha do catálogo e nas solicitações.
 - **Catálogo vivo** — o solicitante escolhe os itens do catálogo (com marca, referência e último preço pago) ao montar o pedido; o que ele descrever à mão, compras inclui no catálogo com um clique, e o item já fica ligado ao produto.
-- **Solicitações de compra** — fluxo `aguardando aprovação → em compras → em cotação → pedido realizado → aguardando recebimento → finalizado` (ou rejeição), com itens, comentários, anexos, trilha de aprovações e fila "Aprovações" por papel.
+- **Solicitações de compra (plano de aquisição)** — fluxo `aguardando aprovação → em compras → em cotação → pedido realizado → aguardando recebimento → finalizado` (ou rejeição), com número sequencial por empresa, contato do solicitante, projeto, itens com **especificação, foto, peso total, local de uso, setor solicitante e data de entrada**, comentários, anexos e linha do tempo.
+- **Quatro assinaturas** — a aprovação segue `técnico → compras → custos → gerente geral`; cada etapa é assinada **desenhando na tela** (ou com a assinatura salva no perfil), com nome, data, hora e IP gravados. Recusa exige motivo. Depois da primeira assinatura o pedido não pode mais ser editado. Na tela **Aprovadores** o administrador escolhe quem assina cada etapa (sem ninguém marcado, os administradores assinam). Aprovado nas quatro, segue para compras cotar.
+- **Avisos por e-mail e WeChat** — quem precisa assinar recebe um e-mail com link para o sistema (SMTP da Hostinger); aprovação final avisa solicitante e compras; recusa avisa o solicitante com o motivo. Quem conectar o WeChat no perfil (via [PushPlus](https://www.pushplus.plus/)) recebe os mesmos avisos no WeChat, em português e chinês. Na página do pedido, **Copiar para o WeChat** gera a mensagem bilíngue para colar no grupo.
 - **Cotações (mapa de cotação)** — abertas a partir da solicitação aprovada; cada fornecedor recebe um **link próprio, sem login**, com a descrição dos materiais, e responde preço, marca, referência, prazo, pagamento e frete (ou recusa). O comprador pode lançar propostas recebidas por e-mail. O mapa coloca os **fornecedores lado a lado**, destaca o menor preço, mostra a **variação contra o último preço pago**, totais com frete, ranking e economia; o vencedor é escolhido por item e, ao encerrar, os preços entram no histórico do catálogo. Exporta o mapa em PDF e Excel e compartilha o link por WhatsApp ou e-mail.
 - **Plano de requisição** — junta as solicitações aprovadas de uma obra numa lista só: itens iguais (mesmo produto, unidade, marca e referência) são **somados numa linha**, guardando de qual solicitação veio cada parte. Ao **lançar**, o plano abre a cotação com a lista consolidada, liga o **link aberto** e passa as solicitações para "em cotação". Gera o **pedido de cotação em PDF** para enviar aos fornecedores.
 - **Link aberto para fornecedores** — um endereço só para divulgar (WhatsApp, e-mail, grupo): qualquer fornecedor vê a lista, informa o **CNPJ** (dígitos verificadores conferidos) e segue para o próprio link de resposta, cotando em cima dos itens. CNPJ novo vira **cadastro pendente**, que compras aprova ou recusa; fornecedor pendente não pode ser escolhido como vencedor. Quem já participa não recebe outro link por ali — ninguém consegue ver ou alterar a proposta de um concorrente sabendo o CNPJ dele.
@@ -100,7 +102,7 @@
 
 **Exportação padronizada**
 - Todo arquivo gerado segue o mesmo padrão: **PDF** com logo, título, filete dourado, tabela com cabeçalho na cor da marca, linhas alternadas, total em destaque e rodapé com empresa, "gerado em … por …" e "Página x de y"; **Excel** com o mesmo timbre, cabeçalho congelado e filtrável, valores em R$ e datas formatadas, pronto para imprimir; **CSV** com `;`, vírgula decimal, datas dd/mm/aaaa e BOM (abre direto no Excel). Nome do arquivo: `falcao-<assunto>-<data>`.
-- Botão **Exportar** (PDF, Excel, CSV) em Fornecedores, Produtos, Solicitações, Cotações, Planos, Contratos, Contas a pagar e Notas fiscais — sempre o filtro atual inteiro, com os filtros no topo. Documentos em PDF: pedido de cotação do plano, mapa de cotação e ficha da solicitação.
+- Botão **Exportar** (PDF, Excel, CSV) em Fornecedores, Produtos, Solicitações, Cotações, Planos, Contratos, Contas a pagar e Notas fiscais — sempre o filtro atual inteiro, com os filtros no topo. Documentos em PDF: pedido de cotação do plano, mapa de cotação e **plano de aquisição** (paisagem, com fotos dos itens e o quadro de assinaturas).
 
 **Plataforma**
 - **Dashboard** — KPIs de suprimentos, atalhos, pendências (contratos vencendo, contas vencidas, reembolsos a decidir) e os próximos 7 dias da agenda — tudo filtrado pelo papel de quem vê.
@@ -220,6 +222,9 @@ O seed cria fornecedores, contratos (um vencendo, um vencido), contas pagas e em
 | `CORS_ORIGIN` | Origem(ns) permitida(s) no CORS — URL do Web; várias separadas por vírgula |
 | `TRUST_PROXY` | Quantos proxies reversos ficam na frente da API (o Nginx do VPS = `1`); `0` = acesso direto. Necessário para o limite por IP dos links públicos |
 | `VITE_API_URL` | URL base da API consumida pelo Web |
+| `APP_URL` | Endereço do site, usado nos links dos e-mails e do WeChat (sem ele, vale a primeira origem de `CORS_ORIGIN`) |
+| `SMTP_HOST` / `SMTP_PORT` / `SMTP_SECURE` | Servidor de e-mail (Hostinger: `smtp.hostinger.com`, `465`, `true`). Sem `SMTP_HOST` nenhum e-mail sai — o motivo fica no log |
+| `SMTP_USER` / `SMTP_PASS` / `MAIL_FROM` | Caixa de e-mail que envia os avisos e o remetente exibido |
 
 > Nunca versione o `.env`. Gere segredos fortes para `JWT_SECRET` e `JWT_REFRESH_SECRET` antes de qualquer deploy.
 
@@ -308,7 +313,9 @@ Prefixo `/api/v1` · autenticação `Authorization: Bearer <accessToken>` (de `P
 
 | Recurso | Endpoints |
 | --- | --- |
-| Usuários | `GET/POST /users`, `GET /users/stats`, `PATCH /users/:id`, `PATCH /users/:id/password`, `GET/PATCH /users/me`, `PATCH /users/me/password` |
+| Usuários | `GET/POST /users`, `GET /users/stats`, `PATCH /users/:id`, `PATCH /users/:id/password`, `GET/PATCH /users/me`, `PATCH /users/me/password`, `GET/PUT/DELETE /users/me/wechat` (avisos no WeChat; o `PUT` manda uma mensagem de teste antes de gravar) |
+| Plano de aquisição | `POST /purchase-requests/:id/sign` (assinatura da etapa atual), `GET /purchase-requests/approval-steps`, `PUT /purchase-requests/approval-steps/:step` (ADMIN), `GET/DELETE /purchase-requests/my-signature`, `POST /purchase-requests/item-photos` (foto do item, multipart), `GET /purchase-requests?pendingMySignature=true` |
+| Foto do produto | `POST /products/:id/photo` (multipart), `DELETE /products/:id/photo` |
 | Contratos | `GET/POST /contracts`, `GET /contracts/stats`, `GET/PATCH /contracts/:id`, `PATCH /contracts/:id/status`, `POST /contracts/:id/amendments` |
 | Financeiro | `GET/POST /payables` (`?comNota=true` para a planilha de notas), `GET /payables/stats`, `GET /payables/cash-flow`, `GET /payables/by-cost-center`, `GET /payables/cost-centers`, `GET/PATCH /payables/:id`, `PATCH /payables/:id/pay`, `PATCH /payables/:id/invoice`, `PATCH /payables/:id/cancel` |
 | Nota fiscal | `POST /payables/:id/invoice-file` (PDF ou XML, multipart), `DELETE /payables/:id/invoice-file/:kind` (`pdf`/`xml`), `POST /payables/invoice-xml/preview` |
@@ -360,7 +367,8 @@ Mesmo design system e convenções do [Falcão Saúde Ocupacional](https://githu
 | Documento | Conteúdo |
 | --- | --- |
 | [docs/documentacao-tecnica.html](docs/documentacao-tecnica.html) | Arquitetura, stack comparada com o Saúde Ocupacional, modelo de dados, módulos, autenticação, isolamento por empresa, fluxo de compra, cotações, plano de requisição, link aberto, catálogo do fornecedor, padrão de exportação, integrações financeiras, uploads e auditoria |
-| [docs/casos-de-uso.html](docs/casos-de-uso.html) | 85 casos de uso em 16 pacotes, com atores, rotas, pré e pós-condições, fluxos e exceções |
+| [docs/casos-de-uso.html](docs/casos-de-uso.html) | 89 casos de uso em 16 pacotes, com atores, rotas, pré e pós-condições, fluxos e exceções |
+| [docs/manual-do-usuario.html](docs/manual-do-usuario.html) | Manual de uso para os colaboradores, em português e chinês (中文) |
 
 Os arquivos são páginas HTML: baixe e abra no navegador (os diagramas usam Mermaid, carregado da CDN).
 
@@ -381,12 +389,13 @@ Os arquivos são páginas HTML: baixe e abra no navegador (os diagramas usam Mer
 11. **Stack igual à do Saúde Ocupacional** — Prisma 7 → 5 no mesmo formato da plataforma irmã, React Router 7, helmet 7 e os mesmos hooks de commit (husky, lint-staged, commitlint), pré-requisito do hub com login único.
 12. **Cotações, catálogo vivo e nota fiscal** — mapa de cotação com link do fornecedor (HMAC), disciplinas editáveis, catálogo com marca/referência/quantidade, inclusão de itens digitados no catálogo, NF-e (PDF/XML com leitura e conferência), planilhas Excel (`exceljs`, a mesma do Saúde) e uploads de 50 MB.
 13. **Plano de requisição, portal do fornecedor e exportação padronizada** — plano que consolida solicitações e vira cotação, link aberto com identificação por CNPJ e cadastro pendente, envio de catálogo com planilha modelo e revisão item a item, links públicos assinados por escopo, padrão único de PDF/Excel/CSV (`jspdf` + `jspdf-autotable`) em todas as listas e preparação para hospedagem (proxy, CORS com vários domínios) e roteiro de deploy num VPS da Hostinger com PostgreSQL.
+14. **Plano de aquisição com quatro assinaturas** — estrutura do formulário em papel (采购计划单) trazida para o sistema: número do plano, contato, projeto, itens com especificação, foto, peso, local de uso, setor e data de entrada; assinatura desenhada por etapa (técnico, compras, custos, gerente geral) com registro de IP; tela de aprovadores; fotos no catálogo; PDF do plano com fotos e assinaturas; avisos por e-mail (SMTP) e WeChat (PushPlus), botão "Copiar para o WeChat"; recarga automática quando o navegador está com uma versão anterior ao deploy.
 
 ---
 
 ## 📍 Estado atual e próximos passos
 
-Funcional para desenvolvimento local; ainda **não pronto para produção**.
+Em produção em **https://suprimentos.falcaoengenhariasz.com** (VPS da Hostinger). Pendente: caixa de e-mail da Hostinger para os avisos por e-mail (`SMTP_*` no `.env` do servidor).
 
 **Infraestrutura**
 - Sem Dockerfile de produção para API/Web — o `docker-compose.yml` sobe apenas o PostgreSQL de desenvolvimento.
@@ -396,7 +405,7 @@ Funcional para desenvolvimento local; ainda **não pronto para produção**.
 **Qualidade**
 - Testes unitários no Web (formatação, KPIs, CSV, calendário, paridade de traduções); a API ainda não tem `*.spec.ts` versionados.
 - Falta um job de CI com PostgreSQL para testes de integração.
-- `npm audit` ainda aponta itens que exigem troca de versão maior: NestJS 10 → 11 e React Router 6 → 7.
+- `npm audit` ainda aponta itens que exigem troca de versão maior: NestJS 10 → 11.
 
 **Segurança**
 - Arquivos em `/uploads` são acessíveis por quem tiver a URL — para dados sensíveis, servir por rota autenticada ou URL assinada.
@@ -405,7 +414,9 @@ Funcional para desenvolvimento local; ainda **não pronto para produção**.
 
 **Produto**
 - PDFs usam a fonte padrão (Helvetica): com o sistema em chinês (zh-CN), textos em ideogramas saem ilegíveis no PDF — Excel e CSV não têm essa limitação. Embutir uma fonte CJK resolve.
-- Avisar o comprador por e-mail quando um fornecedor responde ou envia catálogo.
+- Avisar o comprador por e-mail/WeChat quando um fornecedor responde ou envia catálogo (os avisos de aprovação já existem).
+- Integração com o Google Agenda (assinatura de calendário `.ics` por usuário e convites por e-mail).
+- Fotos de itens e produtos ficam em `/uploads` acessíveis por URL — como os demais anexos.
 - Tela de dados da empresa (`companies` ainda é só serviço interno).
 - Recuperação de senha por e-mail.
 - Busca por conteúdo em PDFs e documentos Office.
