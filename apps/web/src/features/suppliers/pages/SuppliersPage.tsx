@@ -1,7 +1,19 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { CheckCircle2, CircleOff, Layers, Plus, Truck } from 'lucide-react';
+import { toast } from 'sonner';
+import { BookOpen, CheckCircle2, CircleOff, Layers, Plus, Truck, UserCheck } from 'lucide-react';
+
+import { ExportMenu } from '@/components/common/ExportMenu';
+import { SUPPLIER_CATEGORY_LABELS } from '@/constants/enums';
+import {
+  describeFilters,
+  exportReport,
+  fetchAllPages,
+  type ExportFormat,
+} from '@/utils/export/report';
+import { suppliersApi } from '../services/suppliers.api';
+import { suppliersReport } from '../lib/reports';
 
 import { PageHeader } from '@/components/layout/PageHeader';
 import { StatTile } from '@/components/data-display/StatTile';
@@ -29,16 +41,38 @@ export function SuppliersPage() {
   const navigate = useNavigate();
   const [filters, setFilters] = useState<SupplierFilters>({});
   const [page, setPage] = useState(1);
+  /** Só os cadastros que os fornecedores fizeram pelo link e aguardam revisão. */
+  const [onlyPending, setOnlyPending] = useState(false);
   const debouncedSearch = useDebounce(filters.busca, 300);
 
   const stats = useSupplierStats();
-  const list = useSuppliers({
-    page,
-    pageSize: PAGE_SIZE,
+  const listParams = {
     search: debouncedSearch || undefined,
     categoria: filters.categoria,
     estado: filters.estado,
-  });
+    cadastroPendente: onlyPending || undefined,
+  };
+  const list = useSuppliers({ page, pageSize: PAGE_SIZE, ...listParams });
+
+  async function handleExport(format: ExportFormat) {
+    const all = await fetchAllPages((current, pageSize) =>
+      suppliersApi.list({ ...listParams, page: current, pageSize }),
+    );
+    if (all.length === 0) {
+      toast.info(t('common:export.empty'));
+      return;
+    }
+    const meta = describeFilters([
+      [t('suppliers:report.search'), debouncedSearch],
+      [
+        t('suppliers:report.categoria'),
+        filters.categoria && SUPPLIER_CATEGORY_LABELS[filters.categoria],
+      ],
+      [t('suppliers:report.estado'), filters.estado],
+      [null, onlyPending && t('suppliers:registration.onlyPending')],
+    ]);
+    await exportReport(suppliersReport(all, meta), format);
+  }
 
   function handleFilterChange(patch: Partial<SupplierFilters>) {
     setFilters((prev) => ({ ...prev, ...patch }));
@@ -71,7 +105,21 @@ export function SuppliersPage() {
         eyebrow={t('suppliers:page.eyebrow')}
         title={t('suppliers:page.title')}
         description={t('suppliers:page.description')}
-        actions={newSupplierButton}
+        actions={
+          <>
+            <ExportMenu onExport={handleExport} />
+            <Can permission={PERMISSIONS.QUOTATION_WRITE}>
+              <Button
+                variant="outline"
+                leftIcon={<BookOpen className="h-4 w-4" />}
+                onClick={() => navigate(ROUTE_PATHS.CATALOGOS)}
+              >
+                {t('suppliers:actions.catalogs')}
+              </Button>
+            </Can>
+            {newSupplierButton}
+          </>
+        }
       />
 
       <div className="space-y-8 px-6 py-8 sm:px-8">
@@ -113,6 +161,28 @@ export function SuppliersPage() {
         </section>
 
         <Separator />
+
+        {(onlyPending || (stats.data?.pendentes ?? 0) > 0) && (
+          <div className="flex flex-col gap-3 rounded-lg border border-brand-gold-300 bg-brand-gold-50/70 p-4 text-sm text-ink sm:flex-row sm:items-center">
+            <UserCheck className="h-5 w-5 shrink-0 text-brand-gold-700" aria-hidden="true" />
+            <p className="flex-1">
+              {t('suppliers:registration.listBanner', { count: stats.data?.pendentes ?? 0 })}
+            </p>
+            <Button
+              size="sm"
+              variant={onlyPending ? 'primary' : 'outline'}
+              aria-pressed={onlyPending}
+              onClick={() => {
+                setOnlyPending((current) => !current);
+                setPage(1);
+              }}
+            >
+              {onlyPending
+                ? t('suppliers:registration.showAll')
+                : t('suppliers:registration.onlyPending')}
+            </Button>
+          </div>
+        )}
 
         <FiltersBar filters={filters} onChange={handleFilterChange} onClearAll={handleClearAll} />
 

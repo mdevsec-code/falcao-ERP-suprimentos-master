@@ -91,7 +91,7 @@ export const exportIssuer = () => `${brand.legalName} · ${brand.name}`;
 export function exportFileName(base: string, extension: 'pdf' | 'xlsx' | 'csv'): string {
   const slug = base
     .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
+    .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')

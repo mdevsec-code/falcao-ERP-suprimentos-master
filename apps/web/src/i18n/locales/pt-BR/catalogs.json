@@ -1,0 +1,96 @@
+{
+  "page": {
+    "eyebrow": "Suprimentos",
+    "title": "Catálogos recebidos",
+    "description": "Catálogos e listas de preço enviados pelos fornecedores. Revise cada item para ligar ao catálogo vivo — nada entra sem a sua revisão."
+  },
+  "link": {
+    "title": "Link para fornecedores enviarem catálogo",
+    "description": "Mande este link aos fornecedores: eles informam o CNPJ, anexam o catálogo e, se quiserem, a planilha modelo com itens e preços.",
+    "off": "O link está desligado — os fornecedores não conseguem enviar catálogo.",
+    "enable": "Ativar link",
+    "copy": "Copiar link",
+    "whatsapp": "WhatsApp",
+    "email": "E-mail",
+    "regenerate": "Gerar novo link",
+    "disable": "Desativar",
+    "regenerateTitle": "Gerar um novo link de catálogo?",
+    "disableTitle": "Desativar o link de catálogo?",
+    "confirmDescription": "O link atual deixa de funcionar. Os catálogos já recebidos continuam aqui.",
+    "subject": "Envie o catálogo de produtos da sua empresa",
+    "message": "Olá!\n\nQueremos conhecer melhor os produtos da sua empresa. Pelo link abaixo você envia o catálogo (PDF, planilha…) e, se quiser, a planilha modelo com itens e preços:\n{{link}}\n\nObrigado!"
+  },
+  "filters": {
+    "status": "Situação",
+    "all": "Todos"
+  },
+  "error": {
+    "title": "Não foi possível carregar os catálogos",
+    "description": "Verifique a conexão e tente de novo."
+  },
+  "empty": {
+    "title": "Nenhum catálogo por aqui",
+    "description": "Ative o link acima e envie aos fornecedores."
+  },
+  "table": {
+    "supplier": "Fornecedor",
+    "status": "Situação",
+    "items": "Itens",
+    "file": "Arquivo",
+    "sentAt": "Recebido em",
+    "sentBy": "enviado por {{name}}"
+  },
+  "review": {
+    "eyebrow": "Catálogo recebido",
+    "sentBy": "Enviado por {{name}} em {{date}}",
+    "reviewedBy": "Revisado por {{name}} em {{date}}",
+    "back": "Catálogos",
+    "openFile": "Abrir arquivo",
+    "reject": "Recusar catálogo",
+    "apply_one": "Aplicar {{count}} decisão",
+    "apply_other": "Aplicar {{count}} decisões",
+    "pendingSupplier": "O cadastro deste fornecedor ainda está pendente. Aprove o cadastro antes de levar os preços para o catálogo.",
+    "seeSupplier": "Ver cadastro",
+    "notes": "Observações do fornecedor:",
+    "rejectReason": "Motivo da recusa",
+    "fileOnly": "O fornecedor enviou só o arquivo do catálogo, sem a planilha de itens. Abra o arquivo e cadastre os produtos de interesse pelo catálogo.",
+    "itemsTitle_one": "Itens ({{count}})",
+    "itemsTitle_other": "Itens ({{count}})",
+    "hint": "Itens com produto sugerido já vêm marcados. Confira e clique em Aplicar.",
+    "col": {
+      "item": "Item do fornecedor",
+      "price": "Preço",
+      "product": "Produto no catálogo",
+      "action": "Ação"
+    },
+    "suggested": "sugerido",
+    "link": "Vincular",
+    "createProduct": "Criar produto",
+    "ignore": "Ignorar",
+    "rejectTitle": "Recusar este catálogo?",
+    "rejectDescription": "Os itens pendentes ficam como ignorados. O fornecedor pode enviar outro catálogo pelo link.",
+    "notFoundTitle": "Catálogo não encontrado",
+    "notFoundDescription": "Ele pode ter sido removido ou o endereço está incorreto."
+  },
+  "createProduct": {
+    "title": "Criar produto no catálogo",
+    "description": "O produto novo entra no catálogo vivo com este fornecedor como principal e o preço do catálogo no histórico.",
+    "code": "Código interno",
+    "codeHint": "Único na empresa.",
+    "name": "Nome do produto",
+    "unit": "Unidade",
+    "category": "Categoria",
+    "discipline": "Disciplina",
+    "noDiscipline": "Sem disciplina",
+    "submit": "Criar e vincular"
+  },
+  "toast": {
+    "linkOn": "Link de catálogo ativo.",
+    "linkOff": "Link de catálogo desativado.",
+    "copied": "Link copiado.",
+    "copyFailed": "Não foi possível copiar. Selecione e copie manualmente.",
+    "reviewed": "Decisões aplicadas ao catálogo.",
+    "productCreated": "Produto criado e vinculado.",
+    "rejected": "Catálogo recusado."
+  }
+}

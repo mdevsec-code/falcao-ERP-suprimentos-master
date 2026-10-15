@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { CalendarClock, CheckCircle2, LinkIcon, Lock, XCircle } from 'lucide-react';
+import { Bookmark, CalendarClock, CheckCircle2, Copy, LinkIcon, Lock, XCircle } from 'lucide-react';
 
 import { FalcaoLogo } from '@/assets/logo/FalcaoLogo';
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher';
@@ -33,6 +33,10 @@ import type { PublicDeclinePayload, PublicSubmitPayload } from '../types';
  */
 export function SupplierQuotationPage() {
   const { token = '' } = useParams();
+  const [searchParams] = useSearchParams();
+  /** Chegou agora pelo link aberto: precisa guardar este link (é o acesso para editar). */
+  const justJoined = searchParams.get('novo') === '1';
+  const pendingRegistration = searchParams.get('pendente') === '1';
   const { t } = useTranslation('quotations');
   const queryClient = useQueryClient();
   const queryKey = ['public-quotation', token];
@@ -145,6 +149,33 @@ export function SupplierQuotationPage() {
                 </p>
               )}
             </section>
+
+            {justJoined && (
+              <div
+                role="status"
+                className="flex flex-col gap-3 rounded-lg border border-brand-gold-300 bg-brand-gold-50/70 p-4 text-sm text-ink sm:flex-row sm:items-center"
+              >
+                <Bookmark className="h-5 w-5 shrink-0 text-brand-gold-700" aria-hidden="true" />
+                <p className="flex-1">
+                  {t('quotations:public.saveLink')}
+                  {pendingRegistration && ` ${t('quotations:public.pendingRegistration')}`}
+                </p>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  leftIcon={<Copy className="h-3.5 w-3.5" />}
+                  onClick={() => {
+                    const url = `${window.location.origin}${window.location.pathname}`;
+                    navigator.clipboard
+                      .writeText(url)
+                      .then(() => toast.success(t('quotations:toast.linkCopied')))
+                      .catch(() => toast.error(t('quotations:toast.copyFailed')));
+                  }}
+                >
+                  {t('quotations:suppliers.copyLink')}
+                </Button>
+              </div>
+            )}
 
             {answered && (
               <div

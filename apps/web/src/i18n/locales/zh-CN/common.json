@@ -63,7 +63,9 @@
     "users": "用户",
     "audit": "审计",
     "profile": "个人资料",
-    "quotations": "询价"
+    "quotations": "询价",
+    "plans": "采购计划",
+    "catalogs": "已收到的目录"
   },
   "theme": {
     "switchToLight": "切换到浅色主题",

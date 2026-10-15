@@ -96,3 +96,25 @@ export function useRemoveSupplierDocument(id: string) {
     },
   });
 }
+
+/** Revisão do cadastro que o fornecedor fez sozinho pelo link aberto ou de catálogo. */
+export function useDecideSupplierRegistration(id: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (approve: boolean) => suppliersApi.decideRegistration(id, approve),
+    onSuccess: (_, approve) => {
+      void queryClient.invalidateQueries({ queryKey: suppliersKeys.all });
+      // Cotações e catálogos mostram o aviso de cadastro pendente.
+      void queryClient.invalidateQueries({ queryKey: ['quotations'] });
+      void queryClient.invalidateQueries({ queryKey: ['supplier-catalogs'] });
+      toast.success(
+        i18n.t(
+          approve ? 'suppliers:toast.registrationApproved' : 'suppliers:toast.registrationRejected',
+        ),
+      );
+    },
+    onError: (error: Error) => {
+      toast.error(getErrorMessage(error, i18n.t('common:errors.generic')));
+    },
+  });
+}

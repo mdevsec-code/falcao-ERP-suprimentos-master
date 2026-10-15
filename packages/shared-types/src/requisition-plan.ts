@@ -96,7 +96,7 @@ export interface ConsolidationInput {
 function normalize(text: string | null | undefined): string {
   return (text ?? "")
     .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .replace(/\s+/g, " ")
     .trim();

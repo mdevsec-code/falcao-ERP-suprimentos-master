@@ -63,7 +63,9 @@
     "users": "Usuários",
     "audit": "Auditoria",
     "profile": "Meu perfil",
-    "quotations": "Cotações"
+    "quotations": "Cotações",
+    "plans": "Planos de Requisição",
+    "catalogs": "Catálogos Recebidos"
   },
   "theme": {
     "switchToLight": "Ativar tema claro",

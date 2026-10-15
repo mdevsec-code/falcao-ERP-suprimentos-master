@@ -1,0 +1,105 @@
+{
+  "identity": {
+    "title": "Company identification",
+    "description": "Enter your company's CNPJ and your name. If it is your first time, we ask for a few details for the registration.",
+    "cnpj": "CNPJ",
+    "name": "Your name",
+    "registrationTitle": "Company registration",
+    "registrationDescription": "We did not find this CNPJ among our suppliers. Fill in the details below — the registration is reviewed by the purchasing team.",
+    "razaoSocial": "Legal name",
+    "nomeFantasia": "Trade name",
+    "categoria": "Line of business",
+    "categoriaNone": "Prefer not to say",
+    "cidade": "City",
+    "estado": "State",
+    "email": "Contact e-mail",
+    "telefone": "Phone / WhatsApp",
+    "registrationNeeded": "CNPJ not registered yet — please complete the company details.",
+    "errors": {
+      "cnpj": "Invalid CNPJ. Please check the numbers.",
+      "required": "Required field.",
+      "email": "Enter a valid e-mail.",
+      "phone": "Enter the phone number with area code."
+    }
+  },
+  "errors": {
+    "generic": "Could not send. Please try again in a moment."
+  },
+  "closed": {
+    "ENCERRADA": "This quotation has been closed. Thank you for your interest!",
+    "CANCELADA": "This quotation has been cancelled.",
+    "PRAZO": "The deadline to take part has passed."
+  },
+  "openQuotation": {
+    "portal": "Quotation portal",
+    "invalidTitle": "Invalid or disabled link",
+    "invalidDescription": "Ask the purchasing team that shared the quotation for the updated link.",
+    "eyebrow": "Quotation #{{numero}} · {{empresa}}",
+    "eyebrowPlan": "Requisition plan #{{numero}} · {{empresa}}",
+    "intro": "{{empresa}} is collecting quotes for the materials below. Check the list and, to quote, identify your company at the bottom of the page.",
+    "deadline": "Quotes until {{date}}",
+    "itemCount_one": "{{count}} item",
+    "itemCount_other": "{{count}} items",
+    "itemsTitle": "Requested materials",
+    "requested": "Requested: {{value}}",
+    "submit": "Continue to the quotation",
+    "privacy": "Your prices are seen only by the purchasing team of {{empresa}} — other suppliers have no access."
+  },
+  "catalog": {
+    "portal": "Catalog submission",
+    "invalidTitle": "Invalid or disabled link",
+    "invalidDescription": "Ask the purchasing team for the updated link.",
+    "title": "Send your company's product catalog",
+    "intro": "Attach your catalog (PDF, spreadsheet, images…) and, if you like, fill in the template with items and prices — your products get into our records faster that way.",
+    "fileStep": "1. Catalog file (optional)",
+    "fileHint": "Your catalog as you already have it: PDF, spreadsheet, presentation or images (up to 50 MB).",
+    "fileLabel": "Catalog file",
+    "sheetStep": "2. Items and prices in the template (optional)",
+    "sheetHint": "Download the spreadsheet, fill in one row per product (description and unit are required) and upload it back here. We also read your own spreadsheet if the columns have similar names.",
+    "downloadTemplate": "Download template",
+    "chooseSheet": "Upload filled spreadsheet",
+    "readingSheet": "Reading the spreadsheet…",
+    "sheetSummary_one": "{{file}}: {{count}} item ready to send.",
+    "sheetSummary_other": "{{file}}: {{count}} items ready to send.",
+    "sheetInvalid_one": "{{count}} row with problems will not be sent (in red).",
+    "sheetInvalid_other": "{{count}} rows with problems will not be sent (in red).",
+    "col": {
+      "line": "Row",
+      "code": "Code",
+      "description": "Description",
+      "unit": "Unit",
+      "brand": "Brand",
+      "price": "Price"
+    },
+    "previewLimit": "Showing {{shown}} of {{total}} rows.",
+    "notes": "Notes (delivery time, terms, region served…)",
+    "nothingToSend": "Attach the catalog file or upload the spreadsheet with the items.",
+    "submit": "Send catalog",
+    "emptySheet": "No items found in the spreadsheet.",
+    "readError": "Could not read the spreadsheet.",
+    "errors": {
+      "noHeader": "We could not find the Description and Unit columns. Please use the template.",
+      "description": "Missing description.",
+      "unit": "Missing unit.",
+      "price": "Invalid price."
+    },
+    "sentTitle": "Catalog received!",
+    "sentDescription_one": "Thank you, {{fornecedor}}. We received the catalog with {{count}} item — the purchasing team of {{empresa}} will review it.",
+    "sentDescription_other": "Thank you, {{fornecedor}}. We received the catalog with {{count}} items — the purchasing team of {{empresa}} will review it.",
+    "sentPending": "Your company's registration will also be reviewed.",
+    "sendAnother": "Send another catalog",
+    "privacy": "Uploaded files are seen only by the purchasing team of {{empresa}}."
+  },
+  "template": {
+    "title": "Product catalog — template",
+    "subtitle": "To be sent to {{empresa}}",
+    "meta": "One row per product. Description and unit are required; the grey row is just an example.",
+    "helpSheet": "How to fill in",
+    "help1": "1. Fill in the “Itens” tab starting on the row below the black header — one row per product.",
+    "help2": "2. Description and Unit are required. Unit: UN, KG, M, M2, M3, L, CX, PC, SC, TON (or the one you use).",
+    "help3": "3. Unit price in BRL, without itemized taxes (e.g. 38.90). Leave blank if you prefer not to say.",
+    "help4": "4. Brand and reference/part number help identify the product in our records.",
+    "help5": "5. You may delete the example row. Then upload the file through the same link where you downloaded this spreadsheet.",
+    "fileBase": "planilha modelo catalogo"
+  }
+}

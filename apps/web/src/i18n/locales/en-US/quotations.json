@@ -28,7 +28,8 @@
     "answers": "Answers",
     "items": "Items",
     "request": "Request: {{title}}",
-    "overdue": "Past deadline"
+    "overdue": "Past deadline",
+    "plan": "Requisition plan #{{numero}}"
   },
   "empty": {
     "title": "No quotations here",
@@ -135,7 +136,9 @@
     "openLink": "Open link",
     "enterPrices": "Enter received proposal",
     "regenerate": "Generate new link",
-    "remove": "Remove from quotation"
+    "remove": "Remove from quotation",
+    "viaOpenLink": "Joined via open link",
+    "pendingRegistration": "Pending registration"
   },
   "share": {
     "subject": "Quotation #{{numero}} — {{titulo}}",
@@ -217,7 +220,9 @@
     "declined": "Decline recorded. Thanks for letting us know.",
     "invalidTitle": "Invalid or expired link",
     "invalidDescription": "Ask the buyer who sent the quotation for a new link.",
-    "privacy": "Your prices are seen only by the purchasing team at {{empresa}}."
+    "privacy": "Your prices are seen only by the purchasing team at {{empresa}}.",
+    "saveLink": "Save this address (bookmark or copy it) — it is your access to send and change your proposal until the deadline.",
+    "pendingRegistration": "Your company's registration will be reviewed by the purchasing team."
   },
   "toast": {
     "created": "Quotation #{{numero}} opened.",
@@ -233,7 +238,9 @@
     "linkCopied": "Link copied.",
     "messageCopied": "Message copied.",
     "copyFailed": "Could not copy. Select it and copy manually.",
-    "exportError": "Could not export the map."
+    "exportError": "Could not export the map.",
+    "openLinkOn": "Open link enabled.",
+    "openLinkOff": "Open link disabled."
   },
   "export": {
     "sheet": "Quotation map",
@@ -274,5 +281,21 @@
     "summaryTitle": "Summary by supplier",
     "supplier": "Supplier",
     "legend": "Green: lowest price for the item · Gold: chosen supplier · Totals include freight."
+  },
+  "openLink": {
+    "title": "Open link for suppliers",
+    "description": "Share this link: any supplier sees the list, enters their CNPJ and quotes on it. New companies come in as pending registrations for you to approve.",
+    "off": "The open link is off — only invited suppliers can answer.",
+    "enable": "Enable open link",
+    "regenerate": "Generate new link",
+    "disable": "Disable",
+    "hint": "Each supplier gets their own answer link after entering the CNPJ — one supplier never sees another's prices.",
+    "regenerateTitle": "Generate a new open link?",
+    "regenerateDescription": "The current link stops working. Suppliers who already joined keep their own answer link.",
+    "disableTitle": "Disable the open link?",
+    "disableDescription": "New suppliers will no longer be able to join through it. Suppliers who already joined keep their own answer link.",
+    "message": "Hello!\n\nWe are collecting quotes for the materials below (quotation #{{numero}} — {{titulo}}):\n\n{{itens}}\n\nTo quote, open the link, enter your company's CNPJ and fill in the prices by {{prazo}}:\n{{link}}\n\nThank you!",
+    "moreItems_one": "• … and {{count}} more item in the link",
+    "moreItems_other": "• … and {{count}} more items in the link"
   }
 }

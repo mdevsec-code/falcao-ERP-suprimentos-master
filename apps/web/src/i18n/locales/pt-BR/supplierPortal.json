@@ -1,0 +1,105 @@
+{
+  "identity": {
+    "title": "Identificação da empresa",
+    "description": "Informe o CNPJ da sua empresa e o seu nome. Se for a primeira vez, pedimos alguns dados para o cadastro.",
+    "cnpj": "CNPJ",
+    "name": "Seu nome",
+    "registrationTitle": "Cadastro da empresa",
+    "registrationDescription": "Não encontramos este CNPJ entre nossos fornecedores. Preencha os dados abaixo — o cadastro é conferido pela equipe de compras.",
+    "razaoSocial": "Razão social",
+    "nomeFantasia": "Nome fantasia",
+    "categoria": "Ramo de atuação",
+    "categoriaNone": "Não informar",
+    "cidade": "Cidade",
+    "estado": "UF",
+    "email": "E-mail para contato",
+    "telefone": "Telefone / WhatsApp",
+    "registrationNeeded": "CNPJ ainda não cadastrado — complete os dados da empresa.",
+    "errors": {
+      "cnpj": "CNPJ inválido. Confira os números.",
+      "required": "Campo obrigatório.",
+      "email": "Informe um e-mail válido.",
+      "phone": "Informe o telefone com DDD."
+    }
+  },
+  "errors": {
+    "generic": "Não foi possível enviar. Tente de novo em instantes."
+  },
+  "closed": {
+    "ENCERRADA": "Esta cotação foi encerrada. Obrigado pelo interesse!",
+    "CANCELADA": "Esta cotação foi cancelada.",
+    "PRAZO": "O prazo para participar terminou."
+  },
+  "openQuotation": {
+    "portal": "Portal de cotação",
+    "invalidTitle": "Link inválido ou desativado",
+    "invalidDescription": "Peça o link atualizado à equipe de compras que divulgou a cotação.",
+    "eyebrow": "Cotação nº {{numero}} · {{empresa}}",
+    "eyebrowPlan": "Plano de requisição nº {{numero}} · {{empresa}}",
+    "intro": "{{empresa}} está recebendo cotações para os materiais abaixo. Confira a lista e, para cotar, identifique sua empresa no final da página.",
+    "deadline": "Cotações até {{date}}",
+    "itemCount_one": "{{count}} item",
+    "itemCount_other": "{{count}} itens",
+    "itemsTitle": "Materiais solicitados",
+    "requested": "Pedido: {{value}}",
+    "submit": "Continuar para a cotação",
+    "privacy": "Seus preços são vistos apenas pela equipe de compras de {{empresa}} — os demais fornecedores não têm acesso."
+  },
+  "catalog": {
+    "portal": "Envio de catálogo",
+    "invalidTitle": "Link inválido ou desativado",
+    "invalidDescription": "Peça o link atualizado à equipe de compras.",
+    "title": "Envie o catálogo de produtos da sua empresa",
+    "intro": "Anexe o seu catálogo (PDF, planilha, imagens…) e, se quiser, preencha a planilha modelo com itens e preços — assim seus produtos entram mais rápido no nosso cadastro.",
+    "fileStep": "1. Arquivo do catálogo (opcional)",
+    "fileHint": "O catálogo como vocês já têm: PDF, planilha, apresentação ou imagens (até 50 MB).",
+    "fileLabel": "Arquivo do catálogo",
+    "sheetStep": "2. Itens e preços na planilha modelo (opcional)",
+    "sheetHint": "Baixe a planilha, preencha uma linha por produto (descrição e unidade são obrigatórias) e envie de volta aqui. Também lemos a sua planilha se as colunas tiverem nomes parecidos.",
+    "downloadTemplate": "Baixar planilha modelo",
+    "chooseSheet": "Enviar planilha preenchida",
+    "readingSheet": "Lendo a planilha…",
+    "sheetSummary_one": "{{file}}: {{count}} item pronto para enviar.",
+    "sheetSummary_other": "{{file}}: {{count}} itens prontos para enviar.",
+    "sheetInvalid_one": "{{count}} linha com problema não será enviada (em vermelho).",
+    "sheetInvalid_other": "{{count}} linhas com problema não serão enviadas (em vermelho).",
+    "col": {
+      "line": "Linha",
+      "code": "Código",
+      "description": "Descrição",
+      "unit": "Un.",
+      "brand": "Marca",
+      "price": "Preço"
+    },
+    "previewLimit": "Mostrando {{shown}} de {{total}} linhas.",
+    "notes": "Observações (prazo de entrega, condições, região atendida…)",
+    "nothingToSend": "Anexe o arquivo do catálogo ou envie a planilha com os itens.",
+    "submit": "Enviar catálogo",
+    "emptySheet": "Nenhum item encontrado na planilha.",
+    "readError": "Não foi possível ler a planilha.",
+    "errors": {
+      "noHeader": "Não encontramos as colunas Descrição e Unidade. Use a planilha modelo.",
+      "description": "Falta a descrição.",
+      "unit": "Falta a unidade.",
+      "price": "Preço inválido."
+    },
+    "sentTitle": "Catálogo recebido!",
+    "sentDescription_one": "Obrigado, {{fornecedor}}. Recebemos o catálogo com {{count}} item — a equipe de compras de {{empresa}} vai revisar.",
+    "sentDescription_other": "Obrigado, {{fornecedor}}. Recebemos o catálogo com {{count}} itens — a equipe de compras de {{empresa}} vai revisar.",
+    "sentPending": "O cadastro da sua empresa também será conferido.",
+    "sendAnother": "Enviar outro catálogo",
+    "privacy": "Os arquivos enviados são vistos apenas pela equipe de compras de {{empresa}}."
+  },
+  "template": {
+    "title": "Catálogo de produtos — planilha modelo",
+    "subtitle": "Para envio a {{empresa}}",
+    "meta": "Uma linha por produto. Descrição e unidade são obrigatórias; a linha em cinza é só um exemplo.",
+    "helpSheet": "Como preencher",
+    "help1": "1. Preencha a aba “Itens” a partir da linha abaixo do cabeçalho preto — uma linha por produto.",
+    "help2": "2. Descrição e Unidade são obrigatórias. Unidade: UN, KG, M, M2, M3, L, CX, PC, SC, TON (ou a que vocês usam).",
+    "help3": "3. Preço unitário em reais, sem impostos destacados (ex.: 38,90). Deixe em branco se preferir não informar.",
+    "help4": "4. Marca e referência/part number ajudam a identificar o produto no nosso cadastro.",
+    "help5": "5. Pode apagar a linha de exemplo. Depois, envie o arquivo pelo mesmo link em que baixou esta planilha.",
+    "fileBase": "planilha modelo catalogo"
+  }
+}

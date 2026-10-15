@@ -28,7 +28,8 @@
     "answers": "Respostas",
     "items": "Itens",
     "request": "Solicitação: {{title}}",
-    "overdue": "Prazo vencido"
+    "overdue": "Prazo vencido",
+    "plan": "Plano de requisição nº {{numero}}"
   },
   "empty": {
     "title": "Nenhuma cotação aqui",
@@ -135,7 +136,9 @@
     "openLink": "Abrir link",
     "enterPrices": "Lançar proposta recebida",
     "regenerate": "Gerar novo link",
-    "remove": "Remover da cotação"
+    "remove": "Remover da cotação",
+    "viaOpenLink": "Entrou pelo link aberto",
+    "pendingRegistration": "Cadastro pendente"
   },
   "share": {
     "subject": "Cotação nº {{numero}} — {{titulo}}",
@@ -217,7 +220,9 @@
     "declined": "Recusa registrada. Obrigado por avisar.",
     "invalidTitle": "Link inválido ou expirado",
     "invalidDescription": "Peça um novo link ao comprador que enviou a cotação.",
-    "privacy": "Seus preços são vistos apenas pela equipe de compras de {{empresa}}."
+    "privacy": "Seus preços são vistos apenas pela equipe de compras de {{empresa}}.",
+    "saveLink": "Guarde este endereço (favoritos ou copie) — ele é o seu acesso para enviar e alterar a proposta até o prazo.",
+    "pendingRegistration": "O cadastro da sua empresa será conferido pela equipe de compras."
   },
   "toast": {
     "created": "Cotação nº {{numero}} aberta.",
@@ -233,7 +238,9 @@
     "linkCopied": "Link copiado.",
     "messageCopied": "Mensagem copiada.",
     "copyFailed": "Não foi possível copiar. Selecione e copie manualmente.",
-    "exportError": "Não foi possível exportar o mapa."
+    "exportError": "Não foi possível exportar o mapa.",
+    "openLinkOn": "Link aberto ativado.",
+    "openLinkOff": "Link aberto desativado."
   },
   "export": {
     "sheet": "Mapa de cotação",
@@ -274,5 +281,21 @@
     "summaryTitle": "Resumo por fornecedor",
     "supplier": "Fornecedor",
     "legend": "Verde: menor preço do item · Dourado: fornecedor escolhido · Totais com frete."
+  },
+  "openLink": {
+    "title": "Link aberto para fornecedores",
+    "description": "Divulgue este link: qualquer fornecedor vê a lista, informa o CNPJ e cota em cima dela. Empresa nova entra como cadastro pendente para você aprovar.",
+    "off": "O link aberto está desligado — só os fornecedores convidados podem responder.",
+    "enable": "Ativar link aberto",
+    "regenerate": "Gerar novo link",
+    "disable": "Desativar",
+    "hint": "Cada fornecedor recebe o próprio link de resposta depois de informar o CNPJ — os preços de um não aparecem para os outros.",
+    "regenerateTitle": "Gerar um novo link aberto?",
+    "regenerateDescription": "O link atual deixa de funcionar. Quem já entrou continua com o próprio link de resposta.",
+    "disableTitle": "Desativar o link aberto?",
+    "disableDescription": "Novos fornecedores não conseguirão mais entrar por ele. Quem já entrou continua com o próprio link de resposta.",
+    "message": "Olá!\n\nEstamos recebendo cotações para os materiais abaixo (cotação nº {{numero}} — {{titulo}}):\n\n{{itens}}\n\nPara cotar, acesse o link, informe o CNPJ da sua empresa e preencha os preços até {{prazo}}:\n{{link}}\n\nObrigado!",
+    "moreItems_one": "• … e mais {{count}} item no link",
+    "moreItems_other": "• … e mais {{count}} itens no link"
   }
 }

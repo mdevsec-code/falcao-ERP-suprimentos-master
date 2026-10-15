@@ -1,0 +1,96 @@
+{
+  "page": {
+    "eyebrow": "Procurement",
+    "title": "Received catalogs",
+    "description": "Catalogs and price lists sent by suppliers. Review each item to link it to the live catalog — nothing gets in without your review."
+  },
+  "link": {
+    "title": "Link for suppliers to send their catalog",
+    "description": "Send this link to suppliers: they enter their CNPJ, attach the catalog and, if they like, the template with items and prices.",
+    "off": "The link is off — suppliers cannot send catalogs.",
+    "enable": "Enable link",
+    "copy": "Copy link",
+    "whatsapp": "WhatsApp",
+    "email": "E-mail",
+    "regenerate": "Generate new link",
+    "disable": "Disable",
+    "regenerateTitle": "Generate a new catalog link?",
+    "disableTitle": "Disable the catalog link?",
+    "confirmDescription": "The current link stops working. Catalogs already received stay here.",
+    "subject": "Send your company's product catalog",
+    "message": "Hello!\n\nWe would like to know your company's products better. Through the link below you can send your catalog (PDF, spreadsheet…) and, if you like, the template with items and prices:\n{{link}}\n\nThank you!"
+  },
+  "filters": {
+    "status": "Status",
+    "all": "All"
+  },
+  "error": {
+    "title": "Could not load the catalogs",
+    "description": "Check your connection and try again."
+  },
+  "empty": {
+    "title": "No catalogs here",
+    "description": "Enable the link above and send it to suppliers."
+  },
+  "table": {
+    "supplier": "Supplier",
+    "status": "Status",
+    "items": "Items",
+    "file": "File",
+    "sentAt": "Received on",
+    "sentBy": "sent by {{name}}"
+  },
+  "review": {
+    "eyebrow": "Received catalog",
+    "sentBy": "Sent by {{name}} on {{date}}",
+    "reviewedBy": "Reviewed by {{name}} on {{date}}",
+    "back": "Catalogs",
+    "openFile": "Open file",
+    "reject": "Reject catalog",
+    "apply_one": "Apply {{count}} decision",
+    "apply_other": "Apply {{count}} decisions",
+    "pendingSupplier": "This supplier's registration is still pending. Approve the registration before taking the prices into the catalog.",
+    "seeSupplier": "View registration",
+    "notes": "Supplier notes:",
+    "rejectReason": "Rejection reason",
+    "fileOnly": "The supplier sent only the catalog file, without the item spreadsheet. Open the file and register the products you need through the catalog.",
+    "itemsTitle_one": "Items ({{count}})",
+    "itemsTitle_other": "Items ({{count}})",
+    "hint": "Items with a suggested product come pre-selected. Check them and click Apply.",
+    "col": {
+      "item": "Supplier item",
+      "price": "Price",
+      "product": "Catalog product",
+      "action": "Action"
+    },
+    "suggested": "suggested",
+    "link": "Link",
+    "createProduct": "Create product",
+    "ignore": "Ignore",
+    "rejectTitle": "Reject this catalog?",
+    "rejectDescription": "Pending items are marked as ignored. The supplier can send another catalog through the link.",
+    "notFoundTitle": "Catalog not found",
+    "notFoundDescription": "It may have been removed or the address is wrong."
+  },
+  "createProduct": {
+    "title": "Create catalog product",
+    "description": "The new product enters the live catalog with this supplier as the main one and the catalog price in its history.",
+    "code": "Internal code",
+    "codeHint": "Unique within the company.",
+    "name": "Product name",
+    "unit": "Unit",
+    "category": "Category",
+    "discipline": "Discipline",
+    "noDiscipline": "No discipline",
+    "submit": "Create and link"
+  },
+  "toast": {
+    "linkOn": "Catalog link enabled.",
+    "linkOff": "Catalog link disabled.",
+    "copied": "Link copied.",
+    "copyFailed": "Could not copy. Select and copy it manually.",
+    "reviewed": "Decisions applied to the catalog.",
+    "productCreated": "Product created and linked.",
+    "rejected": "Catalog rejected."
+  }
+}

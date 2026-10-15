@@ -14,7 +14,10 @@ import {
 } from 'lucide-react';
 import type { QuotationDetailDto, QuotationSupplierDto } from '@falcao-erp/shared-types';
 
+import { Link } from 'react-router-dom';
+import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
+import { routeTo } from '@/constants/routes';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -95,6 +98,22 @@ export function SuppliersPanel({
                   <p className="font-mono text-2xs text-ink-soft">
                     {formatCNPJ(supplier.supplierCnpj)}
                   </p>
+                  {(supplier.origem === 'LINK_ABERTO' || supplier.cadastroPendente) && (
+                    <p className="mt-1 flex flex-wrap gap-1">
+                      {supplier.origem === 'LINK_ABERTO' && (
+                        <Badge size="sm" variant="info">
+                          {t('quotations:suppliers.viaOpenLink')}
+                        </Badge>
+                      )}
+                      {supplier.cadastroPendente && (
+                        <Link to={routeTo.supplier(supplier.supplierId)}>
+                          <Badge size="sm" variant="warning">
+                            {t('quotations:suppliers.pendingRegistration')}
+                          </Badge>
+                        </Link>
+                      )}
+                    </p>
+                  )}
                 </div>
                 <SupplierResponseBadge status={supplier.status} />
               </div>

@@ -17,6 +17,9 @@ import type {
   QuotationStatus,
   QuotationSupplierStatus,
   ReimbursementStatus,
+  RequisitionPlanStatus,
+  SupplierCatalogItemStatus,
+  SupplierCatalogStatus,
   SupplierCategory,
   SupplierDocumentCategory,
   UnitOfMeasure,
@@ -78,3 +81,12 @@ export const QUOTATION_SUPPLIER_STATUS_LABELS =
 
 export const PRICE_ENTRY_SOURCE_LABELS =
   createTranslatedLabels<PriceEntrySource>('priceEntrySource');
+
+export const REQUISITION_PLAN_STATUS_LABELS =
+  createTranslatedLabels<RequisitionPlanStatus>('requisitionPlanStatus');
+
+export const SUPPLIER_CATALOG_STATUS_LABELS =
+  createTranslatedLabels<SupplierCatalogStatus>('supplierCatalogStatus');
+
+export const SUPPLIER_CATALOG_ITEM_STATUS_LABELS =
+  createTranslatedLabels<SupplierCatalogItemStatus>('supplierCatalogItemStatus');

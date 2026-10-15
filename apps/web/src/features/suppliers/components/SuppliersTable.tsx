@@ -72,7 +72,10 @@ export function SuppliersTable({ rows, isFetching }: SuppliersTableProps) {
               <SupplierScore score={supplier.averageScore} />
             </TableCell>
             <TableCell>
-              <SupplierStatusBadge isActive={supplier.isActive} />
+              <SupplierStatusBadge
+                isActive={supplier.isActive}
+                pending={supplier.cadastroPendente}
+              />
             </TableCell>
             <TableCell aria-hidden="true">
               <ChevronRight className="h-4 w-4 text-ink-soft transition-transform duration-fast group-hover:translate-x-0.5 group-hover:text-brand-gold-700" />

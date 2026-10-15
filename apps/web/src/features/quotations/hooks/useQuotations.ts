@@ -149,3 +149,17 @@ export function useCloseQuotation(id: string) {
 export function useCancelQuotation(id: string) {
   return useQuotationMutation(() => quotationsApi.cancel(id), 'quotations:toast.cancelled');
 }
+
+export function useEnableOpenLink(id: string) {
+  return useQuotationMutation(
+    () => quotationsApi.enableOpenLink(id),
+    'quotations:toast.openLinkOn',
+  );
+}
+
+export function useDisableOpenLink(id: string) {
+  return useQuotationMutation(
+    () => quotationsApi.disableOpenLink(id),
+    'quotations:toast.openLinkOff',
+  );
+}

@@ -79,6 +79,39 @@ const SupplierQuotationPage = lazy(() =>
     default: m.SupplierQuotationPage,
   })),
 );
+const PlansPage = lazy(() =>
+  import('@/features/requisition-plans/pages/PlansPage').then((m) => ({ default: m.PlansPage })),
+);
+const PlanFormPage = lazy(() =>
+  import('@/features/requisition-plans/pages/PlanFormPage').then((m) => ({
+    default: m.PlanFormPage,
+  })),
+);
+const PlanDetailPage = lazy(() =>
+  import('@/features/requisition-plans/pages/PlanDetailPage').then((m) => ({
+    default: m.PlanDetailPage,
+  })),
+);
+const CatalogsPage = lazy(() =>
+  import('@/features/supplier-catalogs/pages/CatalogsPage').then((m) => ({
+    default: m.CatalogsPage,
+  })),
+);
+const CatalogReviewPage = lazy(() =>
+  import('@/features/supplier-catalogs/pages/CatalogReviewPage').then((m) => ({
+    default: m.CatalogReviewPage,
+  })),
+);
+const OpenQuotationPage = lazy(() =>
+  import('@/features/supplier-portal/pages/OpenQuotationPage').then((m) => ({
+    default: m.OpenQuotationPage,
+  })),
+);
+const CatalogUploadPage = lazy(() =>
+  import('@/features/supplier-portal/pages/CatalogUploadPage').then((m) => ({
+    default: m.CatalogUploadPage,
+  })),
+);
 const ContractsPage = lazy(() =>
   import('@/features/contracts/pages/ContractsPage').then((m) => ({ default: m.ContractsPage })),
 );
@@ -199,6 +232,30 @@ const protectedRoutes: RouteObject[] = [
     element: withPermission(PERMISSIONS.QUOTATION_READ, <QuotationDetailPage />),
   },
   {
+    path: ROUTE_PATHS.PLANOS,
+    element: withPermission(PERMISSIONS.QUOTATION_READ, <PlansPage />),
+  },
+  {
+    path: ROUTE_PATHS.PLANO_NOVO,
+    element: withPermission(PERMISSIONS.QUOTATION_WRITE, <PlanFormPage />),
+  },
+  {
+    path: `${ROUTE_PATHS.PLANOS}/:id`,
+    element: withPermission(PERMISSIONS.QUOTATION_READ, <PlanDetailPage />),
+  },
+  {
+    path: `${ROUTE_PATHS.PLANOS}/:id/editar`,
+    element: withPermission(PERMISSIONS.QUOTATION_WRITE, <PlanFormPage />),
+  },
+  {
+    path: ROUTE_PATHS.CATALOGOS,
+    element: withPermission(PERMISSIONS.QUOTATION_READ, <CatalogsPage />),
+  },
+  {
+    path: `${ROUTE_PATHS.CATALOGOS}/:id`,
+    element: withPermission(PERMISSIONS.QUOTATION_READ, <CatalogReviewPage />),
+  },
+  {
     path: ROUTE_PATHS.USUARIOS,
     element: withPermission(PERMISSIONS.USERS_MANAGE, <UsersPage />),
   },
@@ -250,6 +307,18 @@ const routes: RouteObject[] = [
   {
     path: `${ROUTE_PATHS.COTACAO_FORNECEDOR}/:token`,
     element: withSuspense(<SupplierQuotationPage />),
+    errorElement: <RootBoundary />,
+  },
+  // Link aberto da cotação/plano: qualquer fornecedor entra com o CNPJ.
+  {
+    path: `${ROUTE_PATHS.COTAR}/:token`,
+    element: withSuspense(<OpenQuotationPage />),
+    errorElement: <RootBoundary />,
+  },
+  // Link da empresa para o fornecedor enviar o catálogo de produtos.
+  {
+    path: `${ROUTE_PATHS.ENVIAR_CATALOGO}/:token`,
+    element: withSuspense(<CatalogUploadPage />),
     errorElement: <RootBoundary />,
   },
   {

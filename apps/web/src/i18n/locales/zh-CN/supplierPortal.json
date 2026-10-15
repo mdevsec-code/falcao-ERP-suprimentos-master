@@ -1,0 +1,101 @@
+{
+  "identity": {
+    "title": "公司识别",
+    "description": "请填写贵公司的 CNPJ 和您的姓名。首次使用时，我们会请您填写一些注册信息。",
+    "cnpj": "CNPJ",
+    "name": "您的姓名",
+    "registrationTitle": "公司注册",
+    "registrationDescription": "我们的供应商中没有找到此 CNPJ。请填写以下信息——注册将由采购团队审核。",
+    "razaoSocial": "公司法定名称",
+    "nomeFantasia": "商号",
+    "categoria": "业务领域",
+    "categoriaNone": "不填写",
+    "cidade": "城市",
+    "estado": "州",
+    "email": "联系邮箱",
+    "telefone": "电话 / WhatsApp",
+    "registrationNeeded": "该 CNPJ 尚未注册——请补全公司信息。",
+    "errors": {
+      "cnpj": "CNPJ 无效，请核对号码。",
+      "required": "必填项。",
+      "email": "请输入有效的邮箱。",
+      "phone": "请输入带区号的电话。"
+    }
+  },
+  "errors": {
+    "generic": "发送失败，请稍后再试。"
+  },
+  "closed": {
+    "ENCERRADA": "本次询价已结束，感谢关注！",
+    "CANCELADA": "本次询价已取消。",
+    "PRAZO": "参与期限已过。"
+  },
+  "openQuotation": {
+    "portal": "询价门户",
+    "invalidTitle": "链接无效或已停用",
+    "invalidDescription": "请向发布询价的采购团队索取最新链接。",
+    "eyebrow": "询价单 #{{numero}} · {{empresa}}",
+    "eyebrowPlan": "采购计划 #{{numero}} · {{empresa}}",
+    "intro": "{{empresa}} 正在为以下物料征集报价。请查看清单，如需报价，请在页面底部识别贵公司。",
+    "deadline": "报价截止 {{date}}",
+    "itemCount_other": "{{count}} 项",
+    "itemsTitle": "所需物料",
+    "requested": "要求：{{value}}",
+    "submit": "继续报价",
+    "privacy": "您的价格仅 {{empresa}} 的采购团队可见——其他供应商无法查看。"
+  },
+  "catalog": {
+    "portal": "目录提交",
+    "invalidTitle": "链接无效或已停用",
+    "invalidDescription": "请向采购团队索取最新链接。",
+    "title": "提交贵公司的产品目录",
+    "intro": "请附上贵公司的目录（PDF、表格、图片等），如愿意，也可用模板填写物料和价格——这样您的产品能更快录入我们的系统。",
+    "fileStep": "1. 目录文件（可选）",
+    "fileHint": "贵公司现有的目录：PDF、表格、演示文稿或图片（最大 50 MB）。",
+    "fileLabel": "目录文件",
+    "sheetStep": "2. 用模板填写物料和价格（可选）",
+    "sheetHint": "下载表格，每个产品填写一行（描述和单位为必填），然后在此上传。如果列名相近，我们也能读取贵公司自己的表格。",
+    "downloadTemplate": "下载模板",
+    "chooseSheet": "上传已填写的表格",
+    "readingSheet": "正在读取表格……",
+    "sheetSummary_other": "{{file}}：{{count}} 项待发送。",
+    "sheetInvalid_other": "{{count}} 行有问题，将不会发送（红色标出）。",
+    "col": {
+      "line": "行",
+      "code": "编码",
+      "description": "描述",
+      "unit": "单位",
+      "brand": "品牌",
+      "price": "价格"
+    },
+    "previewLimit": "显示 {{total}} 行中的 {{shown}} 行。",
+    "notes": "备注（交货期、条件、服务区域……）",
+    "nothingToSend": "请附上目录文件或上传物料表格。",
+    "submit": "提交目录",
+    "emptySheet": "表格中没有找到物料。",
+    "readError": "无法读取表格。",
+    "errors": {
+      "noHeader": "未找到“描述”和“单位”列，请使用模板。",
+      "description": "缺少描述。",
+      "unit": "缺少单位。",
+      "price": "价格无效。"
+    },
+    "sentTitle": "目录已收到！",
+    "sentDescription_other": "谢谢，{{fornecedor}}。我们已收到包含 {{count}} 项的目录——{{empresa}} 的采购团队将进行审核。",
+    "sentPending": "贵公司的注册信息也将被审核。",
+    "sendAnother": "提交另一份目录",
+    "privacy": "上传的文件仅 {{empresa}} 的采购团队可见。"
+  },
+  "template": {
+    "title": "产品目录——模板",
+    "subtitle": "提交给 {{empresa}}",
+    "meta": "每个产品一行。描述和单位为必填；灰色行仅为示例。",
+    "helpSheet": "填写说明",
+    "help1": "1. 从黑色表头下方的行开始填写“Itens”工作表——每个产品一行。",
+    "help2": "2. 描述和单位为必填。单位：UN、KG、M、M2、M3、L、CX、PC、SC、TON（或贵公司使用的单位）。",
+    "help3": "3. 单价以雷亚尔计，不单列税费（例：38,90）。如不愿提供可留空。",
+    "help4": "4. 品牌和型号/零件号有助于在我们的系统中识别产品。",
+    "help5": "5. 可以删除示例行。然后通过下载此表格的同一链接上传文件。",
+    "fileBase": "planilha modelo catalogo"
+  }
+}

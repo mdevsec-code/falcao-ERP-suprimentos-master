@@ -163,6 +163,22 @@
   },
   "priceEntrySource": {
     "MANUAL": "手工",
-    "COTACAO": "询价"
+    "COTACAO": "询价",
+    "CATALOGO": "供应商目录"
+  },
+  "requisitionPlanStatus": {
+    "RASCUNHO": "草稿",
+    "LANCADO": "已发布",
+    "CANCELADO": "已取消"
+  },
+  "supplierCatalogStatus": {
+    "PENDENTE": "待审核",
+    "REVISADO": "已审核",
+    "REJEITADO": "已拒绝"
+  },
+  "supplierCatalogItemStatus": {
+    "PENDENTE": "待处理",
+    "IMPORTADO": "已入目录",
+    "IGNORADO": "已忽略"
   }
 }

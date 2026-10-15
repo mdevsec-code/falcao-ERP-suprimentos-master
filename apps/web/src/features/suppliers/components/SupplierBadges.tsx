@@ -6,8 +6,22 @@ import { Badge } from '@/components/ui/Badge';
 import { SUPPLIER_CATEGORY_LABELS } from '@/constants/enums';
 import { cn } from '@/utils/cn';
 
-export function SupplierStatusBadge({ isActive }: { isActive: boolean }) {
+export function SupplierStatusBadge({
+  isActive,
+  pending = false,
+}: {
+  isActive: boolean;
+  /** Cadastro feito pelo próprio fornecedor, ainda não revisado. */
+  pending?: boolean;
+}) {
   const { t } = useTranslation('common');
+  if (pending) {
+    return (
+      <Badge variant="warning" size="sm">
+        {t('suppliers:registration.pendingBadge')}
+      </Badge>
+    );
+  }
   return (
     <Badge variant={isActive ? 'success' : 'neutral'} size="sm">
       {isActive ? t('status.active') : t('status.inactive')}

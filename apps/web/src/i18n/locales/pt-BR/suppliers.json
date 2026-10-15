@@ -10,7 +10,8 @@
     "deactivate": "Desativar",
     "reactivate": "Reativar",
     "evaluate": "Avaliar fornecedor",
-    "uploadDocument": "Enviar documento"
+    "uploadDocument": "Enviar documento",
+    "catalogs": "Catálogos recebidos"
   },
   "kpi": {
     "title": "Indicadores de fornecedores",
@@ -25,8 +26,12 @@
       "label": "Buscar",
       "placeholder": "Razão social, nome fantasia ou CNPJ…"
     },
-    "category": { "label": "Categoria" },
-    "state": { "label": "Estado" },
+    "category": {
+      "label": "Categoria"
+    },
+    "state": {
+      "label": "Estado"
+    },
     "allCategories": "Todas as categorias",
     "allStates": "Todos",
     "chipCategory": "Categoria: {{value}}",
@@ -156,6 +161,31 @@
     "evaluationSuccess": "Avaliação registrada.",
     "documentUploaded": "Documento enviado com sucesso.",
     "documentUploadError": "Não foi possível enviar o documento.",
-    "documentRemoved": "Documento removido."
+    "documentRemoved": "Documento removido.",
+    "registrationApproved": "Cadastro aprovado — fornecedor ativo.",
+    "registrationRejected": "Cadastro recusado — fornecedor inativo."
+  },
+  "registration": {
+    "pendingBadge": "Cadastro pendente",
+    "banner": "Este fornecedor se cadastrou sozinho pelo link de cotação ou de catálogo. Confira os dados e aprove para ele poder ser escolhido nas cotações e ter os preços aproveitados no catálogo.",
+    "approve": "Aprovar cadastro",
+    "reject": "Recusar",
+    "listBanner_one": "{{count}} cadastro feito por fornecedor pelo link aguarda revisão.",
+    "listBanner_other": "{{count}} cadastros feitos por fornecedores pelo link aguardam revisão.",
+    "onlyPending": "Ver só os pendentes",
+    "showAll": "Ver todos"
+  },
+  "report": {
+    "fileBase": "fornecedores",
+    "razaoSocial": "Razão social",
+    "nomeFantasia": "Nome fantasia",
+    "cnpj": "CNPJ",
+    "categoria": "Categoria",
+    "cidade": "Cidade/UF",
+    "estado": "UF",
+    "situacao": "Situação",
+    "nota": "Nota média",
+    "desde": "Cadastrado em",
+    "search": "Busca"
   }
 }

@@ -26,6 +26,8 @@ export interface SupplierListParams {
   estado?: string;
   cidade?: string;
   isActive?: boolean;
+  /** Só cadastros feitos pelo próprio fornecedor aguardando revisão. */
+  cadastroPendente?: boolean;
 }
 
 export interface SupplierFilters {

@@ -48,3 +48,42 @@ export function whatsappUrl(phone: string | null, message: string): string {
 export function mailtoUrl(email: string | null, subject: string, body: string): string {
   return `mailto:${email ?? ''}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
+
+/** URL do link aberto — qualquer fornecedor entra com o CNPJ. */
+export function openQuotationLink(token: string, origin: string = window.location.origin): string {
+  return `${origin}${routeTo.openQuotation(token)}`;
+}
+
+interface OpenInviteContext {
+  numero: number;
+  titulo: string;
+  prazoResposta: string;
+  items: ReadonlyArray<{
+    descricao: string;
+    quantidade: string;
+    unidade: string;
+    marca: string | null;
+    referencia: string | null;
+  }>;
+}
+
+/** Até quantos itens a mensagem lista (o restante fica para o link). */
+const MESSAGE_ITEMS = 12;
+
+/** Mensagem para divulgar o link aberto (WhatsApp, e-mail, grupo de fornecedores). */
+export function openInviteMessage(context: OpenInviteContext, link: string): string {
+  const listed = context.items.slice(0, MESSAGE_ITEMS).map((item) => {
+    const extra = [item.marca, item.referencia].filter(Boolean).join(' · ');
+    const qty = Number(item.quantidade).toLocaleString(i18n.language);
+    return `• ${qty} ${item.unidade} — ${item.descricao}${extra ? ` (${extra})` : ''}`;
+  });
+  const rest = context.items.length - listed.length;
+  if (rest > 0) listed.push(i18n.t('quotations:openLink.moreItems', { count: rest }));
+  return i18n.t('quotations:openLink.message', {
+    numero: context.numero,
+    titulo: context.titulo,
+    itens: listed.join('\n'),
+    prazo: formatDateOnly(context.prazoResposta),
+    link,
+  });
+}

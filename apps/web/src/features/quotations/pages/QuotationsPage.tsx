@@ -213,8 +213,12 @@ export function QuotationsPage() {
                           {row.titulo}
                         </Link>
                         <p className="text-xs text-ink-soft">
-                          {t('quotations:table.request', { title: row.purchaseRequestTitle })} ·{' '}
-                          {row.createdByName}
+                          {row.plan
+                            ? t('quotations:table.plan', { numero: row.plan.numero })
+                            : t('quotations:table.request', {
+                                title: row.purchaseRequestTitle,
+                              })}{' '}
+                          · {row.createdByName}
                         </p>
                       </TableCell>
                       <TableCell>

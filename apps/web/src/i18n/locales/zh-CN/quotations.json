@@ -28,7 +28,8 @@
     "answers": "回复",
     "items": "物料",
     "request": "申请：{{title}}",
-    "overdue": "已过截止日期"
+    "overdue": "已过截止日期",
+    "plan": "采购计划 #{{numero}}"
   },
   "empty": {
     "title": "暂无询价",
@@ -129,7 +130,9 @@
     "openLink": "打开链接",
     "enterPrices": "录入收到的报价",
     "regenerate": "生成新链接",
-    "remove": "从询价中移除"
+    "remove": "从询价中移除",
+    "viaOpenLink": "通过公开链接加入",
+    "pendingRegistration": "注册待审核"
   },
   "share": {
     "subject": "询价单 {{numero}} 号 — {{titulo}}",
@@ -209,7 +212,9 @@
     "declined": "已记录拒绝报价，感谢告知。",
     "invalidTitle": "链接无效或已过期",
     "invalidDescription": "请向发送询价的采购人员索取新链接。",
-    "privacy": "您的报价仅 {{empresa}} 的采购团队可见。"
+    "privacy": "您的报价仅 {{empresa}} 的采购团队可见。",
+    "saveLink": "请保存此地址（收藏或复制）——截止日期前，您需要通过它提交和修改报价。",
+    "pendingRegistration": "贵公司的注册信息将由采购团队审核。"
   },
   "toast": {
     "created": "询价单 {{numero}} 号已发起。",
@@ -225,7 +230,9 @@
     "linkCopied": "链接已复制。",
     "messageCopied": "消息已复制。",
     "copyFailed": "无法复制，请手动选择并复制。",
-    "exportError": "无法导出比价表。"
+    "exportError": "无法导出比价表。",
+    "openLinkOn": "公开链接已启用。",
+    "openLinkOff": "公开链接已停用。"
   },
   "export": {
     "sheet": "询价比价表",
@@ -265,5 +272,20 @@
     "summaryTitle": "按供应商汇总",
     "supplier": "供应商",
     "legend": "绿色：该物料最低价 · 金色：已选供应商 · 合计含运费。"
+  },
+  "openLink": {
+    "title": "供应商公开链接",
+    "description": "分享此链接：任何供应商都可查看清单、填写 CNPJ 并据此报价。新公司将作为待审核注册，由您批准。",
+    "off": "公开链接已关闭——只有受邀供应商可以回复。",
+    "enable": "启用公开链接",
+    "regenerate": "生成新链接",
+    "disable": "停用",
+    "hint": "供应商填写 CNPJ 后会获得各自的回复链接——彼此看不到对方的价格。",
+    "regenerateTitle": "生成新的公开链接？",
+    "regenerateDescription": "当前链接将失效。已加入的供应商仍保留各自的回复链接。",
+    "disableTitle": "停用公开链接？",
+    "disableDescription": "新供应商将无法再通过此链接加入。已加入的供应商仍保留各自的回复链接。",
+    "message": "您好！\n\n我们正在为以下物料征集报价（询价单 #{{numero}} — {{titulo}}）：\n\n{{itens}}\n\n如需报价，请打开链接，填写贵公司的 CNPJ，并在 {{prazo}} 前填写价格：\n{{link}}\n\n谢谢！",
+    "moreItems_other": "• …… 链接中还有 {{count}} 项"
   }
 }

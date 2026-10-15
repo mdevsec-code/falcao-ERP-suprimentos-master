@@ -1,0 +1,149 @@
+{
+  "page": {
+    "eyebrow": "Procurement",
+    "title": "Requisition plans",
+    "description": "Gather a work site's approved requests into a single list, launch the plan and share the link so suppliers can quote on it.",
+    "new": "New plan"
+  },
+  "kpi": {
+    "title": "Plan indicators",
+    "available": "Available requests",
+    "availableHint": "Approved, outside any plan and without an open quotation",
+    "drafts": "Drafts",
+    "launched": "Being quoted",
+    "launchedHint": "Launched plans with an open quotation"
+  },
+  "filters": {
+    "search": "Search",
+    "searchPlaceholder": "Title, work site or number",
+    "status": "Status",
+    "all": "All"
+  },
+  "error": {
+    "title": "Could not load the plans",
+    "description": "Check your connection and try again."
+  },
+  "empty": {
+    "title": "No plans here",
+    "description": "Create a plan by gathering a work site's approved requests."
+  },
+  "table": {
+    "number": "#",
+    "title": "Plan",
+    "workSite": "Work site",
+    "status": "Status",
+    "deadline": "Deadline",
+    "requests": "Requests",
+    "quotation": "Quotation",
+    "answers": "Answers",
+    "answersValue": "{{answered}}/{{total}} answered",
+    "createdBy": "Created by",
+    "createdAt": "Created on"
+  },
+  "report": {
+    "fileBase": "planos de requisicao"
+  },
+  "pdf": {
+    "title": "Request for quotation — plan #{{numero}}",
+    "company": "Company",
+    "workSite": "Work site",
+    "deadline": "Answer by",
+    "itemCount": "Items",
+    "notes": "Notes",
+    "itemsTitle": "Requested materials",
+    "col": {
+      "item": "#",
+      "description": "Description",
+      "requested": "Requested brand / reference",
+      "quantity": "Quantity",
+      "unit": "Unit"
+    },
+    "howTo": "How to answer",
+    "howToLink": "Open the address below, enter your company's CNPJ and fill in the unit price, brand and reference for each item by {{prazo}}. Companies not yet registered can register on the same page.",
+    "howToNoLink": "Send your proposal to the purchasing team by {{prazo}}, with unit price, brand and reference for each item.",
+    "privacy": "Prices are seen only by the purchasing team — other suppliers have no access.",
+    "fileBase": "pedido de cotacao plano {{numero}}"
+  },
+  "form": {
+    "newTitle": "New requisition plan",
+    "editTitle": "Edit requisition plan",
+    "description": "Pick the approved requests (usually from one work site). Identical items are added up into a single line.",
+    "save": "Save plan",
+    "defaultTitle": "Purchasing plan — {{obra}}",
+    "fields": {
+      "title": "Plan title",
+      "workSite": "Work site / cost center",
+      "deadline": "Deadline for suppliers to answer",
+      "notes": "Notes for suppliers"
+    },
+    "hints": {
+      "workSite": "Shown to suppliers in the link and in the PDF.",
+      "notes": "Delivery address, terms, deadlines… Suppliers see this text."
+    },
+    "errors": {
+      "deadline": "Choose a date from today onwards."
+    },
+    "requestsTitle_one": "Approved requests ({{count}} chosen)",
+    "requestsTitle_other": "Approved requests ({{count}} chosen)",
+    "filter": "Filter by title, work site or requester",
+    "byWorkSite": "Select by work site:",
+    "loading": "Loading requests…",
+    "noCandidatesTitle": "No requests available",
+    "noCandidatesDescription": "Only approved requests (in purchasing or being quoted) that are not in another plan and have no open quotation can be added.",
+    "itemCount_one": "{{count}} item",
+    "itemCount_other": "{{count}} items",
+    "previewTitle_one": "Consolidated list ({{count}} item)",
+    "previewTitle_other": "Consolidated list ({{count}} items)",
+    "previewEmpty": "Pick requests to see the list suppliers will quote.",
+    "previewHint": "{{lines}} request lines became {{items}} items: same product, unit, brand and reference are added up."
+  },
+  "items": {
+    "number": "#",
+    "description": "Description",
+    "quantity": "Quantity",
+    "origin": "Origin",
+    "fromRequests_one": "{{count}} request",
+    "fromRequests_other": "Sum of {{count}} requests"
+  },
+  "launch": {
+    "title": "Launch plan #{{numero}}",
+    "description": "Opens the quotation with {{items}} items from {{requests}} requests and turns on the open link, with a deadline of {{prazo}}. Once launched, the plan can no longer be edited.",
+    "invite": "Invite suppliers now (optional) — {{count}}/{{max}}",
+    "inviteHint": "Chosen suppliers get their own answer link. Others can join through the open link with their CNPJ.",
+    "search": "Search supplier",
+    "noSuppliers": "No suppliers found.",
+    "tooMany": "At most {{max}} direct invitations.",
+    "submit": "Launch plan"
+  },
+  "detail": {
+    "eyebrow": "Requisition plan #{{numero}}",
+    "createdBy": "Created by {{name}} on {{date}}",
+    "back": "Plans",
+    "pdf": "Request for quotation (PDF)",
+    "openMap": "Quotation map",
+    "cancel": "Cancel plan",
+    "edit": "Edit",
+    "launch": "Launch plan",
+    "status": "Status",
+    "workSite": "Work site",
+    "deadline": "Answer deadline",
+    "quotation": "Quotation",
+    "notLaunched": "Not launched yet",
+    "draftHint": "Draft: check the list and launch the plan to open the quotation and create the link suppliers use to quote.",
+    "notes": "Notes:",
+    "requestsTitle_one": "Included request ({{count}})",
+    "requestsTitle_other": "Included requests ({{count}})",
+    "itemsTitle_one": "Consolidated list ({{count}} item)",
+    "itemsTitle_other": "Consolidated list ({{count}} items)",
+    "cancelTitle": "Cancel this plan?",
+    "cancelDescription": "The requests become available again for another plan or quotation.",
+    "notFoundTitle": "Plan not found",
+    "notFoundDescription": "It may have been removed or the address is wrong."
+  },
+  "toast": {
+    "created": "Plan #{{numero}} created.",
+    "updated": "Plan updated.",
+    "launched": "Plan #{{numero}} launched — quotation open and link active.",
+    "cancelled": "Plan cancelled."
+  }
+}

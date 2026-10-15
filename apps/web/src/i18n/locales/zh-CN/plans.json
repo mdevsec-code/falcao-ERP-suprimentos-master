@@ -1,0 +1,143 @@
+{
+  "page": {
+    "eyebrow": "采购",
+    "title": "采购计划",
+    "description": "将某个工地已批准的申请汇总为一份清单，发布计划并分享链接，供应商据此报价。",
+    "new": "新建计划"
+  },
+  "kpi": {
+    "title": "计划指标",
+    "available": "可用申请",
+    "availableHint": "已批准、未纳入计划且没有进行中的询价",
+    "drafts": "草稿",
+    "launched": "询价中",
+    "launchedHint": "已发布且询价进行中的计划"
+  },
+  "filters": {
+    "search": "搜索",
+    "searchPlaceholder": "标题、工地或编号",
+    "status": "状态",
+    "all": "全部"
+  },
+  "error": {
+    "title": "无法加载计划",
+    "description": "请检查网络后重试。"
+  },
+  "empty": {
+    "title": "暂无计划",
+    "description": "汇总某个工地已批准的申请来创建计划。"
+  },
+  "table": {
+    "number": "编号",
+    "title": "计划",
+    "workSite": "工地",
+    "status": "状态",
+    "deadline": "截止日期",
+    "requests": "申请",
+    "quotation": "询价",
+    "answers": "回复",
+    "answersValue": "{{answered}}/{{total}} 已回复",
+    "createdBy": "创建人",
+    "createdAt": "创建时间"
+  },
+  "report": {
+    "fileBase": "planos de requisicao"
+  },
+  "pdf": {
+    "title": "询价请求——计划 #{{numero}}",
+    "company": "公司",
+    "workSite": "工地",
+    "deadline": "回复截止",
+    "itemCount": "物料数",
+    "notes": "备注",
+    "itemsTitle": "所需物料",
+    "col": {
+      "item": "#",
+      "description": "描述",
+      "requested": "要求的品牌 / 型号",
+      "quantity": "数量",
+      "unit": "单位"
+    },
+    "howTo": "如何回复",
+    "howToLink": "请访问下方地址，填写贵公司的 CNPJ，并在 {{prazo}} 前填写每项物料的单价、品牌和型号。尚未注册的公司可在同一页面注册。",
+    "howToNoLink": "请在 {{prazo}} 前将报价发送给采购团队，注明每项物料的单价、品牌和型号。",
+    "privacy": "所填价格仅采购团队可见——其他供应商无法查看。",
+    "fileBase": "pedido de cotacao plano {{numero}}"
+  },
+  "form": {
+    "newTitle": "新建采购计划",
+    "editTitle": "编辑采购计划",
+    "description": "选择已批准的申请（通常来自同一工地）。相同的物料会合并为一行。",
+    "save": "保存计划",
+    "defaultTitle": "采购计划——{{obra}}",
+    "fields": {
+      "title": "计划标题",
+      "workSite": "工地 / 成本中心",
+      "deadline": "供应商回复截止日期",
+      "notes": "给供应商的备注"
+    },
+    "hints": {
+      "workSite": "在链接和 PDF 中向供应商显示。",
+      "notes": "交货地点、条件、期限……供应商可以看到此内容。"
+    },
+    "errors": {
+      "deadline": "请选择今天或之后的日期。"
+    },
+    "requestsTitle_other": "已批准的申请（已选 {{count}} 项）",
+    "filter": "按标题、工地或申请人筛选",
+    "byWorkSite": "按工地选择：",
+    "loading": "正在加载申请……",
+    "noCandidatesTitle": "没有可用的申请",
+    "noCandidatesDescription": "只能加入已批准（采购中或询价中）、未纳入其他计划且没有进行中询价的申请。",
+    "itemCount_other": "{{count}} 项",
+    "previewTitle_other": "汇总清单（{{count}} 项）",
+    "previewEmpty": "选择申请以查看供应商将要报价的清单。",
+    "previewHint": "申请中的 {{lines}} 行合并为 {{items}} 项：相同产品、单位、品牌和型号会相加。"
+  },
+  "items": {
+    "number": "#",
+    "description": "描述",
+    "quantity": "数量",
+    "origin": "来源",
+    "fromRequests_other": "{{count}} 个申请合计"
+  },
+  "launch": {
+    "title": "发布计划 #{{numero}}",
+    "description": "以 {{requests}} 个申请中的 {{items}} 项物料开启询价，并启用公开链接，截止日期为 {{prazo}}。发布后计划将无法编辑。",
+    "invite": "现在邀请供应商（可选）——{{count}}/{{max}}",
+    "inviteHint": "被选中的供应商会收到各自的回复链接。其他供应商可通过公开链接填写 CNPJ 加入。",
+    "search": "搜索供应商",
+    "noSuppliers": "未找到供应商。",
+    "tooMany": "直接邀请最多 {{max}} 家。",
+    "submit": "发布计划"
+  },
+  "detail": {
+    "eyebrow": "采购计划 #{{numero}}",
+    "createdBy": "由 {{name}} 创建于 {{date}}",
+    "back": "计划",
+    "pdf": "询价请求（PDF）",
+    "openMap": "比价表",
+    "cancel": "取消计划",
+    "edit": "编辑",
+    "launch": "发布计划",
+    "status": "状态",
+    "workSite": "工地",
+    "deadline": "回复截止",
+    "quotation": "询价",
+    "notLaunched": "尚未发布",
+    "draftHint": "草稿：请核对清单并发布计划，以开启询价并生成供应商报价所用的链接。",
+    "notes": "备注：",
+    "requestsTitle_other": "包含的申请（{{count}}）",
+    "itemsTitle_other": "汇总清单（{{count}} 项）",
+    "cancelTitle": "取消此计划？",
+    "cancelDescription": "这些申请将重新可用于其他计划或询价。",
+    "notFoundTitle": "未找到计划",
+    "notFoundDescription": "它可能已被删除，或地址有误。"
+  },
+  "toast": {
+    "created": "计划 #{{numero}} 已创建。",
+    "updated": "计划已更新。",
+    "launched": "计划 #{{numero}} 已发布——询价已开启，链接已启用。",
+    "cancelled": "计划已取消。"
+  }
+}

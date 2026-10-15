@@ -62,3 +62,21 @@ export interface PublicDeclinePayload {
   nomeResponsavel: string;
   motivo?: string;
 }
+
+/** Cadastro mínimo que o fornecedor preenche no link aberto quando o CNPJ é novo. */
+export interface PublicRegistrationPayload {
+  razaoSocial: string;
+  nomeFantasia: string;
+  categoria?: string;
+  cidade: string;
+  estado: string;
+  email: string;
+  telefone: string;
+}
+
+/** Identificação nos links públicos (cotação aberta e catálogo). */
+export interface PublicIdentityPayload {
+  cnpj: string;
+  nomeResponsavel: string;
+  cadastro?: PublicRegistrationPayload;
+}

@@ -15,6 +15,7 @@ import {
   Star,
   Upload,
   User,
+  UserCheck,
 } from 'lucide-react';
 import { ContactType } from '@falcao-erp/shared-types';
 
@@ -40,6 +41,7 @@ import { useSupplier } from '../hooks/useSuppliers';
 import {
   useAddEvaluation,
   useRemoveSupplierDocument,
+  useDecideSupplierRegistration,
   useSetSupplierActive,
   useUploadSupplierDocument,
 } from '../hooks/useSupplierMutations';
@@ -62,6 +64,7 @@ export function SupplierDetailPage() {
   const { data: supplier, isLoading, isError, refetch } = useSupplier(id);
 
   const setActive = useSetSupplierActive(id);
+  const decideRegistration = useDecideSupplierRegistration(id);
   const addEvaluation = useAddEvaluation(id);
   const uploadDocument = useUploadSupplierDocument(id);
   const removeDocument = useRemoveSupplierDocument(id);
@@ -148,10 +151,40 @@ export function SupplierDetailPage() {
 
       <div className="space-y-6 px-6 py-8 sm:px-8">
         <div className="flex animate-fade-in flex-wrap items-center gap-3">
-          <SupplierStatusBadge isActive={supplier.isActive} />
+          <SupplierStatusBadge isActive={supplier.isActive} pending={supplier.cadastroPendente} />
           <SupplierCategoryBadge categoria={supplier.categoria} />
           <SupplierScore score={supplier.averageScore} />
         </div>
+
+        {supplier.cadastroPendente && (
+          <div
+            role="status"
+            className="flex flex-col gap-3 rounded-lg border border-brand-gold-300 bg-brand-gold-50/70 p-4 text-sm text-ink sm:flex-row sm:items-center"
+          >
+            <UserCheck className="h-5 w-5 shrink-0 text-brand-gold-700" aria-hidden="true" />
+            <p className="flex-1">{t('suppliers:registration.banner')}</p>
+            <Can permission={PERMISSIONS.SUPPLIER_WRITE}>
+              <div className="flex gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => decideRegistration.mutate(false)}
+                  disabled={decideRegistration.isPending}
+                >
+                  {t('suppliers:registration.reject')}
+                </Button>
+                <Button
+                  size="sm"
+                  variant="primary"
+                  onClick={() => decideRegistration.mutate(true)}
+                  isLoading={decideRegistration.isPending}
+                >
+                  {t('suppliers:registration.approve')}
+                </Button>
+              </div>
+            </Can>
+          </div>
+        )}
 
         <Tabs defaultValue="overview">
           <TabsList className="h-auto flex-wrap justify-start">

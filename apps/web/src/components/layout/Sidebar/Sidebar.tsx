@@ -18,6 +18,8 @@ import {
   ScrollText,
   X,
   type LucideIcon,
+  BookOpen,
+  Layers,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
@@ -75,9 +77,21 @@ const SECTIONS: NavSection[] = [
         requires: PERMISSIONS.APPROVALS_READ,
       },
       {
+        label: 'nav.plans',
+        to: ROUTE_PATHS.PLANOS,
+        icon: Layers,
+        requires: PERMISSIONS.QUOTATION_READ,
+      },
+      {
         label: 'nav.quotations',
         to: ROUTE_PATHS.COTACOES,
         icon: Scale,
+        requires: PERMISSIONS.QUOTATION_READ,
+      },
+      {
+        label: 'nav.catalogs',
+        to: ROUTE_PATHS.CATALOGOS,
+        icon: BookOpen,
         requires: PERMISSIONS.QUOTATION_READ,
       },
     ],

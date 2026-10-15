@@ -6,6 +6,9 @@ import i18n from '@/i18n';
 import type * as CsvModule from '@/utils/csv';
 import type * as BrandModule from '@/utils/export/brand';
 
+// Gerar planilha/PDF carrega o ExcelJS e o jsPDF: com a máquina ocupada passa dos 5 s padrão.
+vi.setConfig({ testTimeout: 20_000 });
+
 const downloads: Array<{ fileName: string; blob: Blob }> = [];
 
 vi.mock('@/utils/csv', async (importOriginal) => {

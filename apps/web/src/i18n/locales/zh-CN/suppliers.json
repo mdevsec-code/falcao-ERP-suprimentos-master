@@ -10,7 +10,8 @@
     "deactivate": "停用",
     "reactivate": "重新启用",
     "evaluate": "评价供应商",
-    "uploadDocument": "上传文档"
+    "uploadDocument": "上传文档",
+    "catalogs": "已收到的目录"
   },
   "kpi": {
     "title": "供应商指标",
@@ -25,8 +26,12 @@
       "label": "搜索",
       "placeholder": "公司名称、商号或 CNPJ…"
     },
-    "category": { "label": "类别" },
-    "state": { "label": "州" },
+    "category": {
+      "label": "类别"
+    },
+    "state": {
+      "label": "州"
+    },
     "allCategories": "全部类别",
     "allStates": "全部",
     "chipCategory": "类别：{{value}}",
@@ -156,6 +161,30 @@
     "evaluationSuccess": "评价已保存。",
     "documentUploaded": "文档上传成功。",
     "documentUploadError": "无法上传文档。",
-    "documentRemoved": "文档已移除。"
+    "documentRemoved": "文档已移除。",
+    "registrationApproved": "注册已批准——供应商已启用。",
+    "registrationRejected": "注册已拒绝——供应商未启用。"
+  },
+  "registration": {
+    "pendingBadge": "注册待审核",
+    "banner": "该供应商通过询价或目录链接自行注册。请核对信息并批准，之后才能在询价中被选中，其价格也才能用于目录。",
+    "approve": "批准注册",
+    "reject": "拒绝",
+    "listBanner_other": "有 {{count}} 个供应商通过链接提交的注册待审核。",
+    "onlyPending": "仅看待审核",
+    "showAll": "查看全部"
+  },
+  "report": {
+    "fileBase": "fornecedores",
+    "razaoSocial": "公司法定名称",
+    "nomeFantasia": "商号",
+    "cnpj": "CNPJ",
+    "categoria": "类别",
+    "cidade": "城市/州",
+    "estado": "州",
+    "situacao": "状态",
+    "nota": "平均评分",
+    "desde": "注册时间",
+    "search": "搜索"
   }
 }

@@ -10,7 +10,8 @@
     "deactivate": "Deactivate",
     "reactivate": "Reactivate",
     "evaluate": "Rate supplier",
-    "uploadDocument": "Upload document"
+    "uploadDocument": "Upload document",
+    "catalogs": "Received catalogs"
   },
   "kpi": {
     "title": "Supplier indicators",
@@ -25,8 +26,12 @@
       "label": "Search",
       "placeholder": "Legal name, trade name or CNPJ…"
     },
-    "category": { "label": "Category" },
-    "state": { "label": "State" },
+    "category": {
+      "label": "Category"
+    },
+    "state": {
+      "label": "State"
+    },
     "allCategories": "All categories",
     "allStates": "All",
     "chipCategory": "Category: {{value}}",
@@ -156,6 +161,31 @@
     "evaluationSuccess": "Rating saved.",
     "documentUploaded": "Document uploaded successfully.",
     "documentUploadError": "Could not upload the document.",
-    "documentRemoved": "Document removed."
+    "documentRemoved": "Document removed.",
+    "registrationApproved": "Registration approved — supplier active.",
+    "registrationRejected": "Registration rejected — supplier inactive."
+  },
+  "registration": {
+    "pendingBadge": "Pending registration",
+    "banner": "This supplier registered on their own through the quotation or catalog link. Check the details and approve so they can be chosen in quotations and their prices used in the catalog.",
+    "approve": "Approve registration",
+    "reject": "Reject",
+    "listBanner_one": "{{count}} registration made by a supplier through the link is awaiting review.",
+    "listBanner_other": "{{count}} registrations made by suppliers through the link are awaiting review.",
+    "onlyPending": "Show pending only",
+    "showAll": "Show all"
+  },
+  "report": {
+    "fileBase": "fornecedores",
+    "razaoSocial": "Legal name",
+    "nomeFantasia": "Trade name",
+    "cnpj": "CNPJ",
+    "categoria": "Category",
+    "cidade": "City/State",
+    "estado": "State",
+    "situacao": "Status",
+    "nota": "Average score",
+    "desde": "Registered on",
+    "search": "Search"
   }
 }

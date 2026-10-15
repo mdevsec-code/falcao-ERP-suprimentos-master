@@ -63,7 +63,9 @@
     "users": "Users",
     "audit": "Audit",
     "profile": "My profile",
-    "quotations": "Quotations"
+    "quotations": "Quotations",
+    "plans": "Requisition Plans",
+    "catalogs": "Received Catalogs"
   },
   "theme": {
     "switchToLight": "Switch to light theme",

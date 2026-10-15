@@ -48,6 +48,14 @@ export const suppliersApi = {
     return data;
   },
 
+  /** Cadastro feito pelo próprio fornecedor (link aberto): aprovar ativa, recusar deixa inativo. */
+  async decideRegistration(id: string, approve: boolean): Promise<SupplierDetailDto> {
+    const { data } = await httpClient.post<SupplierDetailDto>(
+      `/suppliers/${id}/registration/${approve ? 'approve' : 'reject'}`,
+    );
+    return data;
+  },
+
   async addEvaluation(id: string, score: number, comment?: string): Promise<SupplierEvaluationDto> {
     const { data } = await httpClient.post<SupplierEvaluationDto>(`/suppliers/${id}/evaluations`, {
       score,

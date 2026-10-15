@@ -31,6 +31,8 @@ import { formatCurrencyBRL, formatDateOnly, formatDateTime } from '@/utils/forma
 import {
   useCancelQuotation,
   useCloseQuotation,
+  useDisableOpenLink,
+  useEnableOpenLink,
   usePickCheapest,
   useQuotation,
   useSetQuotationWinner,
@@ -38,6 +40,7 @@ import {
 import { QuotationStatusBadge } from '../components/QuotationBadges';
 import { QuotationMap } from '../components/QuotationMap';
 import { SuppliersPanel } from '../components/SuppliersPanel';
+import { OpenLinkCard } from '../components/OpenLinkCard';
 import { AddSupplierDialog, ManualPricesDialog } from '../components/QuotationDialogs';
 
 export function QuotationDetailPage() {
@@ -50,6 +53,8 @@ export function QuotationDetailPage() {
   const pickCheapest = usePickCheapest(id);
   const close = useCloseQuotation(id);
   const cancel = useCancelQuotation(id);
+  const enableOpenLink = useEnableOpenLink(id);
+  const disableOpenLink = useDisableOpenLink(id);
   const [addSupplierOpen, setAddSupplierOpen] = useState(false);
   const [manualFor, setManualFor] = useState<QuotationSupplierDto | null>(null);
   const [confirm, setConfirm] = useState<'close' | 'cancel' | null>(null);
@@ -270,6 +275,16 @@ export function QuotationDetailPage() {
             {quotation.observacoes}
           </p>
         )}
+
+        <OpenLinkCard
+          token={quotation.linkAbertoToken}
+          isOpen={isOpen}
+          canManage={canManage}
+          context={quotation}
+          onEnable={() => enableOpenLink.mutate(undefined)}
+          onDisable={() => disableOpenLink.mutate(undefined)}
+          isPending={enableOpenLink.isPending || disableOpenLink.isPending}
+        />
 
         <SuppliersPanel
           quotation={quotation}

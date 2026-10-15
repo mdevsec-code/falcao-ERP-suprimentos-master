@@ -163,6 +163,22 @@
   },
   "priceEntrySource": {
     "MANUAL": "Manual",
-    "COTACAO": "Cotação"
+    "COTACAO": "Cotação",
+    "CATALOGO": "Catálogo do fornecedor"
+  },
+  "requisitionPlanStatus": {
+    "RASCUNHO": "Rascunho",
+    "LANCADO": "Lançado",
+    "CANCELADO": "Cancelado"
+  },
+  "supplierCatalogStatus": {
+    "PENDENTE": "Aguardando revisão",
+    "REVISADO": "Revisado",
+    "REJEITADO": "Recusado"
+  },
+  "supplierCatalogItemStatus": {
+    "PENDENTE": "Pendente",
+    "IMPORTADO": "No catálogo",
+    "IGNORADO": "Ignorado"
   }
 }

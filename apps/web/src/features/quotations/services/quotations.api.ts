@@ -1,18 +1,19 @@
-import axios from 'axios';
 import type {
   PaginatedResult,
+  PublicOpenQuotationDto,
+  PublicOpenQuotationJoinDto,
   PublicQuotationDto,
   QuotationDetailDto,
   QuotationStatsDto,
   QuotationSummaryDto,
 } from '@falcao-erp/shared-types';
 
-import { env } from '@/config/env';
 import { httpClient } from '@/services/http/client';
-import { ApiError, type ApiErrorBody } from '@/services/http/errors';
+import { publicClient } from '@/services/http/publicClient';
 import type {
   CreateQuotationPayload,
   PublicDeclinePayload,
+  PublicIdentityPayload,
   PublicSubmitPayload,
   QuotationListParams,
   SubmitPricesPayload,
@@ -106,20 +107,18 @@ export const quotationsApi = {
     const { data } = await httpClient.post<QuotationDetailDto>(`/quotations/${id}/cancel`);
     return data;
   },
-};
 
-/**
- * O fornecedor não tem conta: o link é a credencial. Cliente HTTP próprio,
- * sem token de sessão nem o fluxo de refresh/redirect para o login.
- */
-const publicClient = axios.create({ baseURL: env.VITE_API_URL, timeout: 20_000 });
-publicClient.interceptors.response.use(undefined, (error: unknown) =>
-  Promise.reject(
-    axios.isAxiosError<ApiErrorBody>(error)
-      ? ApiError.fromAxios(error)
-      : new ApiError({ message: 'Erro desconhecido' }),
-  ),
-);
+  /** Liga ou troca o link aberto (o anterior deixa de funcionar). */
+  async enableOpenLink(id: string): Promise<QuotationDetailDto> {
+    const { data } = await httpClient.post<QuotationDetailDto>(`/quotations/${id}/open-link`);
+    return data;
+  },
+
+  async disableOpenLink(id: string): Promise<QuotationDetailDto> {
+    const { data } = await httpClient.delete<QuotationDetailDto>(`/quotations/${id}/open-link`);
+    return data;
+  },
+};
 
 export const publicQuotationsApi = {
   async view(token: string): Promise<PublicQuotationDto> {
@@ -140,6 +139,24 @@ export const publicQuotationsApi = {
   async decline(token: string, payload: PublicDeclinePayload): Promise<PublicQuotationDto> {
     const { data } = await publicClient.post<PublicQuotationDto>(
       `/public/quotations/${encodeURIComponent(token)}/decline`,
+      payload,
+    );
+    return data;
+  },
+};
+
+/** Link aberto: qualquer fornecedor vê os itens e entra com o CNPJ. */
+export const publicOpenQuotationsApi = {
+  async view(token: string): Promise<PublicOpenQuotationDto> {
+    const { data } = await publicClient.get<PublicOpenQuotationDto>(
+      `/public/open-quotations/${encodeURIComponent(token)}`,
+    );
+    return data;
+  },
+
+  async join(token: string, payload: PublicIdentityPayload): Promise<PublicOpenQuotationJoinDto> {
+    const { data } = await publicClient.post<PublicOpenQuotationJoinDto>(
+      `/public/open-quotations/${encodeURIComponent(token)}/join`,
       payload,
     );
     return data;

@@ -1,0 +1,149 @@
+{
+  "page": {
+    "eyebrow": "Suprimentos",
+    "title": "Planos de requisição",
+    "description": "Junte as solicitações aprovadas de uma obra numa lista só, lance o plano e divulgue o link para os fornecedores cotarem em cima dele.",
+    "new": "Novo plano"
+  },
+  "kpi": {
+    "title": "Indicadores dos planos",
+    "available": "Solicitações disponíveis",
+    "availableHint": "Aprovadas, fora de plano e sem cotação aberta",
+    "drafts": "Rascunhos",
+    "launched": "Em cotação",
+    "launchedHint": "Planos lançados com a cotação aberta"
+  },
+  "filters": {
+    "search": "Buscar",
+    "searchPlaceholder": "Título, obra ou número",
+    "status": "Situação",
+    "all": "Todos"
+  },
+  "error": {
+    "title": "Não foi possível carregar os planos",
+    "description": "Verifique a conexão e tente de novo."
+  },
+  "empty": {
+    "title": "Nenhum plano por aqui",
+    "description": "Crie um plano juntando as solicitações aprovadas de uma obra."
+  },
+  "table": {
+    "number": "Nº",
+    "title": "Plano",
+    "workSite": "Obra",
+    "status": "Situação",
+    "deadline": "Prazo",
+    "requests": "Solicitações",
+    "quotation": "Cotação",
+    "answers": "Respostas",
+    "answersValue": "{{answered}}/{{total}} responderam",
+    "createdBy": "Criado por",
+    "createdAt": "Criado em"
+  },
+  "report": {
+    "fileBase": "planos de requisicao"
+  },
+  "pdf": {
+    "title": "Pedido de cotação — plano nº {{numero}}",
+    "company": "Empresa",
+    "workSite": "Obra",
+    "deadline": "Responder até",
+    "itemCount": "Itens",
+    "notes": "Observações",
+    "itemsTitle": "Materiais solicitados",
+    "col": {
+      "item": "Nº",
+      "description": "Descrição",
+      "requested": "Marca / referência pedida",
+      "quantity": "Quantidade",
+      "unit": "Un."
+    },
+    "howTo": "Como responder",
+    "howToLink": "Acesse o endereço abaixo, informe o CNPJ da sua empresa e preencha o preço unitário, a marca e a referência de cada item até {{prazo}}. Empresas ainda não cadastradas fazem o cadastro na mesma página.",
+    "howToNoLink": "Envie sua proposta à equipe de compras até {{prazo}}, com preço unitário, marca e referência de cada item.",
+    "privacy": "Os preços informados são vistos apenas pela equipe de compras — os demais fornecedores não têm acesso.",
+    "fileBase": "pedido de cotacao plano {{numero}}"
+  },
+  "form": {
+    "newTitle": "Novo plano de requisição",
+    "editTitle": "Editar plano de requisição",
+    "description": "Escolha as solicitações aprovadas (normalmente de uma obra). Os itens iguais são somados numa linha só.",
+    "save": "Salvar plano",
+    "defaultTitle": "Plano de compras — {{obra}}",
+    "fields": {
+      "title": "Título do plano",
+      "workSite": "Obra / centro de custo",
+      "deadline": "Prazo para os fornecedores responderem",
+      "notes": "Observações para os fornecedores"
+    },
+    "hints": {
+      "workSite": "Aparece para os fornecedores no link e no PDF.",
+      "notes": "Local de entrega, condições, prazos… Os fornecedores veem este texto."
+    },
+    "errors": {
+      "deadline": "Escolha uma data de hoje em diante."
+    },
+    "requestsTitle_one": "Solicitações aprovadas ({{count}} escolhida)",
+    "requestsTitle_other": "Solicitações aprovadas ({{count}} escolhidas)",
+    "filter": "Filtrar por título, obra ou solicitante",
+    "byWorkSite": "Selecionar por obra:",
+    "loading": "Carregando solicitações…",
+    "noCandidatesTitle": "Nenhuma solicitação disponível",
+    "noCandidatesDescription": "Só entram solicitações aprovadas (em compras ou em cotação) que ainda não estão em outro plano nem têm cotação aberta.",
+    "itemCount_one": "{{count}} item",
+    "itemCount_other": "{{count}} itens",
+    "previewTitle_one": "Lista consolidada ({{count}} item)",
+    "previewTitle_other": "Lista consolidada ({{count}} itens)",
+    "previewEmpty": "Escolha solicitações para ver a lista que os fornecedores vão cotar.",
+    "previewHint": "{{lines}} linhas das solicitações viraram {{items}} itens: mesmo produto, unidade, marca e referência são somados."
+  },
+  "items": {
+    "number": "Nº",
+    "description": "Descrição",
+    "quantity": "Quantidade",
+    "origin": "Origem",
+    "fromRequests_one": "{{count}} solicitação",
+    "fromRequests_other": "Soma de {{count}} solicitações"
+  },
+  "launch": {
+    "title": "Lançar o plano nº {{numero}}",
+    "description": "Abre a cotação com {{items}} itens de {{requests}} solicitações e liga o link aberto, com prazo até {{prazo}}. Depois de lançado, o plano não pode ser editado.",
+    "invite": "Convidar fornecedores agora (opcional) — {{count}}/{{max}}",
+    "inviteHint": "Os escolhidos recebem um link próprio de resposta. Os demais podem entrar pelo link aberto informando o CNPJ.",
+    "search": "Buscar fornecedor",
+    "noSuppliers": "Nenhum fornecedor encontrado.",
+    "tooMany": "No máximo {{max}} convidados diretos.",
+    "submit": "Lançar plano"
+  },
+  "detail": {
+    "eyebrow": "Plano de requisição nº {{numero}}",
+    "createdBy": "Criado por {{name}} em {{date}}",
+    "back": "Planos",
+    "pdf": "Pedido de cotação (PDF)",
+    "openMap": "Mapa de cotação",
+    "cancel": "Cancelar plano",
+    "edit": "Editar",
+    "launch": "Lançar plano",
+    "status": "Situação",
+    "workSite": "Obra",
+    "deadline": "Prazo de resposta",
+    "quotation": "Cotação",
+    "notLaunched": "Ainda não lançado",
+    "draftHint": "Rascunho: confira a lista e lance o plano para abrir a cotação e gerar o link que os fornecedores usam para cotar.",
+    "notes": "Observações:",
+    "requestsTitle_one": "Solicitação incluída ({{count}})",
+    "requestsTitle_other": "Solicitações incluídas ({{count}})",
+    "itemsTitle_one": "Lista consolidada ({{count}} item)",
+    "itemsTitle_other": "Lista consolidada ({{count}} itens)",
+    "cancelTitle": "Cancelar este plano?",
+    "cancelDescription": "As solicitações voltam a ficar disponíveis para outro plano ou cotação.",
+    "notFoundTitle": "Plano não encontrado",
+    "notFoundDescription": "Ele pode ter sido removido ou o endereço está incorreto."
+  },
+  "toast": {
+    "created": "Plano nº {{numero}} criado.",
+    "updated": "Plano atualizado.",
+    "launched": "Plano nº {{numero}} lançado — cotação aberta e link ativo.",
+    "cancelled": "Plano cancelado."
+  }
+}

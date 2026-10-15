@@ -163,6 +163,22 @@
   },
   "priceEntrySource": {
     "MANUAL": "Manual",
-    "COTACAO": "Quotation"
+    "COTACAO": "Quotation",
+    "CATALOGO": "Supplier catalog"
+  },
+  "requisitionPlanStatus": {
+    "RASCUNHO": "Draft",
+    "LANCADO": "Launched",
+    "CANCELADO": "Cancelled"
+  },
+  "supplierCatalogStatus": {
+    "PENDENTE": "Awaiting review",
+    "REVISADO": "Reviewed",
+    "REJEITADO": "Rejected"
+  },
+  "supplierCatalogItemStatus": {
+    "PENDENTE": "Pending",
+    "IMPORTADO": "In catalog",
+    "IGNORADO": "Ignored"
   }
 }
