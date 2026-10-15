@@ -171,5 +171,19 @@
     "saveError": "Could not save the contract.",
     "statusChanged": "Contract status updated.",
     "amendmentAdded": "Amendment recorded."
+  },
+  "report": {
+    "fileBase": "contratos",
+    "search": "Search",
+    "number": "#",
+    "object": "Object",
+    "supplier": "Supplier",
+    "costCenter": "Cost center",
+    "value": "Total value",
+    "start": "Start",
+    "end": "End",
+    "status": "Status",
+    "deadline": "Deadline",
+    "amendments": "Amendments"
   }
 }

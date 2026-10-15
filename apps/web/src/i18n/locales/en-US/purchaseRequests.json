@@ -211,5 +211,38 @@
     "noDiscipline": "No discipline",
     "select": "Select",
     "submit": "Add to catalog"
+  },
+  "report": {
+    "fileBase": "solicitacoes de compra",
+    "search": "Search",
+    "title": "Request",
+    "status": "Status",
+    "costCenter": "Cost center",
+    "requester": "Requester",
+    "items": "Items",
+    "estimated": "Estimated total",
+    "createdAt": "Created on"
+  },
+  "pdf": {
+    "button": "PDF sheet",
+    "title": "Purchase request",
+    "justification": "Justification",
+    "items_one": "Item ({{count}})",
+    "items_other": "Items ({{count}})",
+    "history": "Approval history",
+    "fileBase": "solicitacao {{title}}",
+    "col": {
+      "item": "#",
+      "description": "Description",
+      "brand": "Brand / reference",
+      "quantity": "Quantity",
+      "estimated": "Estimated price",
+      "subtotal": "Subtotal",
+      "date": "Date",
+      "who": "By",
+      "action": "Action",
+      "change": "Status",
+      "comment": "Comment"
+    }
   }
 }

@@ -180,5 +180,19 @@
       "created": "专业已创建。",
       "updated": "专业已更新。"
     }
+  },
+  "report": {
+    "fileBase": "produtos",
+    "search": "搜索",
+    "code": "编码",
+    "name": "产品",
+    "category": "类别",
+    "discipline": "专业",
+    "brand": "品牌 / 型号",
+    "unit": "单位",
+    "supplier": "主要供应商",
+    "lastPrice": "最近价格",
+    "lastPriceAt": "最近价格日期",
+    "lastSupplier": "最近价格供应商"
   }
 }

@@ -1,6 +1,17 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
+import { ExportMenu } from '@/components/common/ExportMenu';
+import {
+  describeFilters,
+  exportReport,
+  fetchAllPages,
+  type ExportFormat,
+} from '@/utils/export/report';
+import { PURCHASE_REQUEST_STATUS_LABELS } from '@/constants/enums';
+import { purchaseRequestsApi } from '../services/purchaseRequests.api';
+import { purchaseRequestsReport } from '../lib/reports';
 import { CheckCircle2, ClipboardList, Hourglass, Plus, ShoppingCart } from 'lucide-react';
 
 import { PageHeader } from '@/components/layout/PageHeader';
@@ -66,13 +77,42 @@ export function PurchaseRequestsPage() {
     </Can>
   );
 
+  /** Todas as solicitações do filtro atual, em PDF, Excel ou CSV. */
+  async function handleExport(format: ExportFormat) {
+    const all = await fetchAllPages((current, pageSize) =>
+      purchaseRequestsApi.list({
+        page: current,
+        pageSize,
+        search: debouncedSearch || undefined,
+        status: filters.status,
+      }),
+    );
+    if (all.length === 0) {
+      toast.info(t('common:export.empty'));
+      return;
+    }
+    const meta = describeFilters([
+      [t('purchaseRequests:report.search'), debouncedSearch],
+      [
+        t('purchaseRequests:report.status'),
+        filters.status && PURCHASE_REQUEST_STATUS_LABELS[filters.status],
+      ],
+    ]);
+    await exportReport(purchaseRequestsReport(all, meta), format);
+  }
+
   return (
     <>
       <PageHeader
         eyebrow={t('purchaseRequests:page.eyebrow')}
         title={t('purchaseRequests:page.title')}
         description={t('purchaseRequests:page.description')}
-        actions={newRequestButton}
+        actions={
+          <>
+            <ExportMenu onExport={handleExport} />
+            {newRequestButton}
+          </>
+        }
       />
 
       <div className="space-y-8 px-6 py-8 sm:px-8">

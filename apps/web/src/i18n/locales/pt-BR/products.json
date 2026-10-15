@@ -182,5 +182,19 @@
       "created": "Disciplina criada.",
       "updated": "Disciplina atualizada."
     }
+  },
+  "report": {
+    "fileBase": "produtos",
+    "search": "Busca",
+    "code": "Código",
+    "name": "Produto",
+    "category": "Categoria",
+    "discipline": "Disciplina",
+    "brand": "Marca / referência",
+    "unit": "Un.",
+    "supplier": "Fornecedor principal",
+    "lastPrice": "Último preço",
+    "lastPriceAt": "Data do último preço",
+    "lastSupplier": "Fornecedor do último preço"
   }
 }

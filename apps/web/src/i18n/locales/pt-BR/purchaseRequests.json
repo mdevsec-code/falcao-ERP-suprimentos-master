@@ -211,5 +211,38 @@
     "noDiscipline": "Sem disciplina",
     "select": "Selecione",
     "submit": "Incluir no catálogo"
+  },
+  "report": {
+    "fileBase": "solicitacoes de compra",
+    "search": "Busca",
+    "title": "Solicitação",
+    "status": "Situação",
+    "costCenter": "Centro de custo",
+    "requester": "Solicitante",
+    "items": "Itens",
+    "estimated": "Total estimado",
+    "createdAt": "Criada em"
+  },
+  "pdf": {
+    "button": "Ficha em PDF",
+    "title": "Solicitação de compra",
+    "justification": "Justificativa",
+    "items_one": "Item ({{count}})",
+    "items_other": "Itens ({{count}})",
+    "history": "Histórico de aprovação",
+    "fileBase": "solicitacao {{title}}",
+    "col": {
+      "item": "Nº",
+      "description": "Descrição",
+      "brand": "Marca / referência",
+      "quantity": "Quantidade",
+      "estimated": "Preço estimado",
+      "subtotal": "Subtotal",
+      "date": "Data",
+      "who": "Responsável",
+      "action": "Ação",
+      "change": "Situação",
+      "comment": "Comentário"
+    }
   }
 }

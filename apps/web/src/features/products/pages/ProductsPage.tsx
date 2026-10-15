@@ -1,6 +1,16 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
+import { ExportMenu } from '@/components/common/ExportMenu';
+import {
+  describeFilters,
+  exportReport,
+  fetchAllPages,
+  type ExportFormat,
+} from '@/utils/export/report';
+import { productsApi } from '../services/products.api';
+import { productsReport } from '../lib/reports';
 import { Boxes, CheckCircle2, CircleOff, Layers, ListTree, Plus } from 'lucide-react';
 
 import { PageHeader } from '@/components/layout/PageHeader';
@@ -88,6 +98,30 @@ export function ProductsPage() {
     </Can>
   );
 
+  /** Todos os produtos do filtro atual (não só a página), em PDF, Excel ou CSV. */
+  async function handleExport(format: ExportFormat) {
+    const all = await fetchAllPages((current, pageSize) =>
+      productsApi.list({
+        page: current,
+        pageSize,
+        search: debouncedSearch || undefined,
+        categoria: filters.categoria,
+        disciplineId: filters.disciplineId,
+        marca: debouncedBrand || undefined,
+        supplierId: filters.supplierId,
+      }),
+    );
+    if (all.length === 0) {
+      toast.info(t('common:export.empty'));
+      return;
+    }
+    const meta = describeFilters([
+      [t('products:report.search'), debouncedSearch],
+      [t('products:report.brand'), debouncedBrand],
+    ]);
+    await exportReport(productsReport(all, meta), format);
+  }
+
   return (
     <>
       <PageHeader
@@ -96,6 +130,7 @@ export function ProductsPage() {
         description={t('products:page.description')}
         actions={
           <div className="flex flex-wrap gap-2">
+            <ExportMenu onExport={handleExport} />
             {disciplinesButton}
             {newProductButton}
           </div>

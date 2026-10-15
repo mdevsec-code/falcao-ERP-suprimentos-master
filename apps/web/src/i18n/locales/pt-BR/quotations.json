@@ -297,5 +297,11 @@
     "message": "Olá!\n\nEstamos recebendo cotações para os materiais abaixo (cotação nº {{numero}} — {{titulo}}):\n\n{{itens}}\n\nPara cotar, acesse o link, informe o CNPJ da sua empresa e preencha os preços até {{prazo}}:\n{{link}}\n\nObrigado!",
     "moreItems_one": "• … e mais {{count}} item no link",
     "moreItems_other": "• … e mais {{count}} itens no link"
+  },
+  "report": {
+    "fileBase": "cotacoes",
+    "origin": "Origem",
+    "createdBy": "Aberta por",
+    "createdAt": "Aberta em"
   }
 }

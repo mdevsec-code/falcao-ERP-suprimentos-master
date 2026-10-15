@@ -297,5 +297,11 @@
     "message": "Hello!\n\nWe are collecting quotes for the materials below (quotation #{{numero}} — {{titulo}}):\n\n{{itens}}\n\nTo quote, open the link, enter your company's CNPJ and fill in the prices by {{prazo}}:\n{{link}}\n\nThank you!",
     "moreItems_one": "• … and {{count}} more item in the link",
     "moreItems_other": "• … and {{count}} more items in the link"
+  },
+  "report": {
+    "fileBase": "cotacoes",
+    "origin": "Origin",
+    "createdBy": "Opened by",
+    "createdAt": "Opened on"
   }
 }

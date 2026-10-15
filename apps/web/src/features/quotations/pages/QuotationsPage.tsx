@@ -1,6 +1,16 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
+import { ExportMenu } from '@/components/common/ExportMenu';
+import {
+  describeFilters,
+  exportReport,
+  fetchAllPages,
+  type ExportFormat,
+} from '@/utils/export/report';
+import { quotationsApi } from '../services/quotations.api';
+import { quotationsReport } from '../lib/reports';
 import { CalendarClock, CheckCircle2, ChevronRight, Hourglass, Scale, Search } from 'lucide-react';
 import { QuotationStatus, toDateOnly } from '@falcao-erp/shared-types';
 
@@ -50,6 +60,27 @@ export function QuotationsPage() {
   });
   const rows = list.data?.data ?? [];
 
+  /** Todas as cotações do filtro atual, em PDF, Excel ou CSV. */
+  async function handleExport(format: ExportFormat) {
+    const all = await fetchAllPages((current, pageSize) =>
+      quotationsApi.list({
+        page: current,
+        pageSize,
+        search: debouncedSearch || undefined,
+        status,
+      }),
+    );
+    if (all.length === 0) {
+      toast.info(t('common:export.empty'));
+      return;
+    }
+    const meta = describeFilters([
+      [t('quotations:filters.search'), debouncedSearch],
+      [t('quotations:filters.status'), status && QUOTATION_STATUS_LABELS[status]],
+    ]);
+    await exportReport(quotationsReport(all, meta), format);
+  }
+
   return (
     <>
       <PageHeader
@@ -57,9 +88,12 @@ export function QuotationsPage() {
         title={t('quotations:page.title')}
         description={t('quotations:page.description')}
         actions={
-          <Button variant="outline" onClick={() => navigate(ROUTE_PATHS.APROVACOES)}>
-            {t('quotations:page.fromRequests')}
-          </Button>
+          <>
+            <ExportMenu onExport={handleExport} />
+            <Button variant="outline" onClick={() => navigate(ROUTE_PATHS.APROVACOES)}>
+              {t('quotations:page.fromRequests')}
+            </Button>
+          </>
         }
       />
 

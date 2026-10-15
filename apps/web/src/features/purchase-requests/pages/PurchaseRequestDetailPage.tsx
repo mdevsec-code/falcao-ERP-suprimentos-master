@@ -14,6 +14,7 @@ import {
 import type { PurchaseRequestItemDto } from '@falcao-erp/shared-types';
 
 import { PageHeader } from '@/components/layout/PageHeader';
+import { ExportMenu } from '@/components/common/ExportMenu';
 import { InfoTile } from '@/components/data-display/InfoTile';
 import { FileList, type FileListItem } from '@/components/data-display/FileList';
 import { EmptyState } from '@/components/feedback/EmptyState';
@@ -105,13 +106,23 @@ export function PurchaseRequestDetailPage() {
         title={request.title}
         description={t('purchaseRequests:detail.requestedBy', { name: request.requesterName })}
         actions={
-          <Button
-            variant="outline"
-            leftIcon={<ArrowLeft className="h-4 w-4" />}
-            onClick={() => navigate(-1)}
-          >
-            {t('common:actions.back')}
-          </Button>
+          <>
+            <Button
+              variant="outline"
+              leftIcon={<ArrowLeft className="h-4 w-4" />}
+              onClick={() => navigate(-1)}
+            >
+              {t('common:actions.back')}
+            </Button>
+            <ExportMenu
+              formats={['pdf']}
+              label={t('purchaseRequests:pdf.button')}
+              onExport={async () => {
+                const { exportPurchaseRequestPdf } = await import('../lib/reports');
+                await exportPurchaseRequestPdf(request);
+              }}
+            />
+          </>
         }
       />
 

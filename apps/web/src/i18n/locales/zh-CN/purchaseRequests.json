@@ -210,5 +210,37 @@
     "noDiscipline": "无专业",
     "select": "请选择",
     "submit": "加入目录"
+  },
+  "report": {
+    "fileBase": "solicitacoes de compra",
+    "search": "搜索",
+    "title": "申请",
+    "status": "状态",
+    "costCenter": "成本中心",
+    "requester": "申请人",
+    "items": "物料",
+    "estimated": "预估总额",
+    "createdAt": "创建时间"
+  },
+  "pdf": {
+    "button": "PDF 单据",
+    "title": "采购申请",
+    "justification": "理由",
+    "items_other": "物料（{{count}}）",
+    "history": "审批记录",
+    "fileBase": "solicitacao {{title}}",
+    "col": {
+      "item": "#",
+      "description": "描述",
+      "brand": "品牌 / 型号",
+      "quantity": "数量",
+      "estimated": "预估价格",
+      "subtotal": "小计",
+      "date": "日期",
+      "who": "负责人",
+      "action": "操作",
+      "change": "状态",
+      "comment": "备注"
+    }
   }
 }

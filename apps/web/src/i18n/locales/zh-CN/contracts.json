@@ -167,5 +167,19 @@
     "saveError": "无法保存合同。",
     "statusChanged": "合同状态已更新。",
     "amendmentAdded": "补充协议已登记。"
+  },
+  "report": {
+    "fileBase": "contratos",
+    "search": "搜索",
+    "number": "编号",
+    "object": "标的",
+    "supplier": "供应商",
+    "costCenter": "成本中心",
+    "value": "总金额",
+    "start": "开始",
+    "end": "结束",
+    "status": "状态",
+    "deadline": "期限",
+    "amendments": "补充协议"
   }
 }

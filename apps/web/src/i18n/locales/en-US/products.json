@@ -182,5 +182,19 @@
       "created": "Discipline created.",
       "updated": "Discipline updated."
     }
+  },
+  "report": {
+    "fileBase": "produtos",
+    "search": "Search",
+    "code": "Code",
+    "name": "Product",
+    "category": "Category",
+    "discipline": "Discipline",
+    "brand": "Brand / reference",
+    "unit": "Unit",
+    "supplier": "Main supplier",
+    "lastPrice": "Last price",
+    "lastPriceAt": "Last price date",
+    "lastSupplier": "Last price supplier"
   }
 }

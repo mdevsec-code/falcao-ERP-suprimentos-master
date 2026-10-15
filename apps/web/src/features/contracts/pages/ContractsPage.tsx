@@ -1,6 +1,17 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
+import { ExportMenu } from '@/components/common/ExportMenu';
+import {
+  describeFilters,
+  exportReport,
+  fetchAllPages,
+  type ExportFormat,
+} from '@/utils/export/report';
+import { CONTRACT_STATUS_LABELS, DEADLINE_STATE_LABELS } from '@/constants/enums';
+import { contractsApi } from '../services/contracts.api';
+import { contractsReport } from '../lib/reports';
 import { AlarmClock, CircleDollarSign, FileText, FileWarning, Plus } from 'lucide-react';
 
 import { PageHeader } from '@/components/layout/PageHeader';
@@ -66,13 +77,41 @@ export function ContractsPage() {
     </Can>
   );
 
+  /** Todos os contratos do filtro atual, em PDF, Excel ou CSV. */
+  async function handleExport(format: ExportFormat) {
+    const all = await fetchAllPages((current, pageSize) =>
+      contractsApi.list({
+        page: current,
+        pageSize,
+        search: debouncedSearch || undefined,
+        status: filters.status,
+        prazo: filters.prazo,
+      }),
+    );
+    if (all.length === 0) {
+      toast.info(t('common:export.empty'));
+      return;
+    }
+    const meta = describeFilters([
+      [t('contracts:report.search'), debouncedSearch],
+      [t('contracts:report.status'), filters.status && CONTRACT_STATUS_LABELS[filters.status]],
+      [t('contracts:report.deadline'), filters.prazo && DEADLINE_STATE_LABELS[filters.prazo]],
+    ]);
+    await exportReport(contractsReport(all, meta), format);
+  }
+
   return (
     <>
       <PageHeader
         eyebrow={t('contracts:page.eyebrow')}
         title={t('contracts:page.title')}
         description={t('contracts:page.description')}
-        actions={newButton}
+        actions={
+          <>
+            <ExportMenu onExport={handleExport} />
+            {newButton}
+          </>
+        }
       />
 
       <div className="space-y-8 px-6 py-8 sm:px-8">

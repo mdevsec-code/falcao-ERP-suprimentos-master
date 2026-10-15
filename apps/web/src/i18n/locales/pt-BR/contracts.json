@@ -171,5 +171,19 @@
     "saveError": "Não foi possível salvar o contrato.",
     "statusChanged": "Status do contrato atualizado.",
     "amendmentAdded": "Aditivo registrado."
+  },
+  "report": {
+    "fileBase": "contratos",
+    "search": "Busca",
+    "number": "Nº",
+    "object": "Objeto",
+    "supplier": "Fornecedor",
+    "costCenter": "Centro de custo",
+    "value": "Valor total",
+    "start": "Início",
+    "end": "Fim",
+    "status": "Situação",
+    "deadline": "Prazo",
+    "amendments": "Aditivos"
   }
 }

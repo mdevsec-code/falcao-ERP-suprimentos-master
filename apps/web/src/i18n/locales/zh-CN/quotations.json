@@ -287,5 +287,11 @@
     "disableDescription": "新供应商将无法再通过此链接加入。已加入的供应商仍保留各自的回复链接。",
     "message": "您好！\n\n我们正在为以下物料征集报价（询价单 #{{numero}} — {{titulo}}）：\n\n{{itens}}\n\n如需报价，请打开链接，填写贵公司的 CNPJ，并在 {{prazo}} 前填写价格：\n{{link}}\n\n谢谢！",
     "moreItems_other": "• …… 链接中还有 {{count}} 项"
+  },
+  "report": {
+    "fileBase": "cotacoes",
+    "origin": "来源",
+    "createdBy": "创建人",
+    "createdAt": "创建时间"
   }
 }
