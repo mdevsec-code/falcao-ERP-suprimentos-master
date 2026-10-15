@@ -12,7 +12,8 @@
     "prisma:deploy": "dotenv -e .env -e ../../.env -- prisma migrate deploy",
     "prisma:seed": "dotenv -e .env -e ../../.env -- tsx prisma/seed.ts",
     "prisma:studio": "dotenv -e .env -e ../../.env -- prisma studio",
-    "typecheck": "tsc -p tsconfig.build.json --noEmit"
+    "typecheck": "tsc -p tsconfig.build.json --noEmit",
+    "prisma:bootstrap": "dotenv -e .env -e ../../.env -- tsx prisma/bootstrap.ts"
   },
   "dependencies": {
     "@falcao-erp/shared-types": "*",

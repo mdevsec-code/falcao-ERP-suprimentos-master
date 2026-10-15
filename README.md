@@ -43,7 +43,7 @@
 - [🛠️ Stack](#️-stack)
 - [🏗️ Arquitetura](#️-arquitetura)
 - [🚀 Começando](#-começando)
-- [☁️ Hospedagem](#️-hospedagem-banco-na-aws-aplicação-na-hostinger)
+- [☁️ Hospedagem](#️-hospedagem-hostinger-banco-e-site-no-mesmo-vps)
 - [🔐 Perfis e permissões](#-perfis-e-permissões)
 - [🔌 API](#-api)
 - [🛡️ Segurança](#️-segurança)
@@ -218,7 +218,7 @@ O seed cria fornecedores, contratos (um vencendo, um vencido), contas pagas e em
 | `JWT_REFRESH_SECRET` / `JWT_REFRESH_EXPIRES_IN` | Segredo e expiração do refresh token |
 | `UPLOADS_DIR` | Diretório dos arquivos enviados |
 | `CORS_ORIGIN` | Origem(ns) permitida(s) no CORS — URL do Web; várias separadas por vírgula |
-| `TRUST_PROXY` | Quantos proxies reversos ficam na frente da API (Nginx da Hostinger, ALB da AWS); `0` = acesso direto. Necessário para o limite por IP dos links públicos |
+| `TRUST_PROXY` | Quantos proxies reversos ficam na frente da API (o Nginx do VPS = `1`); `0` = acesso direto. Necessário para o limite por IP dos links públicos |
 | `VITE_API_URL` | URL base da API consumida pelo Web |
 
 > Nunca versione o `.env`. Gere segredos fortes para `JWT_SECRET` e `JWT_REFRESH_SECRET` antes de qualquer deploy.
@@ -244,18 +244,45 @@ npm run db:studio      # abre o Prisma Studio
 
 ---
 
-## ☁️ Hospedagem (banco na AWS, aplicação na Hostinger)
+## ☁️ Hospedagem (Hostinger: banco e site no mesmo VPS)
 
-Arquitetura recomendada: **PostgreSQL no Amazon RDS** e **API + Web num VPS da Hostinger** (Ubuntu, Node 22, Nginx com HTTPS).
+Tudo num **VPS da Hostinger** com Ubuntu 24.04: **PostgreSQL 16** (só aceita conexão de dentro do servidor), **API** no Node 22 mantida pelo PM2 e **site** servido pelo Nginx, com HTTPS do Let's Encrypt. Um domínio só: o site em `https://suprimentos.seudominio.com.br` e a API em `/api/v1` do mesmo endereço.
 
-1. **Banco (AWS RDS for PostgreSQL)** — crie a instância (PostgreSQL 16), libere no *security group* a porta 5432 **só para o IP do VPS** e use a URL com SSL:
-   `DATABASE_URL="postgresql://usuario:senha@xxxx.rds.amazonaws.com:5432/falcao_erp?schema=public&sslmode=require"`.
-   Aplique as migrations a partir do VPS com `npm run prisma:deploy -w apps/api` (nunca `migrate dev` em produção).
-2. **API (VPS Hostinger)** — `npm ci && npm run build`, depois `node apps/api/dist/main.js` mantido por **PM2** ou **systemd**. Variáveis: `JWT_SECRET`/`JWT_REFRESH_SECRET` fortes (32+ caracteres), `CORS_ORIGIN` com o domínio do Web, `TRUST_PROXY=1` (atrás do Nginx) e `UPLOADS_DIR` numa pasta fora do código, incluída no backup.
-3. **Web** — gere com `VITE_API_URL=https://api.seudominio.com.br/api/v1 npm run build -w apps/web` e sirva `apps/web/dist` pelo Nginx, com *fallback* para `index.html` (as rotas `/cotar/…` e `/enviar-catalogo/…` que os fornecedores abrem são do próprio Web).
-4. **Nginx** — `server_name` do Web servindo os estáticos e `api.` fazendo `proxy_pass` para a porta da API, `client_max_body_size 60m` (uploads de 50 MB) e HTTPS com Let's Encrypt (`certbot --nginx`).
-5. **Links públicos** — os links de cotação, link aberto e catálogo são montados com o domínio em que o comprador está usando o sistema; use sempre o domínio oficial (com HTTPS) ao gerar e enviar links. Trocar o `JWT_SECRET` invalida todos os links já enviados.
-6. **Arquivos** — ficam no disco do VPS (`UPLOADS_DIR`). Para guardar no **Amazon S3**, basta implementar `IStorageProvider` (o restante do código não muda).
+> A hospedagem compartilhada e a "Cloud" da Hostinger oferecem só MySQL — o PostgreSQL exige um **VPS** (o KVM 2, com 2 vCPU e 8 GB, roda o sistema e o build com folga; o KVM 1 também serve para poucos usuários).
+
+Os arquivos ficam em [`deploy/`](deploy):
+
+| Arquivo | Para quê |
+| --- | --- |
+| [`setup-vps.sh`](deploy/setup-vps.sh) | Uma vez, como root: instala PostgreSQL, Node 22, Nginx, Certbot e PM2; cria o banco, o usuário `falcao`, as pastas e o firewall (portas 5432 e 3333 fechadas) |
+| [`env.production.example`](deploy/env.production.example) | Modelo do `.env` de produção |
+| [`deploy.sh`](deploy/deploy.sh) | A cada versão: `git pull`, `npm ci`, migrations, build, reinício da API e checagem do `/health` |
+| [`ecosystem.config.cjs`](deploy/ecosystem.config.cjs) | Configuração do PM2 (reinicia a API se cair e quando o VPS reinicia) |
+| [`nginx-falcao-erp.conf`](deploy/nginx-falcao-erp.conf) | Site, proxy da API e de `/uploads`, uploads de 50 MB, cache dos assets |
+| [`backup.sh`](deploy/backup.sh) | Backup diário do banco (`pg_dump`) e dos arquivos enviados, guardando 14 dias |
+
+**Primeira instalação**
+
+1. **Domínio** — no painel da Hostinger (DNS), crie um registro **A** do subdomínio (ex.: `suprimentos`) para o IP do VPS.
+2. **Servidor** — por SSH, como root: `git clone <repositório> /tmp/falcao && DB_PASSWORD='senha-forte' bash /tmp/falcao/deploy/setup-vps.sh`.
+3. **Código e `.env`** — como o usuário da aplicação (`sudo -iu falcao`): clone em `/var/www/falcao-erp`, copie `deploy/env.production.example` para `.env` na raiz e preencha: senha do banco, dois segredos JWT (`openssl rand -base64 48`), o domínio em `CORS_ORIGIN` e `VITE_API_URL`.
+4. **Publicar** — `bash deploy/deploy.sh` (para outra branch: `BRANCH=nome-da-branch bash deploy/deploy.sh`).
+5. **Nginx e HTTPS** — siga o cabeçalho de `deploy/nginx-falcao-erp.conf` (copiar, trocar o domínio, `certbot --nginx -d seu.dominio`).
+6. **Empresa e primeiro administrador** — não use o `db:seed` em produção (dados fictícios e senha conhecida). Rode uma vez:
+   ```bash
+   BOOTSTRAP_COMPANY_NAME="Falcão Construções e Engenharia" BOOTSTRAP_COMPANY_CNPJ="00.000.000/0001-00" \
+   BOOTSTRAP_ADMIN_NAME="Seu Nome" BOOTSTRAP_ADMIN_EMAIL="voce@empresa.com.br" \
+   BOOTSTRAP_ADMIN_PASSWORD="senha-com-12-ou-mais" npm run prisma:bootstrap -w apps/api
+   ```
+   Cria a empresa, as disciplinas iniciais e o administrador; os demais usuários são criados pela tela "Usuários".
+7. **Backup** — `crontab -e` → `30 3 * * * bash /var/www/falcao-erp/deploy/backup.sh`, e copie a pasta `/var/lib/falcao-erp/backups` para fora do VPS de tempos em tempos (o snapshot semanal do painel da Hostinger também ajuda).
+
+**Atualizar depois:** `sudo -iu falcao`, `cd /var/www/falcao-erp && bash deploy/deploy.sh`.
+
+**Observações**
+- Os links que vão para fornecedores (cotação, link aberto, catálogo) usam o endereço em que o comprador está — gere e envie links sempre a partir do domínio oficial com HTTPS. Trocar o `JWT_SECRET` invalida todos os links já enviados.
+- Para acessar o banco do seu computador (DBeaver, pgAdmin), use um túnel SSH (`ssh -L 5433:localhost:5432 falcao@IP-do-VPS`) em vez de abrir a porta 5432.
+- Logs da API: `pm2 logs falcao-erp-api`. Situação: `pm2 status`.
 
 ---
 
@@ -353,7 +380,7 @@ Os arquivos são páginas HTML: baixe e abra no navegador (os diagramas usam Mer
 10. **Dashboard operacional** — pendências e agenda dos próximos dias no lugar do antigo card "próximos módulos"; remoção das telas "em breve"; CI em Node 22 LTS.
 11. **Stack igual à do Saúde Ocupacional** — Prisma 7 → 5 no mesmo formato da plataforma irmã, React Router 7, helmet 7 e os mesmos hooks de commit (husky, lint-staged, commitlint), pré-requisito do hub com login único.
 12. **Cotações, catálogo vivo e nota fiscal** — mapa de cotação com link do fornecedor (HMAC), disciplinas editáveis, catálogo com marca/referência/quantidade, inclusão de itens digitados no catálogo, NF-e (PDF/XML com leitura e conferência), planilhas Excel (`exceljs`, a mesma do Saúde) e uploads de 50 MB.
-13. **Plano de requisição, portal do fornecedor e exportação padronizada** — plano que consolida solicitações e vira cotação, link aberto com identificação por CNPJ e cadastro pendente, envio de catálogo com planilha modelo e revisão item a item, links públicos assinados por escopo, padrão único de PDF/Excel/CSV (`jspdf` + `jspdf-autotable`) em todas as listas e preparação para hospedagem (proxy, CORS com vários domínios, RDS com SSL).
+13. **Plano de requisição, portal do fornecedor e exportação padronizada** — plano que consolida solicitações e vira cotação, link aberto com identificação por CNPJ e cadastro pendente, envio de catálogo com planilha modelo e revisão item a item, links públicos assinados por escopo, padrão único de PDF/Excel/CSV (`jspdf` + `jspdf-autotable`) em todas as listas e preparação para hospedagem (proxy, CORS com vários domínios) e roteiro de deploy num VPS da Hostinger com PostgreSQL.
 
 ---
 
@@ -363,7 +390,7 @@ Funcional para desenvolvimento local; ainda **não pronto para produção**.
 
 **Infraestrutura**
 - Sem Dockerfile de produção para API/Web — o `docker-compose.yml` sobe apenas o PostgreSQL de desenvolvimento.
-- Sem CD: o deploy segue o roteiro manual de [Hospedagem](#️-hospedagem-banco-na-aws-aplicação-na-hostinger).
+- Sem CD: o deploy segue o roteiro manual de [Hospedagem](#️-hospedagem-hostinger-banco-e-site-no-mesmo-vps).
 - Armazenamento de arquivos apenas em disco local; a interface `IStorageProvider` permite plugar S3/Azure Blob.
 
 **Qualidade**

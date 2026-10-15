@@ -1,4 +1,4 @@
-<!doctype html>
+do<!doctype html>
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
@@ -149,7 +149,7 @@
       <a href="#s10"><span class="tag">15</span> Auditoria</a>
       <a href="#s11"><span class="tag">16</span> Frontend</a>
       <a href="#s12"><span class="tag">17</span> Qualidade, CI e ambiente</a>
-      <a href="#shost"><span class="tag">18</span> Hospedagem (AWS + Hostinger)</a>
+      <a href="#shost"><span class="tag">18</span> Hospedagem (VPS da Hostinger)</a>
     </nav>
     <div class="xlink">Ver também: <a href="casos-de-uso.html">Casos de uso →</a></div>
   </aside>
@@ -498,7 +498,7 @@ sequenceDiagram
           <tr><td><strong>Identificação por CNPJ</strong></td><td>Dígitos verificadores conferidos no front e na API (<code>isValidCnpj</code>, <code>@IsCnpj</code>). CNPJ conhecido usa o cadastro existente (fornecedor desativado por compras é recusado); CNPJ novo exige o cadastro mínimo e cria o fornecedor com <code>cadastroPendente</code> e inativo.</td></tr>
           <tr><td><strong>Proposta de concorrente</strong></td><td>Quem já participa da cotação não recebe outro link pelo link aberto (409): saber o CNPJ de um concorrente não dá acesso à proposta dele.</td></tr>
           <tr><td><strong>Cadastro pendente</strong></td><td>Pode cotar, mas não pode ser escolhido como vencedor nem ter preço levado ao catálogo antes da aprovação (<code>POST /suppliers/:id/registration/approve</code>). "Escolher menor preço" pula os pendentes.</td></tr>
-          <tr><td><strong>Limites</strong></td><td>Ver o link aberto: 30 req/min; entrar (pode criar cadastro): 10 req/min; enviar catálogo: 5 req/min — por IP (atrás de proxy, configurar <code>TRUST_PROXY</code>).</td></tr>
+          <tr><td><strong>Limites</strong></td><td>Ver o link aberto: 30 req/min; entrar (pode criar cadastro): 10 req/min; enviar catálogo: 5 req/min — por IP (atrás do Nginx, <code>TRUST_PROXY=1</code>).</td></tr>
         </tbody>
       </table></div>
       <p><strong>Catálogo do fornecedor</strong>: a empresa liga um link (<code>Company.catalogLinkNonce</code>) e o fornecedor envia, num multipart, o arquivo do catálogo e/ou os itens da planilha modelo (lida no navegador com ExcelJS; a leitura acha o cabeçalho pelas palavras-chave e aceita "1.234,56"). Tudo vira um <code>SupplierCatalog</code> pendente com seus <code>SupplierCatalogItem</code>. Na revisão, a API sugere o produto do catálogo vivo (mesma referência ou mesmo nome normalizado); cada linha é <strong>importada</strong> (preço no histórico com origem <code>CATALOGO</code> e fornecedor ligado ao produto), vira <strong>produto novo</strong> ou é <strong>ignorada</strong>. Quando não sobra linha pendente, o catálogo fica revisado.</p>
@@ -639,16 +639,34 @@ flowchart LR
 
     </div>
     <div class="sec" id="shost">
-      <div class="sec-head"><span class="sec-num">18</span><h2>Hospedagem (AWS + Hostinger)</h2></div>
-      <p>Arquitetura alvo: <strong>PostgreSQL no Amazon RDS</strong> e <strong>API + Web num VPS da Hostinger</strong> atrás do Nginx com HTTPS.</p>
+      <div class="sec-head"><span class="sec-num">18</span><h2>Hospedagem (VPS da Hostinger)</h2></div>
+      <p>Banco e site no mesmo <strong>VPS da Hostinger</strong> (Ubuntu 24.04): PostgreSQL 16 acessível só de dentro do servidor, API no Node 22 sob PM2 e o site servido pelo Nginx com HTTPS, num domínio só. A hospedagem compartilhada da Hostinger não oferece PostgreSQL — por isso o VPS. Os scripts ficam em <code>deploy/</code>.</p>
+      <figure>
+        <div class="frame">
+          <pre class="mermaid">
+flowchart LR
+  U[Usuários e fornecedores] -->|HTTPS 443| N[Nginx]
+  subgraph VPS[VPS Hostinger · Ubuntu 24.04]
+    N -->|/ estáticos| W[apps/web/dist]
+    N -->|/api e /uploads| A[API NestJS · PM2 · 127.0.0.1:3333]
+    A --> P[(PostgreSQL 16 · localhost:5432)]
+    A --> F[/var/lib/falcao-erp/uploads/]
+    B[backup.sh · cron diário] --> P
+    B --> F
+  end
+          </pre>
+        </div>
+        <figcaption>Só as portas 22, 80 e 443 ficam abertas no firewall; banco e API não são alcançáveis de fora.</figcaption>
+      </figure>
       <div class="table-wrap"><table>
         <thead><tr><th>Peça</th><th>Configuração</th></tr></thead>
         <tbody>
-          <tr><td><strong>Banco</strong></td><td>RDS PostgreSQL 16; porta 5432 liberada só para o IP do VPS; <code>DATABASE_URL</code> com <code>sslmode=require</code>; migrations com <code>prisma migrate deploy</code>.</td></tr>
-          <tr><td><strong>API</strong></td><td><code>node apps/api/dist/main.js</code> sob PM2/systemd; <code>TRUST_PROXY=1</code> atrás do Nginx (limite por IP dos links públicos); <code>CORS_ORIGIN</code> com os domínios do Web separados por vírgula; segredos JWT de 32+ caracteres; <code>UPLOADS_DIR</code> fora do código e no backup.</td></tr>
-          <tr><td><strong>Web</strong></td><td>Build com <code>VITE_API_URL</code> apontando para a API; Nginx servindo <code>apps/web/dist</code> com fallback para <code>index.html</code> (inclui <code>/cotar</code>, <code>/cotacao</code> e <code>/enviar-catalogo</code>).</td></tr>
-          <tr><td><strong>Nginx</strong></td><td><code>client_max_body_size 60m</code> (uploads de 50 MB), <code>proxy_set_header X-Forwarded-For</code>, certificado Let's Encrypt.</td></tr>
-          <tr><td><strong>Arquivos</strong></td><td>Disco do VPS por padrão; para S3, implementar <code>IStorageProvider</code>.</td></tr>
+          <tr><td><strong>Banco</strong></td><td>PostgreSQL 16 do Ubuntu, <code>listen_addresses = 'localhost'</code>, usuário e banco próprios (<code>setup-vps.sh</code>); migrations com <code>prisma migrate deploy</code> a cada publicação.</td></tr>
+          <tr><td><strong>API</strong></td><td><code>apps/api/dist/main.js</code> sob PM2 (<code>ecosystem.config.cjs</code>); <code>TRUST_PROXY=1</code> (limite por IP dos links públicos atrás do Nginx); segredos JWT gerados com <code>openssl rand</code>; <code>UPLOADS_DIR=/var/lib/falcao-erp/uploads</code>, fora do código.</td></tr>
+          <tr><td><strong>Web</strong></td><td>Build com <code>VITE_API_URL=https://domínio/api/v1</code>; Nginx com fallback para <code>index.html</code> (inclui <code>/cotar</code>, <code>/cotacao</code> e <code>/enviar-catalogo</code>).</td></tr>
+          <tr><td><strong>Nginx</strong></td><td><code>client_max_body_size 60m</code>, proxy de <code>/api</code> e <code>/uploads</code> com <code>X-Forwarded-For</code>, timeouts de 10 min para envio de arquivos, cache longo de <code>/assets</code>, certificado Let's Encrypt.</td></tr>
+          <tr><td><strong>Primeira carga</strong></td><td><code>npm run prisma:bootstrap -w apps/api</code> cria a empresa, as disciplinas iniciais e o primeiro administrador (o seed é só para desenvolvimento).</td></tr>
+          <tr><td><strong>Backup</strong></td><td><code>backup.sh</code>: <code>pg_dump</code> e arquivos enviados, 14 dias; copiar para fora do VPS periodicamente.</td></tr>
         </tbody>
       </table></div>
     </div>

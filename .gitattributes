@@ -1,0 +1,2 @@
+# Scripts de deploy rodam no Linux do VPS: sempre LF.
+*.sh text eol=lf

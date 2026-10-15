@@ -3,7 +3,7 @@ import { ConfigModule } from "@nestjs/config";
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from "@nestjs/core";
 import { ServeStaticModule } from "@nestjs/serve-static";
 import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
-import { join } from "node:path";
+import { resolve } from "node:path";
 import { validateEnv } from "./config/env.validation";
 import { HttpExceptionFilter } from "./common/filters/http-exception.filter";
 import { JwtAuthGuard } from "./common/guards/jwt-auth.guard";
@@ -39,7 +39,9 @@ import { UsersModule } from "./modules/users/users.module";
       validate: validateEnv,
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(process.cwd(), process.env.UPLOADS_DIR ?? "uploads"),
+      // `resolve` (e não `join`): UPLOADS_DIR absoluto em produção (/var/lib/...) tem de
+      // apontar para a mesma pasta em que o LocalStorageProvider grava.
+      rootPath: resolve(process.env.UPLOADS_DIR ?? "uploads"),
       serveRoot: "/uploads",
       serveStaticOptions: {
         index: false,
