@@ -342,5 +342,16 @@
     "approvedToast": "Plan approved and signed.",
     "rejectedToast": "Plan rejected.",
     "error": "Could not record the signature."
+  },
+  "wechatShare": {
+    "button": "Copy for WeChat",
+    "copied": "Message copied — paste it in the WeChat group.",
+    "copyError": "Could not copy the message.",
+    "header": "Acquisition plan no. {{numero}}",
+    "waiting": "Waiting for signature: {{step}}",
+    "status": "Status: {{status}}",
+    "requester": "Requester",
+    "project": "Project",
+    "items": "Items"
   }
 }

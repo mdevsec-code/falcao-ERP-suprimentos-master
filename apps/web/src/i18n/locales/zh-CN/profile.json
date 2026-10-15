@@ -41,5 +41,22 @@
     "nameError": "无法更新姓名。",
     "passwordChanged": "密码修改成功。",
     "passwordError": "无法修改密码。"
+  },
+  "wechat": {
+    "title": "微信通知",
+    "description": "在微信上接收等待您签字的申请以及您申请的审批结果。",
+    "connected": "已连接",
+    "connectedHint": "审批通知将通过 PushPlus 公众号发送到您的微信。",
+    "disconnect": "断开连接",
+    "step1": "在手机上打开 <link>pushplus.plus</link>，用微信登录（扫描二维码并关注“pushplus 推送加”公众号）。",
+    "step2": "在“一对一推送”菜单中复制您的 token。",
+    "step3": "将 token 粘贴到这里并点击“连接”——您的微信会收到一条测试消息。",
+    "tokenLabel": "PushPlus token",
+    "tokenPlaceholder": "例如：0a1b2c3d4e5f…",
+    "connect": "连接",
+    "privacy": "通知经由外部服务 PushPlus 发送，只包含申请编号、标题和链接，不含金额。",
+    "connectedToast": "微信已连接，请查看测试消息。",
+    "disconnectedToast": "微信已断开。",
+    "error": "无法连接微信。"
   }
 }

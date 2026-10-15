@@ -6,7 +6,10 @@ import { getErrorMessage } from '@/services/http/errors';
 import { useAuthStore } from '@/store/authStore';
 import { profileApi } from '../services/profile.api';
 
-const profileKeys = { me: ['profile', 'me'] as const };
+const profileKeys = {
+  me: ['profile', 'me'] as const,
+  wechat: ['profile', 'wechat'] as const,
+};
 
 export function useProfile() {
   return useQuery({ queryKey: profileKeys.me, queryFn: profileApi.me });
@@ -43,6 +46,38 @@ export function useChangePassword() {
     },
     onError: (error: Error) => {
       toast.error(getErrorMessage(error, i18n.t('profile:toast.passwordError')));
+    },
+  });
+}
+
+export function useWechatStatus() {
+  return useQuery({ queryKey: profileKeys.wechat, queryFn: profileApi.wechatStatus });
+}
+
+export function useSetWechat() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (token: string) => profileApi.setWechat(token),
+    onSuccess: (status) => {
+      queryClient.setQueryData(profileKeys.wechat, status);
+      toast.success(i18n.t('profile:wechat.connectedToast'));
+    },
+    onError: (error: Error) => {
+      toast.error(getErrorMessage(error, i18n.t('profile:wechat.error')));
+    },
+  });
+}
+
+export function useRemoveWechat() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: () => profileApi.removeWechat(),
+    onSuccess: (status) => {
+      queryClient.setQueryData(profileKeys.wechat, status);
+      toast.success(i18n.t('profile:wechat.disconnectedToast'));
+    },
+    onError: (error: Error) => {
+      toast.error(getErrorMessage(error, i18n.t('profile:wechat.error')));
     },
   });
 }

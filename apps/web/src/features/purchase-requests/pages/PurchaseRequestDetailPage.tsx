@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 import {
   ArrowLeft,
   BookPlus,
   CalendarClock,
   Landmark,
+  MessageCircle,
   Package,
   ImageOff,
   Paperclip,
@@ -17,6 +19,7 @@ import type { PurchaseRequestItemDto } from '@falcao-erp/shared-types';
 
 import { PageHeader } from '@/components/layout/PageHeader';
 import { uploadUrl } from '@/utils/image';
+import { wechatShareMessage } from '../lib/wechatShare';
 import { ExportMenu } from '@/components/common/ExportMenu';
 import { InfoTile } from '@/components/data-display/InfoTile';
 import { FileList, type FileListItem } from '@/components/data-display/FileList';
@@ -103,6 +106,16 @@ export function PurchaseRequestDetailPage() {
     uploadedAt: a.uploadedAt,
   }));
 
+  async function copyForWechat() {
+    if (!request) return;
+    try {
+      await navigator.clipboard.writeText(wechatShareMessage(request, window.location.origin));
+      toast.success(t('purchaseRequests:wechatShare.copied'));
+    } catch {
+      toast.error(t('purchaseRequests:wechatShare.copyError'));
+    }
+  }
+
   return (
     <>
       <PageHeader
@@ -117,6 +130,13 @@ export function PurchaseRequestDetailPage() {
               onClick={() => navigate(-1)}
             >
               {t('common:actions.back')}
+            </Button>
+            <Button
+              variant="outline"
+              leftIcon={<MessageCircle className="h-4 w-4" />}
+              onClick={() => void copyForWechat()}
+            >
+              {t('purchaseRequests:wechatShare.button')}
             </Button>
             <ExportMenu
               formats={['pdf']}

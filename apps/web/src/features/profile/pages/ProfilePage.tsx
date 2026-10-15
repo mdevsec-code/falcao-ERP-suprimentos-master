@@ -41,6 +41,7 @@ import i18n from '@/i18n';
 
 import { useChangePassword, useProfile, useUpdateProfileName } from '../hooks/useProfile';
 import { passwordStrength } from '../lib/passwordStrength';
+import { WechatCard } from '../components/WechatCard';
 
 const nameSchema = z.object({ name: requiredText(3, 120) });
 type NameInput = z.infer<typeof nameSchema>;
@@ -262,6 +263,9 @@ export function ProfilePage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Avisos no WeChat */}
+          <WechatCard />
         </div>
 
         {/* Segurança */}

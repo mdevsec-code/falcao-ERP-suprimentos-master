@@ -342,5 +342,16 @@
     "approvedToast": "Plano aprovado e assinado.",
     "rejectedToast": "Plano recusado.",
     "error": "Não foi possível registrar a assinatura."
+  },
+  "wechatShare": {
+    "button": "Copiar para o WeChat",
+    "copied": "Mensagem copiada — cole no grupo do WeChat.",
+    "copyError": "Não foi possível copiar a mensagem.",
+    "header": "Plano de aquisição nº {{numero}}",
+    "waiting": "Aguardando assinatura: {{step}}",
+    "status": "Situação: {{status}}",
+    "requester": "Solicitante",
+    "project": "Projeto",
+    "items": "Itens"
   }
 }

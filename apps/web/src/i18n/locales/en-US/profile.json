@@ -41,5 +41,22 @@
     "nameError": "Could not update the name.",
     "passwordChanged": "Password changed successfully.",
     "passwordError": "Could not change the password."
+  },
+  "wechat": {
+    "title": "WeChat alerts",
+    "description": "Get the requests waiting for your signature and the outcome of your own requests on WeChat.",
+    "connected": "Connected",
+    "connectedHint": "Approval alerts reach your WeChat through the PushPlus official account.",
+    "disconnect": "Disconnect",
+    "step1": "On your phone, open <link>pushplus.plus</link> and sign in with WeChat (scan the QR code and follow the “pushplus 推送加” official account).",
+    "step2": "In the “一对一推送” (one-to-one) menu, copy your token.",
+    "step3": "Paste the token here and click Connect — a test message arrives on your WeChat.",
+    "tokenLabel": "PushPlus token",
+    "tokenPlaceholder": "E.g. 0a1b2c3d4e5f…",
+    "connect": "Connect",
+    "privacy": "Alerts go through PushPlus, an external service. They only carry the request number, title and link — no amounts.",
+    "connectedToast": "WeChat connected. Check the test message.",
+    "disconnectedToast": "WeChat disconnected.",
+    "error": "Could not connect WeChat."
   }
 }

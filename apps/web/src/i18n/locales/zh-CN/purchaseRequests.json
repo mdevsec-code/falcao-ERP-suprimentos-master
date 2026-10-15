@@ -339,5 +339,16 @@
     "approvedToast": "计划已批准并签名。",
     "rejectedToast": "计划已拒绝。",
     "error": "无法记录签名。"
+  },
+  "wechatShare": {
+    "button": "复制到微信",
+    "copied": "消息已复制——请粘贴到微信群。",
+    "copyError": "无法复制消息。",
+    "header": "第{{numero}}号采购计划",
+    "waiting": "等待签字：{{step}}",
+    "status": "状态：{{status}}",
+    "requester": "申请人",
+    "project": "项目",
+    "items": "物料"
   }
 }
