@@ -368,7 +368,7 @@ Mesmo design system e convenções do [Falcão Saúde Ocupacional](https://githu
 | --- | --- |
 | [docs/documentacao-tecnica.html](docs/documentacao-tecnica.html) | Arquitetura, stack comparada com o Saúde Ocupacional, modelo de dados, módulos, autenticação, isolamento por empresa, fluxo de compra, cotações, plano de requisição, link aberto, catálogo do fornecedor, padrão de exportação, integrações financeiras, uploads e auditoria |
 | [docs/casos-de-uso.html](docs/casos-de-uso.html) | 89 casos de uso em 16 pacotes, com atores, rotas, pré e pós-condições, fluxos e exceções |
-| [docs/manual-do-usuario.html](docs/manual-do-usuario.html) | Manual de uso para os colaboradores, em português e chinês (中文) |
+| [docs/manual-do-usuario.html](docs/manual-do-usuario.html) · PDF: [português](docs/manual-do-usuario-pt.pdf), [中文](docs/manual-do-usuario-zh.pdf) | Manual de uso para os colaboradores, em português e chinês (中文) |
 
 Os arquivos são páginas HTML: baixe e abra no navegador (os diagramas usam Mermaid, carregado da CDN).
 
