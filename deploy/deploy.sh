@@ -23,7 +23,9 @@ git checkout "$BRANCH"
 git pull --ff-only origin "$BRANCH"
 
 echo "==> Dependências"
-npm ci
+# O build precisa das devDependencies (TypeScript, Vite, Prisma CLI) mesmo em produção;
+# os hooks de git (husky) não servem no servidor.
+HUSKY=0 npm ci --include=dev
 
 echo "==> Prisma client e migrations"
 npm run prisma:generate -w apps/api
