@@ -32,8 +32,35 @@ function bytesOf(blob: Blob): Promise<ArrayBuffer> {
   });
 }
 
+// PNG de 1×1 — basta para o jsPDF desenhar a assinatura.
+const SIGNATURE =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+
 const request: PurchaseRequestDetailDto = {
   id: 'r1',
+  numero: 12,
+  currentStep: null,
+  requesterContact: '(11) 99999-0000',
+  canSign: false,
+  approvalSteps: [
+    {
+      step: 'TECNICO',
+      approvers: [{ id: 'u2', name: 'Gestor da obra' }],
+      signature: {
+        step: 'TECNICO',
+        decision: 'APROVADO',
+        signerId: 'u2',
+        signerName: 'Gestor da obra',
+        signatureData: SIGNATURE,
+        comment: null,
+        signedAt: '2026-10-10T15:00:00.000Z',
+      },
+      current: false,
+    },
+    { step: 'COMPRAS', approvers: [], signature: null, current: false },
+    { step: 'CUSTOS', approvers: [], signature: null, current: false },
+    { step: 'GERENTE_GERAL', approvers: [], signature: null, current: false },
+  ],
   title: 'Materiais para a laje do bloco B',
   status: 'EM_COTACAO',
   costCenter: 'Residencial Falcão',
@@ -55,6 +82,13 @@ const request: PurchaseRequestDetailDto = {
       estimatedPrice: '40.00',
       marca: 'Votoran',
       referencia: null,
+      especificacao: 'Saco de 50 kg, validade mínima de 60 dias',
+      pesoTotal: '6000',
+      localUso: 'Laje do bloco B',
+      setorSolicitante: 'Engenharia',
+      dataNecessaria: '2026-10-20',
+      photoPath: null,
+      photoUrl: null,
     },
     {
       id: 'i2',
@@ -66,6 +100,13 @@ const request: PurchaseRequestDetailDto = {
       estimatedPrice: '1.00',
       marca: null,
       referencia: 'EP-25',
+      especificacao: null,
+      pesoTotal: null,
+      localUso: 'Laje do bloco B',
+      setorSolicitante: 'Engenharia',
+      dataNecessaria: null,
+      photoPath: null,
+      photoUrl: null,
     },
   ],
   approvals: [
@@ -89,11 +130,11 @@ beforeAll(async () => {
 });
 
 describe('exportPurchaseRequestPdf', () => {
-  it('gera a ficha da solicitação em PDF com o nome padrão', async () => {
+  it('gera o plano de aquisição em PDF com o nome padrão', async () => {
     await exportPurchaseRequestPdf(request);
     const [file] = downloads;
     expect(file?.fileName).toMatch(
-      /^falcao-solicitacao-materiais-para-a-laje-do-bloco-b-\d{4}-\d{2}-\d{2}\.pdf$/,
+      /^falcao-plano-de-aquisicao-12-materiais-para-a-laje-do-bloco-b-\d{4}-\d{2}-\d{2}\.pdf$/,
     );
     const bytes = await bytesOf(file!.blob);
     expect(new TextDecoder('latin1').decode(bytes.slice(0, 5))).toBe('%PDF-');

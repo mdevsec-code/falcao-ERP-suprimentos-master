@@ -36,7 +36,9 @@
     "createdAt": "Criada",
     "items": "Itens",
     "estimatedTotal": "Total estimado",
-    "status": "Status"
+    "status": "Status",
+    "number": "Nº",
+    "signatureStep": "Assinatura: {{step}}"
   },
   "empty": {
     "title": "Nenhuma solicitação ainda",
@@ -60,7 +62,10 @@
     "days_one": "{{count}} dia",
     "days_other": "{{count}} dias",
     "emptyTitle": "Tudo em dia",
-    "emptyDescription": "Não há solicitações aguardando sua ação no momento."
+    "emptyDescription": "Não há solicitações aguardando sua ação no momento.",
+    "toSignTitle_one": "Aguardando sua assinatura ({{count}})",
+    "toSignTitle_other": "Aguardando sua assinatura ({{count}})",
+    "toSignEmpty": "Nenhum plano de aquisição aguardando a sua assinatura."
   },
   "stepper": {
     "ariaLabel": "Etapas da solicitação",
@@ -96,7 +101,12 @@
     },
     "notFoundTitle": "Solicitação não encontrada",
     "notFoundDescription": "Ela pode ter sido removida ou o endereço está incorreto.",
-    "addToCatalog": "Incluir no catálogo"
+    "addToCatalog": "Incluir no catálogo",
+    "eyebrowNumber": "Plano de aquisição nº {{numero}}",
+    "itemLocal": "Local: {{value}}",
+    "itemSector": "Setor: {{value}}",
+    "itemNeededBy": "Entrada: {{date}}",
+    "itemWeight": "Peso: {{value}} kg"
   },
   "timeline": {
     "created": "criou a solicitação",
@@ -151,17 +161,30 @@
       "estimatedPrice": "Preço unit. estimado (R$)",
       "subtotal": "Subtotal",
       "marca": "Marca",
-      "referencia": "Referência"
+      "referencia": "Referência",
+      "requesterContact": "Contato do solicitante",
+      "especificacao": "Especificação",
+      "localUso": "Local de uso",
+      "setorSolicitante": "Setor solicitante",
+      "dataNecessaria": "Data de entrada",
+      "pesoTotal": "Peso total (kg)"
     },
     "placeholders": {
       "title": "Ex.: Materiais para a obra do Setor B",
-      "justification": "Para que serve, prazo necessário, obra/projeto…"
+      "justification": "Para que serve, prazo necessário, obra/projeto…",
+      "especificacao": "Medidas, norma, cor, modelo…",
+      "localUso": "Ex.: Bloco B, 3º pavimento",
+      "setorSolicitante": "Ex.: Engenharia"
     },
     "fromCatalog": "Item do catálogo",
     "looseItemHint": "Item descrito à mão (fora do catálogo).",
     "pickFromCatalog": "Escolher do catálogo",
     "changeProduct": "Trocar",
-    "unlinkProduct": "Desvincular"
+    "unlinkProduct": "Desvincular",
+    "hints": {
+      "costCenter": "Nome do projeto ou obra.",
+      "requesterContact": "Telefone ou ramal para tirar dúvidas."
+    }
   },
   "confirm": {
     "removeAttachmentTitle": "Remover arquivo",
@@ -225,12 +248,12 @@
   },
   "pdf": {
     "button": "Ficha em PDF",
-    "title": "Solicitação de compra",
+    "title": "Plano de aquisição",
     "justification": "Justificativa",
     "items_one": "Item ({{count}})",
     "items_other": "Itens ({{count}})",
     "history": "Histórico de aprovação",
-    "fileBase": "solicitacao {{title}}",
+    "fileBase": "plano de aquisicao {{numero}} {{title}}",
     "col": {
       "item": "Nº",
       "description": "Descrição",
@@ -242,7 +265,82 @@
       "who": "Responsável",
       "action": "Ação",
       "change": "Situação",
-      "comment": "Comentário"
-    }
+      "comment": "Comentário",
+      "material": "Material",
+      "spec": "Especificação",
+      "photo": "Foto",
+      "unit": "Un.",
+      "weight": "Peso total",
+      "local": "Local de uso",
+      "sector": "Setor",
+      "neededBy": "Data de entrada"
+    },
+    "number": "Nº do plano",
+    "contact": "Contato",
+    "project": "Projeto",
+    "updatedAt": "Atualizado em",
+    "currentStep": "Etapa atual",
+    "signatures": "Assinaturas",
+    "requesterBox": "Solicitante",
+    "submittedAt": "Enviado em {{date}}",
+    "approvedAt": "Aprovado em {{date}}",
+    "rejectedAt": "Recusado em {{date}}",
+    "pending": "Pendente"
+  },
+  "approvers": {
+    "eyebrow": "Administração",
+    "title": "Aprovadores",
+    "description": "Quem assina cada etapa do plano de aquisição. Todos os marcados recebem o e-mail quando o pedido chega na etapa; basta um deles assinar.",
+    "errorTitle": "Não foi possível carregar os aprovadores",
+    "search": "Buscar usuário por nome ou e-mail",
+    "stepNumber": "Etapa {{number}}",
+    "hint": {
+      "TECNICO": "Confere se o pedido está tecnicamente correto.",
+      "COMPRAS": "Analisa o pedido; depois da aprovação final, faz a cotação.",
+      "CUSTOS": "Confere o orçamento e o centro de custo.",
+      "GERENTE_GERAL": "Aprovação final do pedido."
+    },
+    "noneHint": "Ninguém marcado: os administradores recebem o e-mail e assinam esta etapa.",
+    "saved": "Aprovadores salvos."
+  },
+  "photo": {
+    "label": "Foto",
+    "alt": "Foto do item",
+    "add": "Adicionar foto",
+    "change": "Trocar foto",
+    "remove": "Remover",
+    "fromCatalog": "Foto do catálogo",
+    "uploadError": "Não foi possível enviar a foto."
+  },
+  "sign": {
+    "title": "Assinaturas",
+    "subtitle": "Solicitante e as quatro etapas de aprovação.",
+    "waitingStep": "Aguardando a assinatura de {{step}}.",
+    "reject": "Recusar",
+    "approve": "Aprovar e assinar",
+    "requester": "Solicitante",
+    "submitted": "Enviou o pedido",
+    "approversList": "Assina: {{names}}",
+    "noApprovers": "Sem aprovador definido (administradores)",
+    "yourTurn": "Sua vez de assinar",
+    "signatureAlt": "Assinatura de {{name}}",
+    "pending": "Aguardando",
+    "notYet": "Ainda não",
+    "rejectedBadge": "Recusado",
+    "rejectTitle": "Recusar o plano nº {{numero}}",
+    "approveTitle": "Aprovar o plano nº {{numero}}",
+    "dialogDescription": "Sua assinatura fica registrada com nome, data, hora e endereço IP.",
+    "useSaved": "Usar minha assinatura salva",
+    "drawNew": "Desenhar outra",
+    "saveForNext": "Salvar esta assinatura para as próximas vezes",
+    "savedAlt": "Sua assinatura salva",
+    "reasonRequired": "Motivo da recusa (obrigatório)",
+    "commentOptional": "Comentário (opcional)",
+    "legalNote": "Ao assinar, você confirma que analisou este pedido.",
+    "confirmReject": "Recusar e assinar",
+    "confirmApprove": "Aprovar e assinar",
+    "approvedToast": "Plano aprovado e assinado.",
+    "rejectedToast": "Plano recusado.",
+    "error": "Não foi possível registrar a assinatura."
   }
 }

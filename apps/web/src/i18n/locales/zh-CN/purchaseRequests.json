@@ -36,7 +36,9 @@
     "createdAt": "创建时间",
     "items": "项目数",
     "estimatedTotal": "预估总额",
-    "status": "状态"
+    "status": "状态",
+    "number": "编号",
+    "signatureStep": "签名：{{step}}"
   },
   "empty": {
     "title": "暂无申请",
@@ -59,7 +61,9 @@
     },
     "days_other": "{{count}} 天",
     "emptyTitle": "全部处理完毕",
-    "emptyDescription": "目前没有等待您处理的申请。"
+    "emptyDescription": "目前没有等待您处理的申请。",
+    "toSignTitle_other": "等待您签名（{{count}}）",
+    "toSignEmpty": "没有等待您签名的采购计划。"
   },
   "stepper": {
     "ariaLabel": "申请环节",
@@ -95,7 +99,12 @@
     },
     "notFoundTitle": "未找到申请",
     "notFoundDescription": "它可能已被删除，或地址有误。",
-    "addToCatalog": "加入目录"
+    "addToCatalog": "加入目录",
+    "eyebrowNumber": "采购计划 第 {{numero}} 号",
+    "itemLocal": "使用地点：{{value}}",
+    "itemSector": "部门：{{value}}",
+    "itemNeededBy": "进场日期：{{date}}",
+    "itemWeight": "重量：{{value}} kg"
   },
   "timeline": {
     "created": "创建了申请",
@@ -150,17 +159,30 @@
       "estimatedPrice": "预估单价（R$）",
       "subtotal": "小计",
       "marca": "品牌",
-      "referencia": "型号"
+      "referencia": "型号",
+      "requesterContact": "申请人联系方式",
+      "especificacao": "规格",
+      "localUso": "使用地点",
+      "setorSolicitante": "申请部门",
+      "dataNecessaria": "进场日期",
+      "pesoTotal": "总重量（kg）"
     },
     "placeholders": {
       "title": "例如：B 区工地材料",
-      "justification": "用途、所需时间、工地/项目…"
+      "justification": "用途、所需时间、工地/项目…",
+      "especificacao": "尺寸、标准、颜色、型号…",
+      "localUso": "例如：B 栋 3 层",
+      "setorSolicitante": "例如：工程部"
     },
     "fromCatalog": "目录物料",
     "looseItemHint": "手动描述的物料（不在目录中）。",
     "pickFromCatalog": "从目录选择",
     "changeProduct": "更换",
-    "unlinkProduct": "解除关联"
+    "unlinkProduct": "解除关联",
+    "hints": {
+      "costCenter": "项目或工地名称。",
+      "requesterContact": "用于咨询的电话或分机。"
+    }
   },
   "confirm": {
     "removeAttachmentTitle": "移除文件",
@@ -224,11 +246,11 @@
   },
   "pdf": {
     "button": "PDF 单据",
-    "title": "采购申请",
+    "title": "采购计划单",
     "justification": "理由",
     "items_other": "物料（{{count}}）",
     "history": "审批记录",
-    "fileBase": "solicitacao {{title}}",
+    "fileBase": "plano de aquisicao {{numero}} {{title}}",
     "col": {
       "item": "#",
       "description": "描述",
@@ -240,7 +262,82 @@
       "who": "负责人",
       "action": "操作",
       "change": "状态",
-      "comment": "备注"
-    }
+      "comment": "备注",
+      "material": "物料",
+      "spec": "规格",
+      "photo": "图片",
+      "unit": "单位",
+      "weight": "总重量",
+      "local": "使用地点",
+      "sector": "部门",
+      "neededBy": "进场日期"
+    },
+    "number": "计划编号",
+    "contact": "联系方式",
+    "project": "项目",
+    "updatedAt": "更新时间",
+    "currentStep": "当前环节",
+    "signatures": "签名",
+    "requesterBox": "申请人",
+    "submittedAt": "提交于 {{date}}",
+    "approvedAt": "批准于 {{date}}",
+    "rejectedAt": "拒绝于 {{date}}",
+    "pending": "待签"
+  },
+  "approvers": {
+    "eyebrow": "管理",
+    "title": "审批人",
+    "description": "采购计划每个环节的签字人。申请到达该环节时，所有勾选的人都会收到邮件；其中任何一人签名即可。",
+    "errorTitle": "无法加载审批人",
+    "search": "按姓名或邮箱搜索用户",
+    "stepNumber": "第 {{number}} 步",
+    "hint": {
+      "TECNICO": "检查申请在技术上是否正确。",
+      "COMPRAS": "审核申请；最终批准后负责询价。",
+      "CUSTOS": "核对预算和成本中心。",
+      "GERENTE_GERAL": "申请的最终批准。"
+    },
+    "noneHint": "未勾选任何人：由管理员接收邮件并签署此环节。",
+    "saved": "审批人已保存。"
+  },
+  "photo": {
+    "label": "图片",
+    "alt": "物料图片",
+    "add": "添加图片",
+    "change": "更换图片",
+    "remove": "删除",
+    "fromCatalog": "目录图片",
+    "uploadError": "无法上传图片。"
+  },
+  "sign": {
+    "title": "签名",
+    "subtitle": "申请人及四个审批环节。",
+    "waitingStep": "等待「{{step}}」签名。",
+    "reject": "拒绝",
+    "approve": "批准并签名",
+    "requester": "申请人",
+    "submitted": "提交了申请",
+    "approversList": "签字人：{{names}}",
+    "noApprovers": "未设置审批人（由管理员签署）",
+    "yourTurn": "轮到您签名",
+    "signatureAlt": "{{name}} 的签名",
+    "pending": "等待中",
+    "notYet": "尚未开始",
+    "rejectedBadge": "已拒绝",
+    "rejectTitle": "拒绝第 {{numero}} 号计划",
+    "approveTitle": "批准第 {{numero}} 号计划",
+    "dialogDescription": "您的签名将连同姓名、日期、时间和 IP 地址一起记录。",
+    "useSaved": "使用我保存的签名",
+    "drawNew": "重新签名",
+    "saveForNext": "保存此签名以便下次使用",
+    "savedAlt": "您保存的签名",
+    "reasonRequired": "拒绝原因（必填）",
+    "commentOptional": "备注（可选）",
+    "legalNote": "签名即表示您已审核此申请。",
+    "confirmReject": "拒绝并签名",
+    "confirmApprove": "批准并签名",
+    "approvedToast": "计划已批准并签名。",
+    "rejectedToast": "计划已拒绝。",
+    "error": "无法记录签名。"
   }
 }

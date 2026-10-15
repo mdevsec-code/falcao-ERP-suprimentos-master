@@ -180,5 +180,11 @@
     "PENDENTE": "待处理",
     "IMPORTADO": "已入目录",
     "IGNORADO": "已忽略"
+  },
+  "approvalStep": {
+    "TECNICO": "技术负责人",
+    "COMPRAS": "采购",
+    "CUSTOS": "成本",
+    "GERENTE_GERAL": "总经理"
   }
 }

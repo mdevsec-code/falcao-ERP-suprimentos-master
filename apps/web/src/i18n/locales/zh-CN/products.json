@@ -194,5 +194,15 @@
     "lastPrice": "最近价格",
     "lastPriceAt": "最近价格日期",
     "lastSupplier": "最近价格供应商"
+  },
+  "photo": {
+    "alt": "产品照片",
+    "add": "添加照片",
+    "change": "更换照片",
+    "remove": "删除照片",
+    "hint": "JPG、PNG 或 WEBP。会显示在该产品的申请中。",
+    "saved": "产品照片已保存。",
+    "removed": "产品照片已删除。",
+    "error": "无法保存照片。"
   }
 }

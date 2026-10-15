@@ -65,7 +65,8 @@
     "profile": "My profile",
     "quotations": "Quotations",
     "plans": "Requisition Plans",
-    "catalogs": "Received Catalogs"
+    "catalogs": "Received Catalogs",
+    "approvers": "Approvers"
   },
   "theme": {
     "switchToLight": "Switch to light theme",
@@ -144,5 +145,10 @@
     "error": "Could not generate the file.",
     "empty": "Nothing to export with the current filters.",
     "filters": "Filters: {{filters}}"
+  },
+  "signature": {
+    "areaLabel": "Area to draw your signature",
+    "placeholder": "Sign here with your finger, a pen or the mouse",
+    "clear": "Clear"
   }
 }

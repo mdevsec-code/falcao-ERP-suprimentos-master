@@ -7,13 +7,16 @@ import {
   CalendarClock,
   Landmark,
   Package,
+  ImageOff,
   Paperclip,
+  Phone,
   Upload,
   User,
 } from 'lucide-react';
 import type { PurchaseRequestItemDto } from '@falcao-erp/shared-types';
 
 import { PageHeader } from '@/components/layout/PageHeader';
+import { uploadUrl } from '@/utils/image';
 import { ExportMenu } from '@/components/common/ExportMenu';
 import { InfoTile } from '@/components/data-display/InfoTile';
 import { FileList, type FileListItem } from '@/components/data-display/FileList';
@@ -35,7 +38,7 @@ import {
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { PERMISSIONS } from '@/constants/permissions';
 import { ROUTE_PATHS, routeTo } from '@/constants/routes';
-import { formatCurrencyBRL, formatDateTime } from '@/utils/format';
+import { formatCurrencyBRL, formatDateOnly, formatDateTime } from '@/utils/format';
 
 import { usePurchaseRequest, usePurchaseRequestTimeline } from '../hooks/usePurchaseRequests';
 import {
@@ -44,6 +47,7 @@ import {
 } from '../hooks/usePurchaseRequestMutations';
 import { PurchaseRequestStatusBadge } from '../components/PurchaseRequestBadges';
 import { StatusStepper } from '../components/StatusStepper';
+import { ApprovalSignatures } from '../components/ApprovalSignatures';
 import { StatusActions } from '../components/StatusActions';
 import { Timeline } from '../components/Timeline';
 import { CommentsPanel } from '../components/CommentsPanel';
@@ -102,7 +106,7 @@ export function PurchaseRequestDetailPage() {
   return (
     <>
       <PageHeader
-        eyebrow={t('purchaseRequests:detail.eyebrow')}
+        eyebrow={t('purchaseRequests:detail.eyebrowNumber', { numero: request.numero })}
         title={request.title}
         description={t('purchaseRequests:detail.requestedBy', { name: request.requesterName })}
         actions={
@@ -137,6 +141,8 @@ export function PurchaseRequestDetailPage() {
           </CardContent>
         </Card>
 
+        <ApprovalSignatures request={request} />
+
         <Tabs defaultValue="overview">
           <TabsList className="h-auto flex-wrap justify-start">
             <TabsTrigger value="overview">{t('purchaseRequests:detail.tabs.overview')}</TabsTrigger>
@@ -161,6 +167,13 @@ export function PurchaseRequestDetailPage() {
                 label={t('purchaseRequests:form.fields.costCenter')}
                 value={request.costCenter ?? '—'}
               />
+              {request.requesterContact && (
+                <InfoTile
+                  icon={Phone}
+                  label={t('purchaseRequests:form.fields.requesterContact')}
+                  value={request.requesterContact}
+                />
+              )}
               <InfoTile
                 icon={CalendarClock}
                 label={t('purchaseRequests:detail.createdAt')}
@@ -191,6 +204,7 @@ export function PurchaseRequestDetailPage() {
                 <Table>
                   <TableHeader>
                     <TableRow>
+                      <TableHead className="w-16">{t('purchaseRequests:photo.label')}</TableHead>
                       <TableHead>{t('purchaseRequests:form.fields.description')}</TableHead>
                       <TableHead className="text-right">
                         {t('purchaseRequests:form.fields.quantity')}
@@ -207,11 +221,57 @@ export function PurchaseRequestDetailPage() {
                   <TableBody>
                     {request.items.map((item) => (
                       <TableRow key={item.id}>
+                        <TableCell className="align-top">
+                          {item.photoUrl ? (
+                            <a
+                              href={uploadUrl(item.photoUrl) ?? '#'}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              <img
+                                src={uploadUrl(item.photoUrl) ?? undefined}
+                                alt={item.description}
+                                className="h-14 w-14 rounded-md border border-border object-cover"
+                              />
+                            </a>
+                          ) : (
+                            <span className="flex h-14 w-14 items-center justify-center rounded-md border border-dashed border-border text-ink-soft">
+                              <ImageOff className="h-4 w-4" aria-hidden="true" />
+                            </span>
+                          )}
+                        </TableCell>
                         <TableCell>
                           <p className="font-medium text-ink">{item.description}</p>
-                          {(item.marca || item.referencia) && (
+                          {(item.marca || item.referencia || item.especificacao) && (
                             <p className="text-xs text-ink-soft">
-                              {[item.marca, item.referencia].filter(Boolean).join(' · ')}
+                              {[item.especificacao, item.marca, item.referencia]
+                                .filter(Boolean)
+                                .join(' · ')}
+                            </p>
+                          )}
+                          {(item.localUso ||
+                            item.setorSolicitante ||
+                            item.dataNecessaria ||
+                            item.pesoTotal) && (
+                            <p className="text-xs text-ink-soft">
+                              {[
+                                item.localUso &&
+                                  t('purchaseRequests:detail.itemLocal', { value: item.localUso }),
+                                item.setorSolicitante &&
+                                  t('purchaseRequests:detail.itemSector', {
+                                    value: item.setorSolicitante,
+                                  }),
+                                item.dataNecessaria &&
+                                  t('purchaseRequests:detail.itemNeededBy', {
+                                    date: formatDateOnly(item.dataNecessaria),
+                                  }),
+                                item.pesoTotal &&
+                                  t('purchaseRequests:detail.itemWeight', {
+                                    value: Number(item.pesoTotal).toLocaleString(),
+                                  }),
+                              ]
+                                .filter(Boolean)
+                                .join(' · ')}
                             </p>
                           )}
                           {item.productId && item.productName && (

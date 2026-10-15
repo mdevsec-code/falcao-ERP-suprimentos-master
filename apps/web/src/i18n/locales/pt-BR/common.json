@@ -65,7 +65,8 @@
     "profile": "Meu perfil",
     "quotations": "Cotações",
     "plans": "Planos de Requisição",
-    "catalogs": "Catálogos Recebidos"
+    "catalogs": "Catálogos Recebidos",
+    "approvers": "Aprovadores"
   },
   "theme": {
     "switchToLight": "Ativar tema claro",
@@ -144,5 +145,10 @@
     "error": "Não foi possível gerar o arquivo.",
     "empty": "Nada para exportar com os filtros atuais.",
     "filters": "Filtros: {{filters}}"
+  },
+  "signature": {
+    "areaLabel": "Área para desenhar a assinatura",
+    "placeholder": "Assine aqui com o dedo, a caneta ou o mouse",
+    "clear": "Limpar"
   }
 }

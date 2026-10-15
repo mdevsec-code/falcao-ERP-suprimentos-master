@@ -5,6 +5,7 @@ import type {
   ProductStatsDto,
   ProductSummaryDto,
 } from '@falcao-erp/shared-types';
+import { UPLOAD_TIMEOUT_MS } from '@/constants/uploads';
 import { httpClient } from '@/services/http/client';
 import type {
   CatalogFromItemPayload,
@@ -62,6 +63,21 @@ export const productsApi = {
   /** Inclui no catálogo um item digitado à mão numa solicitação. */
   async createFromRequestItem(input: CatalogFromItemPayload): Promise<ProductDetailDto> {
     const { data } = await httpClient.post<ProductDetailDto>('/products/from-request-item', input);
+    return data;
+  },
+
+  /** Foto do produto (substitui a anterior). */
+  async setPhoto(id: string, file: File): Promise<ProductDetailDto> {
+    const formData = new FormData();
+    formData.append('file', file);
+    const { data } = await httpClient.post<ProductDetailDto>(`/products/${id}/photo`, formData, {
+      timeout: UPLOAD_TIMEOUT_MS,
+    });
+    return data;
+  },
+
+  async removePhoto(id: string): Promise<ProductDetailDto> {
+    const { data } = await httpClient.delete<ProductDetailDto>(`/products/${id}/photo`);
     return data;
   },
 };

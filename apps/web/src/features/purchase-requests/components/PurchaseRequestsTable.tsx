@@ -10,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/Table';
+import { APPROVAL_STEP_LABELS } from '@/constants/enums';
 import { routeTo } from '@/constants/routes';
 import { formatCurrencyBRL, formatDate, relativeTime } from '@/utils/format';
 import { cn } from '@/utils/cn';
@@ -29,6 +30,7 @@ export function PurchaseRequestsTable({ rows, isFetching }: PurchaseRequestsTabl
     <Table className={cn('transition-opacity duration-base', isFetching && 'opacity-60')}>
       <TableHeader>
         <TableRow>
+          <TableHead className="w-16">{t('purchaseRequests:table.number')}</TableHead>
           <TableHead>{t('purchaseRequests:table.title')}</TableHead>
           <TableHead>{t('purchaseRequests:table.requester')}</TableHead>
           <TableHead>{t('purchaseRequests:table.createdAt')}</TableHead>
@@ -47,6 +49,7 @@ export function PurchaseRequestsTable({ rows, isFetching }: PurchaseRequestsTabl
             className="group cursor-pointer"
             onClick={() => navigate(routeTo.purchaseRequest(request.id))}
           >
+            <TableCell className="font-mono text-ink-soft">#{request.numero}</TableCell>
             <TableCell>
               <Link
                 to={routeTo.purchaseRequest(request.id)}
@@ -76,6 +79,13 @@ export function PurchaseRequestsTable({ rows, isFetching }: PurchaseRequestsTabl
             </TableCell>
             <TableCell>
               <PurchaseRequestStatusBadge status={request.status} />
+              {request.currentStep && (
+                <p className="mt-1 text-2xs text-ink-soft">
+                  {t('purchaseRequests:table.signatureStep', {
+                    step: APPROVAL_STEP_LABELS[request.currentStep],
+                  })}
+                </p>
+              )}
             </TableCell>
             <TableCell aria-hidden="true">
               <ChevronRight className="h-4 w-4 text-ink-soft transition-transform duration-fast group-hover:translate-x-0.5 group-hover:text-brand-gold-700" />

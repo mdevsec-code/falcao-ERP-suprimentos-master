@@ -1,10 +1,10 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import type { PurchaseRequestStatus } from '@falcao-erp/shared-types';
+import type { ApprovalStep, PurchaseRequestStatus } from '@falcao-erp/shared-types';
 
 import i18n from '@/i18n';
 import { getErrorMessage } from '@/services/http/errors';
-import { purchaseRequestsApi } from '../services/purchaseRequests.api';
+import { purchaseRequestsApi, type SignPayload } from '../services/purchaseRequests.api';
 import { purchaseRequestsKeys } from './usePurchaseRequests';
 import type { PurchaseRequestPayload } from '../types';
 
@@ -73,6 +73,67 @@ export function useRemovePurchaseRequestAttachment(id: string) {
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: purchaseRequestsKeys.detail(id) });
       toast.success(i18n.t('purchaseRequests:toast.attachmentRemoved'));
+    },
+    onError: (error: Error) => {
+      toast.error(getErrorMessage(error, i18n.t('common:errors.generic')));
+    },
+  });
+}
+
+/** Assina (aprova ou recusa) a etapa atual; atualiza detalhe, fila e indicadores. */
+export function useSignPurchaseRequest(id: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: SignPayload) => purchaseRequestsApi.sign(id, payload),
+    onSuccess: (request, payload) => {
+      queryClient.setQueryData(purchaseRequestsKeys.detail(id), request);
+      void queryClient.invalidateQueries({ queryKey: purchaseRequestsKeys.all });
+      if (payload.saveSignature) void queryClient.invalidateQueries({ queryKey: ['my-signature'] });
+      toast.success(
+        i18n.t(
+          payload.decision === 'APROVADO'
+            ? 'purchaseRequests:sign.approvedToast'
+            : 'purchaseRequests:sign.rejectedToast',
+        ),
+      );
+    },
+    onError: (error: Error) => {
+      toast.error(getErrorMessage(error, i18n.t('purchaseRequests:sign.error')));
+    },
+  });
+}
+
+export function useMySignature(enabled = true) {
+  return useQuery({
+    queryKey: ['my-signature'],
+    queryFn: purchaseRequestsApi.mySignature,
+    enabled,
+  });
+}
+
+export function useClearMySignature() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: purchaseRequestsApi.clearMySignature,
+    onSuccess: (data) => queryClient.setQueryData(['my-signature'], data),
+  });
+}
+
+export const approvalStepsKey = ['approval-steps'] as const;
+
+export function useApprovalSteps() {
+  return useQuery({ queryKey: approvalStepsKey, queryFn: purchaseRequestsApi.approvalSteps });
+}
+
+export function useSetApprovalStep() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ step, userIds }: { step: ApprovalStep; userIds: string[] }) =>
+      purchaseRequestsApi.setApprovalStep(step, userIds),
+    onSuccess: (data) => {
+      queryClient.setQueryData(approvalStepsKey, data);
+      void queryClient.invalidateQueries({ queryKey: purchaseRequestsKeys.all });
+      toast.success(i18n.t('purchaseRequests:approvers.saved'));
     },
     onError: (error: Error) => {
       toast.error(getErrorMessage(error, i18n.t('common:errors.generic')));

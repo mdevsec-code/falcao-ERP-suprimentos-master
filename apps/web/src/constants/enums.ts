@@ -1,5 +1,6 @@
 import type {
   AgendaEventType,
+  ApprovalStep,
   AgendaItemKind,
   ApprovalAction,
   AuditAction,
@@ -90,3 +91,5 @@ export const SUPPLIER_CATALOG_STATUS_LABELS =
 
 export const SUPPLIER_CATALOG_ITEM_STATUS_LABELS =
   createTranslatedLabels<SupplierCatalogItemStatus>('supplierCatalogItemStatus');
+
+export const APPROVAL_STEP_LABELS = createTranslatedLabels<ApprovalStep>('approvalStep');

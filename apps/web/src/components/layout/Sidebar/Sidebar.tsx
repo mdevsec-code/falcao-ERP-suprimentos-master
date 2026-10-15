@@ -20,6 +20,7 @@ import {
   type LucideIcon,
   BookOpen,
   Layers,
+  PenLine,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
@@ -132,6 +133,12 @@ const SECTIONS: NavSection[] = [
         label: 'nav.users',
         to: ROUTE_PATHS.USUARIOS,
         icon: UserCog,
+        requires: PERMISSIONS.USERS_MANAGE,
+      },
+      {
+        label: 'nav.approvers',
+        to: ROUTE_PATHS.APROVADORES,
+        icon: PenLine,
         requires: PERMISSIONS.USERS_MANAGE,
       },
       {

@@ -151,6 +151,11 @@ const AgendaPage = lazy(() =>
   import('@/features/agenda/pages/AgendaPage').then((m) => ({ default: m.AgendaPage })),
 );
 
+const ApproversSettingsPage = lazy(() =>
+  import('@/features/purchase-requests/pages/ApproversSettingsPage').then((m) => ({
+    default: m.ApproversSettingsPage,
+  })),
+);
 const UsersPage = lazy(() =>
   import('@/features/users/pages/UsersPage').then((m) => ({ default: m.UsersPage })),
 );
@@ -254,6 +259,10 @@ const protectedRoutes: RouteObject[] = [
   {
     path: `${ROUTE_PATHS.CATALOGOS}/:id`,
     element: withPermission(PERMISSIONS.QUOTATION_READ, <CatalogReviewPage />),
+  },
+  {
+    path: ROUTE_PATHS.APROVADORES,
+    element: withPermission(PERMISSIONS.USERS_MANAGE, <ApproversSettingsPage />),
   },
   {
     path: ROUTE_PATHS.USUARIOS,

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ClipboardCheck, Hourglass, Inbox } from 'lucide-react';
+import { ClipboardCheck, Hourglass, Inbox, PenLine } from 'lucide-react';
 
 import { PageHeader } from '@/components/layout/PageHeader';
 import { StatTile } from '@/components/data-display/StatTile';
@@ -16,7 +16,7 @@ import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useDebounce } from '@/hooks/useDebounce';
 import { PURCHASE_REQUEST_STATUS_LABELS } from '@/constants/enums';
 
-import { usePurchaseRequestQueue } from '../hooks/usePurchaseRequests';
+import { usePurchaseRequestQueue, usePurchaseRequests } from '../hooks/usePurchaseRequests';
 import { FiltersBar } from '../components/FiltersBar';
 import { PurchaseRequestsTable } from '../components/PurchaseRequestsTable';
 import { APPROVAL_QUEUE_BY_ROLE, type PurchaseRequestFilters } from '../types';
@@ -33,6 +33,14 @@ export function ApprovalsPage() {
 
   const queueStatuses = (user && APPROVAL_QUEUE_BY_ROLE[user.role]) ?? [];
   const queue = usePurchaseRequestQueue(queueStatuses, debouncedSearch);
+  /** Planos de aquisição em que é a vez do usuário assinar. */
+  const toSign = usePurchaseRequests({
+    page: 1,
+    pageSize: 100,
+    pendingMySignature: true,
+    search: debouncedSearch || undefined,
+  });
+  const toSignRows = toSign.data?.data ?? [];
 
   const total = queue.rows.length;
   const pageRows = queue.rows.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -63,6 +71,26 @@ export function ApprovalsPage() {
             </Badge>
           ))}
         </div>
+
+        <section aria-labelledby="to-sign-title" className="space-y-3">
+          <div className="flex items-center gap-2">
+            <PenLine className="h-4 w-4 text-brand-gold-700" aria-hidden="true" />
+            <h2 id="to-sign-title" className="text-base font-semibold text-ink">
+              {t('purchaseRequests:approvals.toSignTitle', { count: toSignRows.length })}
+            </h2>
+          </div>
+          {toSign.isLoading ? (
+            <Skeleton className="h-14 w-full" />
+          ) : toSignRows.length === 0 ? (
+            <p className="rounded-md border border-dashed border-border px-4 py-4 text-sm text-ink-soft">
+              {t('purchaseRequests:approvals.toSignEmpty')}
+            </p>
+          ) : (
+            <PurchaseRequestsTable rows={toSignRows} isFetching={toSign.isFetching} />
+          )}
+        </section>
+
+        <Separator />
 
         <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {queue.isLoading ? (

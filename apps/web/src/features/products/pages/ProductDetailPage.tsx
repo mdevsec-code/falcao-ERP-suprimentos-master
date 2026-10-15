@@ -37,11 +37,14 @@ import { useAddPriceEntry, useSetProductActive } from '../hooks/useProductMutati
 import { ProductCategoryBadge, ProductStatusBadge } from '../components/ProductBadges';
 import { PriceEntryDialog } from '../components/PriceEntryDialog';
 import { PriceHistory } from '../components/PriceHistory';
+import { ProductPhoto } from '../components/ProductPhoto';
+import { useAuth } from '@/features/auth/hooks/useAuth';
 
 export function ProductDetailPage() {
   const { id = '' } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation('products');
+  const { can } = useAuth();
   const { data: product, isLoading, isError, refetch } = useProduct(id);
   const setActive = useSetProductActive(id);
   const addPriceEntry = useAddPriceEntry(id);
@@ -109,9 +112,16 @@ export function ProductDetailPage() {
       />
 
       <div className="space-y-6 px-6 py-8 sm:px-8">
-        <div className="flex animate-fade-in flex-wrap items-center gap-3">
-          <ProductStatusBadge isActive={product.isActive} />
-          <ProductCategoryBadge categoria={product.categoria} />
+        <div className="flex animate-fade-in flex-wrap items-center gap-6">
+          <ProductPhoto
+            productId={product.id}
+            photoUrl={product.photoUrl}
+            canEdit={can(PERMISSIONS.PRODUCT_WRITE)}
+          />
+          <div className="flex flex-wrap items-center gap-3">
+            <ProductStatusBadge isActive={product.isActive} />
+            <ProductCategoryBadge categoria={product.categoria} />
+          </div>
         </div>
 
         <Tabs defaultValue="overview">

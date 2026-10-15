@@ -14,6 +14,7 @@ import { routeTo } from '@/constants/routes';
 import { UNIT_LABELS } from '@/constants/enums';
 import { formatCurrencyBRL, formatDate } from '@/utils/format';
 import { cn } from '@/utils/cn';
+import { uploadUrl } from '@/utils/image';
 import { ProductCategoryBadge, ProductStatusBadge } from './ProductBadges';
 import type { ProductSummaryDto } from '../types';
 
@@ -50,25 +51,41 @@ export function ProductsTable({ rows, isFetching }: ProductsTableProps) {
             onClick={() => navigate(routeTo.product(product.id))}
           >
             <TableCell>
-              <Link
-                to={routeTo.product(product.id)}
-                onClick={(e) => e.stopPropagation()}
-                className="font-medium text-ink hover:underline group-hover:text-brand-gold-700"
-              >
-                {product.nome}
-              </Link>
-              <p className="text-xs text-ink-soft">
-                <span className="font-mono">{product.codigo}</span>
-                {product.marca ? ` · ${product.marca}` : ''}
-                {product.referencia ? (
-                  <>
-                    {' · '}
-                    <span className="font-mono">
-                      {t('products:table.ref', { value: product.referencia })}
-                    </span>
-                  </>
-                ) : null}
-              </p>
+              <div className="flex items-start gap-3">
+                {product.photoUrl ? (
+                  <img
+                    src={uploadUrl(product.photoUrl) ?? undefined}
+                    alt=""
+                    className="h-10 w-10 shrink-0 rounded border border-border object-cover"
+                  />
+                ) : (
+                  <span
+                    className="h-10 w-10 shrink-0 rounded border border-dashed border-border"
+                    aria-hidden="true"
+                  />
+                )}
+                <div className="min-w-0">
+                  <Link
+                    to={routeTo.product(product.id)}
+                    onClick={(e) => e.stopPropagation()}
+                    className="font-medium text-ink hover:underline group-hover:text-brand-gold-700"
+                  >
+                    {product.nome}
+                  </Link>
+                  <p className="text-xs text-ink-soft">
+                    <span className="font-mono">{product.codigo}</span>
+                    {product.marca ? ` · ${product.marca}` : ''}
+                    {product.referencia ? (
+                      <>
+                        {' · '}
+                        <span className="font-mono">
+                          {t('products:table.ref', { value: product.referencia })}
+                        </span>
+                      </>
+                    ) : null}
+                  </p>
+                </div>
+              </div>
             </TableCell>
             <TableCell className="text-ink-soft">{product.discipline?.nome ?? '—'}</TableCell>
             <TableCell>

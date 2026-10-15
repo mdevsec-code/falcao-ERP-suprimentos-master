@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/Textarea';
 import { FormSection } from '@/components/common/FormSection';
 import { formatCurrencyBRL } from '@/utils/format';
 import { CatalogPickerDialog } from './CatalogPickerDialog';
+import { ItemPhotoField } from './ItemPhotoField';
 import {
   itemSubtotal,
   purchaseRequestFormSchema,
@@ -26,6 +27,13 @@ const EMPTY_ITEM: PurchaseRequestItemInput = {
   estimatedPrice: '',
   marca: '',
   referencia: '',
+  especificacao: '',
+  pesoTotal: '',
+  localUso: '',
+  setorSolicitante: '',
+  dataNecessaria: '',
+  photoPath: '',
+  photoUrl: '',
 };
 
 interface PurchaseRequestFormProps {
@@ -50,7 +58,13 @@ export function PurchaseRequestForm({
   } = useForm<PurchaseRequestFormInput>({
     resolver: zodResolver(purchaseRequestFormSchema),
     mode: 'onTouched',
-    defaultValues: { title: '', justification: '', costCenter: '', items: [EMPTY_ITEM] },
+    defaultValues: {
+      title: '',
+      justification: '',
+      costCenter: '',
+      requesterContact: '',
+      items: [EMPTY_ITEM],
+    },
   });
 
   const { fields, append, remove } = useFieldArray({ control, name: 'items' });
@@ -61,6 +75,8 @@ export function PurchaseRequestForm({
   const [pickingIndex, setPickingIndex] = useState<number | null>(null);
   /** Nome do produto escolhido em cada linha, só para exibir. */
   const [pickedNames, setPickedNames] = useState<Record<string, string>>({});
+  /** Foto do produto escolhido em cada linha (vale quando o item não tem foto própria). */
+  const [pickedPhotos, setPickedPhotos] = useState<Record<string, string | null>>({});
 
   /** Ao escolher do catálogo, preenche descrição, unidade, marca, referência e último preço. */
   function handlePick(product: ProductSummaryDto) {
@@ -80,6 +96,7 @@ export function PurchaseRequestForm({
     }
     if (fieldId) {
       setPickedNames((prev) => ({ ...prev, [fieldId]: `${product.codigo} · ${product.nome}` }));
+      setPickedPhotos((prev) => ({ ...prev, [fieldId]: product.photoUrl }));
     }
     setPickingIndex(null);
   }
@@ -101,13 +118,21 @@ export function PurchaseRequestForm({
           error={errors.title?.message}
           required
         />
-        <Input
-          {...register('costCenter')}
-          label={t('purchaseRequests:form.fields.costCenter')}
-          hint={t('common:form.optional')}
-          error={errors.costCenter?.message}
-          className="sm:max-w-xs"
-        />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <Input
+            {...register('costCenter')}
+            label={t('purchaseRequests:form.fields.costCenter')}
+            hint={t('purchaseRequests:form.hints.costCenter')}
+            error={errors.costCenter?.message}
+          />
+          <Input
+            {...register('requesterContact')}
+            label={t('purchaseRequests:form.fields.requesterContact')}
+            hint={t('purchaseRequests:form.hints.requesterContact')}
+            error={errors.requesterContact?.message}
+            autoComplete="tel"
+          />
+        </div>
         <Textarea
           {...register('justification')}
           label={t('purchaseRequests:form.fields.justification')}
@@ -208,12 +233,34 @@ export function PurchaseRequestForm({
                   )}
                 </div>
 
-                <Input
-                  {...register(`items.${index}.description`)}
-                  label={t('purchaseRequests:form.fields.description')}
-                  error={itemErrors?.description?.message}
-                  required
-                />
+                <div className="flex flex-col gap-3 sm:flex-row">
+                  <div className="flex-1 space-y-3">
+                    <Input
+                      {...register(`items.${index}.description`)}
+                      label={t('purchaseRequests:form.fields.description')}
+                      error={itemErrors?.description?.message}
+                      required
+                    />
+                    <Input
+                      {...register(`items.${index}.especificacao`)}
+                      label={t('purchaseRequests:form.fields.especificacao')}
+                      placeholder={t('purchaseRequests:form.placeholders.especificacao')}
+                      hint={t('common:form.optional')}
+                      error={itemErrors?.especificacao?.message}
+                    />
+                  </div>
+                  <ItemPhotoField
+                    photoPath={items?.[index]?.photoPath}
+                    photoUrl={items?.[index]?.photoUrl}
+                    productPhotoUrl={items?.[index]?.productId ? pickedPhotos[field.id] : null}
+                    onChange={(photo) => {
+                      setValue(`items.${index}.photoPath`, photo?.path ?? '', {
+                        shouldDirty: true,
+                      });
+                      setValue(`items.${index}.photoUrl`, photo?.url ?? '');
+                    }}
+                  />
+                </div>
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   <Input
                     {...register(`items.${index}.marca`)}
@@ -262,6 +309,39 @@ export function PurchaseRequestForm({
                       {subtotal > 0 ? formatCurrencyBRL(subtotal) : '—'}
                     </span>
                   </div>
+                </div>
+
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                  <Input
+                    {...register(`items.${index}.localUso`)}
+                    label={t('purchaseRequests:form.fields.localUso')}
+                    placeholder={t('purchaseRequests:form.placeholders.localUso')}
+                    hint={t('common:form.optional')}
+                    error={itemErrors?.localUso?.message}
+                  />
+                  <Input
+                    {...register(`items.${index}.setorSolicitante`)}
+                    label={t('purchaseRequests:form.fields.setorSolicitante')}
+                    placeholder={t('purchaseRequests:form.placeholders.setorSolicitante')}
+                    hint={t('common:form.optional')}
+                    error={itemErrors?.setorSolicitante?.message}
+                  />
+                  <Input
+                    {...register(`items.${index}.dataNecessaria`)}
+                    type="date"
+                    label={t('purchaseRequests:form.fields.dataNecessaria')}
+                    hint={t('common:form.optional')}
+                    error={itemErrors?.dataNecessaria?.message}
+                  />
+                  <Input
+                    {...register(`items.${index}.pesoTotal`)}
+                    type="number"
+                    min={0}
+                    step="0.001"
+                    label={t('purchaseRequests:form.fields.pesoTotal')}
+                    hint={t('common:form.optional')}
+                    error={itemErrors?.pesoTotal?.message}
+                  />
                 </div>
               </li>
             );

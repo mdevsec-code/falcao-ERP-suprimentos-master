@@ -28,6 +28,7 @@ import { useDisciplines } from '@/features/disciplines/hooks/useDisciplines';
 import { useProducts } from '@/features/products/hooks/useProducts';
 import { formatCurrencyBRL, formatDate } from '@/utils/format';
 import { cn } from '@/utils/cn';
+import { uploadUrl } from '@/utils/image';
 
 const ALL = '__all';
 
@@ -154,6 +155,18 @@ export function CatalogPickerDialog({ open, onOpenChange, onPick }: CatalogPicke
                   onClick={() => onPick(product)}
                   className="flex w-full items-start gap-4 px-4 py-3 text-left transition-colors duration-fast hover:bg-hover focus-visible:bg-hover focus-visible:outline-none"
                 >
+                  {product.photoUrl ? (
+                    <img
+                      src={uploadUrl(product.photoUrl) ?? undefined}
+                      alt=""
+                      className="h-12 w-12 shrink-0 rounded border border-border object-cover"
+                    />
+                  ) : (
+                    <span
+                      className="h-12 w-12 shrink-0 rounded border border-dashed border-border"
+                      aria-hidden="true"
+                    />
+                  )}
                   <div className="min-w-0 flex-1">
                     <p className="font-medium text-ink">{product.nome}</p>
                     <p className="text-xs text-ink-soft">

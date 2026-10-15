@@ -196,5 +196,15 @@
     "lastPrice": "Last price",
     "lastPriceAt": "Last price date",
     "lastSupplier": "Last price supplier"
+  },
+  "photo": {
+    "alt": "Product photo",
+    "add": "Add photo",
+    "change": "Change photo",
+    "remove": "Remove photo",
+    "hint": "JPG, PNG or WEBP. Shown on requests for this product.",
+    "saved": "Product photo saved.",
+    "removed": "Product photo removed.",
+    "error": "Could not save the photo."
   }
 }

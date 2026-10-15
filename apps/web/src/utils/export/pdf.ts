@@ -33,6 +33,8 @@ export interface PdfTableOptions {
   foot?: RowInput[];
   /** Ex.: pintar a célula do menor preço. */
   didParseCell?: (data: CellHookData) => void;
+  /** Ex.: desenhar a miniatura da foto dentro da célula. */
+  didDrawCell?: (data: CellHookData) => void;
   fontSize?: number;
 }
 
@@ -65,6 +67,11 @@ export class PdfReport {
 
   get pageHeight() {
     return this.doc.internal.pageSize.getHeight();
+  }
+
+  /** Margem lateral (mm) — para quem desenha direto no `doc`. */
+  get marginX() {
+    return MARGIN;
   }
 
   get contentWidth() {
@@ -196,6 +203,7 @@ export class PdfReport {
           data.cell.styles.halign = options.columns[data.column.index]?.align ?? 'left';
         options.didParseCell?.(data);
       },
+      didDrawCell: options.didDrawCell,
       didDrawPage: () => this.drawHeader(),
     });
     const last = (this.doc as jsPDF & { lastAutoTable?: { finalY: number } }).lastAutoTable;

@@ -180,5 +180,11 @@
     "PENDENTE": "Pending",
     "IMPORTADO": "In catalog",
     "IGNORADO": "Ignored"
+  },
+  "approvalStep": {
+    "TECNICO": "Technical lead",
+    "COMPRAS": "Purchasing",
+    "CUSTOS": "Costs",
+    "GERENTE_GERAL": "General manager"
   }
 }

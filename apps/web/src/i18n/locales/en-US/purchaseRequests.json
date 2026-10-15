@@ -36,7 +36,9 @@
     "createdAt": "Created",
     "items": "Items",
     "estimatedTotal": "Estimated total",
-    "status": "Status"
+    "status": "Status",
+    "number": "No.",
+    "signatureStep": "Signature: {{step}}"
   },
   "empty": {
     "title": "No requests yet",
@@ -60,7 +62,10 @@
     "days_one": "{{count}} day",
     "days_other": "{{count}} days",
     "emptyTitle": "All caught up",
-    "emptyDescription": "No requests are waiting for your action right now."
+    "emptyDescription": "No requests are waiting for your action right now.",
+    "toSignTitle_one": "Waiting for your signature ({{count}})",
+    "toSignTitle_other": "Waiting for your signature ({{count}})",
+    "toSignEmpty": "No acquisition plan is waiting for your signature."
   },
   "stepper": {
     "ariaLabel": "Request stages",
@@ -96,7 +101,12 @@
     },
     "notFoundTitle": "Request not found",
     "notFoundDescription": "It may have been removed or the address is wrong.",
-    "addToCatalog": "Add to catalog"
+    "addToCatalog": "Add to catalog",
+    "eyebrowNumber": "Acquisition plan no. {{numero}}",
+    "itemLocal": "Location: {{value}}",
+    "itemSector": "Sector: {{value}}",
+    "itemNeededBy": "Needed by: {{date}}",
+    "itemWeight": "Weight: {{value}} kg"
   },
   "timeline": {
     "created": "created the request",
@@ -151,17 +161,30 @@
       "estimatedPrice": "Est. unit price (R$)",
       "subtotal": "Subtotal",
       "marca": "Brand",
-      "referencia": "Reference"
+      "referencia": "Reference",
+      "requesterContact": "Requester contact",
+      "especificacao": "Specification",
+      "localUso": "Place of use",
+      "setorSolicitante": "Requesting sector",
+      "dataNecessaria": "Needed by",
+      "pesoTotal": "Total weight (kg)"
     },
     "placeholders": {
       "title": "E.g.: Materials for the Sector B job site",
-      "justification": "What it is for, deadline, job site/project…"
+      "justification": "What it is for, deadline, job site/project…",
+      "especificacao": "Dimensions, standard, color, model…",
+      "localUso": "E.g. Block B, 3rd floor",
+      "setorSolicitante": "E.g. Engineering"
     },
     "fromCatalog": "Catalog item",
     "looseItemHint": "Item described by hand (not in the catalog).",
     "pickFromCatalog": "Pick from catalog",
     "changeProduct": "Change",
-    "unlinkProduct": "Unlink"
+    "unlinkProduct": "Unlink",
+    "hints": {
+      "costCenter": "Project or site name.",
+      "requesterContact": "Phone or extension for questions."
+    }
   },
   "confirm": {
     "removeAttachmentTitle": "Remove file",
@@ -225,12 +248,12 @@
   },
   "pdf": {
     "button": "PDF sheet",
-    "title": "Purchase request",
+    "title": "Acquisition plan",
     "justification": "Justification",
     "items_one": "Item ({{count}})",
     "items_other": "Items ({{count}})",
     "history": "Approval history",
-    "fileBase": "solicitacao {{title}}",
+    "fileBase": "acquisition plan {{numero}} {{title}}",
     "col": {
       "item": "#",
       "description": "Description",
@@ -242,7 +265,82 @@
       "who": "By",
       "action": "Action",
       "change": "Status",
-      "comment": "Comment"
-    }
+      "comment": "Comment",
+      "material": "Material",
+      "spec": "Specification",
+      "photo": "Photo",
+      "unit": "Unit",
+      "weight": "Total weight",
+      "local": "Place of use",
+      "sector": "Sector",
+      "neededBy": "Needed by"
+    },
+    "number": "Plan no.",
+    "contact": "Contact",
+    "project": "Project",
+    "updatedAt": "Updated at",
+    "currentStep": "Current step",
+    "signatures": "Signatures",
+    "requesterBox": "Requester",
+    "submittedAt": "Submitted on {{date}}",
+    "approvedAt": "Approved on {{date}}",
+    "rejectedAt": "Rejected on {{date}}",
+    "pending": "Pending"
+  },
+  "approvers": {
+    "eyebrow": "Administration",
+    "title": "Approvers",
+    "description": "Who signs each step of the acquisition plan. Everyone checked gets the email when the request reaches the step; any one of them can sign.",
+    "errorTitle": "Could not load the approvers",
+    "search": "Search users by name or email",
+    "stepNumber": "Step {{number}}",
+    "hint": {
+      "TECNICO": "Checks that the request is technically correct.",
+      "COMPRAS": "Reviews the request; after final approval, runs the quotation.",
+      "CUSTOS": "Checks the budget and the cost center.",
+      "GERENTE_GERAL": "Final approval of the request."
+    },
+    "noneHint": "Nobody checked: administrators get the email and sign this step.",
+    "saved": "Approvers saved."
+  },
+  "photo": {
+    "label": "Photo",
+    "alt": "Item photo",
+    "add": "Add photo",
+    "change": "Change photo",
+    "remove": "Remove",
+    "fromCatalog": "Catalog photo",
+    "uploadError": "Could not upload the photo."
+  },
+  "sign": {
+    "title": "Signatures",
+    "subtitle": "Requester and the four approval steps.",
+    "waitingStep": "Waiting for the {{step}} signature.",
+    "reject": "Reject",
+    "approve": "Approve and sign",
+    "requester": "Requester",
+    "submitted": "Submitted the request",
+    "approversList": "Signs: {{names}}",
+    "noApprovers": "No approver set (administrators)",
+    "yourTurn": "Your turn to sign",
+    "signatureAlt": "Signature of {{name}}",
+    "pending": "Waiting",
+    "notYet": "Not yet",
+    "rejectedBadge": "Rejected",
+    "rejectTitle": "Reject plan no. {{numero}}",
+    "approveTitle": "Approve plan no. {{numero}}",
+    "dialogDescription": "Your signature is recorded with name, date, time and IP address.",
+    "useSaved": "Use my saved signature",
+    "drawNew": "Draw a new one",
+    "saveForNext": "Save this signature for next time",
+    "savedAlt": "Your saved signature",
+    "reasonRequired": "Reason for rejecting (required)",
+    "commentOptional": "Comment (optional)",
+    "legalNote": "By signing, you confirm you have reviewed this request.",
+    "confirmReject": "Reject and sign",
+    "confirmApprove": "Approve and sign",
+    "approvedToast": "Plan approved and signed.",
+    "rejectedToast": "Plan rejected.",
+    "error": "Could not record the signature."
   }
 }

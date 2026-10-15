@@ -180,5 +180,11 @@
     "PENDENTE": "Pendente",
     "IMPORTADO": "No catálogo",
     "IGNORADO": "Ignorado"
+  },
+  "approvalStep": {
+    "TECNICO": "Responsável técnico",
+    "COMPRAS": "Compras",
+    "CUSTOS": "Custos",
+    "GERENTE_GERAL": "Gerente geral"
   }
 }

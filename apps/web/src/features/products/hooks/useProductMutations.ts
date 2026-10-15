@@ -80,3 +80,22 @@ export function useCreateProductFromRequestItem() {
     },
   });
 }
+
+/** Envia (arquivo) ou remove (`null`) a foto do produto. */
+export function useProductPhoto(id: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (file: File | null) => {
+      if (!file) return productsApi.removePhoto(id);
+      const { resizePhoto } = await import('@/utils/image');
+      return productsApi.setPhoto(id, await resizePhoto(file));
+    },
+    onSuccess: (_, file) => {
+      void queryClient.invalidateQueries({ queryKey: productsKeys.all });
+      toast.success(i18n.t(file ? 'products:photo.saved' : 'products:photo.removed'));
+    },
+    onError: (error: Error) => {
+      toast.error(getErrorMessage(error, i18n.t('products:photo.error')));
+    },
+  });
+}

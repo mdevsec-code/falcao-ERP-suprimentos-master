@@ -32,6 +32,8 @@ export const ROUTE_PATHS = {
   DOCUMENTOS: '/documentos',
   USUARIOS: '/usuarios',
   AUDITORIA: '/auditoria',
+  /** Quem assina cada etapa do plano de aquisição. */
+  APROVADORES: '/aprovadores',
   PERFIL: '/perfil',
   NOT_FOUND: '/404',
 } as const;
@@ -78,5 +80,6 @@ export const ROUTE_NAV_KEYS: Record<string, string> = {
   [ROUTE_PATHS.DOCUMENTOS]: 'documents',
   [ROUTE_PATHS.USUARIOS]: 'users',
   [ROUTE_PATHS.AUDITORIA]: 'audit',
+  [ROUTE_PATHS.APROVADORES]: 'approvers',
   [ROUTE_PATHS.PERFIL]: 'profile',
 };
