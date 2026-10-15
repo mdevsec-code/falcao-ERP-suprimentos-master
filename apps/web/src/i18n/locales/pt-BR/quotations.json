@@ -66,7 +66,7 @@
     "eyebrow": "Cotação nº {{numero}}",
     "createdBy": "Aberta por {{name}} em {{date}}",
     "back": "Cotações",
-    "export": "Exportar mapa (Excel)",
+    "export": "Exportar mapa",
     "pickCheapest": "Escolher menor preço",
     "close": "Encerrar cotação",
     "cancel": "Cancelar cotação",
@@ -76,7 +76,10 @@
     "requester": "Solicitante · centro de custo",
     "notes": "Observações:",
     "notFoundTitle": "Cotação não encontrada",
-    "notFoundDescription": "Ela pode ter sido removida ou o endereço está incorreto."
+    "notFoundDescription": "Ela pode ter sido removida ou o endereço está incorreto.",
+    "plan": "Plano de requisição",
+    "planLink": "Nº {{numero}} · {{titulo}}",
+    "workSite": "Obra / centro de custo"
   },
   "feedback": {
     "title": "Retorno de preços",
@@ -265,6 +268,11 @@
     },
     "days_one": "{{count}} dia",
     "days_other": "{{count}} dias",
-    "fileName": "mapa-cotacao-{{numero}}"
+    "fileName": "mapa-cotacao-{{numero}}",
+    "plan": "Plano de requisição nº {{numero}} — {{titulo}}",
+    "itemsTitle": "Itens e preços unitários",
+    "summaryTitle": "Resumo por fornecedor",
+    "supplier": "Fornecedor",
+    "legend": "Verde: menor preço do item · Dourado: fornecedor escolhido · Totais com frete."
   }
 }

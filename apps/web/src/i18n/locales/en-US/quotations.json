@@ -66,7 +66,7 @@
     "eyebrow": "Quotation #{{numero}}",
     "createdBy": "Opened by {{name}} on {{date}}",
     "back": "Quotations",
-    "export": "Export map (Excel)",
+    "export": "Export map",
     "pickCheapest": "Pick lowest prices",
     "close": "Close quotation",
     "cancel": "Cancel quotation",
@@ -76,7 +76,10 @@
     "requester": "Requester · cost center",
     "notes": "Notes:",
     "notFoundTitle": "Quotation not found",
-    "notFoundDescription": "It may have been removed or the address is wrong."
+    "notFoundDescription": "It may have been removed or the address is wrong.",
+    "plan": "Requisition plan",
+    "planLink": "#{{numero}} · {{titulo}}",
+    "workSite": "Work site / cost center"
   },
   "feedback": {
     "title": "Price feedback",
@@ -265,6 +268,11 @@
     },
     "days_one": "{{count}} day",
     "days_other": "{{count}} days",
-    "fileName": "quotation-map-{{numero}}"
+    "fileName": "quotation-map-{{numero}}",
+    "plan": "Requisition plan #{{numero}} — {{titulo}}",
+    "itemsTitle": "Items and unit prices",
+    "summaryTitle": "Summary by supplier",
+    "supplier": "Supplier",
+    "legend": "Green: lowest price for the item · Gold: chosen supplier · Totals include freight."
   }
 }

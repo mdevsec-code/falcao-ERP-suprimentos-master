@@ -64,7 +64,7 @@
     "eyebrow": "询价单 {{numero}} 号",
     "createdBy": "{{name}} 于 {{date}} 发起",
     "back": "询价",
-    "export": "导出比价表（Excel）",
+    "export": "导出比价表",
     "pickCheapest": "选择最低价",
     "close": "结束询价",
     "cancel": "取消询价",
@@ -74,7 +74,10 @@
     "requester": "申请人 · 成本中心",
     "notes": "备注：",
     "notFoundTitle": "未找到询价",
-    "notFoundDescription": "可能已被删除或地址有误。"
+    "notFoundDescription": "可能已被删除或地址有误。",
+    "plan": "采购计划",
+    "planLink": "#{{numero}} · {{titulo}}",
+    "workSite": "工地 / 成本中心"
   },
   "feedback": {
     "title": "价格反馈",
@@ -256,6 +259,11 @@
       "savings": "较上次采购节省"
     },
     "days_other": "{{count}} 天",
-    "fileName": "询价比价表-{{numero}}"
+    "fileName": "询价比价表-{{numero}}",
+    "plan": "采购计划 #{{numero}} — {{titulo}}",
+    "itemsTitle": "物料与单价",
+    "summaryTitle": "按供应商汇总",
+    "supplier": "供应商",
+    "legend": "绿色：该物料最低价 · 金色：已选供应商 · 合计含运费。"
   }
 }

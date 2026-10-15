@@ -125,5 +125,21 @@
     "crashTitle": "应用运行时错误",
     "crashDescription": "渲染过程中发生错误。以下是用于诊断的堆栈信息。",
     "reload": "重新加载页面"
+  },
+  "export": {
+    "button": "导出",
+    "formats": {
+      "pdf": "PDF",
+      "xlsx": "Excel (.xlsx)",
+      "csv": "CSV"
+    },
+    "generatedAt": "生成于 {{date}}",
+    "generatedBy": "由 {{name}} 生成于 {{date}}",
+    "page": "第 {{page}} 页，共 {{total}} 页",
+    "total": "合计",
+    "records_other": "{{count}} 条记录",
+    "error": "无法生成文件。",
+    "empty": "当前筛选条件下没有可导出的内容。",
+    "filters": "筛选：{{filters}}"
   }
 }

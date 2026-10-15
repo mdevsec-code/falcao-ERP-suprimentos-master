@@ -5,9 +5,7 @@ import {
   AlarmClock,
   CalendarClock,
   CircleCheckBig,
-  Download,
   FileCode2,
-  FileSpreadsheet,
   FileX2,
   Plus,
   Wallet,
@@ -20,6 +18,7 @@ import { Pagination } from '@/components/data-display/Pagination';
 import { EmptyState } from '@/components/feedback/EmptyState';
 import { ErrorState } from '@/components/feedback/ErrorState';
 import { ConfirmDialog } from '@/components/common/ConfirmDialog';
+import { ExportMenu } from '@/components/common/ExportMenu';
 import { SelectField } from '@/components/common/SelectField';
 import { RankingBarChart } from '@/components/charts';
 import { Skeleton } from '@/components/ui/Skeleton';
@@ -29,15 +28,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useDebounce } from '@/hooks/useDebounce';
 import { PERMISSIONS } from '@/constants/permissions';
-import {
-  PAYABLE_SOURCE_LABELS,
-  PAYABLE_STATUS_LABELS,
-  PAYMENT_METHOD_LABELS,
-} from '@/constants/enums';
-import { csvNumber, downloadText, toCsv } from '@/utils/csv';
-import { formatCurrencyBRL, formatDateOnly } from '@/utils/format';
+import { exportReport, fetchAllPages, type ExportFormat } from '@/utils/export/report';
+import { formatCurrencyBRL } from '@/utils/format';
 import { getIntlLocale } from '@/utils/locale';
-import { toDateOnly } from '@falcao-erp/shared-types';
 
 import {
   useByCostCenter,
@@ -60,6 +53,7 @@ import { PayablesTable } from '../components/PayablesTable';
 import { PayableDialog } from '../components/PayableDialog';
 import { PayDialog } from '../components/PayDialog';
 import { InvoiceDialog } from '../components/InvoiceDialog';
+import { invoicesReport, payableFiltersMeta, payablesReport } from '../lib/reports';
 import {
   fromPayableForm,
   toListParams,
@@ -74,7 +68,6 @@ const compactNumber = (value: number) =>
   new Intl.NumberFormat(getIntlLocale(), { notation: 'compact', maximumFractionDigits: 1 }).format(
     value,
   );
-const EXPORT_PAGE_SIZE = 100;
 
 export function FinancePage() {
   const { t } = useTranslation('finance');
@@ -104,8 +97,6 @@ export function FinancePage() {
   const [paying, setPaying] = useState<PayableDto | null>(null);
   const [invoicing, setInvoicing] = useState<PayableDto | null>(null);
   const [cancelling, setCancelling] = useState<PayableDto | null>(null);
-  const [exporting, setExporting] = useState(false);
-  const [exportingInvoices, setExportingInvoices] = useState(false);
   /** Conta nova aberta a partir do XML: valores sugeridos e o arquivo, anexado depois de criar. */
   const [prefill, setPrefill] = useState<Partial<PayableFormInput> | null>(null);
   const [pendingXml, setPendingXml] = useState<File | null>(null);
@@ -178,79 +169,34 @@ export function FinancePage() {
     }
   }
 
-  /** Planilha das notas fiscais do filtro atual (todas as páginas). */
-  async function handleExportInvoices() {
-    setExportingInvoices(true);
-    try {
-      const rows: PayableDto[] = [];
-      for (let current = 1; ; current++) {
-        const result = await financeApi.list({
-          ...listParams,
-          semNota: undefined,
-          comNota: true,
-          page: current,
-          pageSize: EXPORT_PAGE_SIZE,
-        });
-        rows.push(...result.data);
-        if (current >= result.meta.totalPages) break;
-      }
-      if (rows.length === 0) {
-        toast.info(t('finance:invoiceExport.empty'));
-        return;
-      }
-      const { exportInvoices } = await import('../lib/invoice-export');
-      await exportInvoices(rows, `notas-fiscais-${toDateOnly()}.xlsx`);
-    } catch {
-      toast.error(t('finance:invoiceExport.error'));
-    } finally {
-      setExportingInvoices(false);
+  /** Notas fiscais do filtro atual (todas as páginas), no padrão de exportação. */
+  async function handleExportInvoices(format: ExportFormat) {
+    const rows = await fetchAllPages((current, pageSize) =>
+      financeApi.list({
+        ...listParams,
+        semNota: undefined,
+        comNota: true,
+        page: current,
+        pageSize,
+      }),
+    );
+    if (rows.length === 0) {
+      toast.info(t('finance:invoiceExport.empty'));
+      return;
     }
+    await exportReport(invoicesReport(rows, payableFiltersMeta(filters, debouncedSearch)), format);
   }
 
-  /** Relatório: todas as contas do filtro atual (não só a página), em CSV. */
-  async function handleExport() {
-    setExporting(true);
-    try {
-      const rows: PayableDto[] = [];
-      for (let current = 1; ; current++) {
-        const result = await financeApi.list({
-          ...listParams,
-          page: current,
-          pageSize: EXPORT_PAGE_SIZE,
-        });
-        rows.push(...result.data);
-        if (current >= result.meta.totalPages) break;
-      }
-      const header = [
-        t('finance:export.due'),
-        t('finance:export.description'),
-        t('finance:export.source'),
-        t('finance:export.supplier'),
-        t('finance:export.costCenter'),
-        t('finance:export.invoice'),
-        t('finance:export.amount'),
-        t('finance:export.status'),
-        t('finance:export.paidOn'),
-        t('finance:export.paidAmount'),
-        t('finance:export.method'),
-      ];
-      const body = rows.map((p) => [
-        formatDateOnly(p.vencimento),
-        p.descricao,
-        PAYABLE_SOURCE_LABELS[p.origem],
-        p.supplierName,
-        p.costCenter,
-        p.notaFiscal,
-        csvNumber(p.valor),
-        p.vencida ? t('finance:table.overdue') : PAYABLE_STATUS_LABELS[p.status],
-        formatDateOnly(p.pagoEm),
-        csvNumber(p.valorPago),
-        p.formaPagamento ? PAYMENT_METHOD_LABELS[p.formaPagamento] : '',
-      ]);
-      downloadText(toCsv([header, ...body]), `contas-a-pagar-${toDateOnly()}.csv`);
-    } finally {
-      setExporting(false);
+  /** Contas a pagar do filtro atual (não só a página), em PDF, Excel ou CSV. */
+  async function handleExport(format: ExportFormat) {
+    const rows = await fetchAllPages((current, pageSize) =>
+      financeApi.list({ ...listParams, page: current, pageSize }),
+    );
+    if (rows.length === 0) {
+      toast.info(t('common:export.empty'));
+      return;
     }
+    await exportReport(payablesReport(rows, payableFiltersMeta(filters, debouncedSearch)), format);
   }
 
   const hasFilters = Object.values(filters).some(Boolean);
@@ -265,22 +211,11 @@ export function FinancePage() {
         description={t('finance:page.description')}
         actions={
           <>
-            <Button
-              variant="outline"
-              leftIcon={<Download className="h-4 w-4" />}
-              onClick={() => void handleExport()}
-              isLoading={exporting}
-            >
-              {t('finance:actions.export')}
-            </Button>
-            <Button
-              variant="outline"
-              leftIcon={<FileSpreadsheet className="h-4 w-4" />}
-              onClick={() => void handleExportInvoices()}
-              isLoading={exportingInvoices}
-            >
-              {t('finance:actions.exportInvoices')}
-            </Button>
+            <ExportMenu onExport={handleExport} label={t('finance:actions.export')} />
+            <ExportMenu
+              onExport={handleExportInvoices}
+              label={t('finance:actions.exportInvoices')}
+            />
             {canWrite && (
               <>
                 <input

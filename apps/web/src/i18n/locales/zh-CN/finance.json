@@ -6,13 +6,13 @@
   },
   "actions": {
     "new": "新增应付款",
-    "export": "导出 CSV",
+    "export": "应付账款",
     "pay": "登记付款",
     "invoice": "填写发票",
     "invoiceEdit": "修改发票",
     "cancel": "取消应付款",
     "cancelReimbursementBlocked": "已批准报销生成的应付款不能取消",
-    "exportInvoices": "发票（Excel）",
+    "exportInvoices": "发票",
     "importXml": "导入 NF-e XML"
   },
   "kpi": {
@@ -186,5 +186,10 @@
     "total": "合计",
     "empty": "此筛选下没有带发票的应付款。",
     "error": "无法生成表格。"
+  },
+  "reports": {
+    "payablesTitle": "应付账款",
+    "payablesFile": "contas a pagar",
+    "invoicesFile": "notas fiscais"
   }
 }

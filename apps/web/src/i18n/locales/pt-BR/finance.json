@@ -6,13 +6,13 @@
   },
   "actions": {
     "new": "Lançar conta",
-    "export": "Exportar CSV",
+    "export": "Contas a pagar",
     "pay": "Registrar pagamento",
     "invoice": "Informar nota fiscal",
     "invoiceEdit": "Alterar nota fiscal",
     "cancel": "Cancelar conta",
     "cancelReimbursementBlocked": "Contas de reembolso aprovado não podem ser canceladas",
-    "exportInvoices": "Notas fiscais (Excel)",
+    "exportInvoices": "Notas fiscais",
     "importXml": "Importar XML da NF-e"
   },
   "kpi": {
@@ -189,5 +189,10 @@
     "total": "Total",
     "empty": "Nenhuma conta com nota fiscal neste filtro.",
     "error": "Não foi possível gerar a planilha."
+  },
+  "reports": {
+    "payablesTitle": "Contas a pagar",
+    "payablesFile": "contas a pagar",
+    "invoicesFile": "notas fiscais"
   }
 }

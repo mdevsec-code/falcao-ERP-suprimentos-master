@@ -6,13 +6,13 @@
   },
   "actions": {
     "new": "New payable",
-    "export": "Export CSV",
+    "export": "Payables",
     "pay": "Record payment",
     "invoice": "Add invoice",
     "invoiceEdit": "Change invoice",
     "cancel": "Cancel payable",
     "cancelReimbursementBlocked": "Payables from approved reimbursements can't be cancelled",
-    "exportInvoices": "Invoices (Excel)",
+    "exportInvoices": "Invoices",
     "importXml": "Import NF-e XML"
   },
   "kpi": {
@@ -189,5 +189,10 @@
     "total": "Total",
     "empty": "No payable with an invoice in this filter.",
     "error": "Could not generate the spreadsheet."
+  },
+  "reports": {
+    "payablesTitle": "Accounts payable",
+    "payablesFile": "contas a pagar",
+    "invoicesFile": "notas fiscais"
   }
 }

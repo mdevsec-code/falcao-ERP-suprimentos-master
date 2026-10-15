@@ -125,5 +125,22 @@
     "crashTitle": "Application runtime error",
     "crashDescription": "Something blew up while rendering. Stack trace below for diagnosis.",
     "reload": "Reload page"
+  },
+  "export": {
+    "button": "Export",
+    "formats": {
+      "pdf": "PDF",
+      "xlsx": "Excel (.xlsx)",
+      "csv": "CSV"
+    },
+    "generatedAt": "Generated on {{date}}",
+    "generatedBy": "Generated on {{date}} by {{name}}",
+    "page": "Page {{page}} of {{total}}",
+    "total": "Total",
+    "records_one": "{{count}} record",
+    "records_other": "{{count}} records",
+    "error": "Could not generate the file.",
+    "empty": "Nothing to export with the current filters.",
+    "filters": "Filters: {{filters}}"
   }
 }

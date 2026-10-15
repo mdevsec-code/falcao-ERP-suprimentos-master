@@ -125,5 +125,22 @@
     "crashTitle": "Erro de runtime na aplicação",
     "crashDescription": "Algo explodiu durante a renderização. Stacktrace abaixo para diagnóstico.",
     "reload": "Recarregar página"
+  },
+  "export": {
+    "button": "Exportar",
+    "formats": {
+      "pdf": "PDF",
+      "xlsx": "Excel (.xlsx)",
+      "csv": "CSV"
+    },
+    "generatedAt": "Gerado em {{date}}",
+    "generatedBy": "Gerado em {{date}} por {{name}}",
+    "page": "Página {{page}} de {{total}}",
+    "total": "Total",
+    "records_one": "{{count}} registro",
+    "records_other": "{{count}} registros",
+    "error": "Não foi possível gerar o arquivo.",
+    "empty": "Nada para exportar com os filtros atuais.",
+    "filters": "Filtros: {{filters}}"
   }
 }

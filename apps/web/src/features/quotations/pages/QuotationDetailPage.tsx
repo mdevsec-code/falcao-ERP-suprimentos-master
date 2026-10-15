@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
 import {
   ArrowLeft,
   Ban,
   CalendarClock,
   CheckCheck,
   ClipboardList,
-  FileSpreadsheet,
   PiggyBank,
   Sparkles,
   User,
@@ -22,7 +20,9 @@ import { StatTile } from '@/components/data-display/StatTile';
 import { ErrorState } from '@/components/feedback/ErrorState';
 import { PageSkeleton } from '@/components/feedback/PageSkeleton';
 import { ConfirmDialog } from '@/components/common/ConfirmDialog';
+import { ExportMenu } from '@/components/common/ExportMenu';
 import { Button } from '@/components/ui/Button';
+import type { ExportFormat } from '@/utils/export/report';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { PurchaseRequestStatusBadge } from '@/features/purchase-requests/components/PurchaseRequestBadges';
 import { PERMISSIONS } from '@/constants/permissions';
@@ -53,7 +53,6 @@ export function QuotationDetailPage() {
   const [addSupplierOpen, setAddSupplierOpen] = useState(false);
   const [manualFor, setManualFor] = useState<QuotationSupplierDto | null>(null);
   const [confirm, setConfirm] = useState<'close' | 'cancel' | null>(null);
-  const [exporting, setExporting] = useState(false);
 
   if (isLoading) return <PageSkeleton tiles={4} />;
 
@@ -79,17 +78,10 @@ export function QuotationDetailPage() {
   const overdue = isOpen && quotation.prazoResposta < toDateOnly();
   const answered = quotation.suppliers.filter((s) => s.status === 'RESPONDIDO').length;
 
-  async function handleExport() {
-    if (!quotation) return;
-    setExporting(true);
-    try {
-      const { exportQuotationMap } = await import('../lib/export');
-      await exportQuotationMap(quotation);
-    } catch {
-      toast.error(t('quotations:toast.exportError'));
-    } finally {
-      setExporting(false);
-    }
+  async function handleExport(format: ExportFormat) {
+    if (!quotation || format === 'csv') return;
+    const { exportQuotationMap } = await import('../lib/export');
+    await exportQuotationMap(quotation, format);
   }
 
   return (
@@ -110,14 +102,11 @@ export function QuotationDetailPage() {
             >
               {t('quotations:detail.back')}
             </Button>
-            <Button
-              variant="outline"
-              leftIcon={<FileSpreadsheet className="h-4 w-4" />}
-              onClick={() => void handleExport()}
-              isLoading={exporting}
-            >
-              {t('quotations:detail.export')}
-            </Button>
+            <ExportMenu
+              onExport={handleExport}
+              formats={['pdf', 'xlsx']}
+              label={t('quotations:detail.export')}
+            />
             {canManage && isOpen && (
               <>
                 <Button
@@ -169,28 +158,58 @@ export function QuotationDetailPage() {
               </span>
             }
           />
-          <InfoTile
-            icon={ClipboardList}
-            label={t('quotations:detail.request')}
-            value={
-              <span className="flex flex-col gap-1">
-                <Link
-                  to={routeTo.purchaseRequest(quotation.purchaseRequest.id)}
-                  className="text-ink hover:text-brand-gold-700 hover:underline"
-                >
-                  {quotation.purchaseRequest.title}
-                </Link>
-                <PurchaseRequestStatusBadge status={quotation.purchaseRequest.status} />
-              </span>
-            }
-          />
-          <InfoTile
-            icon={User}
-            label={t('quotations:detail.requester')}
-            value={[quotation.purchaseRequest.requesterName, quotation.purchaseRequest.costCenter]
-              .filter(Boolean)
-              .join(' · ')}
-          />
+          {quotation.purchaseRequest ? (
+            <>
+              <InfoTile
+                icon={ClipboardList}
+                label={t('quotations:detail.request')}
+                value={
+                  <span className="flex flex-col gap-1">
+                    <Link
+                      to={routeTo.purchaseRequest(quotation.purchaseRequest.id)}
+                      className="text-ink hover:text-brand-gold-700 hover:underline"
+                    >
+                      {quotation.purchaseRequest.title}
+                    </Link>
+                    <PurchaseRequestStatusBadge status={quotation.purchaseRequest.status} />
+                  </span>
+                }
+              />
+              <InfoTile
+                icon={User}
+                label={t('quotations:detail.requester')}
+                value={[
+                  quotation.purchaseRequest.requesterName,
+                  quotation.purchaseRequest.costCenter,
+                ]
+                  .filter(Boolean)
+                  .join(' · ')}
+              />
+            </>
+          ) : quotation.plan ? (
+            <>
+              <InfoTile
+                icon={ClipboardList}
+                label={t('quotations:detail.plan')}
+                value={
+                  <Link
+                    to={routeTo.plan(quotation.plan.id)}
+                    className="text-ink hover:text-brand-gold-700 hover:underline"
+                  >
+                    {t('quotations:detail.planLink', {
+                      numero: quotation.plan.numero,
+                      titulo: quotation.plan.titulo,
+                    })}
+                  </Link>
+                }
+              />
+              <InfoTile
+                icon={User}
+                label={t('quotations:detail.workSite')}
+                value={quotation.plan.obra ?? '—'}
+              />
+            </>
+          ) : null}
         </div>
 
         {/* Retorno de preços: o que a cotação já diz sobre o pedido. */}
