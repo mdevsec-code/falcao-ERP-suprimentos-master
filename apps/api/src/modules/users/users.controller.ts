@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -8,6 +9,7 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Put,
   Query,
 } from "@nestjs/common";
 import { AuditLog } from "../../common/decorators/audit-log.decorator";
@@ -18,6 +20,7 @@ import { ChangePasswordDto } from "./dto/change-password.dto";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { QueryUsersDto } from "./dto/query-users.dto";
 import { ResetPasswordDto } from "./dto/reset-password.dto";
+import { SetWechatDto } from "./dto/set-wechat.dto";
 import { UpdateProfileDto } from "./dto/update-profile.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { UsersService } from "./users.service";
@@ -43,6 +46,21 @@ export class UsersController {
   @Patch("me/password")
   changePassword(@CurrentUser() user: AuthenticatedUser, @Body() dto: ChangePasswordDto) {
     return this.usersService.changePassword(user.companyId, user.userId, dto);
+  }
+
+  @Get("me/wechat")
+  wechatStatus(@CurrentUser() user: AuthenticatedUser) {
+    return this.usersService.wechatStatus(user.companyId, user.userId);
+  }
+
+  @Put("me/wechat")
+  setWechat(@CurrentUser() user: AuthenticatedUser, @Body() dto: SetWechatDto) {
+    return this.usersService.setWechat(user.companyId, user.userId, dto.token.trim());
+  }
+
+  @Delete("me/wechat")
+  removeWechat(@CurrentUser() user: AuthenticatedUser) {
+    return this.usersService.removeWechat(user.companyId, user.userId);
   }
 
   // ── Administração (somente ADMIN) ──

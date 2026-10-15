@@ -11,6 +11,7 @@ import type {
 } from "@falcao-erp/shared-types";
 import type { User } from "@prisma/client";
 import { PrismaService } from "../../database/prisma.service";
+import { WechatService } from "../mail/wechat.service";
 import { ChangePasswordDto } from "./dto/change-password.dto";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { QueryUsersDto } from "./dto/query-users.dto";
@@ -24,6 +25,7 @@ export class UsersService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly repository: UsersRepository,
+    private readonly wechat: WechatService,
   ) {}
 
   // ── Usados pela autenticação (sem escopo de empresa: o login ainda não sabe qual é) ──
@@ -146,6 +148,40 @@ export class UsersService {
     await this.repository.update(companyId, userId, {
       passwordHash: await bcrypt.hash(dto.newPassword, PASSWORD_ROUNDS),
     });
+  }
+
+  // ── Avisos no WeChat (PushPlus) ──
+
+  /** Só diz se está ligado — o código em si nunca volta para a tela. */
+  async wechatStatus(companyId: string, userId: string): Promise<{ connected: boolean }> {
+    const user = await this.repository.findByIdOrThrow(companyId, userId);
+    return { connected: Boolean(user.wechatToken) };
+  }
+
+  /** Confere o código mandando uma mensagem de teste; só grava se o PushPlus aceitar. */
+  async setWechat(companyId: string, userId: string, token: string): Promise<{ connected: boolean }> {
+    const user = await this.repository.findByIdOrThrow(companyId, userId);
+    try {
+      await this.wechat.deliver(token, {
+        title: "Falcão ERP conectado · 已连接",
+        lines: [
+          `Olá, ${user.name}! Você vai receber aqui os avisos de aprovação do Falcão ERP.`,
+          "您将在这里收到 Falcão ERP 的审批通知。",
+        ],
+      });
+    } catch (error) {
+      throw new BadRequestException(
+        `O PushPlus não aceitou o código: ${error instanceof Error ? error.message : "erro desconhecido"}`,
+      );
+    }
+    await this.repository.update(companyId, userId, { wechatToken: token });
+    return { connected: true };
+  }
+
+  async removeWechat(companyId: string, userId: string): Promise<{ connected: boolean }> {
+    await this.repository.findByIdOrThrow(companyId, userId);
+    await this.repository.update(companyId, userId, { wechatToken: null });
+    return { connected: false };
   }
 }
 

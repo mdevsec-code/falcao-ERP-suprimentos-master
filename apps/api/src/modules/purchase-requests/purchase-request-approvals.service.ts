@@ -10,8 +10,20 @@ import {
 import type { AuthenticatedUser } from "../../common/types/auth-request";
 import { PrismaService } from "../../database/prisma.service";
 import { MailService } from "../mail/mail.service";
+import { WechatService } from "../mail/wechat.service";
 import { SignPurchaseRequestDto } from "./dto/approval.dto";
 import { PurchaseRequestsRepository, type PurchaseRequestDetailPayload } from "./purchase-requests.repository";
+
+/** Quem recebe os avisos: e-mail e, se a pessoa ligou no perfil, WeChat. */
+const RECIPIENT_SELECT = { email: true, wechatToken: true } as const;
+
+/** Etapas em chinês para os avisos no WeChat (a equipe lê nos dois idiomas). */
+const STEP_LABELS_ZH: Record<ApprovalStep, string> = {
+  TECNICO: "技术负责人",
+  COMPRAS: "采购",
+  CUSTOS: "成本",
+  GERENTE_GERAL: "总经理",
+};
 
 const brl = (value: number) => value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
@@ -26,6 +38,7 @@ export class PurchaseRequestApprovalsService {
     private readonly prisma: PrismaService,
     private readonly repository: PurchaseRequestsRepository,
     private readonly mail: MailService,
+    private readonly wechat: WechatService,
   ) {}
 
   // ── Configuração: quem assina cada etapa ──────────────────────────────────
@@ -147,17 +160,18 @@ export class PurchaseRequestApprovalsService {
     return { signatureData: null };
   }
 
-  // ── E-mails ───────────────────────────────────────────────────────────────
+  // ── Avisos (e-mail + WeChat) ──────────────────────────────────────────────
 
   /** Pede a assinatura aos aprovadores da etapa (sem ninguém configurado: aos administradores). */
   async notifyStep(request: PurchaseRequestDetailPayload, step: ApprovalStep): Promise<void> {
     const approvers = await this.prisma.approvalStepApprover.findMany({
       where: { companyId: request.companyId, step, user: { isActive: true } },
-      select: { user: { select: { email: true } } },
+      select: { user: { select: RECIPIENT_SELECT } },
     });
-    const to = approvers.length > 0 ? approvers.map((row) => row.user.email) : await this.adminEmails(request.companyId);
+    const to = approvers.length > 0 ? approvers.map((row) => row.user) : await this.admins(request.companyId);
+    const url = this.mail.link(`/solicitacoes/${request.id}`);
     this.mail.send({
-      to,
+      to: to.map((user) => user.email),
       subject: `Plano de aquisição nº ${request.numero} aguarda sua aprovação (${APPROVAL_STEP_LABELS[step]})`,
       heading: `Aprovação pendente — ${APPROVAL_STEP_LABELS[step]}`,
       paragraphs: [
@@ -165,17 +179,31 @@ export class PurchaseRequestApprovalsService {
         "Abra o pedido no sistema, confira os itens e assine para aprovar ou recusar.",
       ],
       details: this.details(request),
-      action: { label: "Abrir e assinar", url: this.mail.link(`/solicitacoes/${request.id}`) },
+      action: { label: "Abrir e assinar", url },
     });
+    this.wechat.send(
+      to.map((user) => user.wechatToken),
+      {
+        title: `Nº ${request.numero} aguarda sua assinatura · 第${request.numero}号采购计划待您签字`,
+        lines: [
+          `Plano de aquisição nº ${request.numero} — ${request.title}`,
+          `Etapa: ${APPROVAL_STEP_LABELS[step]} · 审批环节：${STEP_LABELS_ZH[step]}`,
+          `Solicitante / 申请人: ${request.requester.name}`,
+        ],
+        action: { label: "Abrir e assinar · 打开并签字", url },
+      },
+    );
   }
 
   private async notifyApproved(request: PurchaseRequestDetailPayload): Promise<void> {
     const buyers = await this.prisma.approvalStepApprover.findMany({
       where: { companyId: request.companyId, step: "COMPRAS", user: { isActive: true } },
-      select: { user: { select: { email: true } } },
+      select: { user: { select: RECIPIENT_SELECT } },
     });
+    const to = [request.requester, ...buyers.map((row) => row.user)];
+    const url = this.mail.link(`/solicitacoes/${request.id}`);
     this.mail.send({
-      to: [request.requester.email, ...buyers.map((row) => row.user.email)],
+      to: to.map((user) => user.email),
       subject: `Plano de aquisição nº ${request.numero} aprovado — seguir para cotação`,
       heading: "Plano de aquisição aprovado",
       paragraphs: [
@@ -183,8 +211,20 @@ export class PurchaseRequestApprovalsService {
         "O setor de compras já pode fazer a cotação.",
       ],
       details: this.details(request),
-      action: { label: "Abrir no sistema", url: this.mail.link(`/solicitacoes/${request.id}`) },
+      action: { label: "Abrir no sistema", url },
     });
+    this.wechat.send(
+      to.map((user) => user.wechatToken),
+      {
+        title: `Nº ${request.numero} aprovado · 第${request.numero}号采购计划已批准`,
+        lines: [
+          `Plano de aquisição nº ${request.numero} — ${request.title}`,
+          "Assinado por todas as etapas. Compras já pode cotar.",
+          "所有环节均已签字，采购部可以开始询价。",
+        ],
+        action: { label: "Abrir no sistema · 打开系统", url },
+      },
+    );
   }
 
   private notifyRejected(
@@ -193,6 +233,7 @@ export class PurchaseRequestApprovalsService {
     signerName: string,
     comment: string | null,
   ): void {
+    const url = this.mail.link(`/solicitacoes/${request.id}`);
     this.mail.send({
       to: [request.requester.email],
       subject: `Plano de aquisição nº ${request.numero} recusado (${APPROVAL_STEP_LABELS[step]})`,
@@ -202,7 +243,16 @@ export class PurchaseRequestApprovalsService {
         ...(comment ? [`Motivo: ${comment}`] : []),
       ],
       details: this.details(request),
-      action: { label: "Abrir no sistema", url: this.mail.link(`/solicitacoes/${request.id}`) },
+      action: { label: "Abrir no sistema", url },
+    });
+    this.wechat.send([request.requester.wechatToken], {
+      title: `Nº ${request.numero} recusado · 第${request.numero}号采购计划被拒绝`,
+      lines: [
+        `Plano de aquisição nº ${request.numero} — ${request.title}`,
+        `${signerName} recusou na etapa ${APPROVAL_STEP_LABELS[step]} · 在「${STEP_LABELS_ZH[step]}」环节被拒绝`,
+        ...(comment ? [`Motivo / 原因: ${comment}`] : []),
+      ],
+      action: { label: "Abrir no sistema · 打开系统", url },
     });
   }
 
@@ -220,11 +270,10 @@ export class PurchaseRequestApprovalsService {
     ];
   }
 
-  private async adminEmails(companyId: string): Promise<string[]> {
-    const admins = await this.prisma.forCompany(companyId).user.findMany({
+  private admins(companyId: string): Promise<Array<{ email: string; wechatToken: string | null }>> {
+    return this.prisma.forCompany(companyId).user.findMany({
       where: { role: "ADMIN", isActive: true },
-      select: { email: true },
+      select: RECIPIENT_SELECT,
     });
-    return admins.map((admin) => admin.email);
   }
 }

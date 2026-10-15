@@ -66,6 +66,8 @@ model User {
   isActive      Boolean  @default(true) @map("is_active")
   /// Assinatura desenhada guardada para reaproveitar nas aprovações (PNG em data URL).
   signatureData String?  @map("signature_data")
+  /// Código do PushPlus para receber os avisos no WeChat (cada um cola o seu no perfil).
+  wechatToken   String?  @map("wechat_token")
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
 

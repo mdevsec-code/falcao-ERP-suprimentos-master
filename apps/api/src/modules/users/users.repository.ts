@@ -88,7 +88,7 @@ export class UsersRepository {
   async update(
     companyId: string,
     id: string,
-    data: { name?: string; role?: Role; isActive?: boolean; passwordHash?: string },
+    data: { name?: string; role?: Role; isActive?: boolean; passwordHash?: string; wechatToken?: string | null },
   ): Promise<User> {
     await this.findByIdOrThrow(companyId, id);
     const user = await this.prisma.forCompany(companyId).user.update({ where: { id }, data });
