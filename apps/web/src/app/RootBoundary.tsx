@@ -1,9 +1,10 @@
-import { type ReactNode } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import { Link, useRouteError, isRouteErrorResponse } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { EmptyState } from '@/components/feedback/EmptyState';
 import { Button } from '@/components/ui/Button';
 import { AlertTriangle } from 'lucide-react';
+import { reloadOnStaleChunk } from '@/utils/staleChunk';
 
 interface RootBoundaryProps {
   children?: ReactNode;
@@ -20,8 +21,11 @@ interface RootBoundaryProps {
 export function RootBoundary({ children }: RootBoundaryProps) {
   const { t } = useTranslation('common');
   const error = useRouteError();
+  // Tela de versão antiga (depois de um deploy): recarrega em vez de mostrar o erro.
+  const reloading = useMemo(() => (error ? reloadOnStaleChunk(error) : false), [error]);
 
   if (!error) return <>{children}</>;
+  if (reloading) return null;
 
   const title = isRouteErrorResponse(error)
     ? `${error.status} — ${error.statusText || t('notFound.title')}`
