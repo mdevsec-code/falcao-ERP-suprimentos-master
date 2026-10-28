@@ -107,10 +107,14 @@ export function DocumentDialog({
     return options;
   }, [contractsPage, document]);
 
-  const categoryOptions = Object.values(DocumentCategory).map((value) => ({
-    value,
-    label: CENTRAL_DOCUMENT_CATEGORY_LABELS[value],
-  }));
+  // Contrato e nota fiscal são sigilosos: só quem consulta contratos os envia (a API também recusa).
+  const categoryOptions = Object.values(DocumentCategory)
+    .filter(
+      (value) =>
+        canReadContracts ||
+        (value !== DocumentCategory.CONTRATO && value !== DocumentCategory.NOTA_FISCAL),
+    )
+    .map((value) => ({ value, label: CENTRAL_DOCUMENT_CATEGORY_LABELS[value] }));
 
   function handleFileChange(next: File | null) {
     setFile(next);

@@ -2,12 +2,14 @@ import { Type } from "class-transformer";
 import {
   ArrayMinSize,
   IsArray,
+  IsEmail,
   IsEnum,
   IsIn,
   IsOptional,
   IsString,
   Length,
   MaxLength,
+  ValidateIf,
   ValidateNested,
 } from "class-validator";
 import { BRAZILIAN_STATES, ContactType, SupplierCategory } from "@falcao-erp/shared-types";
@@ -22,6 +24,9 @@ export class SupplierContactInputDto {
 
   @IsString()
   @Length(3, 120)
+  // Contato de e-mail vira link `mailto:` na ficha: precisa ser um e-mail de verdade.
+  @ValidateIf((contact: SupplierContactInputDto) => contact.type === ContactType.EMAIL)
+  @IsEmail({}, { message: "Informe um e-mail válido no contato." })
   value: string;
 }
 
