@@ -5,12 +5,31 @@ import type {
   SupplierEvaluationDto,
   SupplierStatsDto,
   SupplierSummaryDto,
+  PublicSupplierSignupLinkDto,
+  PublicSupplierSignupResultDto,
 } from '@falcao-erp/shared-types';
 import { httpClient } from '@/services/http/client';
-import type { SupplierListParams, SupplierPayload } from '../types';
+import { publicClient } from '@/services/http/publicClient';
+import type { SupplierListParams, SupplierPayload, SupplierSignupPayload } from '../types';
 import { UPLOAD_TIMEOUT_MS } from '@/constants/uploads';
 
 export const suppliersApi = {
+  /** Link para o fornecedor fazer o próprio cadastro. */
+  async getSignupLink(): Promise<{ token: string | null }> {
+    const { data } = await httpClient.get<{ token: string | null }>('/suppliers/signup-link');
+    return data;
+  },
+
+  async regenerateSignupLink(): Promise<{ token: string | null }> {
+    const { data } = await httpClient.post<{ token: string | null }>('/suppliers/signup-link');
+    return data;
+  },
+
+  async disableSignupLink(): Promise<{ token: string | null }> {
+    const { data } = await httpClient.delete<{ token: string | null }>('/suppliers/signup-link');
+    return data;
+  },
+
   async list(params: SupplierListParams): Promise<PaginatedResult<SupplierSummaryDto>> {
     const { data } = await httpClient.get<PaginatedResult<SupplierSummaryDto>>('/suppliers', {
       params,
@@ -78,5 +97,26 @@ export const suppliersApi = {
 
   async removeDocument(id: string, documentId: string): Promise<void> {
     await httpClient.delete(`/suppliers/${id}/documents/${documentId}`);
+  },
+};
+
+/** Página pública: o fornecedor faz o próprio cadastro, sem conta no sistema. */
+export const publicSupplierSignupApi = {
+  async view(token: string): Promise<PublicSupplierSignupLinkDto> {
+    const { data } = await publicClient.get<PublicSupplierSignupLinkDto>(
+      `/public/supplier-signup/${encodeURIComponent(token)}`,
+    );
+    return data;
+  },
+
+  async submit(
+    token: string,
+    payload: SupplierSignupPayload,
+  ): Promise<PublicSupplierSignupResultDto> {
+    const { data } = await publicClient.post<PublicSupplierSignupResultDto>(
+      `/public/supplier-signup/${encodeURIComponent(token)}`,
+      payload,
+    );
+    return data;
   },
 };

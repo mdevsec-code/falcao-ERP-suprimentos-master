@@ -25,12 +25,39 @@ import { QuerySuppliersDto } from "./dto/query-suppliers.dto";
 import { UpdateSupplierDto } from "./dto/update-supplier.dto";
 import { UploadDocumentDto } from "./dto/upload-document.dto";
 import { SuppliersService } from "./suppliers.service";
+import { Public } from "../../common/decorators/public.decorator";
+import { Throttle } from "@nestjs/throttler";
+import { PublicSupplierSignupDto } from "./dto/public-supplier-signup.dto";
+import { SupplierSignupService } from "./supplier-signup.service";
 
 const WRITE_ROLES = ["ADMIN", "MANAGER", "BUYER"] as const;
 
 @Controller("suppliers")
 export class SuppliersController {
-  constructor(private readonly suppliersService: SuppliersService) {}
+  constructor(
+    private readonly suppliersService: SuppliersService,
+    private readonly signupService: SupplierSignupService,
+  ) {}
+
+  // ── Link de cadastro pelo fornecedor — antes de ":id" ──
+
+  @Roles(...WRITE_ROLES)
+  @Get("signup-link")
+  getSignupLink(@CurrentUser() user: AuthenticatedUser) {
+    return this.signupService.getLink(user.companyId);
+  }
+
+  @Roles(...WRITE_ROLES)
+  @Post("signup-link")
+  regenerateSignupLink(@CurrentUser() user: AuthenticatedUser) {
+    return this.signupService.regenerateLink(user.companyId);
+  }
+
+  @Roles(...WRITE_ROLES)
+  @Delete("signup-link")
+  disableSignupLink(@CurrentUser() user: AuthenticatedUser) {
+    return this.signupService.disableLink(user.companyId);
+  }
 
   @Get()
   list(@CurrentUser() user: AuthenticatedUser, @Query() query: QuerySuppliersDto) {
@@ -128,5 +155,25 @@ export class SuppliersController {
     @Param("documentId") documentId: string,
   ) {
     return this.suppliersService.removeDocument(user.companyId, id, documentId);
+  }
+}
+
+/** Página pública em que o fornecedor faz o próprio cadastro — sem login, autorizada pelo token da empresa. */
+@Public()
+@Controller("public/supplier-signup")
+export class PublicSupplierSignupController {
+  constructor(private readonly signupService: SupplierSignupService) {}
+
+  @Throttle({ default: { limit: 30, ttl: 60_000 } })
+  @Get(":token")
+  view(@Param("token") token: string) {
+    return this.signupService.publicView(token);
+  }
+
+  /** Limite baixo: cada envio cria um cadastro. */
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  @Post(":token")
+  submit(@Param("token") token: string, @Body() dto: PublicSupplierSignupDto) {
+    return this.signupService.publicSubmit(token, dto);
   }
 }

@@ -21,6 +21,7 @@ import { ContactType } from '@falcao-erp/shared-types';
 
 import { PageHeader } from '@/components/layout/PageHeader';
 import { InfoTile } from '@/components/data-display/InfoTile';
+import { SupplierDescriptionPanel } from '../components/SupplierDescriptionPanel';
 import { FileList, type FileListItem } from '@/components/data-display/FileList';
 import { EmptyState } from '@/components/feedback/EmptyState';
 import { ErrorState } from '@/components/feedback/ErrorState';
@@ -234,6 +235,7 @@ export function SupplierDetailPage() {
                 value={formatDate(supplier.createdAt) ?? '—'}
               />
             </div>
+            <SupplierDescriptionPanel supplier={supplier} />
           </TabsContent>
 
           <TabsContent value="contacts">

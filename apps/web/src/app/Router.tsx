@@ -107,6 +107,11 @@ const OpenQuotationPage = lazy(() =>
     default: m.OpenQuotationPage,
   })),
 );
+const SupplierSignupPage = lazy(() =>
+  import('@/features/supplier-portal/pages/SupplierSignupPage').then((m) => ({
+    default: m.SupplierSignupPage,
+  })),
+);
 const CatalogUploadPage = lazy(() =>
   import('@/features/supplier-portal/pages/CatalogUploadPage').then((m) => ({
     default: m.CatalogUploadPage,
@@ -328,6 +333,12 @@ const routes: RouteObject[] = [
   {
     path: `${ROUTE_PATHS.ENVIAR_CATALOGO}/:token`,
     element: withSuspense(<CatalogUploadPage />),
+    errorElement: <RootBoundary />,
+  },
+  // Link da empresa para o fornecedor fazer o próprio cadastro.
+  {
+    path: `${ROUTE_PATHS.CADASTRO_FORNECEDOR}/:token`,
+    element: withSuspense(<SupplierSignupPage />),
     errorElement: <RootBoundary />,
   },
   {

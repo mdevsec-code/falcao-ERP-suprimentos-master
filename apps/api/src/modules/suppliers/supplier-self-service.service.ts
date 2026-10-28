@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable, UnprocessableEntityException } from "@nestjs/common";
 import { Prisma, type Supplier } from "@prisma/client";
-import { cnpjDigits, formatCnpjMask } from "@falcao-erp/shared-types";
+import { buildSupplierSearchText, cnpjDigits, formatCnpjMask } from "@falcao-erp/shared-types";
 import { PrismaService } from "../../database/prisma.service";
 import { PublicSupplierIdentityDto } from "./dto/public-supplier-identity.dto";
 
@@ -26,16 +26,20 @@ export class SupplierSelfServiceService {
     const cadastro = dto.cadastro;
     if (!cadastro) throw new UnprocessableEntityException(REGISTRATION_REQUIRED_MESSAGE);
 
+    const fields = {
+      cnpj: formatCnpjMask(dto.cnpj),
+      razaoSocial: cadastro.razaoSocial.trim(),
+      nomeFantasia: cadastro.nomeFantasia.trim(),
+      categoria: cadastro.categoria ?? "OUTROS",
+      cidade: cadastro.cidade.trim(),
+      estado: cadastro.estado,
+    };
     try {
       const supplier = await this.prisma.supplier.create({
         data: {
           companyId,
-          cnpj: formatCnpjMask(dto.cnpj),
-          razaoSocial: cadastro.razaoSocial.trim(),
-          nomeFantasia: cadastro.nomeFantasia.trim(),
-          categoria: cadastro.categoria ?? "OUTROS",
-          cidade: cadastro.cidade.trim(),
-          estado: cadastro.estado,
+          ...fields,
+          searchText: buildSupplierSearchText(fields),
           responsavel: dto.nomeResponsavel.trim(),
           isActive: false,
           cadastroPendente: true,

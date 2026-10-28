@@ -23,6 +23,8 @@ export const ROUTE_PATHS = {
   COTAR: '/cotar',
   /** Link público para o fornecedor enviar o catálogo de produtos (sem login). */
   ENVIAR_CATALOGO: '/enviar-catalogo',
+  /** Link público para o fornecedor fazer o próprio cadastro (sem login). */
+  CADASTRO_FORNECEDOR: '/cadastro-fornecedor',
   CONTRATOS: '/contratos',
   CONTRATO_NOVO: '/contratos/novo',
   FINANCEIRO: '/financeiro',
@@ -51,6 +53,7 @@ export const routeTo = {
   supplierQuotation: (token: string) => `${ROUTE_PATHS.COTACAO_FORNECEDOR}/${token}`,
   openQuotation: (token: string) => `${ROUTE_PATHS.COTAR}/${token}`,
   supplierCatalogUpload: (token: string) => `${ROUTE_PATHS.ENVIAR_CATALOGO}/${token}`,
+  supplierSignup: (token: string) => `${ROUTE_PATHS.CADASTRO_FORNECEDOR}/${token}`,
   plan: (id: string) => `${ROUTE_PATHS.PLANOS}/${id}`,
   planEdit: (id: string) => `${ROUTE_PATHS.PLANOS}/${id}/editar`,
   catalog: (id: string) => `${ROUTE_PATHS.CATALOGOS}/${id}`,

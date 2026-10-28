@@ -2,6 +2,7 @@ import { z } from 'zod';
 import {
   BRAZILIAN_STATES,
   ContactType,
+  isValidCnpj,
   SupplierCategory,
   type SupplierDetailDto,
 } from '@falcao-erp/shared-types';
@@ -55,6 +56,10 @@ export const supplierFormSchema = z.object({
     errorMap: () => ({ message: i18n.t('validation:selectOption') }),
   }),
   responsavel: requiredText(2, 120),
+  atividades: optionalText(2000),
+  atividadesZh: optionalText(2000),
+  produtosServicos: optionalText(4000),
+  produtosServicosZh: optionalText(4000),
   contacts: z.array(supplierContactSchema).min(1, i18n.t('suppliers:validation.contactsRequired')),
 });
 
@@ -75,6 +80,10 @@ export function toFormInput(supplier: SupplierDetailDto): SupplierFormInput {
     cidade: supplier.cidade,
     estado: supplier.estado,
     responsavel: supplier.responsavel,
+    atividades: supplier.atividades ?? '',
+    atividadesZh: supplier.atividadesZh ?? '',
+    produtosServicos: supplier.produtosServicos ?? '',
+    produtosServicosZh: supplier.produtosServicosZh ?? '',
     contacts: supplier.contacts.map(({ type, label, value }) => ({ type, label, value })),
   };
 }
@@ -85,3 +94,47 @@ export function fromFormInput(input: SupplierFormInput): SupplierPayload {
 
 /** Limite de upload da API (`addMaxSizeValidator` nos controllers). */
 export const MAX_UPLOAD_BYTES = UPLOAD_LIMIT_BYTES;
+
+/**
+ * Cadastro feito pelo próprio fornecedor pelo link da empresa. Produtos e
+ * serviços são obrigatórios em pelo menos um idioma (português ou chinês).
+ * É uma função (e não uma constante) para as mensagens acompanharem o idioma
+ * que o fornecedor escolher na página.
+ */
+export function makeSupplierSignupSchema() {
+  return z
+    .object({
+      cnpj: z
+        .string()
+        .trim()
+        .min(1, i18n.t('validation:required'))
+        .refine(isValidCnpj, i18n.t('validation:cnpj')),
+      razaoSocial: requiredText(3, 180),
+      nomeFantasia: requiredText(2, 180),
+      inscricaoEstadual: optionalText(30),
+      categoria: z.nativeEnum(SupplierCategory, {
+        errorMap: () => ({ message: i18n.t('validation:selectOption') }),
+      }),
+      cidade: requiredText(2, 120),
+      estado: z.enum(BRAZILIAN_STATES, {
+        errorMap: () => ({ message: i18n.t('validation:selectOption') }),
+      }),
+      responsavel: requiredText(2, 120),
+      email: z.string().trim().email(i18n.t('validation:email')),
+      telefone: requiredText(8, 30),
+      atividades: optionalText(2000),
+      atividadesZh: optionalText(2000),
+      produtosServicos: optionalText(4000),
+      produtosServicosZh: optionalText(4000),
+    })
+    .refine(
+      (value) => Boolean(value.produtosServicos?.trim() || value.produtosServicosZh?.trim()),
+      {
+        path: ['produtosServicos'],
+        message: i18n.t('suppliers:signup.productsRequired'),
+      },
+    );
+}
+
+export type SupplierSignupInput = z.infer<ReturnType<typeof makeSupplierSignupSchema>>;
+export type SupplierSignupPayload = SupplierSignupInput;

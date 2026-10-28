@@ -39,12 +39,18 @@ export interface SupplierSummaryDto {
   isActive: boolean;
   /** Cadastrado pelo próprio fornecedor (link aberto) e ainda não aprovado por compras. */
   cadastroPendente: boolean;
+  /** Produtos e serviços oferecidos, em português e em chinês. */
+  produtosServicos: string | null;
+  produtosServicosZh: string | null;
   averageScore: number | null;
   createdAt: string;
 }
 
 export interface SupplierDetailDto extends SupplierSummaryDto {
   inscricaoEstadual: string | null;
+  /** Atividades da empresa, em português e em chinês. */
+  atividades: string | null;
+  atividadesZh: string | null;
   responsavel: string;
   updatedAt: string;
   contacts: SupplierContactDto[];
@@ -59,4 +65,13 @@ export interface SupplierStatsDto {
   pendentes: number;
   byCategory: Array<{ categoria: SupplierCategory; count: number }>;
   byState: Array<{ estado: BrazilianState; count: number }>;
+}
+
+/** Link público para o fornecedor fazer o próprio cadastro. */
+export interface PublicSupplierSignupLinkDto {
+  empresa: string;
+}
+
+export interface PublicSupplierSignupResultDto {
+  fornecedor: string;
 }

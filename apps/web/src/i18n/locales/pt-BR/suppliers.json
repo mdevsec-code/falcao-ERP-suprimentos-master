@@ -24,7 +24,7 @@
     "title": "Filtros",
     "search": {
       "label": "Buscar",
-      "placeholder": "Razão social, nome fantasia ou CNPJ…"
+      "placeholder": "Nome, CNPJ, produto ou atividade (ex.: cimento, 水泥)…"
     },
     "category": {
       "label": "Categoria"
@@ -70,7 +70,8 @@
     "contractsSoonTitle": "Módulo de Contratos em desenvolvimento",
     "contractsSoonDescription": "Em breve você verá aqui todos os contratos vinculados a este fornecedor.",
     "notFoundTitle": "Fornecedor não encontrado",
-    "notFoundDescription": "Ele pode ter sido removido ou o endereço está incorreto."
+    "notFoundDescription": "Ele pode ter sido removido ou o endereço está incorreto.",
+    "noDescription": "Nenhuma atividade ou produto informado. Edite o fornecedor para preencher."
   },
   "evaluations": {
     "none": "Sem avaliações",
@@ -118,7 +119,9 @@
       "generalDescription": "Identificação fiscal e responsável pelo relacionamento.",
       "address": "Endereço",
       "contacts": "Contatos",
-      "contactsDescription": "Telefones e e-mails para pedidos e cotações."
+      "contactsDescription": "Telefones e e-mails para pedidos e cotações.",
+      "description": "Atividades e produtos",
+      "descriptionHint": "Escreva em português, em chinês ou nos dois. A busca encontra o fornecedor pelo que estiver aqui, nos dois idiomas."
     },
     "fields": {
       "razaoSocial": "Razão social",
@@ -131,13 +134,22 @@
       "estado": "Estado",
       "contactType": "Tipo",
       "contactLabel": "Rótulo",
-      "contactValue": "Contato"
+      "contactValue": "Contato",
+      "produtosServicos": "Produtos e serviços",
+      "atividades": "Atividades da empresa"
     },
     "placeholders": {
       "category": "Selecione a categoria",
       "state": "UF",
       "contactLabel": "Comercial, Vendas…",
-      "contactValue": "(31) 99999-9999 ou nome@empresa.com"
+      "contactValue": "(31) 99999-9999 ou nome@empresa.com",
+      "produtosServicos": "Ex.: cimento CP-II, tijolo de cimento, bloco estrutural, areia, brita",
+      "produtosServicosZh": "例如：水泥、水泥砖、砌块、沙、碎石",
+      "atividades": "Ex.: revenda de materiais de construção com entrega na obra",
+      "atividadesZh": "例如：建筑材料批发，送货到工地"
+    },
+    "hints": {
+      "produtosServicos": "Separe por vírgula. Use os nomes que os compradores procuram."
     }
   },
   "confirm": {
@@ -187,5 +199,45 @@
     "nota": "Nota média",
     "desde": "Cadastrado em",
     "search": "Busca"
+  },
+  "signupLink": {
+    "title": "Link para fornecedores se cadastrarem",
+    "description": "Mande este link a fornecedores novos: eles preenchem os dados da empresa e o que fornecem, em português ou chinês. O cadastro chega aqui como pendente para aprovação.",
+    "offText": "O link está desligado. Ative para fornecedores novos fazerem o próprio cadastro.",
+    "enable": "Ativar link",
+    "copy": "Copiar link",
+    "copied": "Link copiado.",
+    "copyFailed": "Não foi possível copiar. Selecione o link e copie manualmente.",
+    "whatsapp": "WhatsApp",
+    "email": "E-mail",
+    "regenerate": "Gerar novo link",
+    "disable": "Desativar",
+    "regenerateTitle": "Gerar um novo link de cadastro?",
+    "disableTitle": "Desativar o link de cadastro?",
+    "confirmDescription": "O link atual deixa de funcionar. Os cadastros já recebidos continuam na lista.",
+    "on": "Link de cadastro ativado.",
+    "off": "Link de cadastro desativado.",
+    "subject": "Cadastro de fornecedor · 供应商注册",
+    "message": "Olá! Para fornecer para a nossa empresa, faça o cadastro pelo link abaixo, com os dados da empresa e os produtos e serviços que oferece:\n{{link}}\n\n您好！如需成为我们的供应商，请通过以下链接注册，填写公司信息以及提供的产品和服务：\n{{link}}"
+  },
+  "signup": {
+    "portal": "Cadastro de fornecedor",
+    "title": "Cadastre a sua empresa",
+    "intro": "Preencha os dados da empresa e o que ela fornece. A equipe de compras analisa o cadastro e entra em contato.",
+    "companyStep": "Dados da empresa",
+    "contactStep": "Contato",
+    "email": "E-mail",
+    "telefone": "Telefone / WhatsApp",
+    "descriptionHint": "Escreva em português, em chinês ou nos dois. Os produtos e serviços são obrigatórios em pelo menos um idioma.",
+    "productsRequired": "Informe os produtos e serviços em português ou em chinês.",
+    "review": "O cadastro passa pela análise da equipe de compras antes de ser aprovado.",
+    "submit": "Enviar cadastro",
+    "sentTitle": "Cadastro enviado",
+    "sentDescription": "Recebemos o cadastro de {{fornecedor}}. A equipe de compras da {{empresa}} vai analisar e entrar em contato.",
+    "cnpjExists": "Este CNPJ já está cadastrado. Para atualizar os dados, fale com o setor de compras.",
+    "invalid": "Confira os campos destacados e tente de novo.",
+    "tooMany": "Muitos envios em pouco tempo. Aguarde um minuto e tente de novo.",
+    "invalidTitle": "Link de cadastro indisponível",
+    "invalidDescription": "Este link foi desativado ou trocado. Peça um link novo ao setor de compras."
   }
 }

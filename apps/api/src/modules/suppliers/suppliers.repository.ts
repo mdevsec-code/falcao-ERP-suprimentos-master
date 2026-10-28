@@ -1,5 +1,11 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import type { Prisma, SupplierCategory } from "@prisma/client";
+import type { Prisma, Supplier, SupplierCategory } from "@prisma/client";
+import {
+  buildSupplierSearchGroups,
+  buildSupplierSearchText,
+  isCjkSearchTerm,
+  normalizeSearchText,
+} from "@falcao-erp/shared-types";
 import { PrismaService } from "../../database/prisma.service";
 import { CreateSupplierDto } from "./dto/create-supplier.dto";
 import { UpdateSupplierDto } from "./dto/update-supplier.dto";
@@ -46,15 +52,7 @@ export class SuppliersRepository {
       cidade: filters.cidade ? { contains: filters.cidade, mode: "insensitive" } : undefined,
       isActive: filters.isActive,
       cadastroPendente: filters.cadastroPendente,
-      ...(filters.search
-        ? {
-            OR: [
-              { razaoSocial: { contains: filters.search, mode: "insensitive" } },
-              { nomeFantasia: { contains: filters.search, mode: "insensitive" } },
-              { cnpj: { contains: filters.search } },
-            ],
-          }
-        : {}),
+      ...(filters.search ? { AND: searchConditions(filters.search) } : {}),
     };
 
     const client = this.prisma.forCompany(companyId);
@@ -95,11 +93,12 @@ export class SuppliersRepository {
         cidade: dto.cidade,
         estado: dto.estado,
         responsavel: dto.responsavel,
+        ...descriptionFields(dto),
         contacts: { createMany: { data: dto.contacts } },
       },
       include: detailInclude,
     });
-    return supplier as unknown as SupplierDetailPayload;
+    return (await this.refreshSearchText(companyId, supplier as unknown as SupplierDetailPayload)) as SupplierDetailPayload;
   }
 
   async update(companyId: string, id: string, dto: UpdateSupplierDto): Promise<SupplierDetailPayload> {
@@ -117,13 +116,31 @@ export class SuppliersRepository {
         estado: dto.estado,
         responsavel: dto.responsavel,
         isActive: dto.isActive,
+        ...descriptionFields(dto),
         ...(dto.contacts
           ? { contacts: { deleteMany: {}, createMany: { data: dto.contacts } } }
           : {}),
       },
       include: detailInclude,
     });
-    return supplier as unknown as SupplierDetailPayload;
+    return (await this.refreshSearchText(companyId, supplier as unknown as SupplierDetailPayload)) as SupplierDetailPayload;
+  }
+
+  /** Recalcula `searchText` a partir do que está gravado (depois de criar ou editar). */
+  async refreshSearchText<T extends Supplier>(companyId: string, supplier: T): Promise<T> {
+    const searchText = buildSupplierSearchText(supplier);
+    if (searchText === supplier.searchText) return supplier;
+    await this.prisma.forCompany(companyId).supplier.update({ where: { id: supplier.id }, data: { searchText } });
+    return { ...supplier, searchText };
+  }
+
+  /** Fornecedores gravados antes da busca nova (ou por outro caminho) ainda sem texto de busca. */
+  async backfillSearchText(): Promise<number> {
+    const rows = await this.prisma.supplier.findMany({ where: { searchText: "" } });
+    for (const row of rows) {
+      await this.prisma.supplier.update({ where: { id: row.id }, data: { searchText: buildSupplierSearchText(row) } });
+    }
+    return rows.length;
   }
 
   async setActive(companyId: string, id: string, isActive: boolean): Promise<SupplierDetailPayload> {
@@ -215,4 +232,47 @@ export class SuppliersRepository {
       byState: byState.map((row) => ({ estado: row.estado, count: row._count._all })),
     };
   }
+}
+
+/** Campos de descrição: texto vazio vira null (o formulário manda "" ao apagar). */
+function descriptionFields(dto: {
+  atividades?: string;
+  atividadesZh?: string;
+  produtosServicos?: string;
+  produtosServicosZh?: string;
+}) {
+  const clean = (text: string | undefined) => (text === undefined ? undefined : text.trim() || null);
+  return {
+    atividades: clean(dto.atividades),
+    atividadesZh: clean(dto.atividadesZh),
+    produtosServicos: clean(dto.produtosServicos),
+    produtosServicosZh: clean(dto.produtosServicosZh),
+  };
+}
+
+/**
+ * Cada grupo de termos da busca precisa aparecer em algum lugar do fornecedor:
+ * no texto de busca (nome, CNPJ, categoria, cidade, atividades e produtos nos
+ * dois idiomas), nos produtos do catálogo ligados a ele (principal,
+ * alternativo ou com preço registrado) ou nos itens dos catálogos que enviou.
+ */
+function searchConditions(search: string): Prisma.SupplierWhereInput[] {
+  const contains = (value: string) => ({ contains: value, mode: "insensitive" as const });
+  return buildSupplierSearchGroups(search).map((variants) => ({
+    OR: variants.flatMap((variant): Prisma.SupplierWhereInput[] => {
+      const normal = normalizeSearchText(variant);
+      const cjk = isCjkSearchTerm(normal);
+      const inText: Prisma.SupplierWhereInput = { searchText: { contains: cjk ? normal : ` ${normal}` } };
+      // Nos nomes de produto (não normalizados) termos muito curtos achariam pedaço de tudo.
+      if (!cjk && variant.length < 3) return [inText];
+      const product = { OR: [{ nome: contains(variant) }, { marca: contains(variant) }] };
+      return [
+        inText,
+        { primaryForProducts: { some: product } },
+        { alternativeProducts: { some: { product } } },
+        { priceEntries: { some: { product } } },
+        { catalogs: { some: { items: { some: { descricao: contains(variant) } } } } },
+      ];
+    }),
+  }));
 }

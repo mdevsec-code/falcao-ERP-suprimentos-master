@@ -24,7 +24,7 @@
     "title": "Filters",
     "search": {
       "label": "Search",
-      "placeholder": "Legal name, trade name or CNPJ…"
+      "placeholder": "Name, CNPJ, product or activity (e.g. cement, 水泥)…"
     },
     "category": {
       "label": "Category"
@@ -70,7 +70,8 @@
     "contractsSoonTitle": "Contracts module in development",
     "contractsSoonDescription": "Soon you will see every contract linked to this supplier here.",
     "notFoundTitle": "Supplier not found",
-    "notFoundDescription": "It may have been removed or the address is wrong."
+    "notFoundDescription": "It may have been removed or the address is wrong.",
+    "noDescription": "No activities or products yet. Edit the supplier to fill them in."
   },
   "evaluations": {
     "none": "No ratings",
@@ -118,7 +119,9 @@
       "generalDescription": "Tax identification and relationship owner.",
       "address": "Address",
       "contacts": "Contacts",
-      "contactsDescription": "Phones and emails for orders and quotes."
+      "contactsDescription": "Phones and emails for orders and quotes.",
+      "description": "Activities and products",
+      "descriptionHint": "Write in Portuguese, Chinese or both. Search finds the supplier by what is written here, in either language."
     },
     "fields": {
       "razaoSocial": "Legal name",
@@ -131,13 +134,22 @@
       "estado": "State",
       "contactType": "Type",
       "contactLabel": "Label",
-      "contactValue": "Contact"
+      "contactValue": "Contact",
+      "produtosServicos": "Products and services",
+      "atividades": "Company activities"
     },
     "placeholders": {
       "category": "Select a category",
       "state": "State",
       "contactLabel": "Sales, Billing…",
-      "contactValue": "(31) 99999-9999 or name@company.com"
+      "contactValue": "(31) 99999-9999 or name@company.com",
+      "produtosServicos": "Ex.: cimento CP-II, tijolo de cimento, bloco estrutural, areia, brita",
+      "produtosServicosZh": "例如：水泥、水泥砖、砌块、沙、碎石",
+      "atividades": "Ex.: revenda de materiais de construção com entrega na obra",
+      "atividadesZh": "例如：建筑材料批发，送货到工地"
+    },
+    "hints": {
+      "produtosServicos": "Separate with commas. Use the names buyers search for."
     }
   },
   "confirm": {
@@ -187,5 +199,45 @@
     "nota": "Average score",
     "desde": "Registered on",
     "search": "Search"
+  },
+  "signupLink": {
+    "title": "Supplier sign-up link",
+    "description": "Send this link to new suppliers: they fill in their company details and what they supply, in Portuguese or Chinese. The registration arrives here as pending approval.",
+    "offText": "The link is off. Turn it on so new suppliers can register themselves.",
+    "enable": "Turn on link",
+    "copy": "Copy link",
+    "copied": "Link copied.",
+    "copyFailed": "Could not copy. Select the link and copy it manually.",
+    "whatsapp": "WhatsApp",
+    "email": "Email",
+    "regenerate": "Generate new link",
+    "disable": "Turn off",
+    "regenerateTitle": "Generate a new sign-up link?",
+    "disableTitle": "Turn off the sign-up link?",
+    "confirmDescription": "The current link stops working. Registrations already received stay in the list.",
+    "on": "Sign-up link turned on.",
+    "off": "Sign-up link turned off.",
+    "subject": "Supplier registration · 供应商注册",
+    "message": "Hello! To become one of our suppliers, register through the link below with your company details and the products and services you offer:\n{{link}}\n\n您好！如需成为我们的供应商，请通过以下链接注册，填写公司信息以及提供的产品和服务：\n{{link}}"
+  },
+  "signup": {
+    "portal": "Supplier registration",
+    "title": "Register your company",
+    "intro": "Fill in your company details and what you supply. The purchasing team reviews the registration and will contact you.",
+    "companyStep": "Company details",
+    "contactStep": "Contact",
+    "email": "Email",
+    "telefone": "Phone / WhatsApp",
+    "descriptionHint": "Write in Portuguese, Chinese or both. Products and services are required in at least one language.",
+    "productsRequired": "Enter the products and services in Portuguese or Chinese.",
+    "review": "The purchasing team reviews every registration before approving it.",
+    "submit": "Send registration",
+    "sentTitle": "Registration sent",
+    "sentDescription": "We received the registration for {{fornecedor}}. The {{empresa}} purchasing team will review it and contact you.",
+    "cnpjExists": "This CNPJ is already registered. To update your details, contact the purchasing team.",
+    "invalid": "Check the highlighted fields and try again.",
+    "tooMany": "Too many submissions in a short time. Wait a minute and try again.",
+    "invalidTitle": "Sign-up link unavailable",
+    "invalidDescription": "This link was turned off or replaced. Ask the purchasing team for a new one."
   }
 }

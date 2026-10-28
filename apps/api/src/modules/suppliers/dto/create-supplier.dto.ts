@@ -7,6 +7,7 @@ import {
   IsOptional,
   IsString,
   Length,
+  MaxLength,
   ValidateNested,
 } from "class-validator";
 import { BRAZILIAN_STATES, ContactType, SupplierCategory } from "@falcao-erp/shared-types";
@@ -54,6 +55,28 @@ export class CreateSupplierDto {
   @IsString()
   @Length(2, 120)
   responsavel: string;
+
+  /** Atividades da empresa, em português e em chinês. */
+  @IsOptional()
+  @IsString()
+  @MaxLength(2000)
+  atividades?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(2000)
+  atividadesZh?: string;
+
+  /** Produtos e serviços oferecidos — é por aqui que a busca acha o fornecedor. */
+  @IsOptional()
+  @IsString()
+  @MaxLength(4000)
+  produtosServicos?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(4000)
+  produtosServicosZh?: string;
 
   @IsArray()
   @ArrayMinSize(1, { message: "Informe ao menos um contato." })

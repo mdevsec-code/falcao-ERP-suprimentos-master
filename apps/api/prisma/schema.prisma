@@ -41,7 +41,9 @@ model Company {
   supplierCatalogs SupplierCatalog[]
 
   /// Link público para fornecedores enviarem catálogo (HMAC do nonce; null = desligado).
-  catalogLinkNonce String? @map("catalog_link_nonce")
+  catalogLinkNonce    String? @map("catalog_link_nonce")
+  /// Link para o fornecedor fazer o próprio cadastro (null = desligado).
+  supplierSignupNonce String? @map("supplier_signup_nonce")
 
   @@map("companies")
 }
@@ -131,21 +133,28 @@ enum SupplierCategory {
 }
 
 model Supplier {
-  id                String           @id @default(uuid())
-  companyId         String           @map("company_id")
-  razaoSocial       String           @map("razao_social")
-  nomeFantasia      String           @map("nome_fantasia")
-  cnpj              String
-  inscricaoEstadual String?          @map("inscricao_estadual")
-  categoria         SupplierCategory
-  cidade            String
-  estado            String           @db.VarChar(2)
-  responsavel       String
-  isActive          Boolean          @default(true) @map("is_active")
+  id                 String           @id @default(uuid())
+  companyId          String           @map("company_id")
+  razaoSocial        String           @map("razao_social")
+  nomeFantasia       String           @map("nome_fantasia")
+  cnpj               String
+  inscricaoEstadual  String?          @map("inscricao_estadual")
+  categoria          SupplierCategory
+  cidade             String
+  estado             String           @db.VarChar(2)
+  responsavel        String
+  isActive           Boolean          @default(true) @map("is_active")
   /// Cadastrado pelo próprio fornecedor (link aberto de cotação ou de catálogo) e ainda não revisado.
-  cadastroPendente  Boolean          @default(false) @map("cadastro_pendente")
-  createdAt         DateTime         @default(now()) @map("created_at")
-  updatedAt         DateTime         @updatedAt @map("updated_at")
+  cadastroPendente   Boolean          @default(false) @map("cadastro_pendente")
+  /// Atividades da empresa e produtos/serviços, em português e em chinês (busca nos dois idiomas).
+  atividades         String?
+  atividadesZh       String?          @map("atividades_zh")
+  produtosServicos   String?          @map("produtos_servicos")
+  produtosServicosZh String?          @map("produtos_servicos_zh")
+  /// Texto normalizado (sem acento, minúsculas) de nome, CNPJ, categoria, cidade, atividades e produtos — ver buildSupplierSearchText.
+  searchText         String           @default("") @map("search_text")
+  createdAt          DateTime         @default(now()) @map("created_at")
+  updatedAt          DateTime         @updatedAt @map("updated_at")
 
   company     Company              @relation(fields: [companyId], references: [id], onDelete: Cascade)
   contacts    SupplierContact[]

@@ -25,6 +25,7 @@ import { Skeleton } from '@/components/ui/Skeleton';
 import { Button } from '@/components/ui/Button';
 import { Separator } from '@/components/ui/Separator';
 import { Can } from '@/features/auth/components/Can';
+import { SignupLinkCard } from '../components/SignupLinkCard';
 import { useDebounce } from '@/hooks/useDebounce';
 import { PERMISSIONS } from '@/constants/permissions';
 import { ROUTE_PATHS } from '@/constants/routes';
@@ -183,6 +184,10 @@ export function SuppliersPage() {
             </Button>
           </div>
         )}
+
+        <Can permission={PERMISSIONS.SUPPLIER_WRITE}>
+          <SignupLinkCard />
+        </Can>
 
         <FiltersBar filters={filters} onChange={handleFilterChange} onClearAll={handleClearAll} />
 

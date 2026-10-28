@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable } from "@nestjs/common";
+import { BadRequestException, Inject, Injectable, Logger, type OnModuleInit } from "@nestjs/common";
 import type { PaginatedResult, SupplierDetailDto, SupplierSummaryDto } from "@falcao-erp/shared-types";
 import { decodeUploadName } from "../../common/utils/file-name";
 import { STORAGE_PROVIDER, type IStorageProvider } from "../storage/storage-provider.interface";
@@ -15,11 +15,23 @@ type SupplierWithEvaluations = SupplierListItemPayload;
 type SupplierWithDetails = SupplierDetailPayload;
 
 @Injectable()
-export class SuppliersService {
+export class SuppliersService implements OnModuleInit {
+  private readonly logger = new Logger(SuppliersService.name);
+
   constructor(
     private readonly repository: SuppliersRepository,
     @Inject(STORAGE_PROVIDER) private readonly storage: IStorageProvider,
   ) {}
+
+  /** Preenche o texto de busca de fornecedores gravados antes da busca por palavra-chave. */
+  async onModuleInit(): Promise<void> {
+    try {
+      const count = await this.repository.backfillSearchText();
+      if (count > 0) this.logger.log(`Texto de busca preenchido em ${count} fornecedor(es).`);
+    } catch (error) {
+      this.logger.warn(`Não foi possível preencher o texto de busca: ${error instanceof Error ? error.message : error}`);
+    }
+  }
 
   async list(companyId: string, query: QuerySuppliersDto): Promise<PaginatedResult<SupplierSummaryDto>> {
     const { data, total } = await this.repository.findMany(companyId, {
@@ -158,6 +170,8 @@ export class SuppliersService {
       estado: supplier.estado as SupplierSummaryDto["estado"],
       isActive: supplier.isActive,
       cadastroPendente: supplier.cadastroPendente,
+      produtosServicos: supplier.produtosServicos,
+      produtosServicosZh: supplier.produtosServicosZh,
       averageScore,
       createdAt: supplier.createdAt.toISOString(),
     };
@@ -175,6 +189,10 @@ export class SuppliersService {
       nomeFantasia: supplier.nomeFantasia,
       cnpj: supplier.cnpj,
       inscricaoEstadual: supplier.inscricaoEstadual,
+      atividades: supplier.atividades,
+      atividadesZh: supplier.atividadesZh,
+      produtosServicos: supplier.produtosServicos,
+      produtosServicosZh: supplier.produtosServicosZh,
       categoria: supplier.categoria,
       cidade: supplier.cidade,
       estado: supplier.estado as SupplierDetailDto["estado"],

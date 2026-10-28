@@ -14,7 +14,9 @@ export type LinkScope =
   /** Link aberto da cotação: qualquer fornecedor entra com o CNPJ (id = Quotation). */
   | "quotation-open"
   /** Link para fornecedores enviarem catálogo de produtos (id = Company). */
-  | "catalog-link";
+  | "catalog-link"
+  /** Link para o fornecedor fazer o próprio cadastro (id = Company). */
+  | "supplier-signup";
 
 const TOKEN_PATTERN = /^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\.([A-Za-z0-9_-]{43})$/;
 

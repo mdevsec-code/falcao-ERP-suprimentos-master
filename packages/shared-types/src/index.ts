@@ -47,6 +47,8 @@ export type {
   SupplierSummaryDto,
   SupplierDetailDto,
   SupplierStatsDto,
+  PublicSupplierSignupLinkDto,
+  PublicSupplierSignupResultDto,
 } from "./supplier";
 
 export type {
@@ -166,3 +168,4 @@ export type {
   SupplierCatalogItemDto,
   SupplierCatalogSummaryDto,
 } from "./supplier-catalog";
+export * from "./supplier-search";

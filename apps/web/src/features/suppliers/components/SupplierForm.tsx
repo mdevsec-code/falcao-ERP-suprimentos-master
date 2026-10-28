@@ -18,6 +18,7 @@ import { FormSection } from '@/components/common/FormSection';
 import { CONTACT_TYPE_LABELS, SUPPLIER_CATEGORY_LABELS } from '@/constants/enums';
 import { formatCNPJ } from '@/utils/format';
 import { supplierFormSchema, type SupplierFormInput } from '../types';
+import { SupplierDescriptionFields } from './SupplierDescriptionFields';
 
 const EMPTY_CONTACT: SupplierFormInput['contacts'][number] = {
   type: ContactType.PHONE,
@@ -35,6 +36,10 @@ function emptyValues(): SupplierFormInput {
     cidade: '',
     estado: undefined as unknown as SupplierFormInput['estado'],
     responsavel: '',
+    atividades: '',
+    atividadesZh: '',
+    produtosServicos: '',
+    produtosServicosZh: '',
     contacts: [EMPTY_CONTACT],
   };
 }
@@ -185,6 +190,22 @@ export function SupplierForm({
             {errors.estado && <p className="text-xs text-danger">{errors.estado.message}</p>}
           </div>
         </div>
+      </FormSection>
+
+      <FormSection
+        title={t('suppliers:form.sections.description')}
+        description={t('suppliers:form.sections.descriptionHint')}
+        delayMs={90}
+      >
+        <SupplierDescriptionFields
+          register={(name) => register(name)}
+          errors={{
+            atividades: errors.atividades?.message,
+            atividadesZh: errors.atividadesZh?.message,
+            produtosServicos: errors.produtosServicos?.message,
+            produtosServicosZh: errors.produtosServicosZh?.message,
+          }}
+        />
       </FormSection>
 
       <FormSection

@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 import i18n from '@/i18n';
@@ -116,5 +116,28 @@ export function useDecideSupplierRegistration(id: string) {
     onError: (error: Error) => {
       toast.error(getErrorMessage(error, i18n.t('common:errors.generic')));
     },
+  });
+}
+
+const signupLinkKey = ['suppliers', 'signup-link'] as const;
+
+export function useSupplierSignupLink() {
+  return useQuery({ queryKey: signupLinkKey, queryFn: suppliersApi.getSignupLink });
+}
+
+export function useSupplierSignupLinkMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (action: 'regenerate' | 'disable') =>
+      action === 'regenerate'
+        ? suppliersApi.regenerateSignupLink()
+        : suppliersApi.disableSignupLink(),
+    onSuccess: (data, action) => {
+      queryClient.setQueryData(signupLinkKey, data);
+      toast.success(
+        i18n.t(action === 'regenerate' ? 'suppliers:signupLink.on' : 'suppliers:signupLink.off'),
+      );
+    },
+    onError: (error: Error) => toast.error(getErrorMessage(error, i18n.t('common:errors.generic'))),
   });
 }

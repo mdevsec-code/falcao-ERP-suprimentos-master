@@ -24,7 +24,7 @@
     "title": "筛选",
     "search": {
       "label": "搜索",
-      "placeholder": "公司名称、商号或 CNPJ…"
+      "placeholder": "名称、CNPJ、产品或业务（如：水泥、cimento）…"
     },
     "category": {
       "label": "类别"
@@ -70,7 +70,8 @@
     "contractsSoonTitle": "合同模块开发中",
     "contractsSoonDescription": "不久后您将在此看到与该供应商相关的所有合同。",
     "notFoundTitle": "未找到供应商",
-    "notFoundDescription": "它可能已被删除，或地址有误。"
+    "notFoundDescription": "它可能已被删除，或地址有误。",
+    "noDescription": "尚未填写业务或产品。请编辑供应商信息进行填写。"
   },
   "evaluations": {
     "none": "暂无评价",
@@ -118,7 +119,9 @@
       "generalDescription": "税务登记信息与对接负责人。",
       "address": "地址",
       "contacts": "联系人",
-      "contactsDescription": "用于下单和询价的电话与邮箱。"
+      "contactsDescription": "用于下单和询价的电话与邮箱。",
+      "description": "业务与产品",
+      "descriptionHint": "可以用葡萄牙语、中文或两种语言填写。搜索会根据这里的内容找到供应商，两种语言都可以。"
     },
     "fields": {
       "razaoSocial": "公司名称",
@@ -131,13 +134,22 @@
       "estado": "州",
       "contactType": "类型",
       "contactLabel": "标签",
-      "contactValue": "联系方式"
+      "contactValue": "联系方式",
+      "produtosServicos": "产品与服务",
+      "atividades": "公司业务"
     },
     "placeholders": {
       "category": "选择类别",
       "state": "州",
       "contactLabel": "销售、财务…",
-      "contactValue": "(31) 99999-9999 或 name@company.com"
+      "contactValue": "(31) 99999-9999 或 name@company.com",
+      "produtosServicos": "Ex.: cimento CP-II, tijolo de cimento, bloco estrutural, areia, brita",
+      "produtosServicosZh": "例如：水泥、水泥砖、砌块、沙、碎石",
+      "atividades": "Ex.: revenda de materiais de construção com entrega na obra",
+      "atividadesZh": "例如：建筑材料批发，送货到工地"
+    },
+    "hints": {
+      "produtosServicos": "用逗号分隔。请使用采购人员常用的名称。"
     }
   },
   "confirm": {
@@ -186,5 +198,45 @@
     "nota": "平均评分",
     "desde": "注册时间",
     "search": "搜索"
+  },
+  "signupLink": {
+    "title": "供应商注册链接",
+    "description": "把这个链接发给新供应商：他们可以用葡萄牙语或中文填写公司信息和供应的产品。注册信息会以待审核状态出现在这里。",
+    "offText": "链接已关闭。开启后，新供应商可以自行注册。",
+    "enable": "开启链接",
+    "copy": "复制链接",
+    "copied": "链接已复制。",
+    "copyFailed": "无法复制。请选中链接后手动复制。",
+    "whatsapp": "WhatsApp",
+    "email": "邮件",
+    "regenerate": "生成新链接",
+    "disable": "关闭",
+    "regenerateTitle": "生成新的注册链接？",
+    "disableTitle": "关闭注册链接？",
+    "confirmDescription": "当前链接将失效。已收到的注册信息仍保留在列表中。",
+    "on": "注册链接已开启。",
+    "off": "注册链接已关闭。",
+    "subject": "供应商注册 · Cadastro de fornecedor",
+    "message": "您好！如需成为我们的供应商，请通过以下链接注册，填写公司信息以及提供的产品和服务：\n{{link}}\n\nOlá! Para fornecer para a nossa empresa, faça o cadastro pelo link abaixo, com os dados da empresa e os produtos e serviços que oferece:\n{{link}}"
+  },
+  "signup": {
+    "portal": "供应商注册",
+    "title": "注册您的公司",
+    "intro": "请填写公司信息和供应的产品。采购部门审核后会与您联系。",
+    "companyStep": "公司信息",
+    "contactStep": "联系方式",
+    "email": "邮箱",
+    "telefone": "电话 / WhatsApp",
+    "descriptionHint": "可以用葡萄牙语、中文或两种语言填写。产品与服务至少需要用一种语言填写。",
+    "productsRequired": "请用葡萄牙语或中文填写产品与服务。",
+    "review": "所有注册信息都需经采购部门审核后才会通过。",
+    "submit": "提交注册",
+    "sentTitle": "注册已提交",
+    "sentDescription": "我们已收到 {{fornecedor}} 的注册信息。{{empresa}} 的采购部门将进行审核并与您联系。",
+    "cnpjExists": "该 CNPJ 已注册。如需更新信息，请联系采购部门。",
+    "invalid": "请检查标出的字段后重试。",
+    "tooMany": "短时间内提交次数过多。请等待一分钟后重试。",
+    "invalidTitle": "注册链接不可用",
+    "invalidDescription": "该链接已关闭或已更换。请向采购部门索取新链接。"
   }
 }

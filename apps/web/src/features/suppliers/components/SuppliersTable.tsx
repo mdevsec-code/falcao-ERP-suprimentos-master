@@ -23,7 +23,7 @@ interface SuppliersTableProps {
 }
 
 export function SuppliersTable({ rows, isFetching }: SuppliersTableProps) {
-  const { t } = useTranslation('suppliers');
+  const { t, i18n } = useTranslation('suppliers');
   const navigate = useNavigate();
 
   return (
@@ -58,6 +58,11 @@ export function SuppliersTable({ rows, isFetching }: SuppliersTableProps) {
                 {supplier.nomeFantasia}
               </Link>
               <p className="text-xs text-ink-soft">{supplier.razaoSocial}</p>
+              {productsLine(supplier, i18n.language) && (
+                <p className="mt-0.5 line-clamp-1 max-w-md text-xs text-muted">
+                  {productsLine(supplier, i18n.language)}
+                </p>
+              )}
             </TableCell>
             <TableCell className="whitespace-nowrap font-mono text-xs text-ink-soft">
               {formatCNPJ(supplier.cnpj)}
@@ -85,4 +90,13 @@ export function SuppliersTable({ rows, isFetching }: SuppliersTableProps) {
       </TableBody>
     </Table>
   );
+}
+
+/** Produtos e serviços no idioma da tela, quando houver; senão, no outro idioma. */
+function productsLine(supplier: SupplierSummaryDto, language: string): string | null {
+  const zhFirst = language.startsWith('zh');
+  const [first, second] = zhFirst
+    ? [supplier.produtosServicosZh, supplier.produtosServicos]
+    : [supplier.produtosServicos, supplier.produtosServicosZh];
+  return first || second || null;
 }
