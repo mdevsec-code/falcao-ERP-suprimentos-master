@@ -34,7 +34,7 @@ async function bootstrap() {
   app.enableCors({ origin: corsOrigins.length > 1 ? corsOrigins : corsOrigins[0], credentials: true });
 
   const port = config.get<number>("PORT") ?? 3333;
-  await app.listen(port);
+  await app.listen(port, config.get<string>("HOST") ?? "0.0.0.0");
   // eslint-disable-next-line no-console
   console.log(`Falcão ERP API rodando em http://localhost:${port}/api/v1`);
 }

@@ -3,6 +3,8 @@ import { z } from "zod";
 export const envSchema = z.object({
   DATABASE_URL: z.string().min(1, "DATABASE_URL é obrigatório"),
   PORT: z.coerce.number().default(3333),
+  /** Interface em que a API escuta. Em produção, atrás do Nginx: 127.0.0.1 (só o próprio servidor). */
+  HOST: z.string().default("0.0.0.0"),
   JWT_SECRET: z.string().min(10, "JWT_SECRET é obrigatório"),
   JWT_ACCESS_EXPIRES_IN: z.string().default("15m"),
   JWT_REFRESH_SECRET: z.string().min(10, "JWT_REFRESH_SECRET é obrigatório"),
