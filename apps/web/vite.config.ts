@@ -14,7 +14,8 @@ export default defineConfig({
   },
   build: {
     target: 'es2020',
-    sourcemap: true,
+    // Sem source maps em produção: não publica o código-fonte montado junto com o site.
+    sourcemap: false,
     cssCodeSplit: true,
     reportCompressedSize: false,
     rollupOptions: {
