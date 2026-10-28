@@ -80,7 +80,7 @@
 
 **Suprimentos**
 - **Fornecedores** — cadastro completo (razão social, CNPJ, categoria, localização), contatos, avaliações de desempenho e upload de documentos.
-- **Busca por palavra-chave em português, chinês e inglês** — acha o fornecedor pelo nome, CNPJ, categoria, cidade, **atividades e produtos/serviços** (cadastrados em português e/ou 中文), pelos produtos do catálogo ligados a ele e pelos itens dos catálogos que enviou. Cada palavra é procurada separadamente ("tijolo de cimento"), sem acento nem diferença de plural, e um glossário de suprimentos de obra liga os idiomas: buscar "水泥" acha quem escreveu "cimento", e vice-versa.
+- **Busca por palavra-chave em português, chinês e inglês** — acha o fornecedor pelo nome, CNPJ, categoria, cidade, **atividades e produtos/serviços** (cadastrados em português e/ou 中文), pelos produtos do catálogo ligados a ele, pelos itens dos catálogos que enviou e pelo **histórico** — itens que já cotou com preço, objeto dos contratos e descrição das contas a pagar (assim quem foi cadastrado antes da descrição também aparece). Cada palavra é procurada separadamente ("tijolo de cimento"), sem acento nem diferença de plural, e um glossário de suprimentos de obra liga os idiomas: buscar "水泥" acha quem escreveu "cimento", e vice-versa.
 - **Cadastro pelo próprio fornecedor** — link da empresa (ligar, trocar e desligar em Fornecedores) para o fornecedor preencher dados, contato, atividades e produtos em português e/ou chinês, numa página trilíngue sem login. O cadastro entra **pendente e inativo**, compras é avisado por e-mail e WeChat e aprova ou recusa na ficha.
 - **Banco de produtos** — catálogo por empresa com **disciplina** (Civil, Elétrica, Mecânica, Eletromecânica, Hidráulica, Instrumentação — lista editável), marca e **referência** do fabricante; filtros por disciplina, categoria, marca e fornecedor; histórico de preços com **quantidade, marca, referência e origem** (manual ou cotação) e **foto do produto**, que aparece na lista, na escolha do catálogo e nas solicitações.
 - **Catálogo vivo** — o solicitante escolhe os itens do catálogo (com marca, referência e último preço pago) ao montar o pedido; o que ele descrever à mão, compras inclui no catálogo com um clique, e o item já fica ligado ao produto.
@@ -104,6 +104,7 @@
 
 **Exportação padronizada**
 - Todo arquivo gerado segue o mesmo padrão: **PDF** com logo, título, filete dourado, tabela com cabeçalho na cor da marca, linhas alternadas, total em destaque e rodapé com empresa, "gerado em … por …" e "Página x de y"; **Excel** com o mesmo timbre, cabeçalho congelado e filtrável, valores em R$ e datas formatadas, pronto para imprimir; **CSV** com `;`, vírgula decimal, datas dd/mm/aaaa e BOM (abre direto no Excel). Nome do arquivo: `falcao-<assunto>-<data>`.
+- **Idioma do arquivo** — no menu Exportar, 1º e 2º idioma (português, English, 中文) ou um idioma só; o padrão é **português + chinês** ("Fornecedores / 供应商"), independente do idioma da tela, e a escolha fica lembrada no navegador. Vale para títulos, colunas, situações, categorias, filtros e rodapé em PDF, Excel e CSV; a planilha modelo de catálogo sai com cabeçalhos em português e chinês. Os PDFs embutem a **Noto Sans SC** (licença OFL, subconjunto GB2312 + latim) para mostrar chinês — baixada só no primeiro PDF; cada arquivo leva apenas os caracteres usados.
 - Botão **Exportar** (PDF, Excel, CSV) em Fornecedores, Produtos, Solicitações, Cotações, Planos, Contratos, Contas a pagar e Notas fiscais — sempre o filtro atual inteiro, com os filtros no topo. Documentos em PDF: pedido de cotação do plano, mapa de cotação e **plano de aquisição** (paisagem, com fotos dos itens e o quadro de assinaturas).
 
 **Plataforma**
@@ -123,6 +124,7 @@
 | Estilo e UI | Tailwind CSS 3 sobre tokens em CSS · Radix UI · Lucide · Framer Motion · Recharts |
 | Estado e dados | TanStack Query 5 · Zustand 4 (sessão e preferências) · Axios com refresh token |
 | Formulários | React Hook Form 7 + Zod |
+| Arquivos | jsPDF + jspdf-autotable (fonte Noto Sans SC embutida) · ExcelJS |
 | i18n | i18next + react-i18next (pt-BR, en-US, zh-CN) |
 | **API** (`apps/api`) | NestJS 10 · Passport JWT · class-validator · helmet · throttler |
 | Banco | PostgreSQL 16 · Prisma 5 (mesmo formato do Saúde Ocupacional) |
@@ -393,6 +395,7 @@ Os arquivos são páginas HTML: baixe e abra no navegador (os diagramas usam Mer
 13. **Plano de requisição, portal do fornecedor e exportação padronizada** — plano que consolida solicitações e vira cotação, link aberto com identificação por CNPJ e cadastro pendente, envio de catálogo com planilha modelo e revisão item a item, links públicos assinados por escopo, padrão único de PDF/Excel/CSV (`jspdf` + `jspdf-autotable`) em todas as listas e preparação para hospedagem (proxy, CORS com vários domínios) e roteiro de deploy num VPS da Hostinger com PostgreSQL.
 14. **Plano de aquisição com quatro assinaturas** — estrutura do formulário em papel (采购计划单) trazida para o sistema: número do plano, contato, projeto, itens com especificação, foto, peso, local de uso, setor e data de entrada; assinatura desenhada por etapa (técnico, compras, custos, gerente geral) com registro de IP; tela de aprovadores; fotos no catálogo; PDF do plano com fotos e assinaturas; avisos por e-mail (SMTP) e WeChat (PushPlus), botão "Copiar para o WeChat"; recarga automática quando o navegador está com uma versão anterior ao deploy.
 15. **Fornecedores em dois idiomas** — pedido dos gerentes: busca por palavra-chave (atividades, produtos, catálogo e itens enviados) com glossário português–chinês–inglês e texto de busca normalizado (`searchText`), atividades e produtos/serviços em português e chinês, e link para o fornecedor fazer o próprio cadastro, pendente de aprovação.
+16. **Busca pelo histórico e arquivos bilíngues** — fornecedores antigos, sem descrição, encontrados pelo que já cotaram, contratos e contas a pagar; escolha de um ou dois idiomas em todos os PDFs, planilhas e CSVs (padrão português + chinês) e fonte chinesa embutida nos PDFs.
 
 ---
 
@@ -416,7 +419,7 @@ Em produção em **https://suprimentos.falcaoengenhariasz.com** (VPS da Hostinge
 - Exigir segredos JWT de 32+ caracteres na validação de ambiente de produção.
 
 **Produto**
-- PDFs usam a fonte padrão (Helvetica): com o sistema em chinês (zh-CN), textos em ideogramas saem ilegíveis no PDF — Excel e CSV não têm essa limitação. Embutir uma fonte CJK resolve.
+- Preencher atividades e produtos dos fornecedores já cadastrados (pesquisa pelo nome e CNPJ, revisada por compras).
 - Avisar o comprador por e-mail/WeChat quando um fornecedor responde ou envia catálogo (os avisos de aprovação já existem).
 - Integração com o Google Agenda (assinatura de calendário `.ics` por usuário e convites por e-mail).
 - Fotos de itens e produtos ficam em `/uploads` acessíveis por URL — como os demais anexos.

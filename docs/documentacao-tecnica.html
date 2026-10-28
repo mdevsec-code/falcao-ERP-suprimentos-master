@@ -410,6 +410,7 @@ stateDiagram-v2
       </ul>
 
     </div>
+      <div class="callout"><span class="k">Busca de fornecedores</span><p>Cada fornecedor guarda <code>searchText</code>: nome, CNPJ, categoria, cidade, atividades e produtos/serviços (português e chinês), sem acento e em minúsculas (<code>buildSupplierSearchText</code>, em <code>shared-types</code>). A busca separa as palavras (todas precisam aparecer), tira o plural e usa um glossário português–chinês–inglês ("水泥" = "cimento" = "cement"). Além do texto, procura nos produtos ligados ao fornecedor, nos itens dos catálogos enviados e no histórico: itens que já cotou com preço, objeto dos contratos e descrição das contas a pagar — assim fornecedores sem descrição também aparecem. O fornecedor pode se cadastrar por um link público assinado (<code>/cadastro-fornecedor/:token</code>), e o cadastro fica pendente até compras aprovar.</p></div>
     <div class="sec" id="sq">
       <div class="sec-head"><span class="sec-num">09</span><h2>Cotações e link do fornecedor</h2></div>
       <p>A cotação nasce de uma solicitação aprovada (<code>EM_COMPRAS</code> ou <code>EM_COTACAO</code>): o comprador escolhe os itens, até 20 fornecedores e o prazo de resposta. Cada fornecedor convidado recebe um link próprio, que abre uma página pública com a descrição dos materiais; ele responde preço unitário, marca, referência, disponibilidade, prazo de entrega, condição de pagamento, validade e frete, ou recusa o convite.</p>
@@ -565,6 +566,7 @@ erDiagram
       <div class="sec-head"><span class="sec-num">11</span><h2>Padrão de exportação (PDF, Excel, CSV)</h2></div>
       <p>Tudo o que o sistema gera sai de <code>apps/web/src/utils/export</code>: identidade (<code>brand.ts</code> — cores da logo, logo reduzida, "gerado em/por", nome do arquivo <code>falcao-&lt;assunto&gt;-&lt;data&gt;</code>), Excel (<code>xlsx.ts</code> — timbre com logo, cabeçalho preto, linhas alternadas, total em dourado, cabeçalho congelado e repetido na impressão, rodapé com "Página x de y") e PDF (<code>pdf.ts</code> — cabeçalho com logo e filete dourado em toda página, seções, fichas de campos, tabelas que quebram página e rodapé com empresa, data/autor e paginação). As bibliotecas (<code>exceljs</code>, <code>jspdf</code>, <code>jspdf-autotable</code>) só carregam quando alguém exporta.</p>
       <p>As listas descrevem o relatório uma vez (<code>ReportDefinition</code>: título, filtros, colunas com tipo <code>money</code>/<code>date</code>/<code>number</code>…, total) e <code>exportReport</code> gera o CSV, o Excel ou o PDF; <code>fetchAllPages</code> busca todas as páginas do filtro atual. O botão <code>ExportMenu</code> é o mesmo em todas as telas.</p>
+      <p><strong>Idioma do arquivo</strong> (<code>language.ts</code>): o menu escolhe o 1º e o 2º idioma (ou um só), padrão português + chinês, guardado no navegador (<code>falcao:export-languages</code>). Durante a exportação, <code>withExportLanguages</code> ativa os idiomas; os relatórios traduzem com <code>xt(chave)</code> ("Fornecedores / 供应商"), os rótulos de enum com <code>xlabel(LABELS, valor)</code> e o nome do arquivo com <code>fileT</code> (primeiro idioma com letras latinas). O idioma da tela não muda.</p>
       <div class="table-wrap"><table>
         <thead><tr><th>Arquivo</th><th>Formatos</th></tr></thead>
         <tbody>
@@ -574,7 +576,7 @@ erDiagram
           <tr><td>Planilha modelo de catálogo (com aba "Como preencher")</td><td>Excel</td></tr>
         </tbody>
       </table></div>
-      <div class="callout"><span class="k">Segurança e limites</span><p>O CSV neutraliza texto que o Excel executaria como fórmula; no Excel, texto do usuário entra sempre como valor. O PDF usa a fonte padrão (Helvetica): textos em chinês ficam ilegíveis — Excel e CSV não têm essa limitação.</p></div>
+      <div class="callout"><span class="k">Segurança e limites</span><p>O CSV neutraliza texto que o Excel executaria como fórmula; no Excel, texto do usuário entra sempre como valor. O PDF embute a <strong>Noto Sans SC</strong> (licença OFL, em <code>apps/web/src/assets/fonts</code>, subconjunto GB2312 + latim, ~2,2 MB por peso): baixada no primeiro PDF e guardada; o jsPDF grava no arquivo só os caracteres usados (~90 KB por PDF).</p></div>
     </div>
     <div class="sec" id="s8">
       <div class="sec-head"><span class="sec-num">12</span><h2>Financeiro e integrações</h2></div>
