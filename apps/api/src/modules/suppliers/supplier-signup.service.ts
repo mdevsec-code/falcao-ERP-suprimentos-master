@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { Prisma } from "@prisma/client";
 import {
@@ -14,9 +14,6 @@ import { PrismaService } from "../../database/prisma.service";
 import { MailService } from "../mail/mail.service";
 import { WechatService } from "../mail/wechat.service";
 import { PublicSupplierSignupDto } from "./dto/public-supplier-signup.dto";
-
-export const SIGNUP_CNPJ_EXISTS_MESSAGE =
-  "Este CNPJ já está cadastrado. Para atualizar os dados da empresa, fale com o setor de compras.";
 
 /**
  * Cadastro feito pelo próprio fornecedor, por um link da empresa (sem login).
@@ -73,9 +70,15 @@ export class SupplierSignupService {
 
     const existing = await this.prisma.supplier.findFirst({
       where: { companyId: company.id, cnpj: { in: [cnpjDigits(dto.cnpj), formatCnpjMask(dto.cnpj)] } },
-      select: { id: true },
+      select: { id: true, nomeFantasia: true, razaoSocial: true, cnpj: true },
     });
-    if (existing) throw new ConflictException(SIGNUP_CNPJ_EXISTS_MESSAGE);
+    // CNPJ já cadastrado: a resposta é a mesma de um cadastro novo — senão qualquer
+    // pessoa descobriria quem é fornecedor testando CNPJs. Nada é alterado; compras
+    // recebe os dados enviados para conferir pelo contato que já tem.
+    if (existing) {
+      void this.notifyExistingSignup(company.id, existing, dto);
+      return { fornecedor: dto.nomeFantasia.trim() };
+    }
 
     const fields = {
       razaoSocial: dto.razaoSocial.trim(),
@@ -110,8 +113,9 @@ export class SupplierSignupService {
       });
       supplierId = supplier.id;
     } catch (error) {
+      // Dois envios juntos com o mesmo CNPJ: o segundo recebe a mesma resposta.
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
-        throw new ConflictException(SIGNUP_CNPJ_EXISTS_MESSAGE);
+        return { fornecedor: dto.nomeFantasia.trim() };
       }
       throw error;
     }
@@ -121,6 +125,44 @@ export class SupplierSignupService {
   }
 
   // ── Internos ──────────────────────────────────────────────────────────────
+
+  /** Alguém mandou o autocadastro de um CNPJ que já é fornecedor: compras confere. */
+  private async notifyExistingSignup(
+    companyId: string,
+    supplier: { id: string; nomeFantasia: string; razaoSocial: string; cnpj: string },
+    dto: PublicSupplierSignupDto,
+  ): Promise<void> {
+    const recipients = await this.prisma.forCompany(companyId).user.findMany({
+      where: { role: { in: ["BUYER", "ADMIN"] }, isActive: true },
+      select: { email: true, wechatToken: true },
+    });
+    const url = this.mail.link(`/fornecedores/${supplier.id}`);
+    this.mail.send({
+      to: recipients.map((user) => user.email),
+      subject: `Cadastro repetido: ${supplier.nomeFantasia}`,
+      heading: "Autocadastro de um CNPJ que já é fornecedor",
+      paragraphs: [
+        `Alguém enviou o formulário de cadastro com o CNPJ de ${supplier.nomeFantasia}. O cadastro existente não foi alterado.`,
+        "Se for o próprio fornecedor querendo atualizar os dados, confirme pelo contato que já está no cadastro antes de mudar qualquer coisa.",
+      ],
+      details: [
+        ["CNPJ", supplier.cnpj],
+        ["Nome informado", dto.nomeFantasia.trim()],
+        ["Responsável informado", dto.responsavel.trim()],
+        ["E-mail informado", dto.email.trim()],
+        ["Telefone informado", dto.telefone.trim()],
+      ],
+      action: { label: "Abrir fornecedor", url },
+    });
+    this.wechat.send(
+      recipients.map((user) => user.wechatToken),
+      {
+        title: `Cadastro repetido: ${supplier.nomeFantasia} · 重复注册`,
+        lines: [`${supplier.razaoSocial} — CNPJ ${supplier.cnpj}`, "O cadastro existente não foi alterado · 现有资料未更改"],
+        action: { label: "Abrir · 打开", url },
+      },
+    );
+  }
 
   /** Compras (e administradores) recebem o aviso por e-mail e, se ligado, WeChat. */
   private async notifyBuyers(

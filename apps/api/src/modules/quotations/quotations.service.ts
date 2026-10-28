@@ -540,7 +540,9 @@ export class QuotationsService {
   async publicOpenJoin(token: string, dto: PublicSupplierIdentityDto): Promise<PublicOpenQuotationJoinDto> {
     const quotation = await this.quotationByOpenToken(token);
     this.assertAcceptingAnswers(quotation);
-    const { supplier } = await this.supplierSelfService.resolveOrRegister(quotation.companyId, dto);
+    const { supplier } = await this.supplierSelfService.resolveOrRegister(quotation.companyId, dto, {
+      inviteOnly: { context: `cotação nº ${quotation.numero}`, path: `/cotacoes/${quotation.id}` },
+    });
     const existing = await this.prisma.quotationSupplier.findUnique({
       where: { quotationId_supplierId: { quotationId: quotation.id, supplierId: supplier.id } },
     });
