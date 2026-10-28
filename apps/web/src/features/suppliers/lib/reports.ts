@@ -1,11 +1,11 @@
 import type { SupplierSummaryDto } from '@falcao-erp/shared-types';
 
-import i18n from '@/i18n';
+import { fileT, xlabel, xt } from '@/utils/export/language';
 import { SUPPLIER_CATEGORY_LABELS } from '@/constants/enums';
 import { formatCNPJ } from '@/utils/format';
 import type { ReportDefinition } from '@/utils/export/report';
 
-const t = (key: string) => i18n.t(key);
+const t = (key: string) => xt(key);
 
 /** Fornecedores do filtro atual, no relatório padrão (PDF, Excel ou CSV). */
 export function suppliersReport(
@@ -16,7 +16,7 @@ export function suppliersReport(
     title: t('suppliers:page.title'),
     subtitle: t('suppliers:page.eyebrow'),
     meta,
-    fileBase: t('suppliers:report.fileBase'),
+    fileBase: fileT('suppliers:report.fileBase'),
     orientation: 'landscape',
     rows,
     columns: [
@@ -25,7 +25,7 @@ export function suppliersReport(
       { header: t('suppliers:report.cnpj'), value: (s) => formatCNPJ(s.cnpj), width: 20 },
       {
         header: t('suppliers:report.categoria'),
-        value: (s) => SUPPLIER_CATEGORY_LABELS[s.categoria],
+        value: (s) => xlabel(SUPPLIER_CATEGORY_LABELS, s.categoria),
         width: 22,
       },
       { header: t('suppliers:report.cidade'), value: (s) => `${s.cidade}/${s.estado}`, width: 20 },

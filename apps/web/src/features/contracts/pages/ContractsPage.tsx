@@ -9,6 +9,7 @@ import {
   fetchAllPages,
   type ExportFormat,
 } from '@/utils/export/report';
+import { xlabel, xt } from '@/utils/export/language';
 import { CONTRACT_STATUS_LABELS, DEADLINE_STATE_LABELS } from '@/constants/enums';
 import { contractsApi } from '../services/contracts.api';
 import { contractsReport } from '../lib/reports';
@@ -93,9 +94,15 @@ export function ContractsPage() {
       return;
     }
     const meta = describeFilters([
-      [t('contracts:report.search'), debouncedSearch],
-      [t('contracts:report.status'), filters.status && CONTRACT_STATUS_LABELS[filters.status]],
-      [t('contracts:report.deadline'), filters.prazo && DEADLINE_STATE_LABELS[filters.prazo]],
+      [xt('contracts:report.search'), debouncedSearch],
+      [
+        xt('contracts:report.status'),
+        filters.status && xlabel(CONTRACT_STATUS_LABELS, filters.status),
+      ],
+      [
+        xt('contracts:report.deadline'),
+        filters.prazo && xlabel(DEADLINE_STATE_LABELS, filters.prazo),
+      ],
     ]);
     await exportReport(contractsReport(all, meta), format);
   }

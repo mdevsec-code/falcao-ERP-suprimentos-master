@@ -12,6 +12,7 @@ import {
   fetchAllPages,
   type ExportFormat,
 } from '@/utils/export/report';
+import { xlabel, xt } from '@/utils/export/language';
 import { suppliersApi } from '../services/suppliers.api';
 import { suppliersReport } from '../lib/reports';
 
@@ -64,13 +65,13 @@ export function SuppliersPage() {
       return;
     }
     const meta = describeFilters([
-      [t('suppliers:report.search'), debouncedSearch],
+      [xt('suppliers:report.search'), debouncedSearch],
       [
-        t('suppliers:report.categoria'),
-        filters.categoria && SUPPLIER_CATEGORY_LABELS[filters.categoria],
+        xt('suppliers:report.categoria'),
+        filters.categoria && xlabel(SUPPLIER_CATEGORY_LABELS, filters.categoria),
       ],
-      [t('suppliers:report.estado'), filters.estado],
-      [null, onlyPending && t('suppliers:registration.onlyPending')],
+      [xt('suppliers:report.estado'), filters.estado],
+      [null, onlyPending && xt('suppliers:registration.onlyPending')],
     ]);
     await exportReport(suppliersReport(all, meta), format);
   }

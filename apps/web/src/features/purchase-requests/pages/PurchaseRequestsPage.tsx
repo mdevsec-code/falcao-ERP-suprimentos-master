@@ -9,6 +9,7 @@ import {
   fetchAllPages,
   type ExportFormat,
 } from '@/utils/export/report';
+import { xlabel, xt } from '@/utils/export/language';
 import { PURCHASE_REQUEST_STATUS_LABELS } from '@/constants/enums';
 import { purchaseRequestsApi } from '../services/purchaseRequests.api';
 import { purchaseRequestsReport } from '../lib/reports';
@@ -92,10 +93,10 @@ export function PurchaseRequestsPage() {
       return;
     }
     const meta = describeFilters([
-      [t('purchaseRequests:report.search'), debouncedSearch],
+      [xt('purchaseRequests:report.search'), debouncedSearch],
       [
-        t('purchaseRequests:report.status'),
-        filters.status && PURCHASE_REQUEST_STATUS_LABELS[filters.status],
+        xt('purchaseRequests:report.status'),
+        filters.status && xlabel(PURCHASE_REQUEST_STATUS_LABELS, filters.status),
       ],
     ]);
     await exportReport(purchaseRequestsReport(all, meta), format);

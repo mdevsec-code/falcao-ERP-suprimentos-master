@@ -9,6 +9,7 @@ import {
   fetchAllPages,
   type ExportFormat,
 } from '@/utils/export/report';
+import { xlabel, xt } from '@/utils/export/language';
 import { quotationsApi } from '../services/quotations.api';
 import { quotationsReport } from '../lib/reports';
 import { CalendarClock, CheckCircle2, ChevronRight, Hourglass, Scale, Search } from 'lucide-react';
@@ -75,8 +76,8 @@ export function QuotationsPage() {
       return;
     }
     const meta = describeFilters([
-      [t('quotations:filters.search'), debouncedSearch],
-      [t('quotations:filters.status'), status && QUOTATION_STATUS_LABELS[status]],
+      [xt('quotations:filters.search'), debouncedSearch],
+      [xt('quotations:filters.status'), status && xlabel(QUOTATION_STATUS_LABELS, status)],
     ]);
     await exportReport(quotationsReport(all, meta), format);
   }

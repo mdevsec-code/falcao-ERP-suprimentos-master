@@ -1,8 +1,9 @@
 import type { jsPDF } from 'jspdf';
 import type { CellHookData, RowInput, UserOptions } from 'jspdf-autotable';
 
-import i18n from '@/i18n';
 import { downloadBlob } from '@/utils/csv';
+import fontRegularUrl from '@/assets/fonts/NotoSansSC-Regular.ttf?url';
+import fontBoldUrl from '@/assets/fonts/NotoSansSC-Bold.ttf?url';
 import {
   EXPORT_COLORS,
   LOGO_RATIO,
@@ -11,6 +12,7 @@ import {
   loadLogoDataUrl,
   rgb,
 } from './brand';
+import { xt } from './language';
 
 export interface PdfReportOptions {
   title: string;
@@ -36,6 +38,33 @@ export interface PdfTableOptions {
   /** Ex.: desenhar a miniatura da foto dentro da célula. */
   didDrawCell?: (data: CellHookData) => void;
   fontSize?: number;
+}
+
+/**
+ * Noto Sans SC (licença OFL, em `assets/fonts`): latim e ideogramas na mesma
+ * fonte, para o texto bilíngue e nomes em chinês. A Helvetica do jsPDF não tem chinês.
+ */
+export const PDF_FONT = 'NotoSansSC';
+
+let fontPromise: Promise<[string, string]> | null = null;
+
+/** As duas fontes em base64 — baixadas no primeiro PDF e guardadas para os seguintes. */
+function loadPdfFonts(): Promise<[string, string]> {
+  const toBase64 = async (url: string) => {
+    const bytes = new Uint8Array(await (await fetch(url)).arrayBuffer());
+    let binary = '';
+    for (let index = 0; index < bytes.length; index += 0x8000) {
+      binary += String.fromCharCode(...bytes.subarray(index, index + 0x8000));
+    }
+    return btoa(binary);
+  };
+  fontPromise ??= Promise.all([toBase64(fontRegularUrl), toBase64(fontBoldUrl)]).catch(
+    (error: unknown) => {
+      fontPromise = null;
+      throw error;
+    },
+  );
+  return fontPromise;
 }
 
 const MARGIN = 14;
@@ -83,7 +112,7 @@ export class PdfReport {
     const visible = lines.filter((line): line is string => !!line);
     if (visible.length === 0) return this;
     this.doc
-      .setFont('helvetica', 'normal')
+      .setFont(PDF_FONT, 'normal')
       .setFontSize(9)
       .setTextColor(...rgb(EXPORT_COLORS.muted));
     for (const line of visible) {
@@ -102,7 +131,7 @@ export class PdfReport {
     this.y += 2;
     this.doc.setFillColor(...rgb(EXPORT_COLORS.gold)).rect(MARGIN, this.y - 3.6, 1.2, 4.8, 'F');
     this.doc
-      .setFont('helvetica', 'bold')
+      .setFont(PDF_FONT, 'bold')
       .setFontSize(11)
       .setTextColor(...rgb(EXPORT_COLORS.ink));
     this.doc.text(title, MARGIN + 3, this.y);
@@ -124,12 +153,12 @@ export class PdfReport {
       chunk.forEach(([label, value], col) => {
         const x = MARGIN + col * colWidth;
         this.doc
-          .setFont('helvetica', 'normal')
+          .setFont(PDF_FONT, 'normal')
           .setFontSize(7.5)
           .setTextColor(...rgb(EXPORT_COLORS.muted));
         this.doc.text(label.toUpperCase(), x, this.y);
         this.doc
-          .setFont('helvetica', 'normal')
+          .setFont(PDF_FONT, 'normal')
           .setFontSize(9.5)
           .setTextColor(...rgb(EXPORT_COLORS.ink));
         this.doc.text(this.doc.splitTextToSize(value, colWidth - 4) as string[], x, this.y + 4.2);
@@ -144,7 +173,7 @@ export class PdfReport {
   paragraph(text: string | null | undefined): this {
     if (!text?.trim()) return this;
     this.doc
-      .setFont('helvetica', 'normal')
+      .setFont(PDF_FONT, 'normal')
       .setFontSize(9.5)
       .setTextColor(...rgb(EXPORT_COLORS.ink));
     const lines = this.doc.splitTextToSize(text.trim(), this.contentWidth) as string[];
@@ -175,7 +204,7 @@ export class PdfReport {
       margin: { top: HEADER_BOTTOM + 4, left: MARGIN, right: MARGIN, bottom: FOOTER_HEIGHT + 4 },
       theme: 'grid',
       styles: {
-        font: 'helvetica',
+        font: PDF_FONT,
         fontSize: options.fontSize ?? 8,
         cellPadding: 1.6,
         textColor: rgb(EXPORT_COLORS.ink),
@@ -228,12 +257,12 @@ export class PdfReport {
       this.doc.setDrawColor(...rgb(EXPORT_COLORS.border)).setLineWidth(0.2);
       this.doc.line(MARGIN, y - 4, this.pageWidth - MARGIN, y - 4);
       this.doc
-        .setFont('helvetica', 'normal')
+        .setFont(PDF_FONT, 'normal')
         .setFontSize(7)
         .setTextColor(...rgb(EXPORT_COLORS.muted));
       this.doc.text(exportIssuer(), MARGIN, y);
       this.doc.text(generatedLine(), this.pageWidth / 2, y, { align: 'center' });
-      this.doc.text(i18n.t('common:export.page', { page, total }), this.pageWidth - MARGIN, y, {
+      this.doc.text(xt('common:export.page', { page, total }), this.pageWidth - MARGIN, y, {
         align: 'right',
       });
     }
@@ -256,13 +285,13 @@ export class PdfReport {
     }
     const maxWidth = this.pageWidth - MARGIN - textX;
     doc
-      .setFont('helvetica', 'bold')
+      .setFont(PDF_FONT, 'bold')
       .setFontSize(13)
       .setTextColor(...rgb(EXPORT_COLORS.ink));
     doc.text((doc.splitTextToSize(this.options.title, maxWidth) as string[])[0] ?? '', textX, 15);
     if (this.options.subtitle) {
       doc
-        .setFont('helvetica', 'normal')
+        .setFont(PDF_FONT, 'normal')
         .setFontSize(9)
         .setTextColor(...rgb(EXPORT_COLORS.muted));
       doc.text(
@@ -278,10 +307,11 @@ export class PdfReport {
 
 /** O jsPDF (e o plugin de tabela) só é carregado quando alguém gera um PDF. */
 export async function createPdfReport(options: PdfReportOptions): Promise<PdfReport> {
-  const [{ jsPDF }, { autoTable }, logo] = await Promise.all([
+  const [{ jsPDF }, { autoTable }, logo, [regular, bold]] = await Promise.all([
     import('jspdf'),
     import('jspdf-autotable'),
     loadLogoDataUrl(),
+    loadPdfFonts(),
   ]);
   const doc = new jsPDF({
     orientation: options.orientation ?? 'portrait',
@@ -289,6 +319,11 @@ export async function createPdfReport(options: PdfReportOptions): Promise<PdfRep
     format: 'a4',
     compress: true,
   });
+  doc.addFileToVFS('NotoSansSC-Regular.ttf', regular);
+  doc.addFont('NotoSansSC-Regular.ttf', PDF_FONT, 'normal');
+  doc.addFileToVFS('NotoSansSC-Bold.ttf', bold);
+  doc.addFont('NotoSansSC-Bold.ttf', PDF_FONT, 'bold');
+  doc.setFont(PDF_FONT, 'normal');
   doc.setProperties({
     title: options.title,
     subject: options.subtitle ?? '',

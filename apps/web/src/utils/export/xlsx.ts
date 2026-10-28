@@ -1,6 +1,6 @@
 import type { Font, Workbook, Worksheet } from 'exceljs';
 
-import i18n from '@/i18n';
+import { xt } from './language';
 import { downloadBlob } from '@/utils/csv';
 import { EXPORT_COLORS, exportIssuer, generatedLine, loadLogoDataUrl } from './brand';
 
@@ -100,7 +100,7 @@ export async function addLetterhead(
   sheet.headerFooter = {
     oddHeader: `&L&8${escape(exportIssuer())}&R&8${escape(options.title)}`,
     oddFooter: `&L&8${escape(generatedLine())}&R&8${escape(
-      i18n.t('common:export.page', { page: '&P', total: '&N' }),
+      xt('common:export.page', { page: '&P', total: '&N' }),
     )}`,
   };
   return row;

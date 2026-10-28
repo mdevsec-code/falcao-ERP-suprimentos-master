@@ -144,7 +144,13 @@
     "records_other": "{{count}} registros",
     "error": "Não foi possível gerar o arquivo.",
     "empty": "Nada para exportar com os filtros atuais.",
-    "filters": "Filtros: {{filters}}"
+    "filters": "Filtros: {{filters}}",
+    "language": {
+      "title": "Idioma do arquivo",
+      "first": "1º idioma",
+      "second": "2º idioma",
+      "none": "Nenhum"
+    }
   },
   "signature": {
     "areaLabel": "Área para desenhar a assinatura",

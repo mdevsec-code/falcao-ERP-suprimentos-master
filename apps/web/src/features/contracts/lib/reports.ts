@@ -1,10 +1,10 @@
 import type { ContractSummaryDto } from '@falcao-erp/shared-types';
 
-import i18n from '@/i18n';
+import { fileT, xlabel, xt } from '@/utils/export/language';
 import { CONTRACT_STATUS_LABELS, DEADLINE_STATE_LABELS } from '@/constants/enums';
 import type { ReportDefinition } from '@/utils/export/report';
 
-const t = (key: string) => i18n.t(key);
+const t = (key: string) => xt(key);
 
 /** Contratos do filtro atual, com vigência e prazo — relatório padrão. */
 export function contractsReport(
@@ -15,7 +15,7 @@ export function contractsReport(
     title: t('contracts:page.title'),
     subtitle: t('contracts:page.eyebrow'),
     meta,
-    fileBase: t('contracts:report.fileBase'),
+    fileBase: fileT('contracts:report.fileBase'),
     orientation: 'landscape',
     rows,
     columns: [
@@ -33,12 +33,12 @@ export function contractsReport(
       { header: t('contracts:report.end'), value: (c) => c.dataFim, type: 'date' },
       {
         header: t('contracts:report.status'),
-        value: (c) => CONTRACT_STATUS_LABELS[c.status],
+        value: (c) => xlabel(CONTRACT_STATUS_LABELS, c.status),
         width: 12,
       },
       {
         header: t('contracts:report.deadline'),
-        value: (c) => (c.prazo ? DEADLINE_STATE_LABELS[c.prazo] : null),
+        value: (c) => (c.prazo ? xlabel(DEADLINE_STATE_LABELS, c.prazo) : null),
         width: 14,
       },
       {

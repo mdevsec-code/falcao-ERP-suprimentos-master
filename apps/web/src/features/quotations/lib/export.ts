@@ -1,6 +1,6 @@
 import type { QuotationDetailDto } from '@falcao-erp/shared-types';
 
-import i18n from '@/i18n';
+import { fileT, xlabel, xt } from '@/utils/export/language';
 import { QUOTATION_STATUS_LABELS, QUOTATION_SUPPLIER_STATUS_LABELS } from '@/constants/enums';
 import { EXPORT_COLORS, exportFileName, rgb } from '@/utils/export/brand';
 import { displayValue } from '@/utils/export/report';
@@ -10,7 +10,7 @@ const n = (value: string | null | undefined) =>
   value === null || value === undefined ? null : Number(value);
 
 const t = (key: string, options?: Record<string, unknown>) =>
-  i18n.t(`quotations:export.${key}`, options);
+  xt(`quotations:export.${key}`, options);
 
 /** Origem da cotação (solicitação ou plano) e linha de situação/prazo/obra — iguais no Excel e no PDF. */
 function context(quotation: QuotationDetailDto) {
@@ -20,7 +20,7 @@ function context(quotation: QuotationDetailDto) {
       ? t('plan', { numero: quotation.plan.numero, titulo: quotation.plan.titulo })
       : null;
   const meta = t('meta', {
-    status: QUOTATION_STATUS_LABELS[quotation.status],
+    status: xlabel(QUOTATION_STATUS_LABELS, quotation.status),
     prazo: formatDateOnly(quotation.prazoResposta),
     centro: quotation.purchaseRequest?.costCenter ?? quotation.plan?.obra ?? '—',
   });
@@ -45,7 +45,7 @@ function supplierSummary(quotation: QuotationDetailDto) {
         supplier.prazoEntregaDias === null ? null : t('days', { count: supplier.prazoEntregaDias }),
       pagamento: supplier.condicaoPagamento,
       validade: formatDateOnly(supplier.validadeProposta),
-      status: QUOTATION_SUPPLIER_STATUS_LABELS[supplier.status],
+      status: xlabel(QUOTATION_SUPPLIER_STATUS_LABELS, supplier.status),
     };
   });
 }
@@ -217,7 +217,7 @@ async function exportXlsx(quotation: QuotationDetailDto): Promise<void> {
 
   await xlsx.saveWorkbook(
     workbook,
-    exportFileName(t('fileName', { numero: quotation.numero }), 'xlsx'),
+    exportFileName(fileT('quotations:export.fileName', { numero: quotation.numero }), 'xlsx'),
   );
 }
 
@@ -335,5 +335,7 @@ async function exportPdf(quotation: QuotationDetailDto): Promise<void> {
     3,
   );
   pdf.meta([t('legend')]);
-  pdf.save(exportFileName(t('fileName', { numero: quotation.numero }), 'pdf'));
+  pdf.save(
+    exportFileName(fileT('quotations:export.fileName', { numero: quotation.numero }), 'pdf'),
+  );
 }

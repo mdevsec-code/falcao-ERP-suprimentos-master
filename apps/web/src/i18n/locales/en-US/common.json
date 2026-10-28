@@ -144,7 +144,13 @@
     "records_other": "{{count}} records",
     "error": "Could not generate the file.",
     "empty": "Nothing to export with the current filters.",
-    "filters": "Filters: {{filters}}"
+    "filters": "Filters: {{filters}}",
+    "language": {
+      "title": "File language",
+      "first": "1st",
+      "second": "2nd",
+      "none": "None"
+    }
   },
   "signature": {
     "areaLabel": "Area to draw your signature",

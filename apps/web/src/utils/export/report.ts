@@ -1,6 +1,7 @@
 import type { PaginatedResult } from '@falcao-erp/shared-types';
 
 import i18n from '@/i18n';
+import { xt } from './language';
 import { csvNumber, downloadText, toCsv } from '@/utils/csv';
 import { formatCurrencyBRL, formatDateOnly, formatDateTime, parseDateOnly } from '@/utils/format';
 import { exportFileName } from './brand';
@@ -115,7 +116,7 @@ async function exportXlsx<T>(definition: ReportDefinition<T>): Promise<void> {
     subtitle: definition.subtitle,
     meta: [
       ...(definition.meta ?? []),
-      i18n.t('common:export.records', { count: definition.rows.length }),
+      xt('common:export.records', { count: definition.rows.length }),
     ],
     lastColumn,
     orientation: definition.orientation,
@@ -167,7 +168,7 @@ async function exportXlsx<T>(definition: ReportDefinition<T>): Promise<void> {
   const sums = totals(definition);
   if (sums && definition.rows.length > 0) {
     const rowNumber = headerRow + definition.rows.length + 1;
-    sheet.getCell(rowNumber, 1).value = i18n.t('common:export.total');
+    sheet.getCell(rowNumber, 1).value = xt('common:export.total');
     sums.forEach((sum, index) => {
       if (sum === null) return;
       const cell = sheet.getCell(rowNumber, index + 1);
@@ -197,7 +198,7 @@ async function exportPdf<T>(definition: ReportDefinition<T>): Promise<void> {
   });
   pdf.meta([
     ...(definition.meta ?? []),
-    i18n.t('common:export.records', { count: definition.rows.length }),
+    xt('common:export.records', { count: definition.rows.length }),
   ]);
   const sums = totals(definition);
   pdf.table({
@@ -212,7 +213,7 @@ async function exportPdf<T>(definition: ReportDefinition<T>): Promise<void> {
       ? [
           sums.map((sum, index) =>
             index === 0 && sum === null
-              ? i18n.t('common:export.total')
+              ? xt('common:export.total')
               : sum === null
                 ? ''
                 : displayValue(sum, definition.columns[index]?.type),
@@ -246,7 +247,7 @@ export function describeFilters(
         typeof pair[1] === 'string' && pair[1].trim() !== '',
     )
     .map(([label, value]) => (label ? `${label}: ${value}` : value));
-  return parts.length > 0 ? [i18n.t('common:export.filters', { filters: parts.join(' · ') })] : [];
+  return parts.length > 0 ? [xt('common:export.filters', { filters: parts.join(' · ') })] : [];
 }
 
 /**

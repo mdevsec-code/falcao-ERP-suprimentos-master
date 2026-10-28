@@ -1,6 +1,6 @@
 import type { RequisitionPlanDetailDto, RequisitionPlanSummaryDto } from '@falcao-erp/shared-types';
 
-import i18n from '@/i18n';
+import { fileT, xlabel, xt } from '@/utils/export/language';
 import { brand } from '@/config/brand';
 import { QUOTATION_STATUS_LABELS, REQUISITION_PLAN_STATUS_LABELS } from '@/constants/enums';
 import { openQuotationLink } from '@/features/quotations/lib/share';
@@ -8,7 +8,7 @@ import { exportFileName } from '@/utils/export/brand';
 import { displayValue, type ReportDefinition } from '@/utils/export/report';
 import { formatDateOnly } from '@/utils/format';
 
-const t = (key: string, options?: Record<string, unknown>) => i18n.t(`plans:${key}`, options);
+const t = (key: string, options?: Record<string, unknown>) => xt(`plans:${key}`, options);
 
 /**
  * Pedido de cotação em PDF — o documento que vai para o fornecedor: itens
@@ -63,7 +63,7 @@ export async function exportPlanRequestPdf(plan: RequisitionPlanDetailDto): Prom
   }
   pdf.meta([t('pdf.privacy')]);
 
-  pdf.save(exportFileName(t('pdf.fileBase', { numero: plan.numero }), 'pdf'));
+  pdf.save(exportFileName(fileT('plans:pdf.fileBase', { numero: plan.numero }), 'pdf'));
 }
 
 /** Lista de planos (filtro atual) para o relatório padrão em PDF, Excel ou CSV. */
@@ -75,7 +75,7 @@ export function plansReport(
     title: t('page.title'),
     subtitle: t('page.eyebrow'),
     meta,
-    fileBase: t('report.fileBase'),
+    fileBase: fileT('plans:report.fileBase'),
     orientation: 'landscape',
     rows,
     columns: [
@@ -84,7 +84,7 @@ export function plansReport(
       { header: t('table.workSite'), value: (p) => p.obra, width: 20 },
       {
         header: t('table.status'),
-        value: (p) => REQUISITION_PLAN_STATUS_LABELS[p.status],
+        value: (p) => xlabel(REQUISITION_PLAN_STATUS_LABELS, p.status),
         width: 12,
       },
       { header: t('table.deadline'), value: (p) => p.prazoResposta, type: 'date', width: 12 },
@@ -93,7 +93,7 @@ export function plansReport(
         header: t('table.quotation'),
         value: (p) =>
           p.quotation
-            ? `#${p.quotation.numero} · ${QUOTATION_STATUS_LABELS[p.quotation.status]}`
+            ? `#${p.quotation.numero} · ${xlabel(QUOTATION_STATUS_LABELS, p.quotation.status)}`
             : null,
         width: 18,
       },

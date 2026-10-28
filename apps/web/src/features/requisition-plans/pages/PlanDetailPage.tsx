@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
 import {
   ArrowLeft,
   Ban,
   CalendarClock,
-  FileDown,
   HardHat,
   Info,
   Pencil,
@@ -20,6 +18,7 @@ import { InfoTile } from '@/components/data-display/InfoTile';
 import { ErrorState } from '@/components/feedback/ErrorState';
 import { PageSkeleton } from '@/components/feedback/PageSkeleton';
 import { ConfirmDialog } from '@/components/common/ConfirmDialog';
+import { ExportMenu } from '@/components/common/ExportMenu';
 import { Button } from '@/components/ui/Button';
 import { PERMISSIONS } from '@/constants/permissions';
 import { ROUTE_PATHS, routeTo } from '@/constants/routes';
@@ -28,7 +27,6 @@ import { PurchaseRequestStatusBadge } from '@/features/purchase-requests/compone
 import { QuotationStatusBadge } from '@/features/quotations/components/QuotationBadges';
 import { OpenLinkCard } from '@/features/quotations/components/OpenLinkCard';
 import { useDisableOpenLink, useEnableOpenLink } from '@/features/quotations/hooks/useQuotations';
-import { getErrorMessage } from '@/services/http/errors';
 import { formatDateOnly, formatDateTime } from '@/utils/format';
 import { useCancelPlan, usePlan } from '../hooks/usePlans';
 import { exportPlanRequestPdf } from '../lib/exports';
@@ -48,7 +46,6 @@ export function PlanDetailPage() {
   const disableOpenLink = useDisableOpenLink(plan?.quotation?.id ?? '');
   const [launchOpen, setLaunchOpen] = useState(false);
   const [confirmCancel, setConfirmCancel] = useState(false);
-  const [exporting, setExporting] = useState(false);
 
   if (isLoading) return <PageSkeleton tiles={4} />;
   if (isError || !plan) {
@@ -70,18 +67,6 @@ export function PlanDetailPage() {
   const isDraft = plan.status === 'RASCUNHO';
   const quotation = plan.quotation;
 
-  async function handlePdf() {
-    if (!plan) return;
-    setExporting(true);
-    try {
-      await exportPlanRequestPdf(plan);
-    } catch (error) {
-      toast.error(getErrorMessage(error, t('common:export.error')));
-    } finally {
-      setExporting(false);
-    }
-  }
-
   const refreshAfterLink = { onSuccess: () => void refetch() };
 
   return (
@@ -102,14 +87,11 @@ export function PlanDetailPage() {
             >
               {t('plans:detail.back')}
             </Button>
-            <Button
-              variant="outline"
-              leftIcon={<FileDown className="h-4 w-4" />}
-              onClick={() => void handlePdf()}
-              isLoading={exporting}
-            >
-              {t('plans:detail.pdf')}
-            </Button>
+            <ExportMenu
+              formats={['pdf']}
+              label={t('plans:detail.pdf')}
+              onExport={() => exportPlanRequestPdf(plan)}
+            />
             {quotation && (
               <Button
                 variant="outline"

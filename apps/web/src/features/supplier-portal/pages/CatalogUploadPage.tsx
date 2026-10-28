@@ -13,6 +13,7 @@ import { MAX_UPLOAD_BYTES } from '@/constants/uploads';
 import { publicCatalogsApi } from '@/features/supplier-catalogs/services/catalogs.api';
 import type { PublicIdentityPayload } from '@/features/quotations/types';
 import { ApiError, getErrorMessage } from '@/services/http/errors';
+import { loadExportLanguages, withExportLanguages } from '@/utils/export/language';
 import { formatCurrencyBRL } from '@/utils/format';
 import { PublicInvalidLink, PublicLoading, PublicShell } from '../components/PublicShell';
 import { SupplierIdentityForm } from '../components/SupplierIdentityForm';
@@ -179,7 +180,11 @@ export function CatalogUploadPage() {
                     type="button"
                     variant="outline"
                     leftIcon={<Download className="h-4 w-4" />}
-                    onClick={() => void downloadCatalogTemplate(query.data.empresa)}
+                    onClick={() =>
+                      void withExportLanguages(loadExportLanguages(), () =>
+                        downloadCatalogTemplate(query.data.empresa),
+                      )
+                    }
                   >
                     {t('supplierPortal:catalog.downloadTemplate')}
                   </Button>

@@ -1,6 +1,7 @@
 import wordmarkUrl from '@/assets/logo/falcao-wordmark.png';
 import { brand } from '@/config/brand';
 import i18n from '@/i18n';
+import { xt } from './language';
 import { authStore } from '@/store/authStore';
 import { toDateOnly } from '@falcao-erp/shared-types';
 
@@ -80,8 +81,8 @@ export function generatedLine(now: Date = new Date()): string {
   const date = now.toLocaleString(i18n.language, { dateStyle: 'short', timeStyle: 'short' });
   const name = authStore.session?.user.name;
   return name
-    ? i18n.t('common:export.generatedBy', { date, name })
-    : i18n.t('common:export.generatedAt', { date });
+    ? xt('common:export.generatedBy', { date, name })
+    : xt('common:export.generatedAt', { date });
 }
 
 /** Empresa e sistema, no rodapé/cabeçalho de impressão. */

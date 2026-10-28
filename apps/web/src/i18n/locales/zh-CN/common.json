@@ -143,7 +143,13 @@
     "records_other": "{{count}} 条记录",
     "error": "无法生成文件。",
     "empty": "当前筛选条件下没有可导出的内容。",
-    "filters": "筛选：{{filters}}"
+    "filters": "筛选：{{filters}}",
+    "language": {
+      "title": "文件语言",
+      "first": "第一语言",
+      "second": "第二语言",
+      "none": "无"
+    }
   },
   "signature": {
     "areaLabel": "签名区域",

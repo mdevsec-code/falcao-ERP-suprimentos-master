@@ -1,18 +1,18 @@
 import type { PurchaseRequestDetailDto, PurchaseRequestSummaryDto } from '@falcao-erp/shared-types';
 
-import i18n from '@/i18n';
+import { fileT, xlabel, xt } from '@/utils/export/language';
 import {
   APPROVAL_ACTION_LABELS,
   APPROVAL_STEP_LABELS,
   PURCHASE_REQUEST_STATUS_LABELS,
 } from '@/constants/enums';
 import { EXPORT_COLORS, exportFileName, rgb } from '@/utils/export/brand';
-import type { PdfReport } from '@/utils/export/pdf';
+import { PDF_FONT, type PdfReport } from '@/utils/export/pdf';
 import { displayValue, type ReportDefinition } from '@/utils/export/report';
 import { formatDateOnly, formatDateTime } from '@/utils/format';
 import { imageDataUrl, uploadUrl } from '@/utils/image';
 
-const t = (key: string, options?: Record<string, unknown>) => i18n.t(key, options);
+const t = (key: string, options?: Record<string, unknown>) => xt(key, options);
 
 /** Solicitações do filtro atual — relatório padrão. */
 export function purchaseRequestsReport(
@@ -23,14 +23,14 @@ export function purchaseRequestsReport(
     title: t('purchaseRequests:page.title'),
     subtitle: t('purchaseRequests:page.eyebrow'),
     meta,
-    fileBase: t('purchaseRequests:report.fileBase'),
+    fileBase: fileT('purchaseRequests:report.fileBase'),
     orientation: 'landscape',
     rows,
     columns: [
       { header: t('purchaseRequests:report.title'), value: (r) => r.title, width: 40 },
       {
         header: t('purchaseRequests:report.status'),
-        value: (r) => PURCHASE_REQUEST_STATUS_LABELS[r.status],
+        value: (r) => xlabel(PURCHASE_REQUEST_STATUS_LABELS, r.status),
         width: 20,
       },
       { header: t('purchaseRequests:report.costCenter'), value: (r) => r.costCenter, width: 18 },
@@ -85,10 +85,10 @@ export async function exportPurchaseRequestPdf(request: PurchaseRequestDetailDto
       [t('purchaseRequests:pdf.project'), request.costCenter],
       [t('purchaseRequests:report.createdAt'), formatDateTime(request.createdAt)],
       [t('purchaseRequests:pdf.updatedAt'), formatDateTime(request.updatedAt)],
-      [t('purchaseRequests:report.status'), PURCHASE_REQUEST_STATUS_LABELS[request.status]],
+      [t('purchaseRequests:report.status'), xlabel(PURCHASE_REQUEST_STATUS_LABELS, request.status)],
       [
         t('purchaseRequests:pdf.currentStep'),
-        request.currentStep ? APPROVAL_STEP_LABELS[request.currentStep] : null,
+        request.currentStep ? xlabel(APPROVAL_STEP_LABELS, request.currentStep) : null,
       ],
     ],
     4,
@@ -176,8 +176,8 @@ export async function exportPurchaseRequestPdf(request: PurchaseRequestDetailDto
       rows: request.approvals.map((approval) => [
         formatDateTime(approval.createdAt) ?? '',
         approval.approverName,
-        APPROVAL_ACTION_LABELS[approval.action],
-        `${PURCHASE_REQUEST_STATUS_LABELS[approval.fromStatus]} » ${PURCHASE_REQUEST_STATUS_LABELS[approval.toStatus]}`,
+        xlabel(APPROVAL_ACTION_LABELS, approval.action),
+        `${xlabel(PURCHASE_REQUEST_STATUS_LABELS, approval.fromStatus)} » ${xlabel(PURCHASE_REQUEST_STATUS_LABELS, approval.toStatus)}`,
         approval.comment ?? '',
       ]),
     });
@@ -185,7 +185,7 @@ export async function exportPurchaseRequestPdf(request: PurchaseRequestDetailDto
 
   pdf.save(
     exportFileName(
-      t('purchaseRequests:pdf.fileBase', { numero: request.numero, title: request.title }),
+      fileT('purchaseRequests:pdf.fileBase', { numero: request.numero, title: request.title }),
       'pdf',
     ),
   );
@@ -218,7 +218,7 @@ function drawSignatures(pdf: PdfReport, request: PurchaseRequestDetailDto): void
       tone: 'ok',
     },
     ...request.approvalSteps.map(({ step, approvers, signature }) => ({
-      label: APPROVAL_STEP_LABELS[step],
+      label: xlabel(APPROVAL_STEP_LABELS, step),
       name: signature?.signerName ?? approvers.map((a) => a.name).join(', '),
       line: signature
         ? t(
@@ -247,7 +247,7 @@ function drawSignatures(pdf: PdfReport, request: PurchaseRequestDetailDto): void
     doc.setDrawColor(...rgb(EXPORT_COLORS.border)).setLineWidth(0.2);
     doc.rect(x, top, width, BOX_HEIGHT);
     doc
-      .setFont('helvetica', 'bold')
+      .setFont(PDF_FONT, 'bold')
       .setFontSize(8)
       .setTextColor(...rgb(EXPORT_COLORS.ink));
     doc.text(box.label.toUpperCase(), x + 2, top + 4.5);
@@ -266,7 +266,7 @@ function drawSignatures(pdf: PdfReport, request: PurchaseRequestDetailDto): void
     doc.line(x + 3, areaTop + areaHeight + 1, x + width - 3, areaTop + areaHeight + 1);
 
     doc
-      .setFont('helvetica', 'normal')
+      .setFont(PDF_FONT, 'normal')
       .setFontSize(7.5)
       .setTextColor(...rgb(EXPORT_COLORS.ink));
     const name = (doc.splitTextToSize(box.name || '—', width - 4) as string[]).slice(0, 2);

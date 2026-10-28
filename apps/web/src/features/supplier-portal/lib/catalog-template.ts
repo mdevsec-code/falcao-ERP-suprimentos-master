@@ -2,6 +2,7 @@ import { MAX_CATALOG_ITEMS, type CatalogTemplateColumn } from '@falcao-erp/share
 
 import i18n from '@/i18n';
 import { exportFileName } from '@/utils/export/brand';
+import { fileT, xt } from '@/utils/export/language';
 
 /** Linha lida da planilha, já no formato do envio (ou com o problema encontrado). */
 export interface CatalogRow {
@@ -17,18 +18,18 @@ export interface CatalogRow {
 }
 
 /**
- * Cabeçalhos da planilha modelo, em português (o arquivo circula entre
- * fornecedores brasileiros). A leitura reconhece pelas palavras-chave, então
- * aceita também a planilha do próprio fornecedor com cabeçalhos parecidos.
+ * Cabeçalhos da planilha modelo, em português e chinês (o português vem
+ * primeiro: a leitura reconhece pelas palavras-chave do começo, então aceita
+ * também a planilha do próprio fornecedor com cabeçalhos parecidos).
  */
 const HEADERS: Record<CatalogTemplateColumn, string> = {
-  codigoFornecedor: 'Código no fornecedor',
-  descricao: 'Descrição *',
-  unidade: 'Unidade *',
-  marca: 'Marca',
-  referencia: 'Referência / part number',
-  preco: 'Preço unitário (R$)',
-  observacao: 'Observação',
+  codigoFornecedor: 'Código no fornecedor / 供应商编码',
+  descricao: 'Descrição * / 描述 *',
+  unidade: 'Unidade * / 单位 *',
+  marca: 'Marca / 品牌',
+  referencia: 'Referência, part number / 型号',
+  preco: 'Preço unitário (R$) / 单价（雷亚尔）',
+  observacao: 'Observação / 备注',
 };
 
 const KEYWORDS: Array<[CatalogTemplateColumn, RegExp]> = [
@@ -76,7 +77,7 @@ function cellText(value: unknown): string {
 /** Planilha modelo no padrão de exportação, com uma aba de instruções. */
 export async function downloadCatalogTemplate(empresa: string): Promise<void> {
   const xlsx = await import('@/utils/export/xlsx');
-  const t = (key: string) => i18n.t(`supplierPortal:template.${key}`, { empresa });
+  const t = (key: string) => xt(`supplierPortal:template.${key}`, { empresa });
   const workbook = await xlsx.createWorkbook();
   const sheet = workbook.addWorksheet('Itens');
   const columns = Object.keys(HEADERS) as CatalogTemplateColumn[];
@@ -121,7 +122,7 @@ export async function downloadCatalogTemplate(empresa: string): Promise<void> {
 
   await xlsx.saveWorkbook(
     workbook,
-    exportFileName(i18n.t('supplierPortal:template.fileBase'), 'xlsx'),
+    exportFileName(fileT('supplierPortal:template.fileBase'), 'xlsx'),
   );
 }
 

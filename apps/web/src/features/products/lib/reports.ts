@@ -1,10 +1,10 @@
 import type { ProductSummaryDto } from '@falcao-erp/shared-types';
 
-import i18n from '@/i18n';
+import { fileT, xlabel, xt } from '@/utils/export/language';
 import { PRODUCT_CATEGORY_LABELS } from '@/constants/enums';
 import type { ReportDefinition } from '@/utils/export/report';
 
-const t = (key: string) => i18n.t(key);
+const t = (key: string) => xt(key);
 
 /** Produtos do filtro atual, com o último preço pago — relatório padrão. */
 export function productsReport(
@@ -15,7 +15,7 @@ export function productsReport(
     title: t('products:page.title'),
     subtitle: t('products:page.eyebrow'),
     meta,
-    fileBase: t('products:report.fileBase'),
+    fileBase: fileT('products:report.fileBase'),
     orientation: 'landscape',
     rows,
     columns: [
@@ -23,7 +23,7 @@ export function productsReport(
       { header: t('products:report.name'), value: (p) => p.nome, width: 36 },
       {
         header: t('products:report.category'),
-        value: (p) => PRODUCT_CATEGORY_LABELS[p.categoria],
+        value: (p) => xlabel(PRODUCT_CATEGORY_LABELS, p.categoria),
         width: 18,
       },
       { header: t('products:report.discipline'), value: (p) => p.discipline?.nome, width: 16 },

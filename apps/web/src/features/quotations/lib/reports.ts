@@ -1,10 +1,10 @@
 import type { QuotationSummaryDto } from '@falcao-erp/shared-types';
 
-import i18n from '@/i18n';
+import { fileT, xlabel, xt } from '@/utils/export/language';
 import { QUOTATION_STATUS_LABELS } from '@/constants/enums';
 import type { ReportDefinition } from '@/utils/export/report';
 
-const t = (key: string, options?: Record<string, unknown>) => i18n.t(key, options);
+const t = (key: string, options?: Record<string, unknown>) => xt(key, options);
 
 /** Cotações do filtro atual — relatório padrão. */
 export function quotationsReport(
@@ -15,7 +15,7 @@ export function quotationsReport(
     title: t('quotations:page.title'),
     subtitle: t('quotations:page.eyebrow'),
     meta,
-    fileBase: t('quotations:report.fileBase'),
+    fileBase: fileT('quotations:report.fileBase'),
     orientation: 'landscape',
     rows,
     columns: [
@@ -29,7 +29,7 @@ export function quotationsReport(
       },
       {
         header: t('quotations:table.status'),
-        value: (q) => QUOTATION_STATUS_LABELS[q.status],
+        value: (q) => xlabel(QUOTATION_STATUS_LABELS, q.status),
         width: 12,
       },
       { header: t('quotations:table.deadline'), value: (q) => q.prazoResposta, type: 'date' },

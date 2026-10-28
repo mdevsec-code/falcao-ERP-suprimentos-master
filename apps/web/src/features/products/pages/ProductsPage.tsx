@@ -9,6 +9,7 @@ import {
   fetchAllPages,
   type ExportFormat,
 } from '@/utils/export/report';
+import { xt } from '@/utils/export/language';
 import { productsApi } from '../services/products.api';
 import { productsReport } from '../lib/reports';
 import { Boxes, CheckCircle2, CircleOff, Layers, ListTree, Plus } from 'lucide-react';
@@ -116,8 +117,8 @@ export function ProductsPage() {
       return;
     }
     const meta = describeFilters([
-      [t('products:report.search'), debouncedSearch],
-      [t('products:report.brand'), debouncedBrand],
+      [xt('products:report.search'), debouncedSearch],
+      [xt('products:report.brand'), debouncedBrand],
     ]);
     await exportReport(productsReport(all, meta), format);
   }

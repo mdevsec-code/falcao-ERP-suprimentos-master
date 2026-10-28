@@ -1,5 +1,8 @@
 import i18n from '@/i18n';
 
+/** Grupo de cada objeto de rótulos — os relatórios traduzem para outro idioma por ele. */
+const namespaces = new WeakMap<object, string>();
+
 /**
  * Cria um objeto que se comporta como um `Record<K, string>` fixo (mesma API
  * usada há tempos pelos consumidores — `LABELS[key]`), mas cada leitura
@@ -10,9 +13,16 @@ import i18n from '@/i18n';
  * carregou.
  */
 export function createTranslatedLabels<K extends string>(namespace: string): Record<K, string> {
-  return new Proxy({} as Record<K, string>, {
+  const labels = new Proxy({} as Record<K, string>, {
     get(_target, prop): string {
       return i18n.t(`enums:${namespace}.${String(prop)}`);
     },
   });
+  namespaces.set(labels, namespace);
+  return labels;
+}
+
+/** Grupo em `enums:` de um objeto criado por `createTranslatedLabels`. */
+export function labelNamespace(labels: object): string | undefined {
+  return namespaces.get(labels);
 }

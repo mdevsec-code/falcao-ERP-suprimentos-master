@@ -37,6 +37,7 @@ import {
   fetchAllPages,
   type ExportFormat,
 } from '@/utils/export/report';
+import { xlabel, xt } from '@/utils/export/language';
 import { formatDateOnly } from '@/utils/format';
 import { usePlans, usePlanStats } from '../hooks/usePlans';
 import { plansApi } from '../services/plans.api';
@@ -74,8 +75,8 @@ export function PlansPage() {
       return;
     }
     const meta = describeFilters([
-      [t('plans:filters.search'), debouncedSearch],
-      [t('plans:filters.status'), status && REQUISITION_PLAN_STATUS_LABELS[status]],
+      [xt('plans:filters.search'), debouncedSearch],
+      [xt('plans:filters.status'), status && xlabel(REQUISITION_PLAN_STATUS_LABELS, status)],
     ]);
     await exportReport(plansReport(all, meta), format);
   }

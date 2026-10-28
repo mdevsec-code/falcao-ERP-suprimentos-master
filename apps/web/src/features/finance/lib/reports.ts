@@ -1,6 +1,6 @@
 import type { PayableDto } from '@falcao-erp/shared-types';
 
-import i18n from '@/i18n';
+import { fileT, xlabel, xt } from '@/utils/export/language';
 import { API_ORIGIN } from '@/config/env';
 import {
   PAYABLE_SOURCE_LABELS,
@@ -11,10 +11,10 @@ import { formatDateOnly } from '@/utils/format';
 import { describeFilters, type ReportDefinition } from '@/utils/export/report';
 import type { PayableFilters } from '../types';
 
-const t = (key: string, options?: Record<string, unknown>) => i18n.t(key, options);
+const t = (key: string, options?: Record<string, unknown>) => xt(key, options);
 
 const situation = (p: PayableDto) =>
-  p.vencida ? t('finance:table.overdue') : PAYABLE_STATUS_LABELS[p.status];
+  p.vencida ? t('finance:table.overdue') : xlabel(PAYABLE_STATUS_LABELS, p.status);
 
 /** Filtros da tela, como linha de contexto no topo do relatório. */
 export function payableFiltersMeta(filters: PayableFilters, search?: string): string[] {
@@ -24,8 +24,8 @@ export function payableFiltersMeta(filters: PayableFilters, search?: string): st
       : null;
   return describeFilters([
     [t('finance:filters.search.label'), search],
-    [t('finance:filters.status'), filters.status && PAYABLE_STATUS_LABELS[filters.status]],
-    [t('finance:filters.source'), filters.origem && PAYABLE_SOURCE_LABELS[filters.origem]],
+    [t('finance:filters.status'), filters.status && xlabel(PAYABLE_STATUS_LABELS, filters.status)],
+    [t('finance:filters.source'), filters.origem && xlabel(PAYABLE_SOURCE_LABELS, filters.origem)],
     [t('finance:filters.costCenter'), filters.costCenter],
     [t('finance:export.due'), period],
     [null, filters.vencidas && t('finance:filters.overdueOnly')],
@@ -42,7 +42,7 @@ export function payablesReport(
     title: t('finance:reports.payablesTitle'),
     subtitle: t('finance:page.eyebrow'),
     meta,
-    fileBase: t('finance:reports.payablesFile'),
+    fileBase: fileT('finance:reports.payablesFile'),
     orientation: 'landscape',
     rows,
     columns: [
@@ -50,7 +50,7 @@ export function payablesReport(
       { header: t('finance:export.description'), value: (p) => p.descricao, width: 36 },
       {
         header: t('finance:export.source'),
-        value: (p) => PAYABLE_SOURCE_LABELS[p.origem],
+        value: (p) => xlabel(PAYABLE_SOURCE_LABELS, p.origem),
         width: 12,
       },
       { header: t('finance:export.supplier'), value: (p) => p.supplierName, width: 26 },
@@ -67,7 +67,7 @@ export function payablesReport(
       },
       {
         header: t('finance:export.method'),
-        value: (p) => (p.formaPagamento ? PAYMENT_METHOD_LABELS[p.formaPagamento] : null),
+        value: (p) => (p.formaPagamento ? xlabel(PAYMENT_METHOD_LABELS, p.formaPagamento) : null),
         width: 14,
       },
     ],
@@ -84,7 +84,7 @@ export function invoicesReport(
     title: t('finance:invoiceExport.sheet'),
     subtitle: t('finance:page.eyebrow'),
     meta,
-    fileBase: t('finance:reports.invoicesFile'),
+    fileBase: fileT('finance:reports.invoicesFile'),
     orientation: 'landscape',
     rows,
     columns: [
