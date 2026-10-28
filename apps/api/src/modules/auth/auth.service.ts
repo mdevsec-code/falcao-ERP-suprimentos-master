@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
@@ -5,8 +6,7 @@ import * as bcrypt from "bcryptjs";
 import type { AuthUserDto, LoginResponseDto, Role } from "@falcao-erp/shared-types";
 import { PrismaService } from "../../database/prisma.service";
 import { UsersService } from "../users/users.service";
-
-const REFRESH_TOKEN_ROUNDS = 10;
+import { hashRefreshToken } from "./refresh-token-hash";
 
 /**
  * Hash de uma senha qualquer: quando o e-mail não existe, comparamos contra
@@ -49,19 +49,21 @@ export class AuthService {
       throw new UnauthorizedException("Refresh token inválido ou expirado.");
     }
 
-    const storedTokens = await this.prisma.refreshToken.findMany({
-      where: { userId: payload.sub, revokedAt: null, expiresAt: { gt: new Date() } },
-    });
-
-    const matching = await this.findMatchingToken(storedTokens, refreshToken);
-    if (!matching) {
-      throw new UnauthorizedException("Refresh token inválido ou expirado.");
-    }
-
-    await this.prisma.refreshToken.update({
-      where: { id: matching.id },
+    // Revoga o token usado numa operação só: se ele já foi trocado, revogado
+    // (logout, troca de senha) ou usado agora mesmo em outra requisição, nada é
+    // atualizado e a renovação é recusada.
+    const { count } = await this.prisma.refreshToken.updateMany({
+      where: {
+        userId: payload.sub,
+        tokenHash: hashRefreshToken(refreshToken),
+        revokedAt: null,
+        expiresAt: { gt: new Date() },
+      },
       data: { revokedAt: new Date() },
     });
+    if (count === 0) {
+      throw new UnauthorizedException("Refresh token inválido ou expirado.");
+    }
 
     const user = await this.usersService.findById(payload.sub);
     if (!user || !user.isActive) {
@@ -79,18 +81,6 @@ export class AuthService {
     });
   }
 
-  private async findMatchingToken(
-    tokens: { id: string; tokenHash: string }[],
-    rawToken: string,
-  ) {
-    for (const token of tokens) {
-      if (await bcrypt.compare(rawToken, token.tokenHash)) {
-        return token;
-      }
-    }
-    return null;
-  }
-
   private async issueTokens(userId: string, email: string, companyId: string, role: Role) {
     const payload = { sub: userId, email, companyId, role };
 
@@ -99,13 +89,15 @@ export class AuthService {
       expiresIn: this.config.get<string>("JWT_ACCESS_EXPIRES_IN"),
     });
 
+    // `jwtid` aleatório: dois tokens emitidos no mesmo segundo nunca são iguais.
     const refreshToken = this.jwtService.sign(payload, {
       secret: this.config.get<string>("JWT_REFRESH_SECRET"),
       expiresIn: this.config.get<string>("JWT_REFRESH_EXPIRES_IN"),
+      jwtid: randomUUID(),
     });
 
     const decoded = this.jwtService.decode(refreshToken) as { exp: number };
-    const tokenHash = await bcrypt.hash(refreshToken, REFRESH_TOKEN_ROUNDS);
+    const tokenHash = hashRefreshToken(refreshToken);
 
     await this.prisma.refreshToken.create({
       data: {
