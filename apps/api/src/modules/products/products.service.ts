@@ -83,12 +83,14 @@ export class ProductsService {
 
   async create(companyId: string, dto: CreateProductDto): Promise<ProductDetailDto> {
     await this.repository.assertDiscipline(companyId, dto.disciplineId);
+    await this.repository.assertSuppliers(companyId, [dto.primarySupplierId, ...(dto.alternativeSupplierIds ?? [])]);
     const product = await this.repository.create(companyId, dto);
     return this.toDetailDto(product);
   }
 
   async update(companyId: string, id: string, dto: UpdateProductDto): Promise<ProductDetailDto> {
     await this.repository.assertDiscipline(companyId, dto.disciplineId);
+    await this.repository.assertSuppliers(companyId, [dto.primarySupplierId, ...(dto.alternativeSupplierIds ?? [])]);
     const product = await this.repository.update(companyId, id, dto);
     return this.toDetailDto(product);
   }

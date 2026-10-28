@@ -128,6 +128,7 @@ export class PurchaseRequestsService {
 
   async create(user: AuthenticatedUser, dto: CreatePurchaseRequestDto): Promise<PurchaseRequestDetailDto> {
     this.assertOwnPhotos(user.companyId, dto.items);
+    await this.repository.assertProducts(user.companyId, dto.items);
     const request = await this.repository.create(user.companyId, user.userId, dto);
     // Começa a corrida de assinaturas: e-mail para quem assina a primeira etapa.
     void this.approvals.notifyStep(request, "TECNICO");
@@ -146,7 +147,10 @@ export class PurchaseRequestsService {
     if (!isOwner && user.role !== "ADMIN") {
       throw new ForbiddenException("Você só pode editar suas próprias solicitações.");
     }
-    if (dto.items) this.assertOwnPhotos(user.companyId, dto.items);
+    if (dto.items) {
+      this.assertOwnPhotos(user.companyId, dto.items);
+      await this.repository.assertProducts(user.companyId, dto.items);
+    }
 
     const request = await this.repository.update(user.companyId, id, dto);
     return this.toDetailDto(request, user);

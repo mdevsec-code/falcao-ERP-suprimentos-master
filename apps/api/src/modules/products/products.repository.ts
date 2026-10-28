@@ -129,6 +129,16 @@ export class ProductsRepository {
     }
   }
 
+  /** Fornecedor principal e alternativos precisam ser da mesma empresa (o id vem do cliente). */
+  async assertSuppliers(companyId: string, ids: ReadonlyArray<string | null | undefined>): Promise<void> {
+    const unique = [...new Set(ids.filter((id): id is string => Boolean(id)))];
+    if (unique.length === 0) return;
+    const found = await this.prisma.forCompany(companyId).supplier.count({ where: { id: { in: unique } } });
+    if (found !== unique.length) {
+      throw new BadRequestException("Fornecedor não encontrado.");
+    }
+  }
+
   async create(companyId: string, dto: CreateProductDto): Promise<ProductDetailPayload> {
     const product = await this.prisma.forCompany(companyId).product.create({
       data: {

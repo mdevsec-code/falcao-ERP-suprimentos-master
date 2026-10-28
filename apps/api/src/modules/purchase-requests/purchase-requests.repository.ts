@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { Prisma, type ApprovalStep, type PurchaseRequestStatus } from "@prisma/client";
 import { fromDateOnly } from "../../common/utils/date-only";
 import { PrismaService } from "../../database/prisma.service";
@@ -101,6 +101,16 @@ export class PurchaseRequestsRepository {
       throw new NotFoundException("Solicitação não encontrada.");
     }
     return request as unknown as PurchaseRequestDetailPayload;
+  }
+
+  /** Produto do item precisa ser da mesma empresa (o id vem do cliente). */
+  async assertProducts(companyId: string, items: ReadonlyArray<{ productId?: string }>): Promise<void> {
+    const ids = [...new Set(items.map((item) => item.productId).filter((id): id is string => Boolean(id)))];
+    if (ids.length === 0) return;
+    const found = await this.prisma.forCompany(companyId).product.count({ where: { id: { in: ids } } });
+    if (found !== ids.length) {
+      throw new BadRequestException("Produto do catálogo não encontrado.");
+    }
   }
 
   /** Nº sequencial por empresa; a constraint única resolve a corrida de dois envios juntos. */
