@@ -8,6 +8,7 @@ import {
   QUOTATION_READ_ROLES,
 } from "../../common/constants/module-roles";
 import type { AuthenticatedUser } from "../../common/types/auth-request";
+import { documentVisibilityWhere } from "../documents/document-access";
 import { fromDateOnly, money, toDateOnlyString } from "../../common/utils/date-only";
 import { CreateAgendaEventDto, UpdateAgendaEventDto } from "./dto/agenda-event.dto";
 import { QueryAgendaDto } from "./dto/query-agenda.dto";
@@ -46,7 +47,7 @@ export class AgendaService {
       ),
       canFinance ? this.repository.payablesDue(user.companyId, query.from, query.to, obra) : [],
       canContracts ? this.repository.contractsEnding(user.companyId, query.from, query.to, obra) : [],
-      obra ? [] : this.repository.documentsExpiring(user.companyId, query.from, query.to),
+      obra ? [] : this.repository.documentsExpiring(user.companyId, query.from, query.to, documentVisibilityWhere(user.role)),
       canQuotations && !obra ? this.repository.quotationsDue(user.companyId, query.from, query.to) : [],
     ]);
 

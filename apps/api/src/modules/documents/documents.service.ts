@@ -1,4 +1,4 @@
-import { BadRequestException, ForbiddenException, Inject, Injectable } from "@nestjs/common";
+import { BadRequestException, ForbiddenException, Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { extname } from "node:path";
 import { addDays, DOCUMENT_ALERT_DAYS, deadlineState, toDateOnly } from "@falcao-erp/shared-types";
 import type { DocumentDto, DocumentStatsDto, PaginatedResult } from "@falcao-erp/shared-types";
@@ -10,6 +10,7 @@ import { STORAGE_PROVIDER, type IStorageProvider } from "../storage/storage-prov
 import { DocumentFieldsDto } from "./dto/document-fields.dto";
 import { QueryDocumentsDto } from "./dto/query-documents.dto";
 import { UpdateDocumentDto } from "./dto/update-document.dto";
+import { canSeeSensitiveDocuments, documentVisibilityWhere, isSensitiveDocument } from "./document-access";
 import { DocumentsRepository, type DocumentPayload, type DocumentWriteData } from "./documents.repository";
 
 /** Extensões cujo texto é indexado para a busca por conteúdo. */
@@ -31,9 +32,9 @@ export class DocumentsService {
     @Inject(STORAGE_PROVIDER) private readonly storage: IStorageProvider,
   ) {}
 
-  async list(companyId: string, query: QueryDocumentsDto): Promise<PaginatedResult<DocumentDto>> {
+  async list(user: AuthenticatedUser, query: QueryDocumentsDto): Promise<PaginatedResult<DocumentDto>> {
     const today = toDateOnly();
-    const { data, total } = await this.repository.findMany(companyId, {
+    const { data, total } = await this.repository.findMany(user.companyId, {
       search: query.search,
       categoria: query.categoria,
       tag: query.tag,
@@ -44,7 +45,7 @@ export class DocumentsService {
       alertUntil: addDays(today, DOCUMENT_ALERT_DAYS),
       page: query.page,
       pageSize: query.pageSize,
-    });
+    }, documentVisibilityWhere(user.role));
     return {
       data: data.map((document) => this.toDto(document, today)),
       meta: {
@@ -56,17 +57,33 @@ export class DocumentsService {
     };
   }
 
-  async stats(companyId: string): Promise<DocumentStatsDto> {
+  async stats(user: AuthenticatedUser): Promise<DocumentStatsDto> {
     const today = toDateOnly();
-    return this.repository.stats(companyId, today, addDays(today, DOCUMENT_ALERT_DAYS));
+    return this.repository.stats(user.companyId, today, addDays(today, DOCUMENT_ALERT_DAYS), documentVisibilityWhere(user.role));
   }
 
-  tags(companyId: string) {
-    return this.repository.tags(companyId);
+  tags(user: AuthenticatedUser) {
+    return this.repository.tags(user.companyId, !canSeeSensitiveDocuments(user.role));
   }
 
-  async getById(companyId: string, id: string): Promise<DocumentDto> {
-    return this.toDto(await this.repository.findByIdOrThrow(companyId, id));
+  async getById(user: AuthenticatedUser, id: string): Promise<DocumentDto> {
+    return this.toDto(await this.findVisibleOrThrow(user, id));
+  }
+
+  /** O documento, se o perfil pode vê-lo; senão o mesmo 404 de um id inexistente. */
+  private async findVisibleOrThrow(user: AuthenticatedUser, id: string): Promise<DocumentPayload> {
+    const document = await this.repository.findByIdOrThrow(user.companyId, id);
+    if (isSensitiveDocument(document) && !canSeeSensitiveDocuments(user.role)) {
+      throw new NotFoundException("Documento não encontrado.");
+    }
+    return document;
+  }
+
+  /** Quem não vê documentos sigilosos também não cria nem transforma um documento em sigiloso. */
+  private assertCanWriteSensitive(user: AuthenticatedUser, document: { categoria: string; contractId: string | null | undefined }) {
+    if (isSensitiveDocument(document) && !canSeeSensitiveDocuments(user.role)) {
+      throw new ForbiddenException("Documentos de contrato e notas fiscais são enviados por compras, financeiro ou gestão.");
+    }
   }
 
   async upload(
@@ -74,6 +91,7 @@ export class DocumentsService {
     dto: DocumentFieldsDto,
     file: { originalname: string; mimetype: string; buffer: Buffer },
   ): Promise<DocumentDto> {
+    this.assertCanWriteSensitive(user, { categoria: dto.categoria, contractId: dto.contractId });
     await this.assertLinks(user.companyId, dto.supplierId, dto.contractId);
 
     const fileName = decodeUploadName(file.originalname);
@@ -97,8 +115,12 @@ export class DocumentsService {
   }
 
   async update(user: AuthenticatedUser, id: string, dto: UpdateDocumentDto): Promise<DocumentDto> {
-    const existing = await this.repository.findByIdOrThrow(user.companyId, id);
+    const existing = await this.findVisibleOrThrow(user, id);
     this.assertCanManage(user, existing);
+    this.assertCanWriteSensitive(user, {
+      categoria: dto.categoria ?? existing.categoria,
+      contractId: dto.contractId === undefined ? existing.contractId : dto.contractId || null,
+    });
     await this.assertLinks(user.companyId, dto.supplierId ?? undefined, dto.contractId ?? undefined);
 
     const data: DocumentWriteData = {
@@ -114,7 +136,7 @@ export class DocumentsService {
   }
 
   async remove(user: AuthenticatedUser, id: string): Promise<void> {
-    const existing = await this.repository.findByIdOrThrow(user.companyId, id);
+    const existing = await this.findVisibleOrThrow(user, id);
     this.assertCanManage(user, existing);
     await this.repository.delete(user.companyId, id);
     await this.storage.delete(existing.filePath);

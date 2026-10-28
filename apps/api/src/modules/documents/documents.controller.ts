@@ -31,22 +31,22 @@ export class DocumentsController {
 
   @Get()
   list(@CurrentUser() user: AuthenticatedUser, @Query() query: QueryDocumentsDto) {
-    return this.documentsService.list(user.companyId, query);
+    return this.documentsService.list(user, query);
   }
 
   @Get("stats")
   stats(@CurrentUser() user: AuthenticatedUser) {
-    return this.documentsService.stats(user.companyId);
+    return this.documentsService.stats(user);
   }
 
   @Get("tags")
   tags(@CurrentUser() user: AuthenticatedUser) {
-    return this.documentsService.tags(user.companyId);
+    return this.documentsService.tags(user);
   }
 
   @Get(":id")
   getById(@CurrentUser() user: AuthenticatedUser, @Param("id") id: string) {
-    return this.documentsService.getById(user.companyId, id);
+    return this.documentsService.getById(user, id);
   }
 
   @Roles(...DOCUMENT_WRITE_ROLES)

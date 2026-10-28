@@ -73,9 +73,10 @@ export class AgendaRepository {
     });
   }
 
-  async documentsExpiring(companyId: string, from: string, to: string) {
+  /** `visibility`: condição do perfil (documentos sigilosos — ver document-access). */
+  async documentsExpiring(companyId: string, from: string, to: string, visibility?: Prisma.DocumentWhereInput) {
     return this.prisma.forCompany(companyId).document.findMany({
-      where: { validoAte: { gte: fromDateOnly(from), lte: fromDateOnly(to) } },
+      where: { AND: [...(visibility ? [visibility] : []), { validoAte: { gte: fromDateOnly(from), lte: fromDateOnly(to) } }] },
       include: { supplier: true },
       orderBy: { validoAte: "asc" },
     });

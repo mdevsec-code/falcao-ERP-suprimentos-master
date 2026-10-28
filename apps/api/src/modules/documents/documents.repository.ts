@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { Prisma, type DocumentCategory } from "@prisma/client";
 import { PrismaService } from "../../database/prisma.service";
+import { SENSITIVE_DOCUMENT_CATEGORIES } from "./document-access";
 import { fromDateOnly } from "../../common/utils/date-only";
 
 export interface DocumentFilters {
@@ -38,7 +39,8 @@ export interface DocumentWriteData {
 export class DocumentsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findMany(companyId: string, filters: DocumentFilters) {
+  /** `visibility`: condição do perfil (`documentVisibilityWhere`); sem ela, todos. */
+  async findMany(companyId: string, filters: DocumentFilters, visibility?: Prisma.DocumentWhereInput) {
     const today = fromDateOnly(filters.today);
     const alertUntil = fromDateOnly(filters.alertUntil);
     const validoAte: Record<NonNullable<DocumentFilters["validade"]>, Prisma.DocumentWhereInput["validoAte"]> = {
@@ -50,6 +52,7 @@ export class DocumentsRepository {
 
     const search = filters.search?.trim();
     const where: Prisma.DocumentWhereInput = {
+      ...(visibility ? { AND: [visibility] } : {}),
       categoria: filters.categoria,
       supplierId: filters.supplierId,
       contractId: filters.contractId,
@@ -125,25 +128,30 @@ export class DocumentsRepository {
     return (await this.prisma.forCompany(companyId).contract.count({ where: { id } })) > 0;
   }
 
-  async tags(companyId: string) {
+  async tags(companyId: string, hideSensitive: boolean) {
+    // Mesma regra de documentVisibilityWhere, em SQL (unnest não existe no Prisma).
+    const sensitive = hideSensitive
+      ? Prisma.sql`AND contract_id IS NULL AND categoria::text NOT IN (${Prisma.join([...SENSITIVE_DOCUMENT_CATEGORIES])})`
+      : Prisma.empty;
     const rows = await this.prisma.$queryRaw<Array<{ tag: string; count: bigint }>>(Prisma.sql`
       SELECT tag, COUNT(*) AS count
       FROM documents, unnest(tags) AS tag
-      WHERE company_id = ${companyId}
+      WHERE company_id = ${companyId} ${sensitive}
       GROUP BY tag
       ORDER BY count DESC, tag ASC`);
     return rows.map((row) => ({ tag: row.tag, count: Number(row.count) }));
   }
 
-  async stats(companyId: string, today: string, alertUntil: string) {
+  async stats(companyId: string, today: string, alertUntil: string, visibility?: Prisma.DocumentWhereInput) {
     const client = this.prisma.forCompany(companyId);
+    const visible = visibility ? [visibility] : [];
     const [total, vencidos, vencendo, byCategory] = await Promise.all([
-      client.document.count({}),
-      client.document.count({ where: { validoAte: { lt: fromDateOnly(today) } } }),
+      client.document.count({ where: { AND: visible } }),
+      client.document.count({ where: { AND: [...visible, { validoAte: { lt: fromDateOnly(today) } }] } }),
       client.document.count({
-        where: { validoAte: { gte: fromDateOnly(today), lte: fromDateOnly(alertUntil) } },
+        where: { AND: [...visible, { validoAte: { gte: fromDateOnly(today), lte: fromDateOnly(alertUntil) } }] },
       }),
-      this.prisma.document.groupBy({ by: ["categoria"], where: { companyId }, _count: { _all: true } }),
+      this.prisma.document.groupBy({ by: ["categoria"], where: { companyId, AND: visible }, _count: { _all: true } }),
     ]);
     return {
       total,
