@@ -17,7 +17,7 @@ async function bootstrap() {
 
   app.setGlobalPrefix("api/v1");
   // Cabeçalhos de segurança; `cross-origin` permite ao Web (outra origem)
-  // abrir os anexos servidos em /uploads.
+  // abrir os arquivos entregues por /files (links temporários).
   app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
   app.useGlobalPipes(
     new ValidationPipe({

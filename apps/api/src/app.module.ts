@@ -1,9 +1,7 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from "@nestjs/core";
-import { ServeStaticModule } from "@nestjs/serve-static";
 import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
-import { resolve } from "node:path";
 import { validateEnv } from "./config/env.validation";
 import { HttpExceptionFilter } from "./common/filters/http-exception.filter";
 import { JwtAuthGuard } from "./common/guards/jwt-auth.guard";
@@ -28,7 +26,6 @@ import { RequisitionPlansModule } from "./modules/requisition-plans/requisition-
 import { StorageModule } from "./modules/storage/storage.module";
 import { SupplierCatalogsModule } from "./modules/supplier-catalogs/supplier-catalogs.module";
 import { SuppliersModule } from "./modules/suppliers/suppliers.module";
-import { INLINE_UPLOAD_EXTENSIONS, uploadExtension } from "./modules/storage/upload-policy";
 import { UsersModule } from "./modules/users/users.module";
 
 @Module({
@@ -38,25 +35,6 @@ import { UsersModule } from "./modules/users/users.module";
       isGlobal: true,
       envFilePath: [".env", "../../.env"],
       validate: validateEnv,
-    }),
-    ServeStaticModule.forRoot({
-      // `resolve` (e não `join`): UPLOADS_DIR absoluto em produção (/var/lib/...) tem de
-      // apontar para a mesma pasta em que o LocalStorageProvider grava.
-      rootPath: resolve(process.env.UPLOADS_DIR ?? "uploads"),
-      serveRoot: "/uploads",
-      serveStaticOptions: {
-        index: false,
-        dotfiles: "deny",
-        // Arquivos enviados por usuários: nunca deixe o navegador "adivinhar" o
-        // tipo nem executar conteúdo; o que não é PDF/imagem/texto vira download.
-        setHeaders: (res, filePath) => {
-          res.setHeader("X-Content-Type-Options", "nosniff");
-          if (!INLINE_UPLOAD_EXTENSIONS.has(uploadExtension(filePath))) {
-            res.setHeader("Content-Disposition", "attachment");
-            res.setHeader("Content-Security-Policy", "sandbox");
-          }
-        },
-      },
     }),
     // Limite geral generoso; rotas sensíveis (login) usam @Throttle mais restrito.
     ThrottlerModule.forRoot([{ name: "default", ttl: 60_000, limit: 600 }]),

@@ -32,7 +32,7 @@ export async function resizePhoto(file: File, maxSize = 1600, quality = 0.82): P
   }
 }
 
-/** Endereço completo de um arquivo enviado (`/uploads/…` fica na API). */
+/** Endereço completo de um arquivo enviado (link temporário que a API devolve). */
 export function uploadUrl(path: string | null | undefined): string | null {
   return path ? `${API_ORIGIN}${path}` : null;
 }

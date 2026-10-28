@@ -17,6 +17,7 @@ import {
   type ProductDetailPayload,
   type ProductListItemPayload,
 } from "./products.repository";
+import { fileUrlOrNull } from "../../common/utils/file-url";
 
 /** Fotos de produto: só imagens que o navegador e o PDF mostram. */
 const PHOTO_TYPES: Record<string, string> = { "image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp" };
@@ -132,7 +133,7 @@ export class ProductsService {
       unidade: product.unidade,
       leadTimeDays: product.leadTimeDays,
       isActive: product.isActive,
-      photoUrl: product.photoPath ? `/uploads/${product.photoPath}` : null,
+      photoUrl: fileUrlOrNull(product.photoPath),
       primarySupplier: product.primarySupplier
         ? { id: product.primarySupplier.id, nomeFantasia: product.primarySupplier.nomeFantasia }
         : null,
@@ -154,7 +155,7 @@ export class ProductsService {
       leadTimeDays: product.leadTimeDays,
       observacoes: product.observacoes,
       isActive: product.isActive,
-      photoUrl: product.photoPath ? `/uploads/${product.photoPath}` : null,
+      photoUrl: fileUrlOrNull(product.photoPath),
       primarySupplier: product.primarySupplier
         ? { id: product.primarySupplier.id, nomeFantasia: product.primarySupplier.nomeFantasia }
         : null,

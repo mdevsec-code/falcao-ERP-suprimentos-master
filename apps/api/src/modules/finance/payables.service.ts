@@ -16,6 +16,7 @@ import { PayPayableDto } from "./dto/pay-payable.dto";
 import { QueryPayablesDto } from "./dto/query-payables.dto";
 import { UpdatePayableDto } from "./dto/update-payable.dto";
 import { PayablesRepository, type PayablePayload, type PayableWriteData } from "./payables.repository";
+import { fileUrlOrNull } from "../../common/utils/file-url";
 
 /** `YYYY-MM` deslocado `delta` meses. */
 function shiftMonth(month: string, delta: number): string {
@@ -279,9 +280,9 @@ export class PayablesService {
       notaFiscal: payable.notaFiscal,
       notaFiscalEmissao: toDateOnlyOrNull(payable.notaFiscalEmissao),
       notaFiscalChave: payable.notaFiscalChave,
-      notaFiscalPdfUrl: payable.notaFiscalPdfPath ? `/uploads/${payable.notaFiscalPdfPath}` : null,
+      notaFiscalPdfUrl: fileUrlOrNull(payable.notaFiscalPdfPath),
       notaFiscalPdfName: payable.notaFiscalPdfName,
-      notaFiscalXmlUrl: payable.notaFiscalXmlPath ? `/uploads/${payable.notaFiscalXmlPath}` : null,
+      notaFiscalXmlUrl: fileUrlOrNull(payable.notaFiscalXmlPath),
       notaFiscalXmlName: payable.notaFiscalXmlName,
       pagoEm: toDateOnlyOrNull(payable.pagoEm),
       valorPago: payable.valorPago ? money(payable.valorPago) : null,

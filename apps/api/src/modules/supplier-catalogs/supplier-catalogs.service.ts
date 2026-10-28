@@ -25,6 +25,7 @@ import {
   RejectSupplierCatalogDto,
   ReviewSupplierCatalogDto,
 } from "./dto/supplier-catalog.dto";
+import { fileUrlOrNull } from "../../common/utils/file-url";
 
 const summaryInclude = {
   supplier: { select: { nomeFantasia: true, cnpj: true, cadastroPendente: true } },
@@ -407,7 +408,7 @@ export class SupplierCatalogsService {
       enviadoPor: catalog.enviadoPor,
       itens: catalog._count.items,
       fileName: catalog.fileName,
-      fileUrl: catalog.filePath ? `/uploads/${catalog.filePath}` : null,
+      fileUrl: fileUrlOrNull(catalog.filePath),
       createdAt: catalog.createdAt.toISOString(),
     };
   }

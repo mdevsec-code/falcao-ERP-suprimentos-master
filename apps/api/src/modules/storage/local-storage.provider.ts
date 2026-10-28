@@ -3,6 +3,7 @@ import { ConfigService } from "@nestjs/config";
 import { randomUUID } from "node:crypto";
 import { mkdir, unlink, writeFile } from "node:fs/promises";
 import { join, relative, resolve, sep } from "node:path";
+import { fileUrl } from "../../common/utils/file-url";
 import type { IStorageProvider, StoredFile } from "./storage-provider.interface";
 import { isAllowedUpload, uploadExtension } from "./upload-policy";
 
@@ -31,13 +32,17 @@ export class LocalStorageProvider implements IStorageProvider {
 
     return {
       path: relativePath,
-      url: `/uploads/${relativePath}`,
+      url: fileUrl(relativePath),
       size: buffer.length,
     };
   }
 
   async delete(path: string): Promise<void> {
     await unlink(this.insideRoot(path)).catch(() => undefined);
+  }
+
+  localPath(path: string): string {
+    return this.insideRoot(path);
   }
 
   /** Resolve `path` dentro da raiz; recusa `..`, caminhos absolutos e afins. */

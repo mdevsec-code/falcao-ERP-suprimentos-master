@@ -34,6 +34,7 @@ import {
   type PurchaseRequestDetailPayload,
   type PurchaseRequestListItemPayload,
 } from "./purchase-requests.repository";
+import { fileUrl } from "../../common/utils/file-url";
 
 /** Fotos de item: só imagens que o navegador e o PDF mostram. */
 const PHOTO_TYPES: Record<string, string> = { "image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp" };
@@ -345,9 +346,9 @@ export class PurchaseRequestsService {
         dataNecessaria: toDateOnlyOrNull(item.dataNecessaria),
         photoPath: item.photoPath,
         photoUrl: item.photoPath
-          ? `/uploads/${item.photoPath}`
+          ? fileUrl(item.photoPath)
           : item.product?.photoPath
-            ? `/uploads/${item.product.photoPath}`
+            ? fileUrl(item.product.photoPath)
             : null,
       })),
       approvals: request.approvals.map((approval) => ({
@@ -375,7 +376,7 @@ export class PurchaseRequestsService {
         uploadedById: attachment.uploadedById,
         uploadedByName: attachment.uploadedBy.name,
         uploadedAt: attachment.uploadedAt.toISOString(),
-        url: `/uploads/${attachment.filePath}`,
+        url: fileUrl(attachment.filePath),
       })),
     };
   }

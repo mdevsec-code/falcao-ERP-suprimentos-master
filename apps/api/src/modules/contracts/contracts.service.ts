@@ -18,6 +18,7 @@ import {
   type ContractListItemPayload,
   type ContractWriteData,
 } from "./contracts.repository";
+import { fileUrl } from "../../common/utils/file-url";
 
 /** Contratos encerrados/cancelados ficam congelados (sem edição nem aditivo). */
 const EDITABLE_STATUSES: ContractStatus[] = ["VIGENTE", "SUSPENSO"];
@@ -216,7 +217,7 @@ export class ContractsService {
         titulo: document.titulo,
         fileName: document.fileName,
         size: document.size,
-        url: `/uploads/${document.filePath}`,
+        url: fileUrl(document.filePath),
         uploadedByName: document.uploadedBy.name,
         createdAt: document.createdAt.toISOString(),
       })),

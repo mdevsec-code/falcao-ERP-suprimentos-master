@@ -12,6 +12,7 @@ import { QueryDocumentsDto } from "./dto/query-documents.dto";
 import { UpdateDocumentDto } from "./dto/update-document.dto";
 import { canSeeSensitiveDocuments, documentVisibilityWhere, isSensitiveDocument } from "./document-access";
 import { DocumentsRepository, type DocumentPayload, type DocumentWriteData } from "./documents.repository";
+import { fileUrl } from "../../common/utils/file-url";
 
 /** Extensões cujo texto é indexado para a busca por conteúdo. */
 const TEXT_EXTENSIONS = new Set([".txt", ".csv", ".md", ".json", ".xml", ".log"]);
@@ -170,7 +171,7 @@ export class DocumentsService {
       fileName: document.fileName,
       mimeType: document.mimeType,
       size: document.size,
-      url: `/uploads/${document.filePath}`,
+      url: fileUrl(document.filePath),
       conteudoIndexado: document.conteudo !== null,
       supplierId: document.supplierId,
       supplierName: document.supplier?.nomeFantasia ?? null,

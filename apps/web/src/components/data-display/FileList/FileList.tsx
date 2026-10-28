@@ -23,7 +23,7 @@ export interface FileListProps {
   onRemove?: (item: FileListItem) => void;
 }
 
-/** Lista de arquivos enviados à API (`/uploads/...`) com link de download. */
+/** Lista de arquivos enviados à API (link temporário de /api/v1/files) com link de download. */
 export function FileList({ items, onRemove }: FileListProps) {
   const { t } = useTranslation('common');
 

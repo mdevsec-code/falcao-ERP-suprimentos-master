@@ -10,6 +10,7 @@ import {
   type SupplierDetailPayload,
   type SupplierListItemPayload,
 } from "./suppliers.repository";
+import { fileUrl } from "../../common/utils/file-url";
 
 type SupplierWithEvaluations = SupplierListItemPayload;
 type SupplierWithDetails = SupplierDetailPayload;
@@ -225,7 +226,7 @@ export class SuppliersService implements OnModuleInit {
         uploadedById: document.uploadedById,
         uploadedByName: document.uploadedBy.name,
         uploadedAt: document.uploadedAt.toISOString(),
-        url: `/uploads/${document.filePath}`,
+        url: fileUrl(document.filePath),
       })),
     };
   }

@@ -14,4 +14,6 @@ export const STORAGE_PROVIDER = "STORAGE_PROVIDER";
 export interface IStorageProvider {
   save(buffer: Buffer, options: { folder: string; fileName: string }): Promise<StoredFile>;
   delete(path: string): Promise<void>;
+  /** Caminho no disco de um arquivo guardado; recusa caminhos fora da pasta de uploads. */
+  localPath(path: string): string;
 }

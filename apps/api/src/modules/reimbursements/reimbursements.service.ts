@@ -29,6 +29,7 @@ import {
   type ReimbursementDetailPayload,
   type ReimbursementListItemPayload,
 } from "./reimbursements.repository";
+import { fileUrl } from "../../common/utils/file-url";
 
 const canViewAll = (role: Role) => REIMBURSEMENT_VIEW_ALL_ROLES.includes(role);
 
@@ -224,7 +225,7 @@ export class ReimbursementsService {
         uploadedById: attachment.uploadedById,
         uploadedByName: attachment.uploadedBy.name,
         uploadedAt: attachment.uploadedAt.toISOString(),
-        url: `/uploads/${attachment.filePath}`,
+        url: fileUrl(attachment.filePath),
       })),
       payable: reimbursement.payable
         ? {
