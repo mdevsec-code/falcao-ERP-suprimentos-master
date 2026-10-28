@@ -231,15 +231,16 @@ export class SupplierCatalogsService {
       throw new BadRequestException("Anexe o arquivo do catálogo ou preencha a planilha de itens.");
     }
 
-    const { supplier } = await this.supplierSelfService.resolveOrRegister(company.id, dto.identidade);
+    const { supplier, created } = await this.supplierSelfService.resolveOrRegister(company.id, dto.identidade);
     const fileName = file ? decodeUploadName(file.originalname) : null;
     const stored = file
       ? await this.storage.save(file.buffer, { folder: `catalogs/${company.id}`, fileName: fileName as string })
       : null;
 
     const clean = (text: string | undefined) => text?.trim() || null;
+    let catalogId: string;
     try {
-      await this.prisma.supplierCatalog.create({
+      ({ id: catalogId } = await this.prisma.supplierCatalog.create({
         data: {
           companyId: company.id,
           supplierId: supplier.id,
@@ -262,10 +263,21 @@ export class SupplierCatalogsService {
             })),
           },
         },
-      });
+        select: { id: true },
+      }));
     } catch (error) {
       if (stored) await this.storage.delete(stored.path);
       throw error;
+    }
+    // CNPJ de fornecedor aprovado num link aberto: compras confirma com o contato cadastrado.
+    if (!created && !supplier.cadastroPendente) {
+      await this.supplierSelfService.alertBuyers(
+        company.id,
+        supplier,
+        dto.identidade.nomeResponsavel,
+        { context: "envio de catálogo", path: `/catalogos/${catalogId}` },
+        "confirm",
+      );
     }
     return { fornecedor: supplier.nomeFantasia, itens: dto.itens.length, cadastroPendente: supplier.cadastroPendente };
   }

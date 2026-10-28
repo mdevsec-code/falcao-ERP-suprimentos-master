@@ -33,7 +33,7 @@ export class SupplierSelfServiceService {
   /**
    * `inviteOnly`: fornecedor já aprovado não entra (link aberto da cotação) — compras
    * é avisado para mandar o convite. Sem ela (catálogo), entra: o envio só vale
-   * depois da revisão item a item de compras.
+   * depois da revisão item a item de compras, e quem chama avisa compras (`alertBuyers`).
    */
   async resolveOrRegister(
     companyId: string,
@@ -89,25 +89,33 @@ export class SupplierSelfServiceService {
     }
   }
 
-  /** Avisa compras (e-mail e WeChat) que um fornecedor cadastrado pediu para participar. */
-  private async alertBuyers(
+  /**
+   * Avisa compras (e-mail e WeChat) que o CNPJ de um fornecedor cadastrado foi usado
+   * num link aberto. `invite`: pediu para entrar na cotação (foi barrado). `confirm`:
+   * mandou catálogo — entrou para revisão, mas quem mandou pode não ser o fornecedor.
+   */
+  async alertBuyers(
     companyId: string,
     supplier: Supplier,
     informedBy: string,
     target: { context: string; path: string },
+    kind: "invite" | "confirm" = "invite",
   ): Promise<void> {
     const recipients = await this.prisma.forCompany(companyId).user.findMany({
       where: { role: { in: ["BUYER", "ADMIN"] }, isActive: true },
       select: { email: true, wechatToken: true },
     });
     const url = this.mail.link(target.path);
+    const title = kind === "invite" ? `Convite pedido: ${supplier.nomeFantasia}` : `Confirmar envio: ${supplier.nomeFantasia}`;
     this.mail.send({
       to: recipients.map((user) => user.email),
-      subject: `Convite pedido: ${supplier.nomeFantasia}`,
-      heading: "Fornecedor cadastrado pediu para participar",
+      subject: title,
+      heading: kind === "invite" ? "Fornecedor cadastrado pediu para participar" : "Catálogo enviado com CNPJ de fornecedor cadastrado",
       paragraphs: [
         `Alguém informou o CNPJ de ${supplier.nomeFantasia} no link aberto (${target.context}).`,
-        "Por segurança, fornecedores já cadastrados respondem pelo convite individual. Se o pedido for legítimo, convide o fornecedor pelo contato cadastrado — não pelo contato informado agora.",
+        kind === "invite"
+          ? "Por segurança, fornecedores já cadastrados respondem pelo convite individual. Se o pedido for legítimo, convide o fornecedor pelo contato cadastrado — não pelo contato informado agora."
+          : "O link é aberto e o CNPJ é público: antes de aceitar os itens, confirme o envio com o contato cadastrado do fornecedor — não com o contato informado agora.",
       ],
       details: [
         ["Fornecedor", supplier.razaoSocial],
@@ -119,7 +127,7 @@ export class SupplierSelfServiceService {
     this.wechat.send(
       recipients.map((user) => user.wechatToken),
       {
-        title: `Convite pedido: ${supplier.nomeFantasia} · 供应商请求邀请`,
+        title: kind === "invite" ? `${title} · 供应商请求邀请` : `${title} · 请向登记联系人确认目录`,
         lines: [`${supplier.razaoSocial} — CNPJ ${supplier.cnpj}`, `${target.context}`, `Informado por: ${informedBy.trim()}`],
         action: { label: "Abrir · 打开", url },
       },

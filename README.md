@@ -267,7 +267,9 @@ Os arquivos ficam em [`deploy/`](deploy):
 | [`env.production.example`](deploy/env.production.example) | Modelo do `.env` de produção |
 | [`deploy.sh`](deploy/deploy.sh) | A cada versão: `git pull`, `npm ci`, migrations, build, reinício da API e checagem do `/health` |
 | [`ecosystem.config.cjs`](deploy/ecosystem.config.cjs) | Configuração do PM2 (reinicia a API se cair e quando o VPS reinicia) |
-| [`nginx-falcao-erp.conf`](deploy/nginx-falcao-erp.conf) | Site, proxy da API e de `/uploads`, uploads de 50 MB, cache dos assets |
+| [`nginx-falcao-erp.conf`](deploy/nginx-falcao-erp.conf) | Modelo do site: proxy da API, uploads de 50 MB, cache dos assets e cabeçalhos de segurança (HSTS, CSP) |
+| [`nginx-producao.conf`](deploy/nginx-producao.conf) + [`apply-nginx.sh`](deploy/apply-nginx.sh) | A configuração em uso no servidor (com as linhas do Certbot) e o script que a instala com cópia de segurança e volta sozinho se o `nginx -t` falhar |
+| [`harden-vps.sh`](deploy/harden-vps.sh) | Reforço do servidor: API só em `127.0.0.1`, pasta de uploads restrita, backup diário agendado e fail2ban no SSH |
 | [`backup.sh`](deploy/backup.sh) | Backup diário do banco (`pg_dump`) e dos arquivos enviados, guardando 14 dias |
 
 **Primeira instalação**
@@ -284,7 +286,7 @@ Os arquivos ficam em [`deploy/`](deploy):
    BOOTSTRAP_ADMIN_PASSWORD="senha-com-12-ou-mais" npm run prisma:bootstrap -w apps/api
    ```
    Cria a empresa, as disciplinas iniciais e o administrador; os demais usuários são criados pela tela "Usuários".
-7. **Backup** — `crontab -e` → `30 3 * * * bash /var/www/falcao-erp/deploy/backup.sh`, e copie a pasta `/var/lib/falcao-erp/backups` para fora do VPS de tempos em tempos (o snapshot semanal do painel da Hostinger também ajuda).
+7. **Reforço e backup** — como root, `bash deploy/harden-vps.sh` (agenda o backup diário às 02:30) e `bash deploy/apply-nginx.sh` depois de adaptar `deploy/nginx-producao.conf`. Copie a pasta `/var/lib/falcao-erp/backups` para fora do VPS de tempos em tempos (o snapshot semanal do painel da Hostinger também ajuda).
 
 **Atualizar depois:** `sudo -iu falcao`, `cd /var/www/falcao-erp && bash deploy/deploy.sh`.
 
@@ -344,13 +346,17 @@ Fornecedores, produtos e solicitações de compra seguem o mesmo padrão em `/su
 ## 🛡️ Segurança
 
 - **Isolamento por empresa** na camada de consulta (`PrismaService.forCompany`); SQL bruto sempre parametrizado e com `company_id`.
-- **Uploads** — o storage recusa caminhos fora de `UPLOADS_DIR` e aceita só uma lista de extensões (PDF, imagens, Office, texto, CAD, ZIP); HTML, SVG e JS são bloqueados. `/uploads` responde com `nosniff`, e o que não é PDF/imagem/texto vai como download com `Content-Security-Policy: sandbox`.
+- **Acesso por registro** — além do papel, cada registro é conferido: solicitante vê só as próprias solicitações (ou as que assina) e recebe 404 nas demais; documentos de contrato e nota fiscal só para administração, gerência, compras, financeiro e auditoria; produtos e solicitações só aceitam fornecedores e produtos da mesma empresa.
+- **Arquivos** — não há pasta pública: anexos, fotos e catálogos saem por `/api/v1/files/...` com link assinado (HMAC) que vence em cerca de 2 horas. O storage recusa caminhos fora de `UPLOADS_DIR` e aceita só uma lista de extensões; HTML, SVG e JS são bloqueados, e o que não é PDF/imagem/texto vai como download com `Content-Security-Policy: sandbox`.
+- **Sessão** — refresh token de uso único, guardado como SHA-256 e revogado de forma atômica; trocar a senha encerra as sessões abertas.
+- **Links abertos** — fornecedor já aprovado não entra pelo link aberto da cotação (precisa do convite) e o catálogo enviado com o CNPJ dele avisa compras para confirmar com o contato cadastrado; o autocadastro não revela se o CNPJ já existe.
+- **Servidor** — API escutando só em `127.0.0.1`, Nginx sem versão, HSTS, CSP, `Permissions-Policy`, build sem source maps e fail2ban no SSH.
 - **Cabeçalhos** via `helmet`; CORS restrito a `CORS_ORIGIN`.
 - **Força bruta** — login e refresh limitados a 10 tentativas/minuto por IP; o login leva o mesmo tempo para e-mail inexistente e senha errada.
 - **Concorrência** — baixa de conta, cancelamento e decisão de reembolso são atualizações condicionais: dois cliques não pagam duas vezes nem geram duas contas.
 - **Validação** — `whitelist` + `forbidNonWhitelisted` (campos como `companyId` no corpo são rejeitados); erros conhecidos do Prisma viram 409/404/400.
 - **CSV** — a exportação neutraliza células que o Excel executaria como fórmula.
-- **Dependências** — `overrides` fixam versões corrigidas de `multer`, `body-parser`, `lodash` e `qs`.
+- **Dependências** — `overrides` fixam versões corrigidas de `multer`, `body-parser`, `lodash` e `qs`; os alertas restantes dependem do NestJS 11 (ver próximos passos).
 
 ---
 
@@ -396,6 +402,7 @@ Os arquivos são páginas HTML: baixe e abra no navegador (os diagramas usam Mer
 14. **Plano de aquisição com quatro assinaturas** — estrutura do formulário em papel (采购计划单) trazida para o sistema: número do plano, contato, projeto, itens com especificação, foto, peso, local de uso, setor e data de entrada; assinatura desenhada por etapa (técnico, compras, custos, gerente geral) com registro de IP; tela de aprovadores; fotos no catálogo; PDF do plano com fotos e assinaturas; avisos por e-mail (SMTP) e WeChat (PushPlus), botão "Copiar para o WeChat"; recarga automática quando o navegador está com uma versão anterior ao deploy.
 15. **Fornecedores em dois idiomas** — pedido dos gerentes: busca por palavra-chave (atividades, produtos, catálogo e itens enviados) com glossário português–chinês–inglês e texto de busca normalizado (`searchText`), atividades e produtos/serviços em português e chinês, e link para o fornecedor fazer o próprio cadastro, pendente de aprovação.
 16. **Busca pelo histórico e arquivos bilíngues** — fornecedores antigos, sem descrição, encontrados pelo que já cotaram, contratos e contas a pagar; escolha de um ou dois idiomas em todos os PDFs, planilhas e CSVs (padrão português + chinês) e fonte chinesa embutida nos PDFs.
+17. **Auditoria de segurança (28/10/2026)** — falhas reproduzidas em ambiente isolado antes e depois de cada correção: acesso por registro em solicitações, documentos e agenda; links de arquivo assinados no lugar de `/uploads` público; refresh token com SHA-256; troca de senha encerrando sessões; links abertos de fornecedor; cabeçalhos do Nginx e reforço do VPS.
 
 ---
 
@@ -409,20 +416,19 @@ Em produção em **https://suprimentos.falcaoengenhariasz.com** (VPS da Hostinge
 - Armazenamento de arquivos apenas em disco local; a interface `IStorageProvider` permite plugar S3/Azure Blob.
 
 **Qualidade**
-- Testes unitários no Web (formatação, KPIs, CSV, calendário, paridade de traduções); a API ainda não tem `*.spec.ts` versionados.
+- Testes unitários no Web (formatação, KPIs, CSV, calendário, paridade de traduções, permissões) e na API (`node:test`: regras de acesso, links de arquivo, refresh token).
 - Falta um job de CI com PostgreSQL para testes de integração.
-- `npm audit` ainda aponta itens que exigem troca de versão maior: NestJS 10 → 11.
+- `npm audit` ainda aponta itens de negação de serviço que exigem troca de versão maior: NestJS 10 → 11 (Express 5, `multer`, `body-parser`, `qs`) e `zod` 3 → 4.
 
 **Segurança**
-- Arquivos em `/uploads` são acessíveis por quem tiver a URL — para dados sensíveis, servir por rota autenticada ou URL assinada.
+- Acesso SSH ao servidor por chave, com o login de root por senha desligado.
 - Tokens no `localStorage`; cookies `httpOnly` reduziriam o impacto de um eventual XSS.
 - Exigir segredos JWT de 32+ caracteres na validação de ambiente de produção.
 
 **Produto**
 - Preencher atividades e produtos dos fornecedores já cadastrados (pesquisa pelo nome e CNPJ, revisada por compras).
-- Avisar o comprador por e-mail/WeChat quando um fornecedor responde ou envia catálogo (os avisos de aprovação já existem).
+- Avisar o comprador por e-mail/WeChat quando um fornecedor responde ou envia catálogo (hoje só há aviso quando o CNPJ é de fornecedor já aprovado).
 - Integração com o Google Agenda (assinatura de calendário `.ics` por usuário e convites por e-mail).
-- Fotos de itens e produtos ficam em `/uploads` acessíveis por URL — como os demais anexos.
 - Tela de dados da empresa (`companies` ainda é só serviço interno).
 - Recuperação de senha por e-mail.
 - Busca por conteúdo em PDFs e documentos Office.
