@@ -272,6 +272,15 @@ function searchConditions(search: string): Prisma.SupplierWhereInput[] {
         { alternativeProducts: { some: { product } } },
         { priceEntries: { some: { product } } },
         { catalogs: { some: { items: { some: { descricao: contains(variant) } } } } },
+        // Histórico: itens que o fornecedor já cotou com preço, contratos e contas a pagar.
+        // Assim quem foi cadastrado antes da descrição também aparece na busca.
+        {
+          quotations: {
+            some: { prices: { some: { quotationItem: { descricao: contains(variant) } } } },
+          },
+        },
+        { contracts: { some: { OR: [{ objeto: contains(variant) }, { descricao: contains(variant) }] } } },
+        { payables: { some: { descricao: contains(variant) } } },
       ];
     }),
   }));
