@@ -38,13 +38,16 @@ export const ALL_PERMISSIONS: Permission[] = Object.values(PERMISSIONS);
 
 const READ_ONLY: Permission[] = [
   PERMISSIONS.SUPPLIER_READ,
-  PERMISSIONS.SUPPLIER_EVALUATE,
   PERMISSIONS.PRODUCT_READ,
   PERMISSIONS.PURCHASE_REQUEST_READ,
 ];
 
-/** Todo mundo que trabalha (não só consulta): pede reembolso e usa a agenda. */
-const COLLABORATOR: Permission[] = [PERMISSIONS.REIMBURSEMENT_REQUEST, PERMISSIONS.AGENDA_WRITE];
+/** Todo mundo que trabalha (não só consulta): pede reembolso, usa a agenda e avalia fornecedor. */
+const COLLABORATOR: Permission[] = [
+  PERMISSIONS.REIMBURSEMENT_REQUEST,
+  PERMISSIONS.AGENDA_WRITE,
+  PERMISSIONS.SUPPLIER_EVALUATE,
+];
 
 export const ROLE_PERMISSIONS: Record<Role, readonly Permission[]> = {
   [ROLES.ADMIN]: [...ALL_PERMISSIONS],

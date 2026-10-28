@@ -21,6 +21,16 @@ export const REIMBURSEMENT_REQUEST_ROLES: readonly Role[] = [
   "REQUESTER",
 ];
 export const REIMBURSEMENT_DECIDE_ROLES: readonly Role[] = ["ADMIN", "MANAGER"];
+/** Avaliam fornecedores: quem trabalha com eles — o auditor só consulta. */
+export const SUPPLIER_EVALUATION_ROLES: readonly Role[] = [
+  "ADMIN",
+  "MANAGER",
+  "BUYER",
+  "FINANCE",
+  "WAREHOUSE",
+  "REQUESTER",
+];
+
 /** Veem os reembolsos de todos; os demais veem só os próprios. */
 export const REIMBURSEMENT_VIEW_ALL_ROLES: readonly Role[] = ["ADMIN", "MANAGER", "FINANCE", "AUDITOR"];
 

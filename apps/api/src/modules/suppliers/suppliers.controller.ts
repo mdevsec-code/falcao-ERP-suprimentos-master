@@ -17,6 +17,7 @@ import {
 import { FileInterceptor } from "@nestjs/platform-express";
 import { AuditLog } from "../../common/decorators/audit-log.decorator";
 import { CurrentUser } from "../../common/decorators/current-user.decorator";
+import { SUPPLIER_EVALUATION_ROLES } from "../../common/constants/module-roles";
 import { Roles } from "../../common/decorators/roles.decorator";
 import type { AuthenticatedUser } from "../../common/types/auth-request";
 import { CreateEvaluationDto } from "./dto/create-evaluation.dto";
@@ -120,6 +121,7 @@ export class SuppliersController {
     return this.suppliersService.decideRegistration(user.companyId, id, false);
   }
 
+  @Roles(...SUPPLIER_EVALUATION_ROLES)
   @Post(":id/evaluations")
   addEvaluation(
     @CurrentUser() user: AuthenticatedUser,
