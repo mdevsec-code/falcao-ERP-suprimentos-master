@@ -13,6 +13,7 @@
     "prisma:seed": "dotenv -e .env -e ../../.env -- tsx prisma/seed.ts",
     "prisma:studio": "dotenv -e .env -e ../../.env -- prisma studio",
     "typecheck": "tsc -p tsconfig.build.json --noEmit",
+    "test": "tsx --test \"src/**/*.spec.ts\"",
     "prisma:bootstrap": "dotenv -e .env -e ../../.env -- tsx prisma/bootstrap.ts"
   },
   "dependencies": {

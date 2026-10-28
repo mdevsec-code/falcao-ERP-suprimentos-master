@@ -1,4 +1,4 @@
-import { BadRequestException, ForbiddenException, Inject, Injectable } from "@nestjs/common";
+import { BadRequestException, ForbiddenException, Inject, Injectable, NotFoundException } from "@nestjs/common";
 import {
   ALLOWED_TRANSITIONS,
   APPROVAL_STEPS,
@@ -23,6 +23,11 @@ import { ChangeStatusDto } from "./dto/change-status.dto";
 import { CreatePurchaseRequestDto } from "./dto/create-purchase-request.dto";
 import { QueryPurchaseRequestsDto } from "./dto/query-purchase-requests.dto";
 import { UpdatePurchaseRequestDto } from "./dto/update-purchase-request.dto";
+import {
+  canRemovePurchaseRequestAttachment,
+  canViewPurchaseRequest,
+  seesOnlyOwnRequests,
+} from "./purchase-request-access";
 import { PurchaseRequestApprovalsService } from "./purchase-request-approvals.service";
 import {
   PurchaseRequestsRepository,
@@ -47,7 +52,7 @@ export class PurchaseRequestsService {
     const { data, total } = await this.repository.findMany(user.companyId, {
       search: query.search,
       status: pendingMine ? "AGUARDANDO_APROVACAO" : query.status,
-      requesterId: user.role === "REQUESTER" && !pendingMine ? user.userId : undefined,
+      requesterId: seesOnlyOwnRequests(user) && !pendingMine ? user.userId : undefined,
       currentSteps: pendingMine ? await this.approvals.signableSteps(user) : undefined,
       page: query.page,
       pageSize: query.pageSize,
@@ -64,13 +69,34 @@ export class PurchaseRequestsService {
     };
   }
 
-  async getById(user: AuthenticatedUser, id: string): Promise<PurchaseRequestDetailDto> {
+  /**
+   * A solicitação, se o usuário pode vê-la (`canViewPurchaseRequest`). Toda rota
+   * com `:id` passa por aqui; quem não pode ver recebe o mesmo 404 de um id inexistente.
+   */
+  async findVisibleOrThrow(user: AuthenticatedUser, id: string): Promise<PurchaseRequestDetailPayload> {
     const request = await this.repository.findByIdOrThrow(user.companyId, id);
+    const signableSteps = seesOnlyOwnRequests(user) ? await this.approvals.signableSteps(user) : [];
+    const visible = canViewPurchaseRequest(
+      user,
+      {
+        requesterId: request.requesterId,
+        status: request.status,
+        currentStep: request.currentStep,
+        signerIds: request.signatures.map((signature) => signature.userId),
+      },
+      signableSteps,
+    );
+    if (!visible) throw new NotFoundException("Solicitação não encontrada.");
+    return request;
+  }
+
+  async getById(user: AuthenticatedUser, id: string): Promise<PurchaseRequestDetailDto> {
+    const request = await this.findVisibleOrThrow(user, id);
     return this.toDetailDto(request, user);
   }
 
-  async getTimeline(companyId: string, id: string): Promise<PurchaseRequestTimelineEntryDto[]> {
-    const request = await this.repository.findByIdOrThrow(companyId, id);
+  async getTimeline(user: AuthenticatedUser, id: string): Promise<PurchaseRequestTimelineEntryDto[]> {
+    const request = await this.findVisibleOrThrow(user, id);
     const entries: PurchaseRequestTimelineEntryDto[] = [
       {
         type: "CREATED",
@@ -109,7 +135,7 @@ export class PurchaseRequestsService {
   }
 
   async update(user: AuthenticatedUser, id: string, dto: UpdatePurchaseRequestDto): Promise<PurchaseRequestDetailDto> {
-    const existing = await this.repository.findByIdOrThrow(user.companyId, id);
+    const existing = await this.findVisibleOrThrow(user, id);
     const isOwner = existing.requesterId === user.userId;
     if (existing.status !== "AGUARDANDO_APROVACAO") {
       throw new BadRequestException("Só é possível editar solicitações aguardando aprovação.");
@@ -131,7 +157,7 @@ export class PurchaseRequestsService {
     id: string,
     dto: ChangeStatusDto,
   ): Promise<PurchaseRequestDetailDto> {
-    const existing = await this.repository.findByIdOrThrow(user.companyId, id);
+    const existing = await this.findVisibleOrThrow(user, id);
     const from = existing.status;
 
     const allowedTargets = ALLOWED_TRANSITIONS[from];
@@ -171,8 +197,9 @@ export class PurchaseRequestsService {
     return { path: stored.path, url: stored.url };
   }
 
-  async addComment(companyId: string, purchaseRequestId: string, authorId: string, dto: AddCommentDto) {
-    const comment = await this.repository.addComment(companyId, purchaseRequestId, authorId, dto.message);
+  async addComment(user: AuthenticatedUser, purchaseRequestId: string, dto: AddCommentDto) {
+    await this.findVisibleOrThrow(user, purchaseRequestId);
+    const comment = await this.repository.addComment(user.companyId, purchaseRequestId, user.userId, dto.message);
     return {
       id: comment.id,
       message: comment.message,
@@ -183,25 +210,24 @@ export class PurchaseRequestsService {
   }
 
   async addAttachment(
-    companyId: string,
+    user: AuthenticatedUser,
     purchaseRequestId: string,
-    uploadedById: string,
     file: { originalname: string; mimetype: string; buffer: Buffer },
   ) {
-    // Confere a solicitação ANTES de gravar: a pasta usa o id da URL.
-    await this.repository.findByIdOrThrow(companyId, purchaseRequestId);
+    // Confere a solicitação (e se o usuário a vê) ANTES de gravar: a pasta usa o id da URL.
+    await this.findVisibleOrThrow(user, purchaseRequestId);
     const fileName = decodeUploadName(file.originalname);
     const stored = await this.storage.save(file.buffer, {
       folder: `purchase-requests/${purchaseRequestId}`,
       fileName,
     });
 
-    const attachment = await this.repository.addAttachment(companyId, purchaseRequestId, {
+    const attachment = await this.repository.addAttachment(user.companyId, purchaseRequestId, {
       fileName,
       filePath: stored.path,
       mimeType: file.mimetype,
       size: stored.size,
-      uploadedById,
+      uploadedById: user.userId,
     });
 
     return {
@@ -216,8 +242,12 @@ export class PurchaseRequestsService {
     };
   }
 
-  async removeAttachment(companyId: string, purchaseRequestId: string, attachmentId: string) {
-    const attachment = await this.repository.findAttachmentOrThrow(companyId, purchaseRequestId, attachmentId);
+  async removeAttachment(user: AuthenticatedUser, purchaseRequestId: string, attachmentId: string) {
+    const request = await this.findVisibleOrThrow(user, purchaseRequestId);
+    const attachment = await this.repository.findAttachmentOrThrow(user.companyId, purchaseRequestId, attachmentId);
+    if (!canRemovePurchaseRequestAttachment(user, request, attachment)) {
+      throw new ForbiddenException("Você só pode remover anexos que enviou ou da sua própria solicitação.");
+    }
     await this.repository.removeAttachment(attachmentId);
     await this.storage.delete(attachment.filePath);
   }

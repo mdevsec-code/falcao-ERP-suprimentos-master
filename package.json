@@ -16,7 +16,7 @@
     "build": "npm run build -w packages/shared-types && npm run build -w apps/api && npm run build -w apps/web",
     "lint": "npm run lint -w apps/api && npm run lint -w apps/web",
     "typecheck": "npm run build -w packages/shared-types && npm run typecheck -w apps/api && npm run typecheck -w apps/web",
-    "test": "npm run test -w apps/web",
+    "test": "npm run test -w apps/api && npm run test -w apps/web",
     "format": "npm run format -w apps/web",
     "format:check": "npm run format:check -w apps/web",
     "validate": "npm run typecheck && npm run lint && npm run format:check && npm run test && npm run build",

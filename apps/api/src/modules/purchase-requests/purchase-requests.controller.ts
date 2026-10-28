@@ -104,7 +104,7 @@ export class PurchaseRequestsController {
 
   @Get(":id/timeline")
   getTimeline(@CurrentUser() user: AuthenticatedUser, @Param("id", ParseUUIDPipe) id: string) {
-    return this.purchaseRequestsService.getTimeline(user.companyId, id);
+    return this.purchaseRequestsService.getTimeline(user, id);
   }
 
   @Roles(...PARTICIPANT_ROLES)
@@ -144,6 +144,8 @@ export class PurchaseRequestsController {
     @Body() dto: SignPurchaseRequestDto,
     @Req() request: Request,
   ) {
+    // Mesma regra de visibilidade das outras rotas antes de assinar.
+    await this.purchaseRequestsService.findVisibleOrThrow(user, id);
     await this.approvalsService.sign(user, id, dto, {
       ip: request.ip,
       userAgent: request.headers["user-agent"],
@@ -158,7 +160,7 @@ export class PurchaseRequestsController {
     @Param("id", ParseUUIDPipe) id: string,
     @Body() dto: AddCommentDto,
   ) {
-    return this.purchaseRequestsService.addComment(user.companyId, id, user.userId, dto);
+    return this.purchaseRequestsService.addComment(user, id, dto);
   }
 
   @Roles(...PARTICIPANT_ROLES)
@@ -174,7 +176,7 @@ export class PurchaseRequestsController {
     )
     file: Express.Multer.File,
   ) {
-    return this.purchaseRequestsService.addAttachment(user.companyId, id, user.userId, file);
+    return this.purchaseRequestsService.addAttachment(user, id, file);
   }
 
   @Roles(...PARTICIPANT_ROLES)
@@ -185,6 +187,6 @@ export class PurchaseRequestsController {
     @Param("id", ParseUUIDPipe) id: string,
     @Param("attachmentId", ParseUUIDPipe) attachmentId: string,
   ) {
-    return this.purchaseRequestsService.removeAttachment(user.companyId, id, attachmentId);
+    return this.purchaseRequestsService.removeAttachment(user, id, attachmentId);
   }
 }
