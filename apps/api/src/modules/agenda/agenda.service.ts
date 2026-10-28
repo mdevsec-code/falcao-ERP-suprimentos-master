@@ -9,6 +9,7 @@ import {
 } from "../../common/constants/module-roles";
 import type { AuthenticatedUser } from "../../common/types/auth-request";
 import { documentVisibilityWhere } from "../documents/document-access";
+import { seesOnlyOwnRequests } from "../purchase-requests/purchase-request-access";
 import { fromDateOnly, money, toDateOnlyString } from "../../common/utils/date-only";
 import { CreateAgendaEventDto, UpdateAgendaEventDto } from "./dto/agenda-event.dto";
 import { QueryAgendaDto } from "./dto/query-agenda.dto";
@@ -117,12 +118,16 @@ export class AgendaService {
     return items.sort((a, b) => a.inicio.localeCompare(b.inicio));
   }
 
-  obras(companyId: string) {
-    return this.repository.obras(companyId);
+  obras(user: AuthenticatedUser) {
+    return this.repository.obras(user.companyId, {
+      finance: FINANCE_READ_ROLES.includes(user.role),
+      contracts: CONTRACT_READ_ROLES.includes(user.role),
+      requesterId: seesOnlyOwnRequests(user) ? user.userId : undefined,
+    });
   }
 
   async createEvent(user: AuthenticatedUser, dto: CreateAgendaEventDto): Promise<AgendaItemDto> {
-    const data = await this.toWriteData(user.companyId, dto);
+    const data = await this.toWriteData(user, dto);
     const event = await this.repository.createEvent(user.companyId, user.userId, {
       ...data,
       titulo: dto.titulo,
@@ -135,7 +140,7 @@ export class AgendaService {
   async updateEvent(user: AuthenticatedUser, id: string, dto: UpdateAgendaEventDto): Promise<AgendaItemDto> {
     const existing = await this.repository.findEventOrThrow(user.companyId, id);
     this.assertCanManage(user, existing);
-    const data = await this.toWriteData(user.companyId, {
+    const data = await this.toWriteData(user, {
       ...dto,
       inicio: dto.inicio ?? existing.inicio.toISOString(),
       // `null` limpa o término; ausente mantém o atual.
@@ -156,7 +161,8 @@ export class AgendaService {
     }
   }
 
-  private async toWriteData(companyId: string, dto: UpdateAgendaEventDto): Promise<AgendaEventWriteData> {
+  private async toWriteData(user: AuthenticatedUser, dto: UpdateAgendaEventDto): Promise<AgendaEventWriteData> {
+    const companyId = user.companyId;
     const inicio = dto.inicio ? new Date(dto.inicio) : undefined;
     const fim = dto.fim ? new Date(dto.fim) : undefined;
     if (inicio && fim && fim < inicio) {
@@ -165,7 +171,9 @@ export class AgendaService {
     if (dto.supplierId && !(await this.repository.supplierExists(companyId, dto.supplierId))) {
       throw new BadRequestException("Fornecedor não encontrado.");
     }
-    if (dto.purchaseRequestId && !(await this.repository.purchaseRequestExists(companyId, dto.purchaseRequestId))) {
+    // Quem só vê as próprias solicitações só vincula às próprias (a mesma mensagem de inexistente).
+    const ownOnly = seesOnlyOwnRequests(user) ? user.userId : undefined;
+    if (dto.purchaseRequestId && !(await this.repository.purchaseRequestExists(companyId, dto.purchaseRequestId, ownOnly))) {
       throw new BadRequestException("Solicitação de compra não encontrada.");
     }
     return {

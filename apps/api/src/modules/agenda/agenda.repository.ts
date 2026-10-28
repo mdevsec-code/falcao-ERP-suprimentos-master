@@ -120,17 +120,29 @@ export class AgendaRepository {
     return (await this.prisma.forCompany(companyId).supplier.count({ where: { id } })) > 0;
   }
 
-  async purchaseRequestExists(companyId: string, id: string) {
-    return (await this.prisma.forCompany(companyId).purchaseRequest.count({ where: { id } })) > 0;
+  /** `requesterId`: quem só vê as próprias solicitações só vincula às próprias. */
+  async purchaseRequestExists(companyId: string, id: string, requesterId?: string) {
+    return (await this.prisma.forCompany(companyId).purchaseRequest.count({ where: { id, requesterId } })) > 0;
   }
 
-  /** Obras conhecidas: obras dos eventos + centros de custo usados nos demais módulos. */
-  async obras(companyId: string) {
+  /**
+   * Obras conhecidas: obras dos eventos + centros de custo dos módulos que o perfil
+   * consulta (contas e contratos só para quem os vê; solicitações, só as próprias
+   * para quem só vê as próprias).
+   */
+  async obras(companyId: string, scope: { finance: boolean; contracts: boolean; requesterId?: string }) {
+    const payables = scope.finance
+      ? Prisma.sql`UNION SELECT cost_center FROM payables WHERE company_id = ${companyId} AND cost_center IS NOT NULL`
+      : Prisma.empty;
+    const contracts = scope.contracts
+      ? Prisma.sql`UNION SELECT cost_center FROM contracts WHERE company_id = ${companyId} AND cost_center IS NOT NULL`
+      : Prisma.empty;
+    const ownRequests = scope.requesterId ? Prisma.sql`AND requester_id = ${scope.requesterId}` : Prisma.empty;
     const rows = await this.prisma.$queryRaw<Array<{ obra: string }>>(Prisma.sql`
       SELECT obra FROM agenda_events WHERE company_id = ${companyId} AND obra IS NOT NULL
-      UNION SELECT cost_center FROM payables WHERE company_id = ${companyId} AND cost_center IS NOT NULL
-      UNION SELECT cost_center FROM contracts WHERE company_id = ${companyId} AND cost_center IS NOT NULL
-      UNION SELECT cost_center FROM purchase_requests WHERE company_id = ${companyId} AND cost_center IS NOT NULL
+      ${payables}
+      ${contracts}
+      UNION SELECT cost_center FROM purchase_requests WHERE company_id = ${companyId} AND cost_center IS NOT NULL ${ownRequests}
       ORDER BY 1`);
     return rows.map((row) => row.obra);
   }

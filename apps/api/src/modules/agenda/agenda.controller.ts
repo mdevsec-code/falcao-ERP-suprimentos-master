@@ -30,7 +30,7 @@ export class AgendaController {
 
   @Get("obras")
   obras(@CurrentUser() user: AuthenticatedUser) {
-    return this.agendaService.obras(user.companyId);
+    return this.agendaService.obras(user);
   }
 
   @Roles(...AGENDA_WRITE_ROLES)
