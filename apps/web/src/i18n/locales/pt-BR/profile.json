@@ -39,7 +39,7 @@
   "toast": {
     "nameUpdated": "Nome atualizado.",
     "nameError": "Não foi possível atualizar o nome.",
-    "passwordChanged": "Senha alterada com sucesso.",
+    "passwordChanged": "Senha alterada. Entre de novo com a senha nova.",
     "passwordError": "Não foi possível alterar a senha."
   },
   "wechat": {

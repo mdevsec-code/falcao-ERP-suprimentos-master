@@ -39,7 +39,7 @@
   "toast": {
     "nameUpdated": "Name updated.",
     "nameError": "Could not update the name.",
-    "passwordChanged": "Password changed successfully.",
+    "passwordChanged": "Password changed. Sign in again with the new password.",
     "passwordError": "Could not change the password."
   },
   "wechat": {

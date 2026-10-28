@@ -39,7 +39,7 @@
   "toast": {
     "nameUpdated": "姓名已更新。",
     "nameError": "无法更新姓名。",
-    "passwordChanged": "密码修改成功。",
+    "passwordChanged": "密码已修改，请使用新密码重新登录。",
     "passwordError": "无法修改密码。"
   },
   "wechat": {

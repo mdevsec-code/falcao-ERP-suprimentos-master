@@ -33,6 +33,7 @@ export function useUpdateProfileName() {
 }
 
 export function useChangePassword() {
+  const signOut = useAuthStore((s) => s.signOut);
   return useMutation({
     mutationFn: ({
       currentPassword,
@@ -42,7 +43,9 @@ export function useChangePassword() {
       newPassword: string;
     }) => profileApi.changePassword(currentPassword, newPassword),
     onSuccess: () => {
+      // A API encerra todas as sessões ao trocar a senha; entra de novo com a nova.
       toast.success(i18n.t('profile:toast.passwordChanged'));
+      void signOut();
     },
     onError: (error: Error) => {
       toast.error(getErrorMessage(error, i18n.t('profile:toast.passwordError')));

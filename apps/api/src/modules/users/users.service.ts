@@ -148,6 +148,9 @@ export class UsersService {
     await this.repository.update(companyId, userId, {
       passwordHash: await bcrypt.hash(dto.newPassword, PASSWORD_ROUNDS),
     });
+    // Senha trocada (talvez por suspeita de vazamento): encerra todas as sessões,
+    // inclusive a de um aparelho perdido. O Web leva o usuário ao login.
+    await this.repository.revokeSessions(userId);
   }
 
   // ── Avisos no WeChat (PushPlus) ──
