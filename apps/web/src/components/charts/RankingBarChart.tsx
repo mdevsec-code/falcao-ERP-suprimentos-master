@@ -26,7 +26,7 @@ export function RankingBarChart({ data, formatValue, formatTick }: RankingBarCha
         return (
           <li
             key={row.label}
-            className="group/row transition-opacity duration-base hover:!opacity-100 group-hover/chart:opacity-45"
+            className="group/row relative transition-opacity duration-base hover:!opacity-100 group-hover/chart:opacity-45"
           >
             <div className="mb-1.5 flex items-baseline justify-between gap-3 text-sm">
               <span className="min-w-0 truncate text-ink-soft group-hover/row:text-ink">

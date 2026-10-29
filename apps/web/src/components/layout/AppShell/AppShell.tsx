@@ -36,7 +36,10 @@ export function AppShell() {
       <Sidebar />
       <div className="flex min-h-0 flex-col">
         <Topbar />
-        <main ref={mainRef} className="scrollbar-thin flex-1 overflow-y-auto">
+        {/* `relative`: elementos absolutos da página (ex.: textos sr-only) ficam
+            presos à rolagem do <main>; sem isto eles escapavam para o documento
+            e esticavam a janela, deixando uma faixa vazia abaixo do app. */}
+        <main ref={mainRef} className="scrollbar-thin relative flex-1 overflow-y-auto">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div key={pathname} {...PAGE_TRANSITION}>
               <Outlet />
