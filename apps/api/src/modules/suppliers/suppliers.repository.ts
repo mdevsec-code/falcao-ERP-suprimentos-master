@@ -130,13 +130,21 @@ export class SuppliersRepository {
     return { ...supplier, searchText };
   }
 
-  /** Fornecedores gravados antes da busca nova (ou por outro caminho) ainda sem texto de busca. */
+  /**
+   * Recalcula o texto de busca de todos os fornecedores e grava só os que
+   * mudaram: cobre quem foi gravado antes da busca por palavra-chave e
+   * qualquer ajuste na regra de indexação (ex.: compostos como fibrocimento).
+   */
   async backfillSearchText(): Promise<number> {
-    const rows = await this.prisma.supplier.findMany({ where: { searchText: "" } });
+    const rows = await this.prisma.supplier.findMany();
+    let updated = 0;
     for (const row of rows) {
-      await this.prisma.supplier.update({ where: { id: row.id }, data: { searchText: buildSupplierSearchText(row) } });
+      const searchText = buildSupplierSearchText(row);
+      if (searchText === row.searchText) continue;
+      await this.prisma.supplier.update({ where: { id: row.id }, data: { searchText } });
+      updated += 1;
     }
-    return rows.length;
+    return updated;
   }
 
   async setActive(companyId: string, id: string, isActive: boolean): Promise<SupplierDetailPayload> {

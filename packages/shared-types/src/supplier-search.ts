@@ -33,6 +33,9 @@ const isCjk = (term: string) => CJK.test(term);
  * (com acento); a comparação normaliza.
  */
 export const SUPPLY_GLOSSARY: ReadonlyArray<readonly string[]> = [
+  // Compostos que contêm "cimento" mas são outra coisa (ver COMPOUND_REWRITES).
+  ["fibrocimento", "纤维水泥", "fiber cement", "fibre cement"],
+  ["forno de cimento", "fornodecimento", "水泥窑", "cement kiln"],
   ["cimento", "水泥", "cement"],
   ["concreto", "混凝土", "砼", "concrete"],
   ["argamassa", "砂浆", "mortar"],
@@ -229,6 +232,26 @@ export function buildSupplierSearchGroups(query: string): string[][] {
   return groups;
 }
 
+/**
+ * Compostos que citam um material sem ser ele: "telha de fibrocimento"
+ * (纤维水泥) não é cimento, e "coprocessamento em fornos de cimento" (水泥窑)
+ * é serviço de resíduos. No texto indexado viram um termo próprio, que o
+ * glossário liga aos dois idiomas — "cimento"/"水泥" não os acha mais, mas
+ * "fibrocimento"/"纤维水泥" e "forno de cimento"/"水泥窑" continuam achando.
+ * Aplicado depois de `normalizeSearchText` (minúsculas, sem acento).
+ */
+const COMPOUND_REWRITES: ReadonlyArray<readonly [RegExp, string]> = [
+  [/纤维水泥/g, " fibrocimento "],
+  [/水泥窑/g, " fornodecimento "],
+  [/(^| )fornos? (?:de |para )?cimentos?(?= |$)/g, "$1fornodecimento"],
+  [/(^| )fibro cimentos?(?= |$)/g, "$1fibrocimento"],
+];
+
+function rewriteCompounds(normalized: string): string {
+  const out = COMPOUND_REWRITES.reduce((text, [pattern, replacement]) => text.replace(pattern, replacement), normalized);
+  return out.replace(/\s+/g, " ").trim();
+}
+
 /** Termo em ideogramas (comparado como trecho) ou em letras (comparado pelo começo da palavra). */
 export const isCjkSearchTerm = isCjk;
 
@@ -249,7 +272,7 @@ export function buildSupplierSearchText(fields: {
   produtosServicos?: string | null;
   produtosServicosZh?: string | null;
 }): string {
-  const text = normalizeSearchText(
+  const text = rewriteCompounds(normalizeSearchText(
     [
       fields.razaoSocial,
       fields.nomeFantasia,
@@ -263,6 +286,6 @@ export function buildSupplierSearchText(fields: {
       fields.produtosServicos,
       fields.produtosServicosZh,
     ].join(" "),
-  );
+  ));
   return ` ${text} `;
 }

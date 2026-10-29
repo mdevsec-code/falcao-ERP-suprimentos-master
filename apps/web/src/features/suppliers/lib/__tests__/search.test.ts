@@ -79,3 +79,48 @@ describe('busca de fornecedores por palavra-chave', () => {
     expect(matches(cimentoSo, '12.345.678')).toBe(true);
   });
 });
+
+describe('compostos que citam cimento sem ser cimento', () => {
+  const base = {
+    cnpj: '04.432.419/0001-73',
+    categoria: 'MATERIAIS_CONSTRUCAO' as const,
+    cidade: 'Camaçari',
+    estado: 'BA',
+  };
+  // Trechos reais de produção (cadastro feito pelo próprio fornecedor).
+  const madeireira = buildSupplierSearchText({
+    ...base,
+    razaoSocial: 'JV Ind. e Com. de Madeiras EIRELI',
+    nomeFantasia: 'Madeireira Victória',
+    produtosServicos: 'Telhas de fibrocimento, ferragens, fechaduras',
+    produtosServicosZh: '配套材料 各类辅助产品 包括纤维水泥屋面瓦 五金件 锁具',
+  });
+  const residuos = buildSupplierSearchText({
+    ...base,
+    razaoSocial: 'MR Soluções Ambientais',
+    nomeFantasia: 'MR Soluções Ambientais',
+    categoria: 'MANUTENCAO',
+    produtosServicos:
+      'CDRI destinado ao coprocessamento em fornos de cimento; resíduos em forno de cimento',
+    produtosServicosZh: '在水泥窑中协同处置',
+  });
+
+  it('"cimento" e "水泥" não acham fibrocimento (纤维水泥) nem forno de cimento (水泥窑)', () => {
+    for (const query of ['cimento', '水泥', 'cement']) {
+      expect(matches(madeireira, query)).toBe(false);
+      expect(matches(residuos, query)).toBe(false);
+    }
+  });
+
+  it('os compostos continuam encontráveis pelo próprio nome, nos dois idiomas', () => {
+    expect(matches(madeireira, 'fibrocimento')).toBe(true);
+    expect(matches(madeireira, '纤维水泥')).toBe(true);
+    expect(matches(residuos, 'forno de cimento')).toBe(true);
+    expect(matches(residuos, '水泥窑')).toBe(true);
+  });
+
+  it('quem vende cimento continua aparecendo', () => {
+    expect(matches(cimentoSo, 'cimento')).toBe(true);
+    expect(matches(cimentoSo, '水泥')).toBe(true);
+  });
+});

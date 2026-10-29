@@ -24,11 +24,11 @@ export class SuppliersService implements OnModuleInit {
     @Inject(STORAGE_PROVIDER) private readonly storage: IStorageProvider,
   ) {}
 
-  /** Preenche o texto de busca de fornecedores gravados antes da busca por palavra-chave. */
+  /** Mantém o texto de busca dos fornecedores em dia com a regra de indexação atual. */
   async onModuleInit(): Promise<void> {
     try {
       const count = await this.repository.backfillSearchText();
-      if (count > 0) this.logger.log(`Texto de busca preenchido em ${count} fornecedor(es).`);
+      if (count > 0) this.logger.log(`Texto de busca atualizado em ${count} fornecedor(es).`);
     } catch (error) {
       this.logger.warn(`Não foi possível preencher o texto de busca: ${error instanceof Error ? error.message : error}`);
     }
