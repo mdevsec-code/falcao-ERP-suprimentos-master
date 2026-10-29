@@ -1,24 +1,8 @@
 import { useRef, useEffect } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { Topbar } from '@/components/layout/Topbar';
 import { NavigationProgress } from '@/components/layout/NavigationProgress';
-
-// Troca de página: a nova sobe e ganha nitidez; a antiga só esmaece (sair
-// rápido evita a sensação de espera entre telas).
-const PAGE_TRANSITION = {
-  initial: { opacity: 0, y: 10, filter: 'blur(4px)' },
-  animate: {
-    opacity: 1,
-    y: 0,
-    filter: 'blur(0px)',
-    transition: { duration: 0.32, ease: [0.16, 1, 0.3, 1] as const },
-    // `filter` residual (mesmo blur(0)) prenderia elementos `fixed` da página.
-    transitionEnd: { filter: 'none' },
-  },
-  exit: { opacity: 0, transition: { duration: 0.12 } },
-};
 
 export function AppShell() {
   const { pathname } = useLocation();
@@ -40,11 +24,14 @@ export function AppShell() {
             presos à rolagem do <main>; sem isto eles escapavam para o documento
             e esticavam a janela, deixando uma faixa vazia abaixo do app. */}
         <main ref={mainRef} className="scrollbar-thin relative flex-1 overflow-y-auto">
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div key={pathname} {...PAGE_TRANSITION}>
-              <Outlet />
-            </motion.div>
-          </AnimatePresence>
+          {/* Entrada da página em CSS puro, remontada por rota. Antes era um
+              AnimatePresence mode="wait" do framer-motion: com cliques rápidos no
+              menu a saída da página anterior era interrompida e a nova ficava
+              presa em opacidade 0 — o módulo abria "em branco". Sem estado de
+              saída, não há o que travar. */}
+          <div key={pathname} className="animate-rise [animation-duration:320ms]">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>
