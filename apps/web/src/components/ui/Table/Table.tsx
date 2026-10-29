@@ -13,8 +13,12 @@ import { cn } from '@/utils/cn';
  */
 export const Table = forwardRef<HTMLTableElement, HTMLAttributes<HTMLTableElement>>(
   ({ className, ...rest }, ref) => (
-    <div className="scrollbar-thin overflow-x-auto rounded-md border border-border shadow-sm">
-      <table ref={ref} className={cn('w-full text-left text-sm', className)} {...rest} />
+    <div className="scrollbar-thin overflow-x-auto rounded-lg border border-border bg-surface shadow-sm">
+      <table
+        ref={ref}
+        className={cn('w-full text-left text-sm tabular-nums', className)}
+        {...rest}
+      />
     </div>
   ),
 );
@@ -24,7 +28,15 @@ export const TableHeader = forwardRef<
   HTMLTableSectionElement,
   HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...rest }, ref) => (
-  <thead ref={ref} className={cn('bg-brand-gold-50/60 text-ink', className)} {...rest} />
+  <thead
+    ref={ref}
+    className={cn(
+      // Cabeçalho em papel levemente dourado com fio de base mais firme.
+      'border-b border-border bg-gradient-to-b from-brand-gold-50/70 to-brand-gold-50/30 text-ink',
+      className,
+    )}
+    {...rest}
+  />
 ));
 TableHeader.displayName = 'TableHeader';
 
@@ -57,7 +69,7 @@ export const TableHead = forwardRef<HTMLTableCellElement, ThHTMLAttributes<HTMLT
     <th
       ref={ref}
       className={cn(
-        'whitespace-nowrap px-3 py-2 text-xs font-semibold uppercase tracking-wider text-ink-soft',
+        'h-10 whitespace-nowrap px-4 text-2xs font-semibold uppercase tracking-[0.08em] text-ink-soft',
         className,
       )}
       {...rest}
@@ -68,7 +80,7 @@ TableHead.displayName = 'TableHead';
 
 export const TableCell = forwardRef<HTMLTableCellElement, TdHTMLAttributes<HTMLTableCellElement>>(
   ({ className, ...rest }, ref) => (
-    <td ref={ref} className={cn('px-3 py-2.5 text-ink', className)} {...rest} />
+    <td ref={ref} className={cn('px-4 py-3 text-ink', className)} {...rest} />
   ),
 );
 TableCell.displayName = 'TableCell';

@@ -53,7 +53,7 @@ export function FiltersBar({ filters, entityTypes, onChange, onClearAll }: Filte
     chips.push({ key: 'busca', label: t('audit:filters.chipSearch', { value: filters.busca }) });
 
   return (
-    <div className="space-y-4">
+    <div className="filter-panel space-y-4">
       <div className="flex items-center gap-2">
         <Filter className="h-4 w-4 text-ink-soft" aria-hidden="true" />
         <span className="text-sm font-semibold text-ink">{t('audit:filters.title')}</span>

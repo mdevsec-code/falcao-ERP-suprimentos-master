@@ -1,5 +1,6 @@
 import { forwardRef, useId, type TextareaHTMLAttributes } from 'react';
 import { cn } from '@/utils/cn';
+import { fieldError, fieldFocus, fieldLabel, fieldSurface } from '../field';
 
 export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
@@ -14,9 +15,9 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     const inputId = id ?? `textarea-${autoId}`;
 
     return (
-      <div className={cn('flex w-full flex-col gap-1.5', className)}>
+      <div className={cn('group/field flex w-full flex-col gap-1.5', className)}>
         {label && (
-          <label htmlFor={inputId} className="text-xs font-semibold text-ink-soft">
+          <label htmlFor={inputId} className={fieldLabel}>
             {label}
             {rest.required && (
               <span aria-hidden="true" className="ml-0.5 text-danger">
@@ -31,10 +32,10 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           id={inputId}
           rows={rows}
           className={cn(
-            'w-full resize-y rounded-md border bg-surface px-3 py-2 text-sm text-ink placeholder:text-muted',
-            'border-border transition-[border-color,box-shadow] duration-fast',
-            'focus:border-brand-gold-500 focus:shadow-focus focus:outline-none',
-            error && 'border-danger focus:border-danger focus:shadow-focus',
+            'w-full resize-y px-3 py-2 text-sm text-ink placeholder:text-muted',
+            fieldSurface,
+            fieldFocus,
+            error && fieldError,
             rest.disabled && 'cursor-not-allowed opacity-60',
             inputClassName,
           )}

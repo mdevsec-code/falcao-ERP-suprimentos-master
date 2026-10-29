@@ -1,5 +1,6 @@
 import { forwardRef, useId, type InputHTMLAttributes, type ReactNode } from 'react';
 import { cn } from '@/utils/cn';
+import { fieldError, fieldFocusWithin, fieldLabel, fieldSurface } from '../field';
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -17,9 +18,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const inputId = id ?? `input-${autoId}`;
 
     return (
-      <div className={cn('flex w-full flex-col gap-1.5', className)}>
+      <div className={cn('group/field flex w-full flex-col gap-1.5', className)}>
         {label && (
-          <label htmlFor={inputId} className="text-xs font-semibold text-ink-soft">
+          <label htmlFor={inputId} className={fieldLabel}>
             {label}
             {rest.required && (
               <span aria-hidden="true" className="ml-0.5 text-danger">
@@ -31,15 +32,18 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
         <div
           className={cn(
-            'group flex h-10 w-full items-center gap-2 rounded-md border bg-surface px-3',
-            'transition-[border-color,box-shadow] duration-fast',
-            'border-border',
-            'focus-within:border-brand-gold-500 focus-within:shadow-focus',
-            error && 'border-danger focus-within:border-danger focus-within:shadow-focus',
+            'group flex h-10 w-full items-center gap-2 px-3',
+            fieldSurface,
+            fieldFocusWithin,
+            error && fieldError,
             rest.disabled && 'cursor-not-allowed opacity-60',
           )}
         >
-          {leftIcon && <span className="flex shrink-0 items-center text-ink-soft">{leftIcon}</span>}
+          {leftIcon && (
+            <span className="flex shrink-0 items-center text-muted transition-colors duration-fast group-focus-within:text-brand-gold-700">
+              {leftIcon}
+            </span>
+          )}
 
           <input
             ref={ref}

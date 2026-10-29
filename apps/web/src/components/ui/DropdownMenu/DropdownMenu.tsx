@@ -17,7 +17,7 @@ export const DropdownMenuContent = forwardRef<
       className={cn(
         // Vai para o <body> via Portal: precisa ficar acima da Topbar (z-sticky) e
         // dos diálogos (z-modal), como o Select — com z-dropdown a barra cobria o menu.
-        'z-popover min-w-[10rem] overflow-hidden rounded-md border border-border bg-surface p-1 shadow-lg',
+        'z-popover min-w-[10rem] overflow-hidden rounded-lg border border-border bg-surface/95 p-1 shadow-lg backdrop-blur-xl',
         'origin-[var(--radix-dropdown-menu-content-transform-origin)]',
         'data-[state=closed]:animate-scale-out data-[state=open]:animate-scale-in',
         className,
@@ -35,8 +35,9 @@ export const DropdownMenuItem = forwardRef<
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={cn(
-      'flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm text-ink outline-none',
-      'focus:bg-hover data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'flex cursor-default select-none items-center gap-2 rounded-md px-2 py-2 text-sm text-ink outline-none',
+      'transition-colors duration-fast focus:bg-brand-gold-50 focus:text-ink [&>svg]:text-ink-soft focus:[&>svg]:text-brand-gold-700',
+      'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       className,
     )}
     {...props}

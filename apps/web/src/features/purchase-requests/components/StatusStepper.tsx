@@ -52,7 +52,8 @@ export function StatusStepper({ status }: StatusStepperProps) {
                   className={cn(
                     'relative flex h-8 w-8 items-center justify-center rounded-full border-2 text-xs font-semibold',
                     'transition-colors duration-base',
-                    isDone && 'border-brand-gold-500 bg-brand-gold-500 text-white',
+                    isDone &&
+                      'border-brand-gold-700 bg-gradient-to-b from-brand-gold-500 to-brand-gold-700 text-white shadow-glow',
                     isCurrent && 'border-brand-gold-500 bg-brand-gold-50 text-brand-gold-900',
                     !isDone && !isCurrent && 'border-border bg-surface text-ink-soft',
                   )}
@@ -60,7 +61,7 @@ export function StatusStepper({ status }: StatusStepperProps) {
                   {isCurrent && (
                     <span
                       aria-hidden="true"
-                      className="absolute inset-0 animate-glow-pulse rounded-full ring-4 ring-brand-gold-300/40"
+                      className="absolute -inset-1 animate-ping-soft rounded-full ring-2 ring-brand-gold-300/60"
                     />
                   )}
                   {isDone ? <Check className="h-4 w-4" aria-hidden="true" /> : idx + 1}
@@ -75,15 +76,15 @@ export function StatusStepper({ status }: StatusStepperProps) {
                 </span>
               </li>
               {idx < PURCHASE_REQUEST_PIPELINE.length - 1 && (
-                <li
-                  aria-hidden="true"
-                  className={cn(
-                    'mt-4 h-0.5 flex-1 rounded-full transition-colors duration-slow',
-                    idx < currentIndex || status === 'FINALIZADO'
-                      ? 'bg-brand-gold-500'
-                      : 'bg-border',
+                <li aria-hidden="true" className="mt-4 h-0.5 flex-1 rounded-full bg-border">
+                  {(idx < currentIndex || status === 'FINALIZADO') && (
+                    // Trecho vencido se desenha em sequência, da esquerda para a direita.
+                    <span
+                      className="block h-full origin-left animate-grow-x rounded-full bg-gradient-to-r from-brand-gold-500 to-brand-gold-300"
+                      style={{ animationDelay: `${120 + idx * 90}ms` }}
+                    />
                   )}
-                />
+                </li>
               )}
             </Fragment>
           );

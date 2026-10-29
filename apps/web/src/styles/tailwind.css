@@ -14,6 +14,24 @@
     font-family: var(--font-sans);
     color: rgb(var(--color-text-primary));
     background-color: rgb(var(--color-bg));
+    /* Inter: "a" e "l" de leitura mais clara. */
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Títulos em Fraunces: tracking mais justo e corte óptico de display. */
+  .font-display {
+    letter-spacing: -0.015em;
+    font-optical-sizing: auto;
+  }
+
+  /* Foco de teclado padrão (links, linhas clicáveis…): anel dourado. Quem
+     tem anel próprio usa `focus:outline-none focus-visible:shadow-focus`. */
+  :focus-visible {
+    outline: 2px solid rgb(var(--color-brand-gold-500));
+    outline-offset: 2px;
   }
 
   body {
@@ -32,6 +50,20 @@
 }
 
 @layer components {
+  /* Painel de filtros das listas: barra de ferramentas em vez de campos soltos. */
+  .filter-panel {
+    position: relative;
+    border-radius: var(--radius-lg);
+    border: 1px solid rgb(var(--color-border));
+    background:
+      linear-gradient(rgb(var(--color-surface)), rgb(var(--color-surface))) padding-box,
+      linear-gradient(180deg, rgb(var(--color-brand-gold-300) / 0.35), rgb(var(--color-border)) 40%)
+        border-box;
+    border-color: transparent;
+    box-shadow: var(--shadow-sm);
+    padding: 1rem 1.25rem 1.25rem;
+  }
+
   /* Entrada escalonada: cada filho direto sobe com `--stagger-step` de atraso.
      O índice vem de `--i` (definido via style) ou cai nos nth-child abaixo. */
   .stagger > * {

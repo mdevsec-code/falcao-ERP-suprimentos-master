@@ -87,9 +87,19 @@
   --radius-full: 9999px;
 
   /* ---------- Shadow ---------- */
-  --shadow-sm: 0 1px 2px rgba(20, 20, 15, 0.04), 0 1px 3px rgba(20, 20, 15, 0.04);
-  --shadow-md: 0 1px 2px rgba(20, 20, 15, 0.04), 0 8px 24px rgba(20, 20, 15, 0.06);
-  --shadow-lg: 0 8px 32px rgba(20, 20, 15, 0.08), 0 2px 8px rgba(20, 20, 15, 0.04);
+  /* Sombras em camadas (contato + ambiente) com um fio de luz no topo:
+     dá volume de objeto real em vez de "caixa com sombra cinza". */
+  --shadow-sm:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 1px 1px rgba(20, 20, 15, 0.04),
+    0 2px 4px -2px rgba(20, 20, 15, 0.06);
+  --shadow-md:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 1px 2px rgba(20, 20, 15, 0.05),
+    0 6px 16px -6px rgba(20, 20, 15, 0.1), 0 16px 32px -16px rgba(20, 20, 15, 0.08);
+  --shadow-lg:
+    0 1px 2px rgba(20, 20, 15, 0.05), 0 12px 28px -8px rgba(20, 20, 15, 0.14),
+    0 32px 64px -24px rgba(20, 20, 15, 0.16);
+  /* Campo de formulário: leve "afundado". */
+  --shadow-field: inset 0 1px 2px rgba(20, 20, 15, 0.05);
   --shadow-focus: 0 0 0 3px rgba(172, 126, 6, 0.22);
 
   /* Brilho dourado de elementos em destaque (botão primário, trilho ativo). */
@@ -152,9 +162,14 @@
   --color-brand-gold-700: 224 172 62;
   --color-brand-gold-900: 247 197 84;
 
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-sm: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 1px 2px rgba(0, 0, 0, 0.4),
+    0 10px 28px -8px rgba(0, 0, 0, 0.55);
+  --shadow-lg:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 16px 40px -12px rgba(0, 0, 0, 0.7),
+    0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-field: inset 0 1px 2px rgba(0, 0, 0, 0.35);
   --shadow-focus: 0 0 0 3px rgba(253, 191, 42, 0.32);
   --shadow-glow: 0 0 0 1px rgba(253, 191, 42, 0.22), 0 6px 22px -6px rgba(253, 191, 42, 0.45);
 

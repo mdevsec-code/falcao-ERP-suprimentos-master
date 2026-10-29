@@ -14,13 +14,13 @@ export function InfoTile({ icon: Icon, label, value, className }: InfoTileProps)
   return (
     <div
       className={cn(
-        'flex items-start gap-3 rounded-lg border border-border bg-surface p-4',
-        'transition-shadow duration-base hover:shadow-sm',
+        'group flex items-start gap-3 rounded-lg border border-border bg-surface p-4 shadow-sm',
+        'transition-[box-shadow,border-color] duration-base hover:border-brand-gold-300/50 hover:shadow-md',
         className,
       )}
     >
       <span
-        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-brand-gold-50 text-brand-gold-700"
+        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-brand-gold-50 text-brand-gold-700 ring-1 ring-inset ring-brand-gold-100 transition-transform duration-base ease-spring group-hover:-rotate-6"
         aria-hidden="true"
       >
         <Icon className="h-4 w-4" />

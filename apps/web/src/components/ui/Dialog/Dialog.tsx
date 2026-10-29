@@ -48,7 +48,7 @@ export const DialogContent = React.forwardRef<
       >
         {children}
         <DialogPrimitive.Close
-          className="absolute right-4 top-4 rounded-md p-1 text-ink-soft hover:bg-hover hover:text-ink focus:outline-none focus-visible:shadow-focus"
+          className="absolute right-4 top-4 rounded-md p-1.5 text-ink-soft transition-[color,background-color,transform] duration-base hover:rotate-90 hover:bg-hover hover:text-ink focus:outline-none focus-visible:shadow-focus"
           aria-label={t('actions.close')}
         >
           <X className="h-4 w-4" />
@@ -60,11 +60,20 @@ export const DialogContent = React.forwardRef<
 DialogContent.displayName = 'DialogContent';
 
 export function DialogHeader({ className, ...rest }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn('flex flex-col gap-1.5 pb-4', className)} {...rest} />;
+  return <div className={cn('flex flex-col gap-1.5 pb-5 pr-8', className)} {...rest} />;
 }
 
 export function DialogFooter({ className, ...rest }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn('flex justify-end gap-2 pt-4', className)} {...rest} />;
+  // Rodapé em faixa própria, encostado nas bordas do diálogo (o conteúdo tem p-6).
+  return (
+    <div
+      className={cn(
+        '-mx-6 -mb-6 mt-6 flex flex-wrap justify-end gap-2 rounded-b-lg border-t border-border bg-hover/50 px-6 py-4',
+        className,
+      )}
+      {...rest}
+    />
+  );
 }
 
 export const DialogTitle = React.forwardRef<
@@ -73,7 +82,7 @@ export const DialogTitle = React.forwardRef<
 >(({ className, ...rest }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn('font-display text-lg font-semibold text-ink', className)}
+    className={cn('font-display text-xl font-semibold tracking-tight text-ink', className)}
     {...rest}
   />
 ));

@@ -32,7 +32,7 @@ export function PageHeader({ title, description, eyebrow, actions, className }: 
       />
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div className="min-w-0 space-y-1.5">
+        <div className="min-w-0 flex-1 space-y-1.5">
           {eyebrow && (
             <p className="flex items-center gap-2 font-mono text-2xs uppercase tracking-[0.14em] text-brand-gold-700">
               <span
@@ -57,7 +57,7 @@ export function PageHeader({ title, description, eyebrow, actions, className }: 
         </div>
 
         {actions && (
-          <div className="flex animate-rise flex-wrap items-center gap-2 [animation-delay:140ms]">
+          <div className="flex animate-rise flex-wrap items-center gap-2 [animation-delay:140ms] sm:justify-end lg:shrink-0 lg:flex-nowrap">
             {actions}
           </div>
         )}

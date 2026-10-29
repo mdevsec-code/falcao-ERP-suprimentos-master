@@ -15,8 +15,10 @@ export const TooltipContent = React.forwardRef<
       ref={ref}
       sideOffset={sideOffset}
       className={cn(
-        'z-tooltip overflow-hidden rounded-md border border-border bg-neutral-900 px-2.5 py-1.5',
-        'text-xs font-medium text-white shadow-md',
+        // Grafite da barra lateral com fio dourado no topo.
+        'relative z-tooltip overflow-hidden rounded-md border border-rail-border bg-rail px-2.5 py-1.5',
+        'text-xs font-medium text-rail-text shadow-lg',
+        "before:absolute before:inset-x-2 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-brand-gold-300/70 before:to-transparent before:content-['']",
         'origin-[var(--radix-tooltip-content-transform-origin)]',
         'data-[state=closed]:animate-scale-out data-[state=delayed-open]:animate-scale-in',
         className,

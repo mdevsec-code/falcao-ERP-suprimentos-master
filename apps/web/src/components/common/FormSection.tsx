@@ -27,8 +27,8 @@ export function FormSection({
       className={cn('animate-slide-up', className)}
       style={{ animationDelay: `${delayMs}ms`, animationFillMode: 'backwards' }}
     >
-      <CardHeader className="flex-row items-start justify-between gap-3 space-y-0">
-        <div className="space-y-1">
+      <CardHeader className="flex-row items-start justify-between gap-3 space-y-0 bg-gradient-to-b from-hover/60 to-transparent">
+        <div className="space-y-1 border-l-2 border-brand-gold-300 pl-3">
           <CardTitle className="text-base">{title}</CardTitle>
           {description && <CardDescription>{description}</CardDescription>}
         </div>

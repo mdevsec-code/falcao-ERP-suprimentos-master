@@ -42,7 +42,7 @@ export function FiltersBar({ filters, costCenters, onChange, onClearAll }: Filte
     chips.push({ key: 'busca', label: t('finance:filters.chipSearch', { value: filters.busca }) });
 
   return (
-    <div className="space-y-4">
+    <div className="filter-panel space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <Filter className="h-4 w-4 text-ink-soft" aria-hidden="true" />

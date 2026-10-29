@@ -3,6 +3,7 @@ import * as SelectPrimitive from '@radix-ui/react-select';
 import { Check, ChevronDown } from 'lucide-react';
 
 import { cn } from '@/utils/cn';
+import { fieldFocus, fieldSurface } from '../field';
 
 const Select = SelectPrimitive.Root;
 const SelectGroup = SelectPrimitive.Group;
@@ -15,8 +16,10 @@ const SelectTrigger = forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      'flex h-10 w-full items-center justify-between rounded-md border border-border bg-surface px-3 text-sm',
-      'focus:outline-none focus-visible:shadow-focus data-[placeholder]:text-muted',
+      'group flex h-10 w-full items-center justify-between px-3 text-left text-sm',
+      fieldSurface,
+      fieldFocus,
+      'data-[placeholder]:text-muted',
       'disabled:cursor-not-allowed disabled:opacity-60',
       '[&>span]:line-clamp-1',
       className,
@@ -25,7 +28,7 @@ const SelectTrigger = forwardRef<
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <ChevronDown className="h-4 w-4 shrink-0 opacity-60" />
+      <ChevronDown className="h-4 w-4 shrink-0 text-muted transition-transform duration-base ease-out group-data-[state=open]:rotate-180 group-data-[state=open]:text-brand-gold-700" />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ));
@@ -40,7 +43,7 @@ const SelectContent = forwardRef<
       ref={ref}
       position={position}
       className={cn(
-        'relative z-popover max-h-96 min-w-[10rem] overflow-hidden rounded-md border border-border bg-surface text-ink shadow-md',
+        'relative z-popover max-h-96 min-w-[10rem] overflow-hidden rounded-lg border border-border bg-surface/95 text-ink shadow-lg backdrop-blur-xl',
         'origin-[var(--radix-select-content-transform-origin)]',
         'data-[state=closed]:animate-scale-out data-[state=open]:animate-scale-in',
         position === 'popper' && 'data-[side=bottom]:translate-y-1 data-[side=top]:-translate-y-1',
@@ -69,8 +72,9 @@ const SelectItem = forwardRef<
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
-      'relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none',
-      'focus:bg-hover focus:text-ink data-[state=checked]:font-semibold data-[state=checked]:text-brand-gold-700',
+      'relative flex w-full cursor-default select-none items-center rounded-md py-2 pl-8 pr-2 text-sm outline-none',
+      'transition-colors duration-fast focus:bg-brand-gold-50 focus:text-ink',
+      'data-[state=checked]:font-semibold data-[state=checked]:text-brand-gold-700',
       'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       className,
     )}
@@ -78,7 +82,7 @@ const SelectItem = forwardRef<
   >
     <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
       <SelectPrimitive.ItemIndicator>
-        <Check className="h-4 w-4" />
+        <Check className="h-4 w-4 animate-pop-in" />
       </SelectPrimitive.ItemIndicator>
     </span>
     <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>

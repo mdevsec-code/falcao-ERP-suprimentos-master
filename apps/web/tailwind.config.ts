@@ -91,6 +91,7 @@ const config: Config = {
         lg: 'var(--shadow-lg)',
         focus: 'var(--shadow-focus)',
         glow: 'var(--shadow-glow)',
+        field: 'var(--shadow-field)',
         'inner-soft': 'inset 0 1px 2px rgba(0,0,0,0.04)',
       },
       zIndex: {
