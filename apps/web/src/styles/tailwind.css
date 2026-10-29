@@ -32,6 +32,78 @@
 }
 
 @layer components {
+  /* Entrada escalonada: cada filho direto sobe com `--stagger-step` de atraso.
+     O índice vem de `--i` (definido via style) ou cai nos nth-child abaixo. */
+  .stagger > * {
+    animation: rise 0.55s var(--ease-out) backwards;
+    animation-delay: calc(var(--i, 0) * var(--stagger-step));
+  }
+  .stagger > *:nth-child(2) {
+    --i: 1;
+  }
+  .stagger > *:nth-child(3) {
+    --i: 2;
+  }
+  .stagger > *:nth-child(4) {
+    --i: 3;
+  }
+  .stagger > *:nth-child(5) {
+    --i: 4;
+  }
+  .stagger > *:nth-child(6) {
+    --i: 5;
+  }
+  .stagger > *:nth-child(7) {
+    --i: 6;
+  }
+  .stagger > *:nth-child(8) {
+    --i: 7;
+  }
+  .stagger > *:nth-child(9) {
+    --i: 8;
+  }
+  .stagger > *:nth-child(n + 10) {
+    --i: 9;
+  }
+
+  /* Holofote dourado que segue o cursor (posição em --mx/--my, ver useSpotlight).
+     Fica num ::before para não brigar com o conteúdo nem com o fundo do cartão. */
+  .spotlight {
+    position: relative;
+    isolation: isolate;
+  }
+  .spotlight::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity var(--duration-slow) var(--ease-out);
+    background: radial-gradient(
+      260px circle at var(--mx, 50%) var(--my, 50%),
+      rgb(var(--color-brand-gold-300) / 0.14),
+      transparent 70%
+    );
+  }
+  .spotlight:hover::before {
+    opacity: 1;
+  }
+
+  /* Malha milimetrada da planta (mesma do login), para fundos de cabeçalho. */
+  .blueprint-grid {
+    background-image:
+      linear-gradient(rgb(var(--color-border) / 0.7) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(var(--color-border) / 0.7) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .blueprint-grid-gold {
+    background-image:
+      linear-gradient(rgb(var(--color-rail-grid) / 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(var(--color-rail-grid) / 0.07) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
   /* Scrollbars discretas */
   .scrollbar-thin {
     scrollbar-width: thin;
@@ -53,5 +125,23 @@
   }
   .dark .scrollbar-thin::-webkit-scrollbar-thumb {
     background-color: rgb(var(--color-neutral-700));
+  }
+  .scrollbar-rail {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--color-rail-border)) transparent;
+  }
+}
+
+/* Movimento reduzido: animações CSS e transições viram instantâneas. O
+   framer-motion já respeita a preferência via <MotionConfig reducedMotion="user">. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

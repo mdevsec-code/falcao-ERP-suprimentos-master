@@ -39,6 +39,14 @@ const config: Config = {
         warning: 'rgb(var(--color-warning) / <alpha-value>)',
         danger: 'rgb(var(--color-danger) / <alpha-value>)',
         info: 'rgb(var(--color-info) / <alpha-value>)',
+        // Barra lateral grafite
+        rail: {
+          DEFAULT: 'rgb(var(--color-rail-bg) / <alpha-value>)',
+          surface: 'rgb(var(--color-rail-surface) / <alpha-value>)',
+          border: 'rgb(var(--color-rail-border) / <alpha-value>)',
+          text: 'rgb(var(--color-rail-text) / <alpha-value>)',
+          'text-soft': 'rgb(var(--color-rail-text-soft) / <alpha-value>)',
+        },
         // Surfaces
         bg: 'rgb(var(--color-bg) / <alpha-value>)',
         surface: 'rgb(var(--color-surface) / <alpha-value>)',
@@ -82,6 +90,7 @@ const config: Config = {
         md: 'var(--shadow-md)',
         lg: 'var(--shadow-lg)',
         focus: 'var(--shadow-focus)',
+        glow: 'var(--shadow-glow)',
         'inner-soft': 'inset 0 1px 2px rgba(0,0,0,0.04)',
       },
       zIndex: {
@@ -95,6 +104,7 @@ const config: Config = {
       },
       transitionTimingFunction: {
         out: 'var(--ease-out)',
+        spring: 'var(--ease-spring)',
       },
       transitionDuration: {
         fast: 'var(--duration-fast)',
@@ -199,6 +209,39 @@ const config: Config = {
           '0%, 49%': { opacity: '1' },
           '50%, 100%': { opacity: '0' },
         },
+        // ── Linguagem do app (overhaul) ──
+        // Entrada de bloco: sobe, ganha nitidez. Escalonar com .stagger.
+        rise: {
+          from: { transform: 'translateY(10px)', opacity: '0', filter: 'blur(4px)' },
+          // fill-mode `backwards` (não both): ao terminar devolve o transform ao hover.
+          to: { transform: 'none', opacity: '1', filter: 'none' },
+        },
+        // Reflexo que atravessa o botão primário no hover.
+        shine: {
+          from: { transform: 'translateX(-120%) skewX(-20deg)' },
+          to: { transform: 'translateX(220%) skewX(-20deg)' },
+        },
+        // Barra de carregamento indeterminada (NavigationProgress).
+        'progress-sweep': {
+          '0%': { transform: 'translateX(-100%) scaleX(0.3)' },
+          '50%': { transform: 'translateX(20%) scaleX(0.6)' },
+          '100%': { transform: 'translateX(110%) scaleX(0.3)' },
+        },
+        // Anel que se expande a partir de um ponto (pendência / ao vivo).
+        'ping-soft': {
+          '0%': { transform: 'scale(1)', opacity: '0.7' },
+          '80%, 100%': { transform: 'scale(2.4)', opacity: '0' },
+        },
+        // Ícone que "encaixa" ao ativar (trilho da Sidebar, sucesso).
+        'pop-in': {
+          '0%': { transform: 'scale(0.6)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+        // Malha da planta deslizando devagar (fundo do cabeçalho de página).
+        'grid-pan': {
+          from: { backgroundPosition: '0 0' },
+          to: { backgroundPosition: '24px 24px' },
+        },
       },
       animation: {
         'fade-in': 'fade-in var(--duration-base) var(--ease-out)',
@@ -222,6 +265,12 @@ const config: Config = {
         'pulse-travel': 'pulse-travel 5s var(--ease-in-out) infinite',
         'node-lit': 'node-lit 5s var(--ease-in-out) infinite',
         'blink-caret': 'blink-caret 1.1s steps(1) infinite',
+        rise: 'rise 0.55s var(--ease-out) backwards',
+        shine: 'shine 0.9s var(--ease-out)',
+        'progress-sweep': 'progress-sweep 1.2s var(--ease-in-out) infinite',
+        'ping-soft': 'ping-soft 2s var(--ease-out) infinite',
+        'pop-in': 'pop-in 0.35s var(--ease-spring) both',
+        'grid-pan': 'grid-pan 6s linear infinite',
       },
     },
   },

@@ -17,13 +17,17 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses: Record<ButtonVariant, string> = {
+  // O reflexo (::after) atravessa o botão uma vez a cada hover.
   primary:
-    'bg-brand-gold-500 text-white hover:bg-brand-gold-700 active:bg-brand-gold-900 ' +
-    'shadow-sm hover:shadow-md focus-visible:shadow-focus',
+    'relative overflow-hidden bg-gradient-to-b from-brand-gold-500 to-brand-gold-700 text-white ' +
+    'hover:to-brand-gold-900 active:from-brand-gold-700 shadow-sm hover:shadow-glow focus-visible:shadow-focus ' +
+    "after:pointer-events-none after:absolute after:inset-y-0 after:left-0 after:w-1/3 after:content-[''] " +
+    'after:-translate-x-[120%] after:bg-gradient-to-r after:from-transparent after:via-white/35 after:to-transparent ' +
+    'hover:after:animate-shine',
   secondary:
     'bg-ink text-bg hover:opacity-90 active:opacity-80 ' + 'shadow-sm focus-visible:shadow-focus',
   outline:
-    'border border-border bg-surface text-ink hover:bg-hover active:bg-border ' +
+    'border border-border bg-surface text-ink hover:border-brand-gold-300/70 hover:bg-hover active:bg-border ' +
     'focus-visible:shadow-focus',
   ghost: 'text-ink-soft hover:bg-hover hover:text-ink active:bg-border',
   danger:

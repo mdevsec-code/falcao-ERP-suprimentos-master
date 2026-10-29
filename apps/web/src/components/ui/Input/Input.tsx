@@ -1,4 +1,4 @@
-import { forwardRef, type InputHTMLAttributes, type ReactNode } from 'react';
+import { forwardRef, useId, type InputHTMLAttributes, type ReactNode } from 'react';
 import { cn } from '@/utils/cn';
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -12,7 +12,9 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, inputClassName, label, hint, error, leftIcon, rightIcon, id, ...rest }, ref) => {
-    const inputId = id ?? `input-${rest.name ?? Math.random().toString(36).slice(2, 8)}`;
+    // useId: estável entre renders e único mesmo com dois campos de mesmo `name` na tela.
+    const autoId = useId();
+    const inputId = id ?? `input-${autoId}`;
 
     return (
       <div className={cn('flex w-full flex-col gap-1.5', className)}>

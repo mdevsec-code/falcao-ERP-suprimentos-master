@@ -13,7 +13,7 @@ import { cn } from '@/utils/cn';
  */
 export const Table = forwardRef<HTMLTableElement, HTMLAttributes<HTMLTableElement>>(
   ({ className, ...rest }, ref) => (
-    <div className="scrollbar-thin overflow-x-auto rounded-md border border-border">
+    <div className="scrollbar-thin overflow-x-auto rounded-md border border-border shadow-sm">
       <table ref={ref} className={cn('w-full text-left text-sm', className)} {...rest} />
     </div>
   ),
@@ -40,7 +40,12 @@ export const TableRow = forwardRef<HTMLTableRowElement, HTMLAttributes<HTMLTable
   ({ className, ...rest }, ref) => (
     <tr
       ref={ref}
-      className={cn('transition-colors duration-fast [tbody_&]:hover:bg-hover', className)}
+      className={cn(
+        'transition-[background-color,box-shadow] duration-fast',
+        // Hover marca a linha com o trilho dourado da Sidebar.
+        '[tbody_&]:hover:bg-hover [tbody_&]:hover:shadow-[inset_3px_0_0_rgb(var(--color-brand-gold-300))]',
+        className,
+      )}
       {...rest}
     />
   ),

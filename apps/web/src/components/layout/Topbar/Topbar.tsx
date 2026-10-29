@@ -105,9 +105,13 @@ export function Topbar(): ReactNode {
   return (
     <header
       className={cn(
-        'sticky top-0 z-sticky flex items-center gap-3 border-b border-border bg-surface/80 px-4 py-3 backdrop-blur-md sm:px-6',
+        'sticky top-0 z-sticky flex items-center gap-3 border-b border-border bg-surface/75 px-4 py-3 backdrop-blur-xl backdrop-saturate-150 sm:px-6',
       )}
     >
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-brand-gold-300/60 via-transparent to-transparent"
+      />
       {isDesktop ? (
         <Button
           variant="ghost"
@@ -160,9 +164,12 @@ export function Topbar(): ReactNode {
       <span className="font-display text-base font-semibold text-ink sm:hidden">Falcão</span>
 
       <div className="ml-auto flex items-center gap-2">
-        <div className="hidden w-72 lg:block 2xl:w-96">
-          <GlobalSearch />
-        </div>
+        {/* Só monta no desktop: escondida por CSS, ainda capturaria o Ctrl+K. */}
+        {isDesktop && (
+          <div className="w-72 2xl:w-96">
+            <GlobalSearch />
+          </div>
+        )}
 
         <Button
           variant="ghost"
@@ -213,7 +220,7 @@ export function Topbar(): ReactNode {
               aria-label={t('topbar.account')}
               className="ml-1 rounded-full focus:outline-none focus-visible:shadow-focus"
             >
-              <Avatar>
+              <Avatar className="ring-2 ring-transparent transition-shadow duration-base hover:ring-brand-gold-300/60">
                 <AvatarFallback>{getInitials(user?.name ?? 'Falcão')}</AvatarFallback>
               </Avatar>
             </button>

@@ -1,22 +1,12 @@
-import { useEffect } from 'react';
 import { useUIStore } from '@/store/uiStore';
 
 /**
- * Hook que aplica o tema atual ao `<html>` (classe `dark` ou nada)
- * e persiste a escolha do usuário.
+ * Tema atual e ações para trocá-lo. A classe `dark` no `<html>` é aplicada
+ * em `main.tsx` (antes do primeiro render e a cada mudança da store).
  */
 export function useTheme() {
   const theme = useUIStore((state) => state.theme);
   const setTheme = useUIStore((state) => state.setTheme);
-
-  useEffect(() => {
-    const root = document.documentElement;
-    if (theme === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-  }, [theme]);
 
   const toggle = () => setTheme(theme === 'dark' ? 'light' : 'dark');
 

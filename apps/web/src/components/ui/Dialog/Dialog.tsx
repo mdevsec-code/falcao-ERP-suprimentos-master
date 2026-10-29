@@ -16,7 +16,7 @@ export const DialogOverlay = React.forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      'fixed inset-0 z-modal-backdrop bg-neutral-900/50 backdrop-blur-sm',
+      'fixed inset-0 z-modal-backdrop bg-accent-900/55 backdrop-blur-[3px]',
       'data-[state=closed]:animate-fade-out data-[state=open]:animate-fade-in',
       className,
     )}
@@ -38,6 +38,9 @@ export const DialogContent = React.forwardRef<
         className={cn(
           'fixed left-1/2 top-1/2 z-modal max-h-[90vh] w-[calc(100%-2rem)] max-w-lg overflow-y-auto',
           '-translate-x-1/2 -translate-y-1/2 rounded-lg border border-border bg-surface p-6 shadow-lg',
+          // Fio dourado no topo: o mesmo da borda da Sidebar.
+          "before:pointer-events-none before:absolute before:inset-x-6 before:top-0 before:h-px before:content-['']",
+          'before:bg-gradient-to-r before:from-transparent before:via-brand-gold-300 before:to-transparent',
           'data-[state=closed]:animate-dialog-out data-[state=open]:animate-dialog-in',
           className,
         )}

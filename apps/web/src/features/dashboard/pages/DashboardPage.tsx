@@ -35,6 +35,7 @@ import { PERMISSIONS, type Permission } from '@/constants/permissions';
 import { ROUTE_PATHS } from '@/constants/routes';
 import { PURCHASE_REQUEST_STATUS_LABELS, SUPPLIER_CATEGORY_LABELS } from '@/constants/enums';
 import { getIntlLocale } from '@/utils/locale';
+import { useSpotlight } from '@/hooks/useSpotlight';
 
 interface QuickLink {
   id: string;
@@ -95,6 +96,7 @@ export function DashboardPage() {
   const summary = summarizeStats(requestStats.data);
   const firstName = user?.name.split(' ')[0] ?? '';
   const visibleLinks = QUICK_LINKS.filter((link) => !link.requires || can(link.requires));
+  const spotlight = useSpotlight<HTMLAnchorElement>();
   const kpisLoading = supplierStats.isLoading || productStats.isLoading || requestStats.isLoading;
 
   const categoryData = [...(supplierStats.data?.byCategory ?? [])]
@@ -125,7 +127,7 @@ export function DashboardPage() {
       <div className="space-y-8 px-6 py-8 sm:px-8">
         <section
           aria-labelledby="kpi-title"
-          className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4"
+          className="stagger grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4"
         >
           <h2 id="kpi-title" className="sr-only">
             {t('dashboard:kpiSection.title')}
@@ -156,6 +158,7 @@ export function DashboardPage() {
                 label={t('dashboard:kpis.pendingMyApproval')}
                 value={<CountUp value={summary.pendingMyApproval} />}
                 icon={<Hourglass className="h-4 w-4" />}
+                attention={summary.pendingMyApproval > 0}
                 delta={
                   summary.pendingMyApproval > 0
                     ? { value: t('dashboard:kpis.actionNeeded'), direction: 'flat' }
@@ -174,15 +177,15 @@ export function DashboardPage() {
               <h2 id="quick-links-title" className="mb-4 text-sm font-semibold text-ink">
                 {t('dashboard:quickLinks.title')}
               </h2>
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-                {visibleLinks.map((link, idx) => (
+              <div className="stagger grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+                {visibleLinks.map((link) => (
                   <Link
                     key={link.id}
                     to={link.to}
-                    className="group flex animate-slide-up items-start gap-3 rounded-lg border border-border bg-surface p-4 transition-[box-shadow,transform] duration-base ease-out hover:-translate-y-0.5 hover:shadow-md"
-                    style={{ animationDelay: `${idx * 50}ms`, animationFillMode: 'backwards' }}
+                    onPointerMove={spotlight.onPointerMove}
+                    className="spotlight group flex items-start gap-3 rounded-lg border border-border bg-surface p-4 transition-[box-shadow,transform,border-color] duration-base ease-out hover:-translate-y-0.5 hover:border-brand-gold-300/60 hover:shadow-md focus:outline-none focus-visible:shadow-focus"
                   >
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-brand-gold-50 text-brand-gold-700 transition-transform duration-base group-hover:scale-110">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-brand-gold-50 text-brand-gold-700 ring-1 ring-inset ring-brand-gold-100 transition-transform duration-base ease-spring group-hover:-rotate-6 group-hover:scale-110">
                       <link.icon className="h-4 w-4" />
                     </span>
                     <span className="min-w-0">
@@ -202,7 +205,7 @@ export function DashboardPage() {
           </>
         )}
 
-        <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <section className="stagger grid grid-cols-1 gap-6 xl:grid-cols-2">
           <Card>
             <CardHeader>
               <CardTitle>{t('dashboard:charts.pipeline.title')}</CardTitle>

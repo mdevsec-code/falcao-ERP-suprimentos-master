@@ -1,18 +1,37 @@
 import { forwardRef, type HTMLAttributes } from 'react';
 import { cn } from '@/utils/cn';
+import { useSpotlight } from '@/hooks/useSpotlight';
 
-export const Card = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...rest }, ref) => (
-    <div
-      ref={ref}
-      className={cn(
-        'rounded-lg border border-border bg-surface shadow-sm',
-        'transition-shadow duration-base',
-        className,
-      )}
-      {...rest}
-    />
-  ),
+export interface CardProps extends HTMLAttributes<HTMLDivElement> {
+  /** Holofote dourado sob o cursor + leve elevação no hover. */
+  interactive?: boolean;
+}
+
+export const Card = forwardRef<HTMLDivElement, CardProps>(
+  ({ className, interactive = false, onPointerMove, ...rest }, ref) => {
+    const spotlight = useSpotlight<HTMLDivElement>();
+    return (
+      <div
+        ref={ref}
+        onPointerMove={
+          interactive
+            ? (event) => {
+                spotlight.onPointerMove(event);
+                onPointerMove?.(event);
+              }
+            : onPointerMove
+        }
+        className={cn(
+          'rounded-lg border border-border bg-surface shadow-sm',
+          'transition-[box-shadow,border-color,transform] duration-base ease-out',
+          interactive &&
+            'spotlight hover:-translate-y-0.5 hover:border-brand-gold-300/60 hover:shadow-md',
+          className,
+        )}
+        {...rest}
+      />
+    );
+  },
 );
 Card.displayName = 'Card';
 

@@ -139,8 +139,8 @@ export function OperationsOverview() {
         }).format(parseDateOnly(day));
 
   return (
-    <section className="grid grid-cols-1 gap-6 xl:grid-cols-[2fr_3fr]">
-      <Card className="animate-slide-up">
+    <section className="stagger grid grid-cols-1 gap-6 xl:grid-cols-[2fr_3fr]">
+      <Card>
         <CardHeader>
           <CardTitle>{t('dashboard:operations.pendingTitle')}</CardTitle>
           <CardDescription>{t('dashboard:operations.pendingDescription')}</CardDescription>
@@ -162,7 +162,7 @@ export function OperationsOverview() {
                   >
                     <span
                       className={cn(
-                        'flex h-9 w-9 shrink-0 items-center justify-center rounded-md',
+                        'relative flex h-9 w-9 shrink-0 items-center justify-center rounded-md',
                         row.alert
                           ? 'bg-warning/15 text-warning'
                           : 'bg-brand-gold-50 text-brand-gold-700',
@@ -170,6 +170,12 @@ export function OperationsOverview() {
                       aria-hidden="true"
                     >
                       <row.icon className="h-4 w-4" />
+                      {row.alert && (
+                        <span className="absolute -right-0.5 -top-0.5 flex h-2 w-2">
+                          <span className="absolute inset-0 animate-ping-soft rounded-full bg-warning" />
+                          <span className="relative h-2 w-2 rounded-full bg-warning" />
+                        </span>
+                      )}
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="block text-sm text-ink">{row.label}</span>
@@ -190,7 +196,7 @@ export function OperationsOverview() {
         </CardContent>
       </Card>
 
-      <Card className="animate-slide-up" style={{ animationDelay: '60ms' }}>
+      <Card>
         <CardHeader className="flex-row items-start justify-between gap-3 space-y-0">
           <div className="space-y-1">
             <CardTitle>{t('dashboard:operations.agendaTitle', { count: AGENDA_DAYS })}</CardTitle>
