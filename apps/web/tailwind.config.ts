@@ -242,6 +242,12 @@ const config: Config = {
           from: { backgroundPosition: '0 0' },
           to: { backgroundPosition: '24px 24px' },
         },
+        // Linha de varredura descendo pela prancha (painel do login).
+        scan: {
+          '0%': { transform: 'translateY(-10vh)', opacity: '0' },
+          '10%, 85%': { opacity: '1' },
+          '100%': { transform: 'translateY(110vh)', opacity: '0' },
+        },
       },
       animation: {
         'fade-in': 'fade-in var(--duration-base) var(--ease-out)',
@@ -271,6 +277,7 @@ const config: Config = {
         'ping-soft': 'ping-soft 2s var(--ease-out) infinite',
         'pop-in': 'pop-in 0.35s var(--ease-spring) both',
         'grid-pan': 'grid-pan 6s linear infinite',
+        scan: 'scan 9s var(--ease-in-out) infinite',
       },
     },
   },

@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { MIN_PASSWORD_LENGTH } from '@falcao-erp/shared-types';
 
+import { LocaleFlag } from '@/components/layout/LanguageSwitcher/LocaleFlag';
 import { BlueprintBackdrop } from '@/components/brand/BlueprintBackdrop';
 import { CornerBrackets } from '@/components/brand/CornerBrackets';
 import { Avatar, AvatarFallback } from '@/components/ui/Avatar';
@@ -26,13 +27,7 @@ import { Input } from '@/components/ui/Input';
 import { Switch } from '@/components/ui/Switch';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useTheme } from '@/hooks/useTheme';
-import {
-  LOCALES,
-  localeFlags,
-  localeLabels,
-  localeShortLabels,
-  type Locale,
-} from '@/constants/i18n';
+import { LOCALES, localeLabels, localeShortLabels, type Locale } from '@/constants/i18n';
 import { ROLE_LABELS } from '@/constants/roles';
 import { formatDate, getInitials } from '@/utils/format';
 import { cn } from '@/utils/cn';
@@ -253,7 +248,7 @@ export function ProfilePage() {
                             : 'border-border text-ink hover:bg-hover',
                         )}
                       >
-                        <span aria-hidden="true">{localeFlags[locale]}</span>
+                        <LocaleFlag locale={locale} />
                         <span title={localeLabels[locale]}>{localeShortLabels[locale]}</span>
                         {selected && <Check className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />}
                       </button>

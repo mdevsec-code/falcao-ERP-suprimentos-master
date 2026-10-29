@@ -9,7 +9,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu';
-import { LOCALES, localeFlags, localeLabels, type Locale } from '@/constants/i18n';
+import { LOCALES, localeLabels, type Locale } from '@/constants/i18n';
+import { LocaleFlag } from './LocaleFlag';
 import { cn } from '@/utils/cn';
 
 interface LanguageSwitcherProps {
@@ -43,7 +44,7 @@ export function LanguageSwitcher({ iconOnly = true, className }: LanguageSwitche
         ) : (
           <Button variant="outline" size="sm" className={cn('gap-1.5', className)}>
             <Globe className="h-3.5 w-3.5" />
-            <span aria-hidden="true">{localeFlags[currentLocale]}</span>
+            <LocaleFlag locale={currentLocale} />
             {localeLabels[currentLocale]}
           </Button>
         )}
@@ -51,7 +52,7 @@ export function LanguageSwitcher({ iconOnly = true, className }: LanguageSwitche
       <DropdownMenuContent align="end">
         {LOCALES.map((locale) => (
           <DropdownMenuItem key={locale} onSelect={() => handleSelect(locale)}>
-            <span aria-hidden="true">{localeFlags[locale]}</span>
+            <LocaleFlag locale={locale} />
             <span className="flex-1">{localeLabels[locale]}</span>
             {currentLocale === locale && (
               <Check className="h-3.5 w-3.5 shrink-0 text-brand-gold-700" aria-hidden="true" />

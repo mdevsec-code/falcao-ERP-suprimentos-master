@@ -44,10 +44,3 @@ export const localeShortLabels: Record<Locale, string> = {
   'en-US': 'English',
   'zh-CN': '简体中文',
 };
-
-/** Bandeira/emoji curto usado no seletor de idioma. */
-export const localeFlags: Record<Locale, string> = {
-  'pt-BR': '🇧🇷',
-  'en-US': '🇺🇸',
-  'zh-CN': '🇨🇳',
-};

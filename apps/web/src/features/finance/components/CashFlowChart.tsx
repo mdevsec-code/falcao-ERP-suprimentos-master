@@ -10,7 +10,13 @@ import {
   YAxis,
 } from 'recharts';
 import { toDateOnly } from '@falcao-erp/shared-types';
-import { AXIS_TICK, CHART_SERIES, CURSOR_FILL, GRID_STROKE } from '@/components/charts';
+import {
+  AXIS_TICK,
+  CHART_SERIES,
+  CURSOR_FILL,
+  ChartTooltipFrame,
+  GRID_STROKE,
+} from '@/components/charts';
 import { formatCurrencyBRL } from '@/utils/format';
 import { getIntlLocale } from '@/utils/locale';
 import { monthLabel } from '../lib/status';
@@ -59,8 +65,8 @@ export function CashFlowChart({ data, height = 260 }: CashFlowChartProps) {
         </li>
       </ul>
       <ResponsiveContainer width="100%" height={height}>
-        <BarChart data={rows} margin={{ top: 8, right: 8, left: 0, bottom: 0 }} barGap={3}>
-          <CartesianGrid vertical={false} stroke={GRID_STROKE} />
+        <BarChart data={rows} margin={{ top: 8, right: 8, left: 0, bottom: 0 }} barGap={2}>
+          <CartesianGrid vertical={false} stroke={GRID_STROKE} strokeDasharray="2 4" />
           <XAxis dataKey="label" tick={AXIS_TICK} axisLine={false} tickLine={false} />
           <YAxis
             tick={AXIS_TICK}
@@ -86,10 +92,9 @@ export function CashFlowChart({ data, height = 260 }: CashFlowChartProps) {
             cursor={{ fill: CURSOR_FILL }}
             content={({ active, payload, label }) =>
               active && payload?.length ? (
-                <div className="rounded-md border border-border bg-surface px-3 py-2 text-xs shadow-md">
-                  <p className="font-semibold text-ink">{label}</p>
+                <ChartTooltipFrame title={label}>
                   {payload.map((entry) => (
-                    <p key={String(entry.dataKey)} className="mt-0.5 tabular-nums text-ink-soft">
+                    <p key={String(entry.dataKey)} className="tabular-nums text-ink-soft">
                       {entry.dataKey === 'pago'
                         ? t('finance:cashFlow.paid')
                         : t('finance:cashFlow.forecast')}
@@ -99,7 +104,7 @@ export function CashFlowChart({ data, height = 260 }: CashFlowChartProps) {
                       </span>
                     </p>
                   ))}
-                </div>
+                </ChartTooltipFrame>
               ) : null
             }
           />
@@ -117,7 +122,8 @@ export function CashFlowChart({ data, height = 260 }: CashFlowChartProps) {
             fill={CHART_SERIES}
             radius={[4, 4, 0, 0]}
             maxBarSize={22}
-            animationDuration={600}
+            animationDuration={900}
+            animationEasing="ease-out"
           />
         </BarChart>
       </ResponsiveContainer>

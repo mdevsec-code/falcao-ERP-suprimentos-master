@@ -1,12 +1,8 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import type { Prisma, Supplier, SupplierCategory } from "@prisma/client";
-import {
-  buildSupplierSearchGroups,
-  buildSupplierSearchText,
-  isCjkSearchTerm,
-  normalizeSearchText,
-} from "@falcao-erp/shared-types";
+import { buildSupplierSearchText } from "@falcao-erp/shared-types";
 import { PrismaService } from "../../database/prisma.service";
+import { supplierSearchConditions } from "./supplier-search-filters";
 import { CreateSupplierDto } from "./dto/create-supplier.dto";
 import { UpdateSupplierDto } from "./dto/update-supplier.dto";
 
@@ -52,7 +48,7 @@ export class SuppliersRepository {
       cidade: filters.cidade ? { contains: filters.cidade, mode: "insensitive" } : undefined,
       isActive: filters.isActive,
       cadastroPendente: filters.cadastroPendente,
-      ...(filters.search ? { AND: searchConditions(filters.search) } : {}),
+      ...(filters.search ? { AND: supplierSearchConditions(filters.search) } : {}),
     };
 
     const client = this.prisma.forCompany(companyId);
@@ -250,38 +246,3 @@ function descriptionFields(dto: {
   };
 }
 
-/**
- * Cada grupo de termos da busca precisa aparecer em algum lugar do fornecedor:
- * no texto de busca (nome, CNPJ, categoria, cidade, atividades e produtos nos
- * dois idiomas), nos produtos do catálogo ligados a ele (principal,
- * alternativo ou com preço registrado) ou nos itens dos catálogos que enviou.
- */
-function searchConditions(search: string): Prisma.SupplierWhereInput[] {
-  const contains = (value: string) => ({ contains: value, mode: "insensitive" as const });
-  return buildSupplierSearchGroups(search).map((variants) => ({
-    OR: variants.flatMap((variant): Prisma.SupplierWhereInput[] => {
-      const normal = normalizeSearchText(variant);
-      const cjk = isCjkSearchTerm(normal);
-      const inText: Prisma.SupplierWhereInput = { searchText: { contains: cjk ? normal : ` ${normal}` } };
-      // Nos nomes de produto (não normalizados) termos muito curtos achariam pedaço de tudo.
-      if (!cjk && variant.length < 3) return [inText];
-      const product = { OR: [{ nome: contains(variant) }, { marca: contains(variant) }] };
-      return [
-        inText,
-        { primaryForProducts: { some: product } },
-        { alternativeProducts: { some: { product } } },
-        { priceEntries: { some: { product } } },
-        { catalogs: { some: { items: { some: { descricao: contains(variant) } } } } },
-        // Histórico: itens que o fornecedor já cotou com preço, contratos e contas a pagar.
-        // Assim quem foi cadastrado antes da descrição também aparece na busca.
-        {
-          quotations: {
-            some: { prices: { some: { quotationItem: { descricao: contains(variant) } } } },
-          },
-        },
-        { contracts: { some: { OR: [{ objeto: contains(variant) }, { descricao: contains(variant) }] } } },
-        { payables: { some: { descricao: contains(variant) } } },
-      ];
-    }),
-  }));
-}

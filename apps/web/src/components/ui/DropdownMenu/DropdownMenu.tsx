@@ -15,7 +15,9 @@ export const DropdownMenuContent = forwardRef<
       ref={ref}
       sideOffset={sideOffset}
       className={cn(
-        'z-dropdown min-w-[10rem] overflow-hidden rounded-md border border-border bg-surface p-1 shadow-md',
+        // Vai para o <body> via Portal: precisa ficar acima da Topbar (z-sticky) e
+        // dos diálogos (z-modal), como o Select — com z-dropdown a barra cobria o menu.
+        'z-popover min-w-[10rem] overflow-hidden rounded-md border border-border bg-surface p-1 shadow-lg',
         'origin-[var(--radix-dropdown-menu-content-transform-origin)]',
         'data-[state=closed]:animate-scale-out data-[state=open]:animate-scale-in',
         className,

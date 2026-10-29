@@ -355,7 +355,6 @@ export function FinancePage() {
                     }))}
                     formatValue={formatCurrencyBRL}
                     formatTick={compactNumber}
-                    labelWidth={160}
                   />
                 ) : (
                   <p className="py-10 text-center text-sm text-ink-soft">

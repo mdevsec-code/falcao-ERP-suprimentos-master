@@ -226,7 +226,6 @@ export function DashboardPage() {
                   formatValue={(v) =>
                     t('dashboard:charts.pipeline.tooltip', { count: v, value: formatCount(v) })
                   }
-                  labelWidth={170}
                 />
               )}
             </CardContent>
@@ -259,7 +258,6 @@ export function DashboardPage() {
                       value: formatCount(v),
                     })
                   }
-                  labelWidth={170}
                 />
               )}
             </CardContent>
